@@ -1,5 +1,7 @@
 {
 	"files.associations": {
-		"cube.h": "c"
-	}
+		"cube.h": "c",
+		"stdio.h": "c"
+	},
+	"C_Cpp.errorSquiggles": "disabled"
 }

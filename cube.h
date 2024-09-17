@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/17 21:03:40 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/09/17 23:40:42 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,51 @@ typedef struct s_img_data
 //======== colors =========
 
 # define WHITE 0xffffff
-# define BROWN 0xCC6600
-# define RED 0xff0000
+# define BLACK 0x000000
+# define BLUE  0x0000ff
+# define RED   0xff0000
 # define GREEN 0x009900
-# define CYAN 0x00ffff
-# define BLUE 0x0000ff
+# define BROWN 0xCC6600
+# define CYAN  0x00ffff
 
 //===========================
+//==== data =================
+
+typedef struct s_data
+{
+	t_img_data	*img_data;
+	void		*mlx;
+	void		*win;
+	t_img_data	img_data;
+	int			ceiling_color;
+	int			floor_color;
+	//TODO comlete this
+} t_data;
+
+//===========================
+//==== struct of HEAP CONTROLLER ==
+
+typedef struct	s_heap
+{
+	void	*ptr;
+	struct s_heap	*next;
+} t_heap;
+
+//=================================
+
+//=======================================================
+//=== parsing ===========================================
+
+//=======================================================
+//=== rendering =========================================
+
+//=======================================================
+//=== garbage collector =================================
+
+void	*mallocate(size_t size);
+void	free_all_heap(void);
+void	ft_free(void *ptr);
+//=======================================================
+
 
 #endif
