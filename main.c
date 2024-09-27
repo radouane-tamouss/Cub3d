@@ -39,6 +39,9 @@ void	init_data()
 	get_data()->floor_color = GREEN;// TODO this just for startin befroe parsing is complete
 	get_data()->ceiling_color = CYAN;// TODO this just for startin befroe parsing is complete
 	create_background();
+	mlx_hook(get_data()->win, 2, 1L << 0, handle_keys, NULL);// this to handle when a key pressed
+	mlx_hook(get_data()->win, 17, 1L << 0, ft_close, NULL);// this to handle when red arrow clicked
+
 }
 
 int	main(int ac, char **av)
