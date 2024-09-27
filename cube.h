@@ -18,6 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <mlx.h>
+# include <math.h>
 
 //== const sizes =========
 
@@ -81,6 +82,10 @@ typedef struct s_data
 	t_img_data	background_img;
 	int			ceiling_color;
 	int			floor_color;
+	char		**map;
+	int			player_angle;
+	int			player_x;
+	int			player_y;
 	//TODO comlete this
 } t_data;
 
