@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cube.h                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/27 14:32:18 by rtamouss         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   cube.h                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/17 20:55:34 by eouhrich      #+#    #+#                 */
+/*   Updated: 2024/09/27 17:35:03 by rtamouss      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,18 +48,71 @@ typedef struct s_img_data
 # define BROWN 0xCC6600
 # define CYAN  0x00ffff
 
+
+
+typedef struct s_color
+{
+    int r;
+    int g;
+    int b;
+} t_color;
+
+typedef struct s_texture
+{
+    char *path;
+    void *img;
+    int width;
+    int height;
+} t_texture;
+
+typedef struct s_player
+{
+    double pos_x;
+    double pos_y;
+    double dir_x;
+    double dir_y;
+    double plane_x;
+    double plane_y;
+} t_player;
+
+typedef struct s_map
+{
+    char **grid;
+    int width;
+    int height;
+} t_map;
+
+typedef struct s_game
+{
+    void *mlx;
+    void *win;
+    t_texture north;
+    t_texture south;
+    t_texture west;
+    t_texture east;
+    t_color floor;
+    t_color ceiling;
+    t_map map;
+    t_player player;
+} t_game;
+
+
+
 //===========================
 //==== data =================
 
-typedef struct s_data
-{
-	void		*mlx;
-	void		*win;
-	t_img_data	img_data;
-	int			ceiling_color;
-	int			floor_color;
-	//TODO comlete this
-} t_data;
+// typedef struct s_data
+// {
+// 	void		*mlx;
+// 	void		*win;
+// 	t_img_data	img_data;
+// 	int			ceiling_color;
+// 	int			floor_color;
+// 	//TODO comlete this
+// } t_data;
+
+
+
 
 //===========================
 //==== struct of HEAP CONTROLLER ==
