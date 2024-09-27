@@ -25,25 +25,29 @@ void	init_data()
 	get_data()->mlx = mlx_init();
 	if (get_data()->mlx != NULL)
 	{
-		get_data()->win = mlx_new_window(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT, "fdf");
-		get_data()->data.img = mlx_new_image(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT);
+		get_data()->win = mlx_new_window(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT, "cube3d");
+		get_data()->walls.img = mlx_new_image(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT);
 	}
-	if (get_data()->mlx == NULL || get_data()->win == NULL || get_data()->data.img == NULL)
+	if (get_data()->mlx == NULL || get_data()->win == NULL || get_data()->walls.img == NULL)
 	{
-		ft_putstr_fd("CUB3D: mlx failed\n", 2);
+		print_err("CUB3D: mlx failed\n");
 		exiter(1);
 	}
-	vars->data.addr = mlx_get_data_addr(vars->data.img,
-			&(vars->data.bits_per_pixel), &(vars->data.line_length),
-			&(vars->data.endian));
-	get_data()->floor_color = BROWN;// TODO this just for startin befroe parsing is complete
+	get_data()->walls.addr = mlx_get_data_addr(get_data()->walls.img,
+			&(get_data()->walls.bits_per_pixel), &(get_data()->walls.line_length),
+			&(get_data()->walls.endian));
+	get_data()->floor_color = GREEN;// TODO this just for startin befroe parsing is complete
 	get_data()->ceiling_color = CYAN;// TODO this just for startin befroe parsing is complete
+	create_background();
 }
 
 int	main(int ac, char **av)
 {
+	(void)ac;
+	(void)av;
 	init_data();
 	render_background();
 	//TODO complete .. 
+	mlx_loop(get_data()->mlx);
 	return (0);
 }
