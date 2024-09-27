@@ -24,7 +24,26 @@
 # define WIN_HEIGHT 1000
 # define WIN_WIDTH 1000
 
-//===========================
+//=== buttons ====
+# define ESC 65307
+# define Q 113
+# define W 119
+# define A 97
+# define S 115
+# define Z 122
+# define X 120
+# define E 101
+# define R 114
+# define D 100
+# define F 102
+# define C 99
+# define V 118
+# define UP_ARROW 65362
+# define DOWN_ARROW 65364
+# define SPACE 32
+# define ENTER 65293
+# define DELETE 65288
+
 //====== mlx img struct ===== 
 
 typedef struct s_img_data
@@ -85,7 +104,8 @@ t_data	*get_data(void);
 void	put_pixel(t_img_data *img, int x, int y, int color);
 void	create_background(void);
 void	render_background(void);
-
+int		handle_keys(int keycode, void *garbage);
+int		ft_close(void);
 //=== garbage collector =================================
 
 void	*mallocate(size_t size);
