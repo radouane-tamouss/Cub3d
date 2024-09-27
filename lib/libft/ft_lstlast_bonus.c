@@ -1,14 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exiter.c                                           :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 23:02:06 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/27 12:49:03 by rtamouss         ###   ########.fr       */
+/*   Created: 2023/11/14 00:22:28 by rtamouss          #+#    #+#             */
+/*   Updated: 2024/03/09 15:22:17 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// this will act as clean exiter , that free and remove leaks before exiting
-void	exiter(int code)
+#include "libft.h"
+
+t_list	*ft_lstlast(t_list *lst)
+{
+	t_list	*ptr;
+
+	ptr = lst;
+	if (!ptr)
+		return (0);
+	while (ptr->next)
+		ptr = ptr -> next;
+	return (ptr);
+}

@@ -1,14 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exiter.c                                           :+:      :+:    :+:   */
+/*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: rtamouss <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 23:02:06 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/27 12:49:03 by rtamouss         ###   ########.fr       */
+/*   Created: 2023/11/03 16:12:12 by rtamouss          #+#    #+#             */
+/*   Updated: 2023/11/03 16:16:00 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// this will act as clean exiter , that free and remove leaks before exiting
-void	exiter(int code)
+#include "libft.h"
+
+int	ft_tolower(int c)
+{
+	if (c >= 65 && c <= 90)
+		c += 32;
+	return (c);
+}

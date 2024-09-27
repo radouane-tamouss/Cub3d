@@ -1,14 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exiter.c                                           :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: akrid <akrid@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 23:02:06 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/27 12:49:03 by rtamouss         ###   ########.fr       */
+/*   Created: 2023/11/01 17:44:31 by rtamouss          #+#    #+#             */
+/*   Updated: 2024/05/28 18:35:43 by akrid            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// this will act as clean exiter , that free and remove leaks before exiting
-void	exiter(int code)
+#include "libft.h"
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
+	while (s && s[i])
+		i++;
+	return (i);
+}

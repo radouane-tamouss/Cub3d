@@ -1,14 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exiter.c                                           :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 23:02:06 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/27 12:49:03 by rtamouss         ###   ########.fr       */
+/*   Created: 2023/11/10 19:25:03 by rtamouss          #+#    #+#             */
+/*   Updated: 2023/11/16 21:48:08 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// this will act as clean exiter , that free and remove leaks before exiting
-void	exiter(int code)
+#include "libft.h"
+
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+{
+	int	i;
+	int	len;
+
+	if (!s || !f)
+		return ;
+	len = ft_strlen(s);
+	i = 0;
+	while (i < len)
+	{
+		f (i, &s[i]);
+		i++;
+	}
+}

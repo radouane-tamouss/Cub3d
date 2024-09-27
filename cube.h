@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/17 23:40:42 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/09/27 14:32:18 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUBE_H
 
 # include <stdlib.h>
+# include "lib/libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
 # include <stdio.h>
@@ -52,7 +53,6 @@ typedef struct s_img_data
 
 typedef struct s_data
 {
-	t_img_data	*img_data;
 	void		*mlx;
 	void		*win;
 	t_img_data	img_data;
