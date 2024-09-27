@@ -1,12 +1,11 @@
 CC = cc
-CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
-MLX_FLAGS = -Lmlx -lmlx -lm -framework OpenGL -framework AppKit 
+CFLAGS =  #-Werror -Wextra -Wall  #-g3 #-fsanitize=address
+MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
 RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
-UTILS_FILES =
-RENDER_FILES =
+UTILS_FILES =  utils/exiter.c utils/ft_strlen.c utils/print_err.c 
+RENDER_FILES = rendering/put_pixel.c rendering/background.c
 PARSING_FILES =
-ENV= 
 CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR}
 OFILES = ${CFILES:.c=.o}
 NAME = cub3D
@@ -14,7 +13,7 @@ NAME = cub3D
 all : ${NAME}
 
 ${NAME} : ${OFILES}
-	$(CC) ${CFLAGS} $(OFILES) ${MLX_FLAGS} -o $(NAME
+	$(CC) ${CFLAGS} $(OFILES) ${MLX_FLAGS} -o $(NAME)
 
 %.o: %.c
 	$(CC) ${CFLAGS} -Imlx -c $< -o $@

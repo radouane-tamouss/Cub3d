@@ -52,16 +52,20 @@ typedef struct s_img_data
 
 typedef struct s_data
 {
-	t_img_data	*img_data;
 	void		*mlx;
 	void		*win;
-	t_img_data	img_data;
+	t_img_data	walls;
+	t_img_data	north_img;
+	t_img_data	south_img;
+	t_img_data	east_img;
+	t_img_data	west_img;
+	t_img_data	background_img;
 	int			ceiling_color;
 	int			floor_color;
 	//TODO comlete this
 } t_data;
 
-//===========================
+
 //==== struct of HEAP CONTROLLER ==
 
 typedef struct	s_heap
@@ -71,20 +75,27 @@ typedef struct	s_heap
 } t_heap;
 
 //=================================
+t_data	*get_data(void);
 
-//=======================================================
 //=== parsing ===========================================
 
-//=======================================================
+
 //=== rendering =========================================
 
-//=======================================================
+void	put_pixel(t_img_data *img, int x, int y, int color);
+void	create_background(void);
+void	render_background(void);
+
 //=== garbage collector =================================
 
 void	*mallocate(size_t size);
 void	free_all_heap(void);
 void	ft_free(void *ptr);
-//=======================================================
+//=== utils =============================================
 
+size_t	ft_strlen(char *str);
+void print_err(char *str);
+void	exiter(int code);
+//=======================================================
 
 #endif

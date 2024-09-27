@@ -9,6 +9,11 @@
 /*   Updated: 2024/09/17 23:03:06 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include "../cube.h"
 
 // this will act as clean exiter , that free and remove leaks before exiting
 void	exiter(int code)
+{
+	free_all_heap();
+	exit(code);
+}
