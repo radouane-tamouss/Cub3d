@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/28 18:31:59 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/09/28 22:01:56 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,23 +133,21 @@ void parse_texture_info(char *line, t_game *game, t_map *map)
 	split = ft_split(line, ' ');
 	if (ft_strcmp(split[0], "NO") == 0)
 	{
-		// if (game->north.path != NULL)
-		// {
-		// 	printf("error duplicate north texture\n");
-		// 	exit(1);
-		// }
-		printf("the north is %s\n", split[1]);
-		int fd = open(split[1], O_RDONLY);
+		if (game->north.path != NULL)
+		{
+			printf("error duplicate north texture\n");
+			exit(1);
+		}
+		game->north.path = ft_strtrim(split[1], "\n");
+		int fd = open(game->north.path, O_RDONLY);
         if (fd == -1)
         {
-            // printf("error: north texture file does not exist: %s\n", split[1]);
 			perror("open");
             map->valid = 0;
             exit(55);
         }
         close(fd);
-		game->north.path = split[1];
-		printf("the north is %s\n", game->north.path);
+		printf("[the north is %s]\n", game->north.path);
 	}
 	else if(ft_strcmp(split[0], "SO") == 0)
 	{
@@ -158,16 +156,16 @@ void parse_texture_info(char *line, t_game *game, t_map *map)
 			printf("error duplicate south texture\n");
 			exit(1);
 		}
-		 int fd = open(split[1], O_RDONLY);
+		game->south.path = ft_strtrim(split[1], "\n");
+		int fd = open(game->south.path, O_RDONLY);
         if (fd == -1)
         {
-            printf("error: south texture file does not exist: %s\n", split[1]);
+			perror("open");
             map->valid = 0;
             exit(1);
         }
         close(fd);
-		game->south.path = split[1];
-		printf("the south is %s\n", game->south.path);
+		printf("[the south is %s]\n", game->south.path);
 	}
 	else if(ft_strcmp(split[0], "WE") == 0)
 	{
