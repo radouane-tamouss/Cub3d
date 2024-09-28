@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/17 20:55:34 by eouhrich      #+#    #+#                 */
-/*   Updated: 2024/09/27 17:35:03 by rtamouss      ########   odam.nl         */
+/*   Updated: 2024/09/28 10:29:17 by rtamouss      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 # include "lib/libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <stdio.h>
+# include "lib/get_next_line.h"
 # include <mlx.h>
 
 //== const sizes =========
@@ -80,6 +82,7 @@ typedef struct s_map
     char **grid;
     int width;
     int height;
+    int valid;
 } t_map;
 
 typedef struct s_game
