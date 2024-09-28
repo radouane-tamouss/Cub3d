@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   main.c                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/17 20:55:26 by eouhrich      #+#    #+#                 */
-/*   Updated: 2024/09/28 14:17:40 by rtamouss      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
+/*   Updated: 2024/09/28 18:31:59 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,94 @@ void print_map(char **map)
 	int i = 0;
 	while(map[i] != NULL)
 	{
-		printf("map[%d] = [%s\n]",i, map[i]);
+		printf("%s",map[i]);
 		free(map[i]);
 		i++;
 	}
+	printf("\n");
 }
+
+void parse_texture_info(char *line, t_game *game, t_map *map)
+{
+	char **split;
+	
+	split = ft_split(line, ' ');
+	if (ft_strcmp(split[0], "NO") == 0)
+	{
+		// if (game->north.path != NULL)
+		// {
+		// 	printf("error duplicate north texture\n");
+		// 	exit(1);
+		// }
+		printf("the north is %s\n", split[1]);
+		int fd = open(split[1], O_RDONLY);
+        if (fd == -1)
+        {
+            // printf("error: north texture file does not exist: %s\n", split[1]);
+			perror("open");
+            map->valid = 0;
+            exit(55);
+        }
+        close(fd);
+		game->north.path = split[1];
+		printf("the north is %s\n", game->north.path);
+	}
+	else if(ft_strcmp(split[0], "SO") == 0)
+	{
+		if (game->south.path != NULL)
+		{
+			printf("error duplicate south texture\n");
+			exit(1);
+		}
+		 int fd = open(split[1], O_RDONLY);
+        if (fd == -1)
+        {
+            printf("error: south texture file does not exist: %s\n", split[1]);
+            map->valid = 0;
+            exit(1);
+        }
+        close(fd);
+		game->south.path = split[1];
+		printf("the south is %s\n", game->south.path);
+	}
+	else if(ft_strcmp(split[0], "WE") == 0)
+	{
+		if (game->west.path != NULL)
+		{
+			printf("error duplicate west texture\n");
+			exit(1);
+		}
+		int fd = open(split[1], O_RDONLY);
+        if (fd == -1)
+        {
+            printf("error: west texture file does not exist: %s\n", split[1]);
+            map->valid = 0;
+            exit(1);
+        }
+        close(fd);
+		game->west.path = split[1];
+		printf("the west is %s\n", game->west.path);
+	}
+	else if(ft_strcmp(split[0], "EA") == 0)
+	{
+		if (game->west.path != NULL)
+		{
+			printf("error duplicate west texture\n");
+			exit(1);
+		}
+		 int fd = open(split[1], O_RDONLY);
+        if (fd == -1)
+        {
+            printf("error: east texture file does not exist: %s\n", split[1]);
+            map->valid = 0;
+            exit(1);
+        }
+        close(fd);
+		game->east.path = split[1];
+		printf("the east path is %s\n", game->east.path);
+	}
+}
+
 t_map check_map(int fd, char *file)
 {
 	t_map m2;
@@ -135,6 +218,7 @@ t_map check_map(int fd, char *file)
 	line = NULL;
 	m2.height = calc_height(fd, file, &m2, line);
 	printf("the height of the map is %d\n", m2.height);
+	printf("------------\n");
 	map = malloc(sizeof(char *) * (m2.height + 1));
 	if (!map)
 	{
@@ -143,6 +227,14 @@ t_map check_map(int fd, char *file)
 		return (m2);
 	}
 	fill_map(map, file, line);
+	t_game game;
+	int i = 0;
+	while(map[i])
+	{
+		parse_texture_info(map[i], &game, &m2);
+		i++;
+	}
+	// parse_texture_info(map[0], &game);
 	// print_map(map);
 	// free(map);
 	return (m2);
