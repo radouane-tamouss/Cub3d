@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   cube.h                                             :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/09/17 20:55:34 by eouhrich      #+#    #+#                 */
-/*   Updated: 2024/09/28 10:29:17 by rtamouss      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   cube.h                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
+/*   Updated: 2024/09/28 18:30:07 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <limits.h>
 # include <stdio.h>
 # include "lib/get_next_line.h"
-# include <mlx.h>
+// # include <mlx.h>
 
 //== const sizes =========
 
