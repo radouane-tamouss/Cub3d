@@ -3,11 +3,12 @@ CC = cc
 MLX_FLAGS = -Lmlx -lmlx -lm -framework OpenGL -framework AppKit 
 RM = rm -rf
 # GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
-#UTILS_FILES =
-#RENDER_FILES =
-#PARSING_FILES =
-#ENV= 
-CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR}
+# UTILS_FILES =
+# RENDER_FILES =
+# PARSING_FILES =
+GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
+ENV= 
+CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR} ${GET_NEXT_LINE_FILES}
 OFILES = ${CFILES:.c=.o}
 NAME = cub3D
 
