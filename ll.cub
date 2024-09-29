@@ -1,19 +1,12 @@
 NO       ./textures/north.xpm 
 SO      ./textures/so.xpm
 
-
-
-
-
-
-
-
-
-                                                                    WE ./textures/we.xpm
+                        
+WE ./textures/we.xpm
 EA ./textures/ea.xpm
 
-F 270,100,0
-C 225,30,0
+F 002,100,10
+C 4,30,10
 
             11111111111111111111111
             10000000001000000000001
