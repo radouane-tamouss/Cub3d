@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/17 20:55:34 by eouhrich      #+#    #+#                 */
-/*   Updated: 2024/09/27 17:35:03 by rtamouss      ########   odam.nl         */
+/*   Updated: 2024/09/29 18:41:48 by rtamouss      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 # include "lib/libft/libft.h"
 # include <unistd.h>
 # include <fcntl.h>
+# include <limits.h>
 # include <stdio.h>
-# include <mlx.h>
+# include "lib/get_next_line.h"
+// # include <mlx.h>
 
 //== const sizes =========
 
@@ -52,6 +54,7 @@ typedef struct s_img_data
 
 typedef struct s_color
 {
+    char *color;
     int r;
     int g;
     int b;
@@ -80,6 +83,7 @@ typedef struct s_map
     char **grid;
     int width;
     int height;
+    int valid;
 } t_map;
 
 typedef struct s_game
@@ -127,6 +131,11 @@ typedef struct	s_heap
 
 //=======================================================
 //=== parsing ===========================================
+
+// split by charset
+
+char	**ft_split2(char const *s, char *charset);
+int	check_charset(char *charset, char c);
 
 //=======================================================
 //=== rendering =========================================
