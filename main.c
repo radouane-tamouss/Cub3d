@@ -63,7 +63,7 @@ int check_file(char *str, int *fd)
 	if (str == NULL)
 		return (0);
 	res = ft_strrchr(str, '.');
-	if (res == NULL || ft_strcmp(res, ".cub") != 0)
+	if (res == NULL || ft_strcmp(res, ".cub") != 0 || ft_strlen(str) <= 4)
 		return (printf("invalid file\n"), 0);
 	*fd = open(str, O_RDONLY);
 	if (*fd < 0)
@@ -97,6 +97,17 @@ size_t calc_height(int fd, char *file, t_map *m2, char *line)
 	return (m2->height);
 }
 
+int check_line_empty(char *line)
+{
+	int i = 0;
+	while(line[i])
+	{
+		if (check_charset(" \t\r\n\v\f", line[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
 void fill_map(char **map, char *file, char *line)
 {
 	int fd;
@@ -107,7 +118,7 @@ void fill_map(char **map, char *file, char *line)
 	i = 0;
 	while(line)
 	{
-		if (ft_strcmp(line, "") == 0 || ft_strcmp(line, "\n") == 0)
+		if (ft_strcmp(line, "") == 0 || check_line_empty(line) == 1)
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -217,7 +228,69 @@ void parse_east_texture(t_game *game, char **split)
 	}
 	close (fd);
 }
-void parse_texture_info(char *line, t_game *game, t_map *map)
+
+int check_file_extension(char *str)
+{
+	char *res;
+	res = ft_strrchr(str, '.');
+	if (res == NULL || ft_strcmp(res, ".xpm") != 0 || ft_strlen(str) <= 4)
+		return (0);
+	return (1);
+}
+void parse_color(char *color, t_color *color_struct)
+{
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int r = 0;
+	int g = 0;
+	int b = 0;
+	while (color[i])
+	{
+		if (color[i] == ',')
+		{
+			j++;
+			i++;
+		}
+		if (j == 0)
+		{
+			if (color[i] < '0' || color[i] > '9')
+			{
+				printf("Error: Invalid color format\n");
+				exit(1);
+			}
+			r = r * 10 + (color[i] - '0');
+		}
+		else if (j == 1)
+		{
+			if (color[i] < '0' || color[i] > '9')
+			{
+				printf("Error: Invalid color format\n");
+				exit(1);
+			}
+			g = g * 10 + (color[i] - '0');
+		}
+		else if (j == 2)
+		{
+			if (color[i] < '0' || color[i] > '9')
+			{
+				printf("Error: Invalid color format\n");
+				exit(1);
+			}
+			b = b * 10 + (color[i] - '0');
+		}
+		i++;
+	}
+	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	{
+		printf("Error: Invalid color format\n");
+		exit(1);
+	}
+	color_struct->r = r;
+	color_struct->g = g;
+	color_struct->b = b;
+}
+void parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 {
     char **split;
     
@@ -230,7 +303,11 @@ void parse_texture_info(char *line, t_game *game, t_map *map)
 		printf("Error: Invalid line format\n");
 		exit(1);
 	}
-
+	if (check_file_extension(split[1]) == 0 && ft_strcmp(split[0], "F") != 0 && ft_strcmp(split[0], "C") != 0)
+	{
+		printf("Error: Invalid file extension\n");
+		exit(1);
+	}
     if (ft_strcmp(split[0], "NO") == 0)
 		parse_north_texture(game, split);
     else if (ft_strcmp(split[0], "SO") == 0)
@@ -239,7 +316,22 @@ void parse_texture_info(char *line, t_game *game, t_map *map)
 		parse_west_texture(game, split);
     else if (ft_strcmp(split[0], "EA") == 0)
 		parse_east_texture(game, split);
-
+	else if (ft_strcmp(split[0], "F") == 0)
+	{
+		// parse_floor_color
+		if (game->floor.color!= NULL)
+		{
+			printf("error duplicate floor color\n");
+			exit(1);
+		}
+		if (split[1] == NULL) {
+			printf("Error: Missing color for floor\n");
+			exit(1);
+		}
+		game->floor.color = ft_strdup(split[1]);
+		parse_color(game->floor.color, &game->floor);
+		printf("floor color is [%s]\n", game->floor.color);
+	}
     // Free split array to avoid memory leak
     int i = 0;
     while (split[i]) {
@@ -275,15 +367,17 @@ t_map check_map(int fd, char *file)
 	game.south.path = NULL;
 	game.west.path = NULL;
 	game.east.path = NULL;
+	game.floor.color = NULL;
 
 	int i = 0;
 	// printf("map length = %d\n", m2.height);
 	// print_map(map);
-	while(i < 4)
+	while(i < 6)
 	{
-		parse_texture_info(map[i], &game, &m2);
+		parse_texture_and_colors_info(map[i], &game, &m2);
 		i++;
 	}
+
 	// parse_texture_info(map[0], &game);
 	// free(map);
 	return (m2);

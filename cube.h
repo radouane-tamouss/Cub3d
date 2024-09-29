@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2024/09/17 20:55:34 by eouhrich      #+#    #+#                 */
-/*   Updated: 2024/09/29 12:57:55 by rtamouss      ########   odam.nl         */
+/*   Updated: 2024/09/29 18:41:48 by rtamouss      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_img_data
 
 typedef struct s_color
 {
+    char *color;
     int r;
     int g;
     int b;
@@ -134,6 +135,7 @@ typedef struct	s_heap
 // split by charset
 
 char	**ft_split2(char const *s, char *charset);
+int	check_charset(char *charset, char c);
 
 //=======================================================
 //=== rendering =========================================
