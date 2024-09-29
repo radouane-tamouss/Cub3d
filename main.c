@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/28 22:01:56 by rtamouss         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   main.c                                             :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/09/17 20:55:26 by eouhrich      #+#    #+#                 */
+/*   Updated: 2024/09/29 10:23:01 by rtamouss      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,12 @@ void parse_texture_info(char *line, t_game *game, t_map *map)
         {
 			perror("open");
             map->valid = 0;
-            exit(55);
+            exit(1);
         }
         close(fd);
 		printf("[the north is %s]\n", game->north.path);
 	}
-	else if(ft_strcmp(split[0], "SO") == 0)
-	{
+	else if (ft_strcmp(split[0], "SO") == 0) {
 		if (game->south.path != NULL)
 		{
 			printf("error duplicate south texture\n");
@@ -167,42 +166,41 @@ void parse_texture_info(char *line, t_game *game, t_map *map)
         close(fd);
 		printf("[the south is %s]\n", game->south.path);
 	}
-	else if(ft_strcmp(split[0], "WE") == 0)
-	{
+	else if (ft_strcmp(split[0], "WE") == 0) {
 		if (game->west.path != NULL)
 		{
 			printf("error duplicate west texture\n");
 			exit(1);
 		}
-		int fd = open(split[1], O_RDONLY);
+		game->west.path = ft_strtrim(split[1], "\n");
+		int fd = open(game->west.path, O_RDONLY);
         if (fd == -1)
         {
-            printf("error: west texture file does not exist: %s\n", split[1]);
+			perror("open");
             map->valid = 0;
             exit(1);
         }
         close(fd);
-		game->west.path = split[1];
-		printf("the west is %s\n", game->west.path);
+		printf("[the west is %s]\n", game->west.path);
 	}
-	else if(ft_strcmp(split[0], "EA") == 0)
-	{
-		if (game->west.path != NULL)
+	else if (ft_strcmp(split[0], "EA") == 0) {
+		if (game->east.path != NULL)
 		{
-			printf("error duplicate west texture\n");
+			printf("error duplicate east texture\n");
 			exit(1);
 		}
-		 int fd = open(split[1], O_RDONLY);
+		game->east.path = ft_strtrim(split[1], "\n");
+		int fd = open(game->east.path, O_RDONLY);
         if (fd == -1)
         {
-            printf("error: east texture file does not exist: %s\n", split[1]);
+			perror("open");
             map->valid = 0;
             exit(1);
         }
         close(fd);
-		game->east.path = split[1];
-		printf("the east path is %s\n", game->east.path);
+		printf("[the east is %s]\n", game->east.path);
 	}
+
 }
 
 t_map check_map(int fd, char *file)
@@ -226,6 +224,11 @@ t_map check_map(int fd, char *file)
 	}
 	fill_map(map, file, line);
 	t_game game;
+	game.north.path = NULL;
+	game.south.path = NULL;
+	game.west.path = NULL;
+	game.east.path = NULL;
+
 	int i = 0;
 	while(map[i])
 	{
