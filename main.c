@@ -483,6 +483,40 @@ void check_invalid_spaces(t_game *game)
 		i++;
 	}
 }
+void pad_map_with_spaces(t_game *game)
+{
+	int i = 0;
+	int j = 0;
+	while(game->map.grid[i] != NULL)
+	{
+		j = 0;
+		if (ft_strlen(game->map.grid[i]) < game->map.width)
+		{
+			int map_width = calc_map_width(game->map.grid);
+			char *line = malloc(sizeof(char) * (map_width + 1));
+			int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
+			int k = 0;
+			while(k < number_of_spaces_to_add)
+			{
+				line[k] = ' ';
+				k++;
+			}
+			while(k < map_width)
+			{
+				line[k] = game->map.grid[i][j];
+				k++;
+				j++;
+			}
+			line[k] = '\0';
+			game->map.grid[i] = ft_strdup(line);
+			free(line);
+		}
+		i++;
+	}
+	printf("------------ after padding ------------\n");
+	print_map(game->map.grid);
+	printf("------------\n");
+}
 t_map check_map(int fd, char *file)
 {
 	t_map m2;
@@ -565,6 +599,7 @@ t_map check_map(int fd, char *file)
 	map_height = calc_map_height(game.map.grid);
 	printf("map width = %d\n", map_width);
 	printf("map height = %d\n", map_height);
+	pad_map_with_spaces(&game);
 
 	// parse_texture_info(map[0], &game);
 	// free(map);
