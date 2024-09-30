@@ -131,6 +131,12 @@ void fill_map(char **map, char *file, char *line)
 		filled_lines++;
 		i++;
 	}
+	// Remove trailing empty lines
+    while (i > 0 && (ft_strcmp(map[i - 1], "") == 0 || check_line_empty(map[i - 1]) == 1))
+    {
+        free(map[i - 1]);
+        i--;
+    }
 	map[i] = NULL;
 	close(fd);
 }
@@ -139,11 +145,12 @@ void print_map(char **map)
 	int i = 0;
 	while(map[i] != NULL)
 	{
-		printf("%s\n",map[i]);
+		printf("[%s]\n",map[i]);
 		// free(map[i]);
 		i++;
 	}
 }
+// TODO remove last empty lines
 void check_file_exists_or_empty(char *file)
 {
 	int fd;
@@ -359,12 +366,13 @@ void check_if_map_contains_only_valid_characters(t_game *game)
 	while (game->map.grid[i] != NULL)
 	{
 		j = 0;
-		game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
-		if (game->map.grid[i][0] == '\0')
-		{
-			printf("Error: Empty line in map\n");
-			exit(1);
-		}
+		// game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
+		game->map.grid[i] = ft_strtrim(game->map.grid[i], "\n");
+		// if (game->map.grid[i][0] == '\0')
+		// {
+		// 	printf("Error: Empty line in map\n");
+		// 	exit(1);
+		// }
 		while (game->map.grid[i][j])
 		{
 			if (game->map.grid[i][j] != '0' && game->map.grid[i][j] != '1' && game->map.grid[i][j] != 'N' && game->map.grid[i][j] != 'S' && game->map.grid[i][j] != 'E' && game->map.grid[i][j] != 'W' && game->map.grid[i][j] != ' ')
@@ -384,8 +392,13 @@ void check_map_sourrounded_by_walls(t_game *game)
 	while (game->map.grid[i] != NULL)
 	{
 		j = 0;
-		game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
+		// game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
 		printf("map[%d] = [%s]\n", i, game->map.grid[i]);
+		if (game->map.grid[i][0] == '\0')
+		{
+			printf("Error: Empty line in map\n");
+			exit(1);
+		}
 		while (game->map.grid[i][j])
 		{
 			if (i == 0 || i == game->map.height - 1 || j == 0 || j == ft_strlen(game->map.grid[i]) - 1)
@@ -483,6 +496,145 @@ void check_invalid_spaces(t_game *game)
 		i++;
 	}
 }
+int check_if_player_direction(char c)
+{
+	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (1);
+	return (0);
+}
+void check_invalid_map(t_game *game)
+{
+    int i = 0;
+    int j = 0;
+    while (game->map.grid[i] != NULL)
+    {
+        j = 0;
+        while (game->map.grid[i][j])
+        { 
+            if (game->map.grid[i][j] == '0' || check_if_player_direction(game->map.grid[i][j]) == 1)
+            {
+                if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i - 1][j] != '1' && !check_if_player_direction(game->map.grid[i - 1][j]))) ||  // above
+                    (i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0' && game->map.grid[i + 1][j] != '1' && !check_if_player_direction(game->map.grid[i + 1][j]))) ||  // below
+                    (j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j - 1] != '1' && !check_if_player_direction(game->map.grid[i][j - 1]))) ||  // left
+                    (j < ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
+                {
+					if (check_if_player_direction(game->map.grid[i][j]) == 1)
+						printf("invalid player direction at (%d, %d)\n", i, j);
+					else 
+      		            printf("invalid zero at (%d, %d)\n", i, j);
+
+                    exit(1);
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+}
+void get_player_position(t_game *game)
+{
+	int i = 0;
+	int j = 0;
+	t_player player;
+	while (game->map.grid[i] != NULL)
+	{
+		j = 0;
+		while (game->map.grid[i][j])
+		{
+			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S' || game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
+			{
+				player.pos_x = i;
+				player.pos_y = j;
+				player.dir_x = 0; 
+				player.dir_y = 0;
+				game->player = player;
+				return;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void pad_map_with_spaces(t_game *game)
+{
+    int i = 0;
+    int j = 0;
+    int map_width = calc_map_width(game->map.grid);
+
+    while (game->map.grid[i] != NULL)
+    {
+        j = 0;
+        if (ft_strlen(game->map.grid[i]) < map_width)
+        {
+            char *line = malloc(sizeof(char) * (map_width + 1));
+            int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
+            int k = 0;
+
+            // Copy the original line
+            while (game->map.grid[i][j])
+            {
+                line[k] = game->map.grid[i][j];
+                k++;
+                j++;
+            }
+
+            // Add the necessary spaces
+            while (k < map_width)
+            {
+                line[k] = ' ';
+                k++;
+            }
+
+            line[k] = '\0';
+            free(game->map.grid[i]); // Free the original line
+            game->map.grid[i] = ft_strdup(line); // Duplicate the new padded line
+            free(line); // Free the temporary line
+        }
+        i++;
+    }
+
+    printf("------------ after padding ------------\n");
+    print_map(game->map.grid);
+    printf("------------\n");
+}
+// void pad_map_with_spaces(t_game *game)
+// {
+// 	int i = 0;
+// 	int j = 0;
+// 	while(game->map.grid[i] != NULL)
+// 	{
+// 		j = 0;
+// 		if (ft_strlen(game->map.grid[i]) < game->map.width)
+// 		{
+// 			int map_width = calc_map_width(game->map.grid);
+// 			char *line = malloc(sizeof(char) * (map_width + 1));
+// 			int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
+// 			int k = 0;
+// 			// 11111111111111111 = width 32 = aded spaces is 32 - 17 = 15
+// 			printf("number of spaces to add = %d\n", number_of_spaces_to_add);
+// 			while(k < map_width)
+// 			{
+// 				line[k] = game->map.grid[i][j];
+// 				k++;
+// 				j++;
+// 			}
+// 			while(k < number_of_spaces_to_add)
+// 			{
+// 				line[k] = ' ';
+// 				k++;
+// 			}
+// 			line[k] = '\0';
+// 			game->map.grid[i] = ft_strdup(line);
+// 			free(line);
+// 		}
+// 		i++;
+// 	}
+// 	printf("------------ after padding ------------\n");
+// 	print_map(game->map.grid);
+// 	printf("------------\n");
+// }
+
 t_map check_map(int fd, char *file)
 {
 	t_map m2;
@@ -493,8 +645,6 @@ t_map check_map(int fd, char *file)
 	m2.valid = 0;
 	line = NULL;
 	m2.height = calc_height(fd, file, &m2, line);
-	printf("the height of the map is %d\n", m2.height);
-	printf("------------\n");
 	map = malloc(sizeof(char *) * (m2.height + 1));
 	if (!map)
 	{
@@ -520,13 +670,13 @@ t_map check_map(int fd, char *file)
 		i++;
 	}
 
-	printf("east texture is [%s]\n", game.east.path);
-	printf("west texture is [%s]\n", game.west.path);
-	printf("south texture is [%s]\n", game.south.path);
-	printf("north texture is [%s]\n", game.north.path);
-	printf("floor color is [%d,%d,%d]\n", game.floor.r, game.floor.g, game.floor.b);
-	printf("ceiling color is [%d,%d,%d]\n", game.ceiling.r, game.ceiling.g, game.ceiling.b);
-	printf("------------\n");
+	// printf("east texture is [%s]\n", game.east.path);
+	// printf("west texture is [%s]\n", game.west.path);
+	// printf("south texture is [%s]\n", game.south.path);
+	// printf("north texture is [%s]\n", game.north.path);
+	// printf("floor color is [%d,%d,%d]\n", game.floor.r, game.floor.g, game.floor.b);
+	// printf("ceiling color is [%d,%d,%d]\n", game.ceiling.r, game.ceiling.g, game.ceiling.b);
+	// printf("------------\n");
 	
 	
 	int map_height = 0;
@@ -535,14 +685,14 @@ t_map check_map(int fd, char *file)
 		map_height++;
 	}
 	map_height = map_height - 6;
-	// printf("map height = %d\n", map_height);
 	game.map.height = map_height;
 	int j = 0;
 	game.map.grid = malloc(sizeof(char *) * (map_height + 1));
 	while (j < map_height)
 	{
-		game.map.grid[j] = ft_strtrim(map[j + 6], " ");
-		game.map.grid[j] = ft_strtrim(game.map.grid[j], "\n");
+		// game.map.grid[j] = ft_strtrim(map[j + 6], " ");
+		// game.map.grid[j] = ft_strtrim(game.map.grid[j], "\n");
+		game.map.grid[j] = ft_strdup(map[j + 6]);
 		j++;
 	}
 	game.map.grid[j] = NULL;
@@ -553,18 +703,22 @@ t_map check_map(int fd, char *file)
 	// [x] Validate that the map contains only valid characters (0, 1, N, S, E W)
 	// [x] Ensure the map is surrounded by walls (1's)
 	// [x] Verify that there is exactly one player starting position (N, S, E, or W)
-	check_if_map_contains_only_valid_characters(&game);
-	check_map_sourrounded_by_walls(&game);
-	verify_player_starting_position(&game);
+	// verify_player_starting_position(&game);
 	// [ ] check for invalid spaces in the map
-	check_invalid_spaces(&game);
-	printf("------------\n");
-	print_map(game.map.grid);
-	printf("------------\n");
+	// check_invalid_spaces(&game);
+	// printf("------------\n");
+	// print_map(game.map.grid);
+	// printf("------------\n");
 	int map_width = calc_map_width(game.map.grid);
 	map_height = calc_map_height(game.map.grid);
+	check_if_map_contains_only_valid_characters(&game);
+	check_map_sourrounded_by_walls(&game);
 	printf("map width = %d\n", map_width);
 	printf("map height = %d\n", map_height);
+	pad_map_with_spaces(&game);
+	check_invalid_map(&game);
+	get_player_position(&game);
+	printf("player position = [%f,%f]\n", game.player.pos_x, game.player.pos_y);
 
 	// parse_texture_info(map[0], &game);
 	// free(map);
