@@ -112,13 +112,15 @@ void fill_map(char **map, char *file, char *line)
 {
 	int fd;
 	int i;
+	int filled_lines;
 	
 	fd = open(file, O_RDONLY);
+	filled_lines = 0;
 	line = get_next_line(fd);
 	i = 0;
 	while(line)
 	{
-		if (ft_strcmp(line, "") == 0 || check_line_empty(line) == 1)
+		if (filled_lines <= 6 && (ft_strcmp(line, "") == 0 || check_line_empty(line) == 1))
 		{
 			free(line);
 			line = get_next_line(fd);
@@ -126,6 +128,7 @@ void fill_map(char **map, char *file, char *line)
 		}
 		map[i] = line;
 		line = get_next_line(fd);
+		filled_lines++;
 		i++;
 	}
 	map[i] = NULL;
@@ -136,11 +139,10 @@ void print_map(char **map)
 	int i = 0;
 	while(map[i] != NULL)
 	{
-		printf("%s",map[i]);
-		free(map[i]);
+		printf("%s\n",map[i]);
+		// free(map[i]);
 		i++;
 	}
-	printf("\n");
 }
 void check_file_exists_or_empty(char *file)
 {
@@ -180,7 +182,6 @@ void parse_north_texture(t_game *game, char **split)
     }
     game->north.path = ft_strdup(split[1]);
 	check_file_exists_or_empty(game->north.path);
-	printf("north texture is [%s]\n", game->north.path);
 }
 void parse_south_texture(t_game *game, char **split)
 {
@@ -194,7 +195,6 @@ void parse_south_texture(t_game *game, char **split)
 		exit(1);
 	}
 	game->south.path = ft_strdup(split[1]);
-	printf("south texture is [%s]\n", game->south.path);
 	check_file_exists_or_empty(game->south.path);
 }
 void parse_west_texture(t_game *game,char **split)
@@ -209,7 +209,6 @@ void parse_west_texture(t_game *game,char **split)
 		exit(1);
 	}
 	game->west.path = ft_strdup(split[1]);
-	printf("west texture is [%s]\n", game->west.path);
 	check_file_exists_or_empty(game->west.path);
 }
 
@@ -225,7 +224,6 @@ void parse_east_texture(t_game *game, char **split)
 		exit(1);
 	}
 	game->east.path = ft_strdup(split[1]);
-	printf("east texture is [%s]\n", game->east.path);
 	check_file_exists_or_empty(game->east.path);
 }
 
@@ -280,11 +278,11 @@ void parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
     
     split = ft_split2(line, " \t\r\n\v\f");
     if (split[0] == NULL) {
-        printf("Error: Invalid line format\n");
+        printf("Error: Invalid map\n");
         exit(1);
     }
 	else if (split[1] == NULL || split[2] != NULL) {
-		printf("Error: Invalid line format\n");
+		printf("Error: Invalid Map\n");
 		exit(1);
 	}
 	if (check_file_extension(split[1]) == 0 && ft_strcmp(split[0], "F") != 0 && ft_strcmp(split[0], "C") != 0)
@@ -314,7 +312,6 @@ void parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 		}
 		game->floor.color = ft_strdup(split[1]);
 		parse_color(game->floor.color, &game->floor);
-		printf("floor color is [%s]\n", game->floor.color);
 	}
 	else if (ft_strcmp(split[0], "C") == 0)
 	{
@@ -330,7 +327,6 @@ void parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 		}
 		game->ceiling.color = ft_strdup(split[1]);
 		parse_color(game->ceiling.color, &game->ceiling);
-		printf("ceiling color is [%s]\n", game->ceiling.color);
 	}
     // Free split array to avoid memory leak
     int i = 0;
@@ -354,6 +350,138 @@ int check_if_file_empty(char *file)
 		return (printf("Read failed\n"), 0);
 	close(fd);
 	return (0);
+}
+void check_if_map_contains_only_valid_characters(t_game *game)
+{
+	int i = 0;
+	int j = 0;
+	// printf("map[7][0] = [%s]\n", game->map.grid[7]);
+	while (game->map.grid[i] != NULL)
+	{
+		j = 0;
+		game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
+		if (game->map.grid[i][0] == '\0')
+		{
+			printf("Error: Empty line in map\n");
+			exit(1);
+		}
+		while (game->map.grid[i][j])
+		{
+			if (game->map.grid[i][j] != '0' && game->map.grid[i][j] != '1' && game->map.grid[i][j] != 'N' && game->map.grid[i][j] != 'S' && game->map.grid[i][j] != 'E' && game->map.grid[i][j] != 'W' && game->map.grid[i][j] != ' ')
+			{
+				printf("Error: Invalid character in map\n");
+				exit(1);
+			}
+			j++;
+		}
+		i++;
+	}
+}
+void check_map_sourrounded_by_walls(t_game *game)
+{
+	int i = 0;
+	int j = 0;
+	while (game->map.grid[i] != NULL)
+	{
+		j = 0;
+		game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
+		printf("map[%d] = [%s]\n", i, game->map.grid[i]);
+		while (game->map.grid[i][j])
+		{
+			if (i == 0 || i == game->map.height - 1 || j == 0 || j == ft_strlen(game->map.grid[i]) - 1)
+			{
+				if (game->map.grid[i][j] != '1' && game->map.grid[i][j] != ' ')
+				{
+					printf("Error: Map is not surrounded by walls\n");
+					exit(1);
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+}
+int calc_map_height(char **map)
+{
+	int i = 0;
+	while(map[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
+}
+int calc_map_width(char **map)
+{
+	int i = 0;
+	int j = 0;
+	int max = 0;
+	while(map[i] != NULL)
+	{
+		j = 0;
+		while(map[i][j])
+		{
+			j++;
+		}
+		if (j > max)
+			max = j;
+		i++;
+	}
+	return (max);
+}
+void verify_player_starting_position(t_game *game)
+{
+	int i = 0;
+	int j = 0;
+	int player_count = 0;
+	while (game->map.grid[i] != NULL)
+	{
+		j = 0;
+		while (game->map.grid[i][j])
+		{
+			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S' || game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
+			{
+				player_count++;
+				if (player_count > 1)
+				{
+					printf("Error: More than one player starting position\n");
+					exit(1);
+				}
+			}
+			j++;
+		}
+		i++;
+	}
+	if (player_count == 0)
+	{
+		printf("Error: No player starting position\n");
+		exit(1);
+	}
+}
+
+void check_invalid_spaces(t_game *game)
+{
+	int i = 0;
+	int j = 0;
+	while (game->map.grid[i] != NULL)
+	{
+		j = 0;
+		while (game->map.grid[i][j])
+		{
+			if (game->map.grid[i][j] == ' ')
+			{
+				if ((i > 0 && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != ' ') ||  // above
+					(i < game->map.height - 1 && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != ' ') ||  // below
+					(j > 0 && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != ' ') ||  // left
+					(j < ft_strlen(game->map.grid[i]) - 1 && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != ' '))  // right
+				{
+					printf("Error: Invalid space found at (%d, %d)\n", i, j);
+					exit(1);
+				}
+			}
+			j++;
+		}
+		i++;
+	}
 }
 t_map check_map(int fd, char *file)
 {
@@ -386,16 +514,63 @@ t_map check_map(int fd, char *file)
 	int i = 0;
 	// printf("map length = %d\n", m2.height);
 	// print_map(map);
-	while(i < 7)
+	while(i < 6)
 	{
 		parse_texture_and_colors_info(map[i], &game, &m2);
 		i++;
 	}
 
+	printf("east texture is [%s]\n", game.east.path);
+	printf("west texture is [%s]\n", game.west.path);
+	printf("south texture is [%s]\n", game.south.path);
+	printf("north texture is [%s]\n", game.north.path);
+	printf("floor color is [%d,%d,%d]\n", game.floor.r, game.floor.g, game.floor.b);
+	printf("ceiling color is [%d,%d,%d]\n", game.ceiling.r, game.ceiling.g, game.ceiling.b);
+	printf("------------\n");
+	
+	
+	int map_height = 0;
+	while(map[map_height] != NULL)
+	{
+		map_height++;
+	}
+	map_height = map_height - 6;
+	// printf("map height = %d\n", map_height);
+	game.map.height = map_height;
+	int j = 0;
+	game.map.grid = malloc(sizeof(char *) * (map_height + 1));
+	while (j < map_height)
+	{
+		game.map.grid[j] = ft_strtrim(map[j + 6], " ");
+		game.map.grid[j] = ft_strtrim(game.map.grid[j], "\n");
+		j++;
+	}
+	game.map.grid[j] = NULL;
+	// print_map(game.map.grid);
+	// TODO parse the map
+	// [x] Identify the start of the map (should be after texture and color information) 
+	// [x] Read the map lines and store them in a 2d array or similar structure
+	// [x] Validate that the map contains only valid characters (0, 1, N, S, E W)
+	// [x] Ensure the map is surrounded by walls (1's)
+	// [x] Verify that there is exactly one player starting position (N, S, E, or W)
+	check_if_map_contains_only_valid_characters(&game);
+	check_map_sourrounded_by_walls(&game);
+	verify_player_starting_position(&game);
+	// [ ] check for invalid spaces in the map
+	check_invalid_spaces(&game);
+	printf("------------\n");
+	print_map(game.map.grid);
+	printf("------------\n");
+	int map_width = calc_map_width(game.map.grid);
+	map_height = calc_map_height(game.map.grid);
+	printf("map width = %d\n", map_width);
+	printf("map height = %d\n", map_height);
+
 	// parse_texture_info(map[0], &game);
 	// free(map);
 	return (m2);
 }
+
 
 int	main(int ac, char **av)
 {
@@ -411,6 +586,5 @@ int	main(int ac, char **av)
 	// init_data();
 	// render_background();
 
-	//TODO complete .. 
 	return (0);
 }
