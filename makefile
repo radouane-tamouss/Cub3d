@@ -1,10 +1,10 @@
 CC = cc
-CFLAGS =  #-Werror -Wextra -Wall  #-g3 #-fsanitize=address
+CFLAGS =  -g3#-Werror -Wextra -Wall  #-g3 #-fsanitize=address
 MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
 RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
 UTILS_FILES =  utils/exiter.c utils/ft_strlen.c utils/print_err.c 
-RENDER_FILES = rendering/put_pixel.c rendering/background.c rendering/event_handling.c
+RENDER_FILES = rendering/put_pixel.c rendering/background.c rendering/event_handling.c rendering/rotation.c rendering/movement.c rendering/ft_math.c rendering/walls.c
 PARSING_FILES =
 CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR}
 OFILES = ${CFILES:.c=.o}
