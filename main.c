@@ -598,42 +598,6 @@ void pad_map_with_spaces(t_game *game)
     print_map(game->map.grid);
     printf("------------\n");
 }
-// void pad_map_with_spaces(t_game *game)
-// {
-// 	int i = 0;
-// 	int j = 0;
-// 	while(game->map.grid[i] != NULL)
-// 	{
-// 		j = 0;
-// 		if (ft_strlen(game->map.grid[i]) < game->map.width)
-// 		{
-// 			int map_width = calc_map_width(game->map.grid);
-// 			char *line = malloc(sizeof(char) * (map_width + 1));
-// 			int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
-// 			int k = 0;
-// 			// 11111111111111111 = width 32 = aded spaces is 32 - 17 = 15
-// 			printf("number of spaces to add = %d\n", number_of_spaces_to_add);
-// 			while(k < map_width)
-// 			{
-// 				line[k] = game->map.grid[i][j];
-// 				k++;
-// 				j++;
-// 			}
-// 			while(k < number_of_spaces_to_add)
-// 			{
-// 				line[k] = ' ';
-// 				k++;
-// 			}
-// 			line[k] = '\0';
-// 			game->map.grid[i] = ft_strdup(line);
-// 			free(line);
-// 		}
-// 		i++;
-// 	}
-// 	printf("------------ after padding ------------\n");
-// 	print_map(game->map.grid);
-// 	printf("------------\n");
-// }
 
 t_map check_map(int fd, char *file)
 {
@@ -703,8 +667,7 @@ t_map check_map(int fd, char *file)
 	// [x] Validate that the map contains only valid characters (0, 1, N, S, E W)
 	// [x] Ensure the map is surrounded by walls (1's)
 	// [x] Verify that there is exactly one player starting position (N, S, E, or W)
-	// verify_player_starting_position(&game);
-	// [ ] check for invalid spaces in the map
+	// [x] check for invalid spaces in the map
 	// check_invalid_spaces(&game);
 	// printf("------------\n");
 	// print_map(game.map.grid);
@@ -717,8 +680,9 @@ t_map check_map(int fd, char *file)
 	printf("map height = %d\n", map_height);
 	pad_map_with_spaces(&game);
 	check_invalid_map(&game);
+	verify_player_starting_position(&game);
 	get_player_position(&game);
-	printf("player position = [%f,%f]\n", game.player.pos_x, game.player.pos_y);
+	// printf("player position = [%f,%f]\n", game.player.pos_x, game.player.pos_y);
 
 	// parse_texture_info(map[0], &game);
 	// free(map);
