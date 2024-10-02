@@ -557,8 +557,6 @@ void get_player_position(t_game *game)
 			{
 				player.pos_x = i;
 				player.pos_y = j;
-				player.dir_x = 0; 
-				player.dir_y = 0;
 				game->player = player;
 				return;
 			}
@@ -720,6 +718,14 @@ t_game check_map(int fd, char *file)
 // 		i++;
 // 	}
 // }
+void my_mlx_pixel_put(t_image_data *img, int x, int y, int color)
+{
+	char *dst;
+
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}
+
 void render_wall(t_game *game, int x, int y)
 {
 	int i = 0;
@@ -730,24 +736,58 @@ void render_wall(t_game *game, int x, int y)
 		j = 0;
 		while (j < SQUARE_SIZE - 1)
 		{
-			mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
+			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
+			my_mlx_pixel_put(&game->img, j + x, i + y, RED);
 			j++;
 		}
 		i++;
 	}
 }
-// radius = 32 / 4 = 8
-// center_x = 5 * 32 + 32 / 2 = 168
-// center_y = 9 * 32 + 32 / 2 = 304
 
-// y = -8
-// x = -8
+void render_line(t_game *game, int x1, int y1, int x2, int y2)
+{
+    double dx = x2 - x1;
+    double dy = y2 - y1;
+    double max = fmax(fabs(dx), fabs(dy));
 
-// if (x * x + y * y <= radius * radius) = -8 * -8 + -8 * -8 <= 8 * 8
+    double x_step = dx / max;
+    double y_step = dy / max;
+
+    double x = x1;
+    double y = y1;
+
+    for (int i = 0; i <= max; i++)
+    {
+        mlx_pixel_put(game->mlx, game->win, round(x), round(y), GREEN);
+        x += x_step;
+        y += y_step;
+    }
+}
+// void update_player(t_game *game)
+// {
+// 	game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
+
+// }
+void update_player(t_game *game)
+{
+    game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
+	double move_step = game->player.walk_direction * game->player.move_speed;
+	double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
+	double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
+	if (game->map.grid[(int)round(new_player_x)][(int)round(new_player_y)] != '1')
+	{
+		game->player.pos_x = new_player_x;
+		game->player.pos_y = new_player_y;
+	}
+	// game->player.pos_x = new_player_x;
+	// game->player.pos_y = new_player_y;
+
+
+}
 void render_player(t_game *game)
 {
 	int x, y;
-	int radius = SQUARE_SIZE / 4;
+	int radius = SQUARE_SIZE / 6;
 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
 
@@ -761,6 +801,12 @@ void render_player(t_game *game)
 			}
 		}
 	}
+	// Calculate the end point of the direction line
+    int end_x = center_x + cos(game->player.rotation_angle) * SQUARE_SIZE;
+    int end_y = center_y + sin(game->player.rotation_angle) * SQUARE_SIZE;
+	
+
+	render_line(game, center_x, center_y, end_x, end_y);
 }
 void render_floor(t_game *game, int x, int y)
 {
@@ -771,7 +817,8 @@ void render_floor(t_game *game, int x, int y)
 		j = 0;
 		while(j < SQUARE_SIZE - 1)
 		{
-			mlx_pixel_put(game->mlx, game->win, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
+			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
+			my_mlx_pixel_put(&game->img, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
 			j++;
 		}
 		i++;
@@ -800,50 +847,75 @@ void render_map(t_game *game)
 			else if (check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
 				render_floor(game, x, y);
-				render_player(game);
+				// render_player(game);
 			}
 			j++;
 		}
 		i++;
 	}
 }
+
+void render_frame(t_game *game)
+{
+	ft_memset(game->img.addr, 0, game->map.width * SQUARE_SIZE * game->map.height * SQUARE_SIZE * (game->img.bits_per_pixel / 8));
+
+	render_map(game);
+	render_player(game);
+	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+}
 int key_hook(int keycode, t_game *game)
 {
-	int old_pos_x = game->player.pos_x;
-	int old_pos_y = game->player.pos_y;
-
 	if (keycode == ESC_MAC)
 	{
 		exit(0);
 	}
+	else if (keycode == UP_MAC)
+	{
+		printf("UP\n");
+		game->player.walk_direction = 1;
+	}
+	else if (keycode == DOWN_MAC)
+	{
+		printf("Down\n");
+		game->player.walk_direction = -1;
+	}
+	else if (keycode == LEFT_MAC)
+	{
+		printf("Left\n");
+		game->player.turn_direction = -1;
+	}
+	else if (keycode == RIGHT_MAC)
+	{
+		printf("Right\n");
+		game->player.turn_direction = 1;
+	}
 	else if (keycode == W_MAC)
 	{
-		printf("w pressed\n");
-		game->player.pos_x += game->player.dir_x * MOVE_SPEED;
-		game->player.pos_y += game->player.dir_y * MOVE_SPEED;
+		printf("W\n");
+		game->player.walk_direction = 1;
 	}
 	else if (keycode == S_MAC)
 	{
-		printf("s pressed\n");
-		game->player.pos_x -= game->player.dir_x * MOVE_SPEED;
-		game->player.pos_y -= game->player.dir_y * MOVE_SPEED;
+		printf("S\n");
+		game->player.walk_direction = -1;
 	}
-	else if (keycode == A_MAC)
-	{
-		printf("a pressed\n");
-		game->player.pos_x -= game->player.plane_x * MOVE_SPEED;
-		game->player.pos_y -= game->player.plane_y * MOVE_SPEED;
-	}
-	else if (keycode == D_MAC)
-	{
-		printf("d pressed\n");
-		game->player.pos_x += game->player.plane_x * MOVE_SPEED;
-		game->player.pos_y += game->player.plane_y * MOVE_SPEED;
-	}
-	mlx_clear_window(game->mlx, game->win);
+	// mlx_clear_window(game->mlx, game->win);
+	// render_map(game);
+	// render_player(game);
 	render_map(game);
+	render_frame(game);
+	update_player(game);
+	render_player(game);
+	game->player.walk_direction = 0;
+	game->player.turn_direction = 0;
 	return (0);
 
+}
+int game_loop(t_game *game)
+{
+	update_player(game);
+	render_frame(game);
+	return (0);
 }
 int	main(int ac, char **av)
 {
@@ -857,11 +929,19 @@ int	main(int ac, char **av)
 	printf("width = %d\n", game.map.width * 32);
 	printf("height = %d\n", game.map.height * 32);
 	game.mlx = mlx_init();
-	game.win = mlx_new_window(game.mlx, game.map.width*32, game.map.height*32, "cube3d");
+	game.win = mlx_new_window(game.mlx, game.map.width*SQUARE_SIZE, game.map.height*SQUARE_SIZE, "cube3d");
+	game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
+	game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
 	// render_background(&game);
 	// render_wall(&game);
 	// render_floor(&game);
-	render_map(&game);
+	game.player.rotation_angle = 0;
+	game.player.move_speed = MOVE_SPEED;
+	game.player.rotation_speed = ROTATION_SPEED;
+	game.player.turn_direction = 0;
+	game.player.walk_direction = 0;
+	render_frame(&game);
+	render_player(&game);
 	mlx_hook(game.win, 2, 1L << 0, key_hook, &game);
 	mlx_loop(game.mlx);
 
