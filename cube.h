@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/02 12:42:49 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/02 18:45:58 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <limits.h>
 # include <stdio.h>
 # include "lib/get_next_line.h"
+# include <math.h>
 # include <mlx.h>
 
 //== const sizes =========
@@ -27,11 +28,11 @@
 # define WIN_HEIGHT 1000
 # define WIN_WIDTH 1000
 
-# define MOVE_SPEED 2.0
-# define SQUARE_SIZE 32
+
+# define SQUARE_SIZE 32 
 # define PI 3.14159265359
-# define ROTATION_ANGLE PI / 2 // 1.57079632679 
-# define ROTATION_ANGLE 2 * (PI / 180) // 0.03490658503
+#define ROTATION_SPEED 0.3
+#define MOVE_SPEED 0.3
 
 //===========================
 //====== mlx img struct ===== 
@@ -55,8 +56,8 @@ typedef struct s_img_data
 # define GREEN 0x009900
 # define BROWN 0xCC6600
 # define CYAN  0x00ffff
-# define MOVE_SPEED 1
 // keys
+
 # define W_MAC 13
 # define A_MAC 0
 # define S_MAC 1
@@ -79,6 +80,16 @@ typedef struct s_img_data
 # define DOWN_LIN 65364
 # define E_LIN 101
 
+// ANSI escape codes for colors
+#define CRESET   "\033[0m"
+#define CBLACK   "\033[30m"      /* Black */
+#define CRED     "\033[31m"      /* Red */
+#define CGREEN   "\033[32m"      /* Green */
+#define CYELLOW  "\033[33m"      /* Yellow */
+#define CBLUE    "\033[34m"      /* Blue */
+#define CMAGENTA "\033[35m"      /* Magenta */
+#define CCYAN    "\033[36m"      /* Cyan */
+#define CWHITE   "\033[37m"      /* White */
 
 
 typedef struct s_color
@@ -103,10 +114,9 @@ typedef struct s_player
     double pos_y;
     int turn_direction; // -1 if left, +1 if right
     int walk_direction; // -1 if back, +1 if front
-    // double dir_x;
-    // double dir_y;
-    // double plane_x;
-    // double plane_y;
+    double rotation_angle;
+    double move_speed;
+    double rotation_speed;
 } t_player;
 
 typedef struct s_map
@@ -117,10 +127,22 @@ typedef struct s_map
     int valid;
 } t_map;
 
+typedef struct s_image_data
+{
+    void *img;
+    char *addr;
+    int bits_per_pixel;
+    int line_length;
+    int endian;
+} t_image_data;
+
 typedef struct s_game
 {
     void *mlx;
     void *win;
+    t_image_data img;
+
+    
     t_texture north;
     t_texture south;
     t_texture west;
