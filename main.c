@@ -423,6 +423,16 @@ int calc_map_height(char **map)
 	}
 	return (i);
 }
+char *ft_strtrim_last(char *s1, char *set)
+{
+	int i = ft_strlen(s1) - 1;
+	while (i >= 0 && check_charset(set, s1[i]) == 1)
+	{
+		s1[i] = '\0';
+		i--;
+	}
+	return (s1);
+}
 int calc_map_width(char **map)
 {
 	int i = 0;
@@ -431,6 +441,8 @@ int calc_map_width(char **map)
 	while(map[i] != NULL)
 	{
 		j = 0;
+		if (check_line_empty(map[i]) != 1)
+			map[i] = ft_strtrim_last(map[i], " ");
 		while(map[i][j])
 		{
 			j++;
@@ -561,6 +573,8 @@ void pad_map_with_spaces(t_game *game)
     int i = 0;
     int j = 0;
     int map_width = calc_map_width(game->map.grid);
+	game->map.width = map_width;
+	printf("map width  2 = %d\n", map_width);
 
     while (game->map.grid[i] != NULL)
     {
@@ -599,7 +613,7 @@ void pad_map_with_spaces(t_game *game)
     printf("------------\n");
 }
 
-t_map check_map(int fd, char *file)
+t_game check_map(int fd, char *file)
 {
 	t_map m2;
 	char *line;
@@ -613,8 +627,7 @@ t_map check_map(int fd, char *file)
 	if (!map)
 	{
 		printf("Error\n Malloc failed\n");
-		m2.valid = 0;
-		return (m2);
+		exit(1);
 	}
 	fill_map(map, file, line);
 	t_game game;
@@ -686,19 +699,173 @@ t_map check_map(int fd, char *file)
 
 	// parse_texture_info(map[0], &game);
 	// free(map);
-	return (m2);
+	return (game);
 }
 
+// void render_background(t_game *game)
+// {
+// 	int i = 0;
+// 	int j = 0;
+// 	int color;
+// 	int width = game->map.width * SQUARE_SIZE;
+// 	int height = game->map.height * SQUARE_SIZE;
+// 	while (i < height)
+// 	{
+// 		j = 0;
+// 		while (j < width)
+// 		{
+// 			mlx_pixel_put(game->mlx, game->win, j, i, BLACK);
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
+void render_wall(t_game *game, int x, int y)
+{
+	int i = 0;
+	int j = 0;
 
+	while (i < SQUARE_SIZE - 1)
+	{
+		j = 0;
+		while (j < SQUARE_SIZE - 1)
+		{
+			mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
+			j++;
+		}
+		i++;
+	}
+}
+// radius = 32 / 4 = 8
+// center_x = 5 * 32 + 32 / 2 = 168
+// center_y = 9 * 32 + 32 / 2 = 304
+
+// y = -8
+// x = -8
+
+// if (x * x + y * y <= radius * radius) = -8 * -8 + -8 * -8 <= 8 * 8
+void render_player(t_game *game)
+{
+	int x, y;
+	int radius = SQUARE_SIZE / 4;
+	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+
+	for (y = -radius; y <= radius; y++)
+	{
+		for (x = -radius; x <= radius; x++)
+		{
+			if (x * x + y * y <= radius * radius)
+			{
+				mlx_pixel_put(game->mlx, game->win, center_x + x, center_y + y, BLUE);
+			}
+		}
+	}
+}
+void render_floor(t_game *game, int x, int y)
+{
+	int i = 0;
+	int j = 0;
+	while(i < SQUARE_SIZE - 1)
+	{
+		j = 0;
+		while(j < SQUARE_SIZE - 1)
+		{
+			mlx_pixel_put(game->mlx, game->win, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
+			j++;
+		}
+		i++;
+	}
+}
+void render_map(t_game *game)
+{
+	int i,j;
+	int x,y;
+	i = 0;
+	while(i < game->map.height)
+	{
+		j = 0;
+		while (j < game->map.width)
+		{
+			x = j * SQUARE_SIZE;
+			y = i * SQUARE_SIZE;
+			if (game->map.grid[i][j] == '1')
+			{
+				render_wall(game, x, y);
+			}
+			else if (game->map.grid[i][j] == '0')
+			{
+				render_floor(game, x, y);
+			}
+			else if (check_if_player_direction(game->map.grid[i][j]) == 1)
+			{
+				render_floor(game, x, y);
+				render_player(game);
+			}
+			j++;
+		}
+		i++;
+	}
+}
+int key_hook(int keycode, t_game *game)
+{
+	int old_pos_x = game->player.pos_x;
+	int old_pos_y = game->player.pos_y;
+
+	if (keycode == ESC_MAC)
+	{
+		exit(0);
+	}
+	else if (keycode == W_MAC)
+	{
+		printf("w pressed\n");
+		game->player.pos_x += game->player.dir_x * MOVE_SPEED;
+		game->player.pos_y += game->player.dir_y * MOVE_SPEED;
+	}
+	else if (keycode == S_MAC)
+	{
+		printf("s pressed\n");
+		game->player.pos_x -= game->player.dir_x * MOVE_SPEED;
+		game->player.pos_y -= game->player.dir_y * MOVE_SPEED;
+	}
+	else if (keycode == A_MAC)
+	{
+		printf("a pressed\n");
+		game->player.pos_x -= game->player.plane_x * MOVE_SPEED;
+		game->player.pos_y -= game->player.plane_y * MOVE_SPEED;
+	}
+	else if (keycode == D_MAC)
+	{
+		printf("d pressed\n");
+		game->player.pos_x += game->player.plane_x * MOVE_SPEED;
+		game->player.pos_y += game->player.plane_y * MOVE_SPEED;
+	}
+	mlx_clear_window(game->mlx, game->win);
+	render_map(game);
+	return (0);
+
+}
 int	main(int ac, char **av)
 {
 	int		fd;
-	t_map map;
+	t_game game;
 
 	if (ac != 2 || check_file(av[1], &fd) == 0)
 		return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
-	map = check_map(fd, av[1]);
+	game = check_map(fd, av[1]);
 	close(fd);
+	printf("width = %d\n", game.map.width * 32);
+	printf("height = %d\n", game.map.height * 32);
+	game.mlx = mlx_init();
+	game.win = mlx_new_window(game.mlx, game.map.width*32, game.map.height*32, "cube3d");
+	// render_background(&game);
+	// render_wall(&game);
+	// render_floor(&game);
+	render_map(&game);
+	mlx_hook(game.win, 2, 1L << 0, key_hook, &game);
+	mlx_loop(game.mlx);
+
+
 	
 
 	// init_data();
