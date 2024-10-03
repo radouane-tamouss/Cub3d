@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 19:49:10 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/29 20:06:28 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/03 00:48:44 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_power(int nbr, int power)
 	return (r);
 }
 
-int	ft_abs(int nbr)
+double	ft_abs(double nbr)
 {
 	return (((nbr >= 0) - (nbr < 0)) * nbr);
 }

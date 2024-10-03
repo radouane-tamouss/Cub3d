@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/01 02:18:36 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:43:38 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 32 
-# define ZOOM 200
+# define ZOOM 350
 # define SPEED 4
 
 //=== buttons ====
@@ -64,7 +64,7 @@ typedef struct s_img_data
 	int		endian;
 }				t_img_data;
 
-//=========================
+
 //======== colors =========
 
 # define WHITE 0xffffff
@@ -83,6 +83,17 @@ typedef struct s_vector
 }	t_vector;
 
 
+//======== casted ray data =================
+typedef struct s_ray_data {
+    t_vector ray_dir;
+    t_vector delta_dist;
+    t_vector side_dist;
+    int map_x;
+    int map_y;
+    int step_x;
+    int step_y;
+    int side;
+} t_ray_data;
 //==== data =================
 
 typedef struct s_data
@@ -103,6 +114,7 @@ typedef struct s_data
 	float		player_angle;//
 	t_vector	player_pos;
 	t_vector	player_dir;
+	t_vector	mouse_pos;
 	//TODO comlete this
 } t_data;
 
@@ -128,11 +140,12 @@ void	init_background(void);
 void	render_background(void);
 int		handle_keys(int keycode, void *garbage);
 int		ft_close(void);
+int mouse_event(int x, int y, void *par);
 void	line_between_2points(t_vector point1,
 				t_vector point2, int color);
 float	ft_max(float nbr1, float nbr2);
 float	ft_min(float nbr1, float nbr2);
-int	ft_abs(int nbr);
+double	ft_abs(double nbr);
 int	calc_dist(int x, int y, t_vector point);
 void	rotate_player(float angle);
 void	move_backward();
@@ -140,7 +153,9 @@ void	move_forward();
 void	move_left();
 void	move_right();
 void	draw_player();
+float	normalise_angle(float angle);
 //
+
 void	render_walls(void);
 //=== garbage collector =================================
 
