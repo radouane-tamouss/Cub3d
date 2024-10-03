@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/03 11:39:51 rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/03 22:09:15 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,18 @@
 # include "lib/get_next_line.h"
 # include <math.h>
 # include <mlx.h>
+# include <math.h>
+# include <limits.h>
 
 //== const sizes =========
 
 # define WIN_HEIGHT 1000
 # define WIN_WIDTH 1000
+# define MY_PI 3.14159265358979323846
+# define FOV (60 * (MY_PI / 180))
+# define GRID_DIST 32
+# define ZOOM 350
+# define SPEED 4
 
 
 # define SQUARE_SIZE 64 
@@ -35,7 +42,28 @@
 #define MOVE_SPEED 0.1
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
-//===========================
+//=== buttons ====
+# define ESC 65307
+# define Q 113
+# define W 119
+# define A 97
+# define S 115
+# define Z 122
+# define X 120
+# define E 101
+# define R 114
+# define D 100
+# define F 102
+# define C 99
+# define V 118
+# define UP_ARROW 65362
+# define DOWN_ARROW 65364
+# define RIGHT_ARROW 65363
+# define LEFT_ARROW 65361
+# define SPACE 32
+# define ENTER 65293
+# define DELETE 65288
+
 //====== mlx img struct ===== 
 
 typedef struct s_img_data
@@ -47,7 +75,7 @@ typedef struct s_img_data
 	int		endian;
 }				t_img_data;
 
-//=========================
+
 //======== colors =========
 
 # define WHITE 0xffffff
@@ -176,23 +204,50 @@ typedef struct s_game
 
 
 
-//===========================
+//==== vector struct ========
+typedef struct s_vector
+{
+	float	x;
+	float	y;
+}	t_vector;
+
+
+//======== casted ray data =================
+typedef struct s_ray_data {
+    t_vector ray_dir;
+    t_vector delta_dist;
+    t_vector side_dist;
+    int map_x;
+    int map_y;
+    int step_x;
+    int step_y;
+    int side;
+} t_ray_data;
 //==== data =================
 
-// typedef struct s_data
-// {
-// 	void		*mlx;
-// 	void		*win;
-// 	t_img_data	img_data;
-// 	int			ceiling_color;
-// 	int			floor_color;
-// 	//TODO comlete this
-// } t_data;
+typedef struct s_data
+{
+	void		*mlx;
+	void		*win;
+	// t_img_data	walls;
+	t_img_data	north_img;
+	t_img_data	south_img;
+	t_img_data	east_img;
+	t_img_data	west_img;
+	t_img_data	background_img;
+	int			ceiling_color;
+	int			floor_color;
+	char		**map;
+	int			height;
+	int			width;
+	float		player_angle;//
+	t_vector	player_pos;
+	t_vector	player_dir;
+	t_vector	mouse_pos;
+	//TODO comlete this
+} t_data;
 
 
-
-
-//===========================
 //==== struct of HEAP CONTROLLER ==
 
 typedef struct	s_heap
@@ -202,8 +257,8 @@ typedef struct	s_heap
 } t_heap;
 
 //=================================
+t_data	*get_data(void);
 
-//=======================================================
 //=== parsing ===========================================
 
 // split by charset
@@ -214,13 +269,37 @@ int	check_charset(char *charset, char c);
 //=======================================================
 //=== rendering =========================================
 
-//=======================================================
+void	put_pixel(t_img_data *img, int x, int y, int color);
+void	init_background(void);
+void	render_background(void);
+int		handle_keys(int keycode, void *garbage);
+int		ft_close(void);
+int mouse_event(int x, int y, void *par);
+void	line_between_2points(t_vector point1,
+				t_vector point2, int color);
+float	ft_max(float nbr1, float nbr2);
+float	ft_min(float nbr1, float nbr2);
+double	ft_abs(double nbr);
+int	calc_dist(int x, int y, t_vector point);
+void	rotate_player(float angle);
+void	move_backward();
+void	move_forward();
+void	move_left();
+void	move_right();
+void	draw_player();
+float	normalise_angle(float angle);
+//
+
+void	render_walls(void);
 //=== garbage collector =================================
 
 void	*mallocate(size_t size);
 void	free_all_heap(void);
 void	ft_free(void *ptr);
-//=======================================================
+//=== utils =============================================
 
+void print_err(char *str);
+void	exiter(int code);
+//=======================================================
 
 #endif
