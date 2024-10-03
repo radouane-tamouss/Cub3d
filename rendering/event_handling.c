@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/01 02:43:17 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:57:45 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	ft_close(void)
 int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
-	printf("keycode => %d\n", keycode);
+	// printf("keycode => %d\n", keycode);
 	if (keycode == ESC)
 	{
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
@@ -43,8 +43,23 @@ int	handle_keys(int keycode, void *garbage)
 	// draw_player();
 	render_walls();
 	render_background();
-	printf("===== coords (%f, %f)\n", get_data()->player_pos.x, get_data()->player_pos.y);
-	printf("===== directoin vector (%f, %f)\n", get_data()->player_dir.x, get_data()->player_dir.y);
-	printf("===== angle %f\n", get_data()->player_angle * (180 / MY_PI));
+	// printf("\n\n\n");
+	// printf("===== coords (%f, %f)\n", get_data()->player_pos.x / GRID_DIST, get_data()->player_pos.y/ GRID_DIST);
+	// printf("===== directoin vector (%f, %f)\n", get_data()->player_dir.x, get_data()->player_dir.y);
+	// printf("===== angle %f degree\n", get_data()->player_angle * (180 / MY_PI));
 	return (0);
+}
+int mouse_event(int x, int y, void *par)
+{
+	(void)par;
+	// if (get_data()->mouse_pos.x > x)
+	rotate_player(-(get_data()->mouse_pos.x - x) * (MY_PI / 180));
+	get_data()->mouse_pos.x = x;
+	init_background();
+	render_walls();
+	render_background();
+	// fprintf(stderr,"mouse moved x = %d, y = %d\n", x, y);
+	// exit(0);
+	return (0);
+	// mlx_mouse_get_pos
 }

@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/01 02:39:30 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/03 19:11:55 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,14 @@ void	init_data()
 	// get_data()->walls.addr = mlx_get_data_addr(get_data()->walls.img,
 	// 		&(get_data()->walls.bits_per_pixel), &(get_data()->walls.line_length),
 	// 		&(get_data()->walls.endian));
-	get_data()->floor_color = BLACK;// TODO this just for startin befroe parsing is complete
-	get_data()->ceiling_color = BLACK;// TODO this just for startin befroe parsing is complete
+	get_data()->floor_color = BROWN;// TODO this just for startin befroe parsing is complete
+	get_data()->ceiling_color = CYAN;// TODO this just for startin befroe parsing is complete
 	init_background();
 	mlx_hook(get_data()->win, 2, 1L << 0, handle_keys, NULL);// this to handle when a key pressed
 	mlx_hook(get_data()->win, 17, 1L << 0, ft_close, NULL);// this to handle when red arrow clicked
+	// mlx_mouse_hook(get_data()->win, mouse_event, NULL);
+	mlx_hook(get_data()->win, 6, 1L<<6, mouse_event, NULL);
+	// mlx_hook(get_data()->win, 5, 1L << 0, mouse_event, NULL);// this to handle when mouse moves
 	get_data()->player_pos.x = 3.5 * GRID_DIST;// TODO for test only
 	get_data()->player_pos.y =  3.5 * GRID_DIST;// TODO for test only
 	get_data()->player_angle = MY_PI/4;
