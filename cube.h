@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/02 18:45:58 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:39:51 rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@
 # define WIN_WIDTH 1000
 
 
-# define SQUARE_SIZE 32 
+# define SQUARE_SIZE 64 
 # define PI 3.14159265359
-#define ROTATION_SPEED 0.3
-#define MOVE_SPEED 0.3
-
+#define ROTATION_SPEED 0.1
+#define MOVE_SPEED 0.1
+#define WALL_STRIP_WIDTH 100 
+#define FOV_ANGLE 60 * (PI / 180)
 //===========================
 //====== mlx img struct ===== 
 
@@ -110,6 +111,7 @@ typedef struct s_texture
 
 typedef struct s_player
 {
+    int radius;
     double pos_x;
     double pos_y;
     int turn_direction; // -1 if left, +1 if right
@@ -136,6 +138,20 @@ typedef struct s_image_data
     int endian;
 } t_image_data;
 
+typedef struct s_ray
+{
+    double ray_angle;
+    double wall_hit_x;
+    double wall_hit_y;
+    double distance;
+    int was_hit_vertical;
+    int is_ray_facing_up;
+    int is_ray_facing_down;
+    int is_ray_facing_left;
+    int is_ray_facing_right;
+    int wall_hit_content;
+} t_ray;
+
 typedef struct s_game
 {
     void *mlx;
@@ -144,9 +160,14 @@ typedef struct s_game
 
     
     t_texture north;
+    int win_width;
+    int win_height;
+    int num_rays;
     t_texture south;
+    double ray_angle;
     t_texture west;
     t_texture east;
+    t_ray *rays;
     t_color floor;
     t_color ceiling;
     t_map map;

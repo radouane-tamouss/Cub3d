@@ -737,7 +737,7 @@ void render_wall(t_game *game, int x, int y)
 		while (j < SQUARE_SIZE - 1)
 		{
 			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
-			my_mlx_pixel_put(&game->img, j + x, i + y, RED);
+			my_mlx_pixel_put(&game->img, j + x, i + y, CYAN);
 			j++;
 		}
 		i++;
@@ -768,46 +768,22 @@ void render_line(t_game *game, int x1, int y1, int x2, int y2)
 // 	game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
 
 // }
-void update_player(t_game *game)
+int has_wall_at(t_game *game, double x, double y)
 {
-    game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
-	double move_step = game->player.walk_direction * game->player.move_speed;
-	double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
-	double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
-	if (game->map.grid[(int)round(new_player_x)][(int)round(new_player_y)] != '1')
-	{
-		game->player.pos_x = new_player_x;
-		game->player.pos_y = new_player_y;
-	}
-	// game->player.pos_x = new_player_x;
-	// game->player.pos_y = new_player_y;
-
-
+	// printf("x = %f\n", x);
+	// printf("y = %f\n", y);
+	int map_x = round(x);
+	int map_y = round(y);
+	// printf("map_x = %d\n", map_x);
+	// printf("map_y = %d\n", map_y);
+	// printf("map[map_x][map_y] = %c\n", game->map.grid[map_x][map_y]);
+	if (map_x < 0 || map_x >= game->map.height || map_y < 0 || map_y >= game->map.width)
+		return (1);
+	if (game->map.grid[map_x][map_y] == '1')
+		return (1);
+	return (0);
 }
-void render_player(t_game *game)
-{
-	int x, y;
-	int radius = SQUARE_SIZE / 6;
-	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
 
-	for (y = -radius; y <= radius; y++)
-	{
-		for (x = -radius; x <= radius; x++)
-		{
-			if (x * x + y * y <= radius * radius)
-			{
-				mlx_pixel_put(game->mlx, game->win, center_x + x, center_y + y, BLUE);
-			}
-		}
-	}
-	// Calculate the end point of the direction line
-    int end_x = center_x + cos(game->player.rotation_angle) * SQUARE_SIZE;
-    int end_y = center_y + sin(game->player.rotation_angle) * SQUARE_SIZE;
-	
-
-	render_line(game, center_x, center_y, end_x, end_y);
-}
 void render_floor(t_game *game, int x, int y)
 {
 	int i = 0;
@@ -847,7 +823,6 @@ void render_map(t_game *game)
 			else if (check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
 				render_floor(game, x, y);
-				// render_player(game);
 			}
 			j++;
 		}
@@ -855,6 +830,50 @@ void render_map(t_game *game)
 	}
 }
 
+void render_ray(t_game *game, t_ray ray)
+{
+	// Calculate the end point of the ray
+	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int end_x = center_x + cos(ray.ray_angle) * 80;
+	int end_y = center_y + sin(ray.ray_angle) * 80;
+
+	// Render the ray
+	render_line(game, center_x, center_y, end_x, end_y);
+}
+void render_rays(t_game *game)
+{
+	int i = 0;
+	while (i < game->num_rays)
+	{
+		render_ray(game, game->rays[i]);
+		i++;
+	}
+}
+void render_player(t_game *game)
+{
+	int x, y;
+	// int radius = SQUARE_SIZE / 6;
+	int radius = game->player.radius;
+	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+
+	for (y = -radius; y <= radius; y++)
+	{
+		for (x = -radius; x <= radius; x++)
+		{
+			if (x * x + y * y <= radius * radius)
+			{
+				mlx_pixel_put(game->mlx, game->win, center_x + x, center_y + y, BLUE);
+			}
+		}
+	}
+	// Calculate the end point of the direction line
+    int end_x = center_x + cos(game->player.rotation_angle) * 80;
+    int end_y = center_y + sin(game->player.rotation_angle) * 80;
+	render_line(game, center_x, center_y, end_x, end_y);
+	render_rays(game);
+}
 void render_frame(t_game *game)
 {
 	ft_memset(game->img.addr, 0, game->map.width * SQUARE_SIZE * game->map.height * SQUARE_SIZE * (game->img.bits_per_pixel / 8));
@@ -863,9 +882,9 @@ void render_frame(t_game *game)
 	render_player(game);
 	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
-int key_hook(int keycode, t_game *game)
+int key_press(int keycode, t_game *game)
 {
-	if (keycode == ESC_MAC)
+   if (keycode == ESC_MAC)
 	{
 		exit(0);
 	}
@@ -888,68 +907,132 @@ int key_hook(int keycode, t_game *game)
 	{
 		printf("Right\n");
 		game->player.turn_direction = 1;
-	}
-	else if (keycode == W_MAC)
-	{
-		printf("W\n");
-		game->player.walk_direction = 1;
-	}
-	else if (keycode == S_MAC)
-	{
-		printf("S\n");
-		game->player.walk_direction = -1;
-	}
-	// mlx_clear_window(game->mlx, game->win);
-	// render_map(game);
-	// render_player(game);
-	render_map(game);
-	render_frame(game);
-	update_player(game);
-	render_player(game);
-	game->player.walk_direction = 0;
-	game->player.turn_direction = 0;
-	return (0);
-
-}
-int game_loop(t_game *game)
-{
-	update_player(game);
-	render_frame(game);
+	} 
 	return (0);
 }
-int	main(int ac, char **av)
-{
-	int		fd;
-	t_game game;
 
-	if (ac != 2 || check_file(av[1], &fd) == 0)
-		return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
-	game = check_map(fd, av[1]);
-	close(fd);
-	printf("width = %d\n", game.map.width * 32);
-	printf("height = %d\n", game.map.height * 32);
-	game.mlx = mlx_init();
-	game.win = mlx_new_window(game.mlx, game.map.width*SQUARE_SIZE, game.map.height*SQUARE_SIZE, "cube3d");
-	game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
-	game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
+int key_release(int keycode, t_game *game)
+{
+    if (keycode == UP_MAC || keycode == DOWN_MAC)
+        game->player.walk_direction = 0;
+    if (keycode == LEFT_MAC || keycode == RIGHT_MAC)
+        game->player.turn_direction = 0;
+    return (0);
+}
+void update_player(t_game *game)
+{
+    // game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
+	// double move_step = game->player.walk_direction * game->player.move_speed;
+	// double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
+	// double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
+	// if (has_wall_at(game, new_player_x, new_player_y) != 1)
+	// {
+	// 	game->player.pos_x = new_player_x;
+	// 	game->player.pos_y = new_player_y;
+	// 	printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
+	// }
+
+
+}
+void cast_all_rays(t_game *game)
+{
+	int column_id = 0;
+
+	game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+	game->rays = malloc(sizeof(t_ray) * game->num_rays);
+	while (column_id < game->num_rays)
+	{
+		// game->rays[column_id].ray_angle = normalize_angle(game->ray_angle);
+		// game->rays[column_id].wall_hit_x = 0;
+		// game->rays[column_id].wall_hit_y = 0;
+		// game->rays[column_id].distance = 0;
+		// game->rays[column_id].was_hit_vertical = 0;
+		// cast_ray(game, column_id);
+		game->rays[column_id].ray_angle = game->ray_angle;
+		game->ray_angle += FOV_ANGLE / game->num_rays;
+		column_id++;
+	}
+
+	// printf("%s========RAYS========%s\n", CRED, CRESET);
+	// int i = 0;
+	// while (i < game->num_rays)
+	// {
+	// 	printf("ray_angle = %f\n", game->rays[i].ray_angle);
+	// 	i++;
+	// }
+	// printf("%s====================%s\n", CRED, CRESET);
+}
+int loop_hook(t_game *game)
+{
+    // Update player position based on key presses
+    // if (game->player.walk_direction != 0)
+    // {
+    //     game->player.pos_x += game->player.walk_direction * game->player.move_speed * sin(game->player.rotation_angle);
+    //     game->player.pos_y += game->player.walk_direction * game->player.move_speed * cos(game->player.rotation_angle);
+    // }
+    // if (game->player.turn_direction != 0)
+    // {
+    //     game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
+    // }
+
+    game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
+	double move_step = game->player.walk_direction * game->player.move_speed;
+	double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
+	double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
+	if (has_wall_at(game, new_player_x, new_player_y) != 1)
+	{
+		game->player.pos_x = new_player_x;
+		game->player.pos_y = new_player_y;
+		// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
+	}
+	cast_all_rays(game);
+    // Render the frame
+    render_frame(game);
+    render_player(game);
+
+	// render_rays(game);
+
+    return (0);
+}
+// cast all rays
+// table of rays
+// render the rays
+
+
+int main(int ac, char **av)
+{
+    int fd;
+    t_game game;
+
+    if (ac != 2 || check_file(av[1], &fd) == 0)
+        return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
+    game = check_map(fd, av[1]);
+    close(fd);
+    printf("width = %d\n", game.map.width * 32);
+    printf("height = %d\n", game.map.height * 32);
+    game.mlx = mlx_init();
+    game.win = mlx_new_window(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE, "cube3d");
+    game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
+    game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
+
+    game.player.rotation_angle = 0;
+    game.player.radius = 3;
+    game.player.pos_x = game.map.height / 2;
+    game.player.pos_y = game.map.width / 2;
+    game.player.move_speed = MOVE_SPEED;
+    game.player.rotation_speed = ROTATION_SPEED;
+    game.player.turn_direction = 0;
+    game.player.walk_direction = 0;
+	game.win_width = game.map.width * SQUARE_SIZE;
+	game.win_height= game.map.height* SQUARE_SIZE;
+	game.num_rays = game.win_width / WALL_STRIP_WIDTH;
+	printf("num_rays = %d\n", game.num_rays);
 	// render_background(&game);
-	// render_wall(&game);
-	// render_floor(&game);
-	game.player.rotation_angle = 0;
-	game.player.move_speed = MOVE_SPEED;
-	game.player.rotation_speed = ROTATION_SPEED;
-	game.player.turn_direction = 0;
-	game.player.walk_direction = 0;
-	render_frame(&game);
-	render_player(&game);
-	mlx_hook(game.win, 2, 1L << 0, key_hook, &game);
-	mlx_loop(game.mlx);
+	cast_all_rays(&game);
+    mlx_hook(game.win, 2, 1L << 0, key_press, &game); // Register key press hook
+    mlx_hook(game.win, 3, 1L << 1, key_release, &game); // Register key release hook
+    mlx_loop_hook(game.mlx, loop_hook, &game);
+    mlx_loop(game.mlx);
 
-
-	
-
-	// init_data();
-	// render_background();
-
-	return (0);
+    return (0);
 }
