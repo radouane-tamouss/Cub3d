@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/02 18:45:58 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/03 11:39:51 rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@
 # define WIN_WIDTH 1000
 
 
-# define SQUARE_SIZE 32 
+# define SQUARE_SIZE 64 
 # define PI 3.14159265359
-#define ROTATION_SPEED 0.3
-#define MOVE_SPEED 0.3
+#define ROTATION_SPEED 0.1
+#define MOVE_SPEED 0.1
 
 //===========================
 //====== mlx img struct ===== 
@@ -110,6 +110,7 @@ typedef struct s_texture
 
 typedef struct s_player
 {
+    int radius;
     double pos_x;
     double pos_y;
     int turn_direction; // -1 if left, +1 if right
