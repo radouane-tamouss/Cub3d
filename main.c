@@ -823,7 +823,6 @@ void render_map(t_game *game)
 			else if (check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
 				render_floor(game, x, y);
-				// render_player(game);
 			}
 			j++;
 		}
@@ -831,6 +830,26 @@ void render_map(t_game *game)
 	}
 }
 
+void render_ray(t_game *game, t_ray ray)
+{
+	// Calculate the end point of the ray
+	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int end_x = center_x + cos(ray.ray_angle) * 80;
+	int end_y = center_y + sin(ray.ray_angle) * 80;
+
+	// Render the ray
+	render_line(game, center_x, center_y, end_x, end_y);
+}
+void render_rays(t_game *game)
+{
+	int i = 0;
+	while (i < game->num_rays)
+	{
+		render_ray(game, game->rays[i]);
+		i++;
+	}
+}
 void render_player(t_game *game)
 {
 	int x, y;
@@ -852,9 +871,8 @@ void render_player(t_game *game)
 	// Calculate the end point of the direction line
     int end_x = center_x + cos(game->player.rotation_angle) * 80;
     int end_y = center_y + sin(game->player.rotation_angle) * 80;
-	
-
 	render_line(game, center_x, center_y, end_x, end_y);
+	render_rays(game);
 }
 void render_frame(t_game *game)
 {
@@ -916,6 +934,34 @@ void update_player(t_game *game)
 
 
 }
+void cast_all_rays(t_game *game)
+{
+	int column_id = 0;
+
+	game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+	game->rays = malloc(sizeof(t_ray) * game->num_rays);
+	while (column_id < game->num_rays)
+	{
+		// game->rays[column_id].ray_angle = normalize_angle(game->ray_angle);
+		// game->rays[column_id].wall_hit_x = 0;
+		// game->rays[column_id].wall_hit_y = 0;
+		// game->rays[column_id].distance = 0;
+		// game->rays[column_id].was_hit_vertical = 0;
+		// cast_ray(game, column_id);
+		game->rays[column_id].ray_angle = game->ray_angle;
+		game->ray_angle += FOV_ANGLE / game->num_rays;
+		column_id++;
+	}
+
+	// printf("%s========RAYS========%s\n", CRED, CRESET);
+	// int i = 0;
+	// while (i < game->num_rays)
+	// {
+	// 	printf("ray_angle = %f\n", game->rays[i].ray_angle);
+	// 	i++;
+	// }
+	// printf("%s====================%s\n", CRED, CRESET);
+}
 int loop_hook(t_game *game)
 {
     // Update player position based on key presses
@@ -939,12 +985,20 @@ int loop_hook(t_game *game)
 		game->player.pos_y = new_player_y;
 		// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
 	}
+	cast_all_rays(game);
     // Render the frame
     render_frame(game);
     render_player(game);
 
+	// render_rays(game);
+
     return (0);
 }
+// cast all rays
+// table of rays
+// render the rays
+
+
 int main(int ac, char **av)
 {
     int fd;
@@ -969,7 +1023,12 @@ int main(int ac, char **av)
     game.player.rotation_speed = ROTATION_SPEED;
     game.player.turn_direction = 0;
     game.player.walk_direction = 0;
-
+	game.win_width = game.map.width * SQUARE_SIZE;
+	game.win_height= game.map.height* SQUARE_SIZE;
+	game.num_rays = game.win_width / WALL_STRIP_WIDTH;
+	printf("num_rays = %d\n", game.num_rays);
+	// render_background(&game);
+	cast_all_rays(&game);
     mlx_hook(game.win, 2, 1L << 0, key_press, &game); // Register key press hook
     mlx_hook(game.win, 3, 1L << 1, key_release, &game); // Register key release hook
     mlx_loop_hook(game.mlx, loop_hook, &game);
