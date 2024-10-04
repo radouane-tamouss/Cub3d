@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/04 15:48:35 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:47:54 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ typedef struct s_img_data
 //-- manipulating colors --
 
 # define CREATE_TRGB(t, r, g, b) (t << 24 | r << 16 | g << 8 | b)
-# define GET_T(TRGB) ((trgb >> 24) & 0xFF)
-# define GET_R(TRGB) ((trgb >> 16) & 0xFF)
-# define GET_G(TRGB) ((trgb >> 8) & 0xFF)
-# define GET_B(TRGB) (trgb & 0xFF)
+# define GET_T(trgb) ((trgb >> 24) & 0xFF)
+# define GET_R(trgb) ((trgb >> 16) & 0xFF)
+# define GET_G(trgb) ((trgb >> 8) & 0xFF)
+# define GET_B(trgb) (trgb & 0xFF)
 //=== keys
 
 # define W_MAC 13

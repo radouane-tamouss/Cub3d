@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:33:12 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/09/30 18:14:05 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:56:34 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ void	init_background()
 		while (x < WIN_WIDTH)
 		{
 			if (y < (WIN_HEIGHT / 2))
+			{
 				color = get_data()->ceiling_color;
+				// color = CREATE_TRGB(0, (GET_R(color) - (int)(GET_R(color) * ((float)y / (float)(WIN_HEIGHT/2)))), (GET_G(color) - (int)(GET_G(color) * ((float)y / (float)(WIN_HEIGHT/2)))), (GET_B(color) - (int)(GET_B(color) * ((float)y / (float)(WIN_HEIGHT/2)))));
+			}
 			else
+			{
 				color = get_data()->floor_color;
+				color = CREATE_TRGB(0, ((int)(GET_R(color) * ((float)y / (float)(WIN_HEIGHT/2)))), ((int)(GET_G(color) * ((float)y / (float)(WIN_HEIGHT/2)))), ((int)(GET_B(color) * ((float)y / (float)(WIN_HEIGHT/2)))));
+			}
 			put_pixel(&(get_data()->background_img), x, y, color);
 			x++;
 		}
