@@ -2,10 +2,6 @@ CC = cc
 # CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
 # MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
-# GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
-# UTILS_FILES =
-# RENDER_FILES =
-# PARSING_FILES =
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -g3#-Werror -Wextra -Wall  #-g3 #-fsanitize=address
 MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
@@ -28,7 +24,7 @@ all : ${NAME}
 # ${NAME} : ${OFILES} ${LIBFT}
 # 	$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
 ${NAME} : ${OFILES} ${LIBFT}
-	$(CC) ${CFLAGS} ${LIBFT} ${OFILES} ${MLX_FLAGS} -o $(NAME)
+	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
 
 ${LIBFT} :
 	@make -C $(LIBFT_DIR)
@@ -36,8 +32,8 @@ ${LIBFT} :
 	@echo "\033[0;32m[LIBFT COMPILED]\033[0m"
 
 %.o: %.c
-	$(CC) ${CFLAGS} -c $< -o $@
-	# $(CC) ${CFLAGS} -Imlx -c $< -o $@
+	$(CC) ${CFLAGS} -Imlx -c $< -o $@
+#	$(CC) ${CFLAGS} -c $< -o $@
 
 clean :
 	${RM} ${OFILES}

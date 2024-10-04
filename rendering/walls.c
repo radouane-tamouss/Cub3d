@@ -99,19 +99,25 @@ t_ray_data cast_ray(float ray_angle)
 // this will find the texture later
 int calc_color(t_ray_data ray, int start, int i, int end)
 {
+	int	wall_height;
+
+	//color 0xffffff ------> origin color
+	//				  <-i->
+	// height 0      ------> WIN_HEIGHT
+	wall_height = end - start;
 	if (ray.side == 0)
 	{
 		if (ray.ray_dir.x > 0)
-			return (RED);
+			return (CREATE_TRGB(0, ((int)(255  * ((float)wall_height / (float)WIN_HEIGHT))), 0, 0));//(RED);
 		else
-			return (GREEN);
+			return (CREATE_TRGB(0, 0, ((int)(255  * ((float)wall_height / (float)WIN_HEIGHT))), 0));
 	}
 	else
 	{
 		if (ray.ray_dir.y > 0)
-			return (BLUE);
+			return (CREATE_TRGB(0, 0, 0, ((int)(255  * ((float)wall_height / (float)WIN_HEIGHT)))));
 		else
-			return (WHITE);
+			return (CREATE_TRGB(0, ((int)(125  * ((float)wall_height / (float)WIN_HEIGHT))), ((int)(125  * ((float)wall_height / (float)WIN_HEIGHT))), 0));
 	}
 }
 
