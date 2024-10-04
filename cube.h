@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/03 22:09:15 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/04 15:48:35 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,14 @@ typedef struct s_img_data
 # define GREEN 0x009900
 # define BROWN 0xCC6600
 # define CYAN  0x00ffff
-// keys
+//-- manipulating colors --
+
+# define CREATE_TRGB(t, r, g, b) (t << 24 | r << 16 | g << 8 | b)
+# define GET_T(TRGB) ((trgb >> 24) & 0xFF)
+# define GET_R(TRGB) ((trgb >> 16) & 0xFF)
+# define GET_G(TRGB) ((trgb >> 8) & 0xFF)
+# define GET_B(TRGB) (trgb & 0xFF)
+//=== keys
 
 # define W_MAC 13
 # define A_MAC 0
@@ -140,8 +147,8 @@ typedef struct s_texture
 typedef struct s_player
 {
     int radius;
-    double pos_x;
-    double pos_y;
+    float pos_x;// double pos_x;
+    float pos_y;// double 
     int turn_direction; // -1 if left, +1 if right
     int walk_direction; // -1 if back, +1 if front
     double rotation_angle;

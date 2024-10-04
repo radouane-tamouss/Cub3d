@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/03 22:03:51 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/04 16:08:46 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	}
 	return (*(unsigned char *)s1 - *(unsigned char *)s2);
 }
-void	init_data()
+void	init_data(t_game game)
 {
 	get_data()->mlx = mlx_init();
 	if (get_data()->mlx != NULL)
@@ -41,32 +41,32 @@ void	init_data()
 		exiter(1);
 	}
 
-	get_data()->floor_color = BROWN;// TODO this just for startin befroe parsing is complete
-	get_data()->ceiling_color = CYAN;// TODO this just for startin befroe parsing is complete
+	get_data()->floor_color = BLACK;// TODO this just for startin befroe parsing is complete
+	get_data()->ceiling_color = BLACK;// TODO this just for startin befroe parsing is complete
 	init_background();
 	mlx_hook(get_data()->win, 2, 1L << 0, handle_keys, NULL);// this to handle when a key pressed
 	mlx_hook(get_data()->win, 17, 1L << 0, ft_close, NULL);// this to handle when red arrow clicked
 	mlx_hook(get_data()->win, 6, 1L<<6, mouse_event, NULL);
-	get_data()->player_pos.x = 3.5 * GRID_DIST;// TODO for test only
-	get_data()->player_pos.y =  3.5 * GRID_DIST;// TODO for test only
-	get_data()->player_angle = MY_PI/4;
+	get_data()->player_pos.x = game.player.pos_x * GRID_DIST + GRID_DIST/2;//1. * GRID_DIST;// TODO for test only
+	get_data()->player_pos.y =  game.player.pos_y * GRID_DIST;//1. * GRID_DIST;// TODO for test only
+	get_data()->player_angle = 0;//MY_PI / 4;
 	get_data()->player_dir.x = cos(get_data()->player_angle) * SPEED;
 	get_data()->player_dir.y = sin(get_data()->player_angle) * SPEED;
 
-	get_data()->map = (char **)malloc(sizeof(char *) * 11);
-	get_data()->map[0] = ft_strdup("1111111111");
-	get_data()->map[1] = ft_strdup("1000000001");
-	get_data()->map[2] = ft_strdup("1000000001");
-	get_data()->map[3] = ft_strdup("1000000001");
-	get_data()->map[4] = ft_strdup("1000000001");
-	get_data()->map[5] = ft_strdup("1000000001");
-	get_data()->map[6] = ft_strdup("1000000001");
-	get_data()->map[7] = ft_strdup("1000000001");
-	get_data()->map[8] = ft_strdup("1000000001");
-	get_data()->map[9] = ft_strdup("1111111111");
-
-	get_data()->height = 10;
-	get_data()->width = 10;
+	// get_data()->map = (char **)malloc(sizeof(char *) * 11);
+	// get_data()->map[0] = ft_strdup("1111111111");
+	// get_data()->map[1] = ft_strdup("1000000001");
+	// get_data()->map[2] = ft_strdup("1000000001");
+	// get_data()->map[3] = ft_strdup("1000000001");
+	// get_data()->map[4] = ft_strdup("1000000001");
+	// get_data()->map[5] = ft_strdup("1000000001");
+	// get_data()->map[6] = ft_strdup("1000000001");
+	// get_data()->map[7] = ft_strdup("1000000001");
+	// get_data()->map[8] = ft_strdup("1000000001");
+	// get_data()->map[9] = ft_strdup("1111111111");
+	get_data()->map = game.map.grid;
+	get_data()->height = game.map.height;
+	get_data()->width = game.map.height;
 }
 
 void	draw_circle(t_img_data *img, int cho3a3, t_vector point)
@@ -598,7 +598,7 @@ void get_player_position(t_game *game)
 {
 	int i = 0;
 	int j = 0;
-	t_player player;
+	// t_player player;
 	while (game->map.grid[i] != NULL)
 	{
 		j = 0;
@@ -606,9 +606,10 @@ void get_player_position(t_game *game)
 		{
 			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S' || game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
 			{
-				player.pos_x = i;
-				player.pos_y = j;
-				game->player = player;
+				game->player.pos_y = i;
+				game->player.pos_x = j;
+				fprintf(stderr, "x == %d,  y == %d \n", i, j);
+				// game->player = player;
 				return;
 			}
 			j++;
@@ -1061,29 +1062,34 @@ int main(int ac, char **av)
     close(fd);
     printf("width = %d\n", game.map.width * 32);
     printf("height = %d\n", game.map.height * 32);
-    game.mlx = mlx_init();
-    game.win = mlx_new_window(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE, "cube3d");
-    game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
-    game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
+    // game.mlx = mlx_init();
+    // game.win = mlx_new_window(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE, "cube3d");
+    // game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
+    // game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
 
     game.player.rotation_angle = 0;
     game.player.radius = 3;
-    game.player.pos_x = game.map.height / 2;
-    game.player.pos_y = game.map.width / 2;
+    // game.player.pos_x = game.map.height / 2;
+    // game.player.pos_y = game.map.width / 2;
     game.player.move_speed = MOVE_SPEED;
     game.player.rotation_speed = ROTATION_SPEED;
     game.player.turn_direction = 0;
     game.player.walk_direction = 0;
 	game.win_width = game.map.width * SQUARE_SIZE;
-	game.win_height= game.map.height* SQUARE_SIZE;
+	game.win_height= game.map.height * SQUARE_SIZE;
 	game.num_rays = game.win_width / WALL_STRIP_WIDTH;
-	printf("num_rays = %d\n", game.num_rays);
+	// printf("num_rays = %d\n", game.num_rays);
 	// render_background(&game);
 	cast_all_rays(&game);
-    mlx_hook(game.win, 2, 1L << 0, key_press, &game); // Register key press hook
-    mlx_hook(game.win, 3, 1L << 1, key_release, &game); // Register key release hook
-    mlx_loop_hook(game.mlx, loop_hook, &game);
-    mlx_loop(game.mlx);
+    // mlx_hook(game.win, 2, 1L << 0, key_press, &game); // Register key press hook
+    // mlx_hook(game.win, 3, 1L << 1, key_release, &game); // Register key release hook
+    // mlx_loop_hook(game.mlx, loop_hook, &game);
+
+	init_data(game);
+	init_background();
+	render_walls();
+	render_background();
+    mlx_loop(get_data()->mlx);
 
     return (0);
 }
