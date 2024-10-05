@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/04 16:47:54 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:46:50 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@
 # define WIN_HEIGHT 1000
 # define WIN_WIDTH 1000
 # define MY_PI 3.14159265358979323846
-# define FOV (60 * (MY_PI / 180))
-# define GRID_DIST 32
-# define ZOOM 350
-# define SPEED 4
+# define FOV (100 * (MY_PI / 180))
+# define GRID_DIST 64
+# define ZOOM 100
+# define SPEED 2
 
 
 # define SQUARE_SIZE 64 
@@ -136,13 +136,6 @@ typedef struct s_color
     int b;
 } t_color;
 
-typedef struct s_texture
-{
-    char *path;
-    void *img;
-    int width;
-    int height;
-} t_texture;
 
 typedef struct s_player
 {
@@ -163,6 +156,14 @@ typedef struct s_map
     int height;
     int valid;
 } t_map;
+
+typedef struct s_texture
+{
+    char *path;
+    t_img_data img;
+    int width;
+    int height;
+} t_texture;
 
 typedef struct s_image_data
 {
@@ -229,6 +230,8 @@ typedef struct s_ray_data {
     int step_x;
     int step_y;
     int side;
+	float	angle;
+	float	dist;
 } t_ray_data;
 //==== data =================
 
@@ -237,10 +240,10 @@ typedef struct s_data
 	void		*mlx;
 	void		*win;
 	// t_img_data	walls;
-	t_img_data	north_img;
-	t_img_data	south_img;
-	t_img_data	east_img;
-	t_img_data	west_img;
+	t_texture	north_img;
+	t_texture	south_img;
+	t_texture	east_img;
+	t_texture	west_img;
 	t_img_data	background_img;
 	int			ceiling_color;
 	int			floor_color;
@@ -277,6 +280,7 @@ int	check_charset(char *charset, char c);
 //=== rendering =========================================
 
 void	put_pixel(t_img_data *img, int x, int y, int color);
+unsigned int	pull_pixel(t_texture img, int x, int y);
 void	init_background(void);
 void	render_background(void);
 int		handle_keys(int keycode, void *garbage);

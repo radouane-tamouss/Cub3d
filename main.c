@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/04 16:39:59 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:44:36 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,25 +48,17 @@ void	init_data(t_game game)
 	mlx_hook(get_data()->win, 17, 1L << 0, ft_close, NULL);// this to handle when red arrow clicked
 	mlx_hook(get_data()->win, 6, 1L<<6, mouse_event, NULL);
 	get_data()->player_pos.x = game.player.pos_x * GRID_DIST + GRID_DIST/2;//1. * GRID_DIST;// TODO for test only
-	get_data()->player_pos.y =  game.player.pos_y * GRID_DIST;//1. * GRID_DIST;// TODO for test only
+	get_data()->player_pos.y =  game.player.pos_y * GRID_DIST + GRID_DIST/2;//1. * GRID_DIST;// TODO for test only
 	get_data()->player_angle = 0;//MY_PI / 4;
 	get_data()->player_dir.x = cos(get_data()->player_angle) * SPEED;
 	get_data()->player_dir.y = sin(get_data()->player_angle) * SPEED;
 
-	// get_data()->map = (char **)malloc(sizeof(char *) * 11);
-	// get_data()->map[0] = ft_strdup("1111111111");
-	// get_data()->map[1] = ft_strdup("1000000001");
-	// get_data()->map[2] = ft_strdup("1000000001");
-	// get_data()->map[3] = ft_strdup("1000000001");
-	// get_data()->map[4] = ft_strdup("1000000001");
-	// get_data()->map[5] = ft_strdup("1000000001");
-	// get_data()->map[6] = ft_strdup("1000000001");
-	// get_data()->map[7] = ft_strdup("1000000001");
-	// get_data()->map[8] = ft_strdup("1000000001");
-	// get_data()->map[9] = ft_strdup("1111111111");
 	get_data()->map = game.map.grid;
 	get_data()->height = game.map.height;
 	get_data()->width = game.map.height;
+
+	get_data()->north_img.img.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/north.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
+	get_data()->north_img.img.addr = mlx_get_data_addr(get_data()->north_img.img.img, &(get_data()->north_img.img.bits_per_pixel), &(get_data()->north_img.img.line_length), &(get_data()->north_img.img.endian));
 }
 
 void	draw_circle(t_img_data *img, int cho3a3, t_vector point)
@@ -1067,20 +1059,20 @@ int main(int ac, char **av)
     // game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
     // game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
 
-    game.player.rotation_angle = 0;
-    game.player.radius = 3;
+    // game.player.rotation_angle = 0;
+    // game.player.radius = 3;
     // game.player.pos_x = game.map.height / 2;
     // game.player.pos_y = game.map.width / 2;
-    game.player.move_speed = MOVE_SPEED;
-    game.player.rotation_speed = ROTATION_SPEED;
-    game.player.turn_direction = 0;
-    game.player.walk_direction = 0;
-	game.win_width = game.map.width * SQUARE_SIZE;
-	game.win_height= game.map.height * SQUARE_SIZE;
-	game.num_rays = game.win_width / WALL_STRIP_WIDTH;
+    // game.player.move_speed = MOVE_SPEED;
+    // game.player.rotation_speed = ROTATION_SPEED;
+    // game.player.turn_direction = 0;
+    // game.player.walk_direction = 0;
+	// game.win_width = game.map.width * SQUARE_SIZE;
+	// game.win_height= game.map.height * SQUARE_SIZE;
+	// game.num_rays = game.win_width / WALL_STRIP_WIDTH;
 	// printf("num_rays = %d\n", game.num_rays);
 	// render_background(&game);
-	cast_all_rays(&game);
+	// cast_all_rays(&game);
     // mlx_hook(game.win, 2, 1L << 0, key_press, &game); // Register key press hook
     // mlx_hook(game.win, 3, 1L << 1, key_release, &game); // Register key release hook
     // mlx_loop_hook(game.mlx, loop_hook, &game);
