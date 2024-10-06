@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/05 17:46:50 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/06 16:43:29 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 # define WIN_WIDTH 1000
 # define MY_PI 3.14159265358979323846
 # define FOV (100 * (MY_PI / 180))
-# define GRID_DIST 64
+# define GRID_DIST 32
 # define ZOOM 100
-# define SPEED 2
+# define SPEED 3
 
 
-# define SQUARE_SIZE 64 
+# define SQUARE_SIZE 16 
 # define PI 3.14159265359
 #define ROTATION_SPEED 0.1
 #define MOVE_SPEED 0.1
@@ -232,6 +232,7 @@ typedef struct s_ray_data {
     int side;
 	float	angle;
 	float	dist;
+	float	wall_height;
 } t_ray_data;
 //==== data =================
 

@@ -100,63 +100,70 @@ t_ray_data cast_ray(float ray_angle)
 }
 
 // this will calculate wich pixel should take from image buffer
-unsigned int	get_right_pixel(float i, float start, float wall_height, t_ray_data ray)
+unsigned int get_right_pixel(float i, t_ray_data ray)
 {
-	int pixel_x;
-    int pixel_y;
+    int pixel_x;
+    float pixel_y;
     float hit_point;
+    t_texture texture;
+    // float tex_pos;
 
-	pixel_y = get_data()->north_img.height * ((i - start) / wall_height);
-
-    if (ray.side == 0) // if iy hits on the vertical side
+    if (ray.side == 0) // if it hits on the vertical side
     {
-        // if (ray.ray_dir.x > 0) // Looking right
-            hit_point = get_data()->player_pos.y + (ray.dist * ray.ray_dir.y);
-        // else // Looking left
-        //     hit_point = get_data()->player_pos.y + (ray.dist * ray.ray_dir.y);
-
-        // Calculate the texture coordinate relative to the grid size
-        pixel_x = (int)(hit_point * get_data()->north_img.width / GRID_DIST) % get_data()->north_img.width;
-        return (pull_pixel(get_data()->north_img, pixel_x, pixel_y));
+        hit_point = get_data()->player_pos.y + (ray.dist * ray.ray_dir.y);
+		if (ray.ray_dir.x > 0)
+			texture = get_data()->east_img;
+		else
+			texture = get_data()->west_img;
     }
-    else // else if if it ray hit on horizontal side
+    else // else if it ray hit on horizontal side
     {
-        // if (ray.ray_dir.y > 0) // Looking down
-        //     hit_point = get_data()->player_pos.x + (ray.dist * ray.ray_dir.x);
-        // else // Looking up
         hit_point = get_data()->player_pos.x + (ray.dist * ray.ray_dir.x);
-        // Calculate the texture coordinate relative to the grid size
-        pixel_x = (int)(hit_point * get_data()->north_img.width / GRID_DIST) % get_data()->north_img.width; 
-        return (pull_pixel(get_data()->north_img, pixel_x, pixel_y)); // Use the appropriate texture
+        if (ray.ray_dir.y > 0)
+			texture = get_data()->north_img;
+		else
+			texture = get_data()->south_img;
     }
+
+    // calc the x coords in the texture
+    pixel_x = (int)(hit_point * texture.width / GRID_DIST) % texture.width;
+
+
+	// trying to find t x and y of the pixel must be pulled from the texture image
+
+    // calc the y coords in the texture
+    pixel_y = (int)((i - (WIN_HEIGHT / 2 - ray.wall_height / 2)) / ray.wall_height * texture.height) % texture.height;
+	// making sure the y pixel is between 0 and height of our texture
+    // pixel_y = fmaxf(0, fminf(pixel_y, texture.height - 1));
+    return (pull_pixel(texture, pixel_x, (int)pixel_y));
 }
 
 // this will find the texture later
 int calc_color(t_ray_data ray, int start, int i, int end)
 {
-    int wall_height;
+    int projected_wall;
 	int	color;
 
-    wall_height = end - start;
-	color = get_right_pixel(i, start, wall_height, ray);
+    projected_wall = end - start;
+	color = get_right_pixel(i, ray);
 	color = CREATE_TRGB(0,
-		((int)(GET_R(color) * ((float)wall_height / (float)WIN_HEIGHT))),
-		((int)(GET_G(color) * ((float)wall_height / (float)WIN_HEIGHT))),
-		((int)(GET_B(color) * ((float)wall_height / (float)WIN_HEIGHT))));
+		((int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
+		((int)(GET_G(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
+		((int)(GET_B(color) * ((float)projected_wall / (float)WIN_HEIGHT))));
 	return (color);
 }
 
 
-void draw_col(t_ray_data	ray, int col)
+void draw_col(t_ray_data ray, int col)
 {
-	int wall_height;
+	float wall_height;
 	int start;
 	int end;
 	int i;
 
-	wall_height = (GRID_DIST / ray.dist) * ((WIN_WIDTH / 2) / tan(FOV / 2));
-	start = (WIN_HEIGHT - wall_height) / 2;
-	end = start + wall_height;
+	ray.wall_height = (GRID_DIST / ray.dist) * ((WIN_WIDTH / 2) / tan(FOV / 2));
+	start = (WIN_HEIGHT - (int)ray.wall_height) / 2;
+	end = start + (int)ray.wall_height;
 	if (start < 0)
 		start = 0;
 	if (end > WIN_HEIGHT)
@@ -180,12 +187,6 @@ void render_col(int col)
 	ray = cast_ray(ray_angle);
     draw_col(ray, col);
 }
-// void render_col(int col)
-// {
-//     float ray_angle = normalise_angle(get_data()->player_angle - (FOV / 2) + (col * (FOV / WIN_WIDTH)));
-//     t_ray_data ray = cast_ray(ray_angle); // Update the ray every frame
-//     draw_col(ray, col); // Draw the column based on the current ray data
-// }
 
 // this will draw the the walls on the background img (it will not put it to window)
 void	render_walls(void)

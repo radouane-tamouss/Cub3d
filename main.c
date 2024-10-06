@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/05 17:44:36 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/06 17:56:54 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,18 @@ void	init_data(t_game game)
 	get_data()->height = game.map.height;
 	get_data()->width = game.map.height;
 
-	get_data()->north_img.img.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/north.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
+	get_data()->north_img.img.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/horror.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
 	get_data()->north_img.img.addr = mlx_get_data_addr(get_data()->north_img.img.img, &(get_data()->north_img.img.bits_per_pixel), &(get_data()->north_img.img.line_length), &(get_data()->north_img.img.endian));
+
+	get_data()->south_img.img.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/horror.xpm", &(get_data()->south_img.width), &(get_data()->south_img.height));
+	get_data()->south_img.img.addr = mlx_get_data_addr(get_data()->south_img.img.img, &(get_data()->south_img.img.bits_per_pixel), &(get_data()->south_img.img.line_length), &(get_data()->south_img.img.endian));
+
+	get_data()->east_img.img.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/horror.xpm", &(get_data()->east_img.width), &(get_data()->east_img.height));
+	get_data()->east_img.img.addr = mlx_get_data_addr(get_data()->east_img.img.img, &(get_data()->east_img.img.bits_per_pixel), &(get_data()->east_img.img.line_length), &(get_data()->east_img.img.endian));
+	
+	get_data()->west_img.img.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/horror.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
+	get_data()->west_img.img.addr = mlx_get_data_addr(get_data()->west_img.img.img, &(get_data()->west_img.img.bits_per_pixel), &(get_data()->west_img.img.line_length), &(get_data()->west_img.img.endian));
+	
 }
 
 void	draw_circle(t_img_data *img, int cho3a3, t_vector point)
@@ -1019,20 +1029,20 @@ int loop_hook(t_game *game)
     //     game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
     // }
 
-    game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
-	double move_step = game->player.walk_direction * game->player.move_speed;
-	double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
-	double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
-	if (has_wall_at(game, new_player_x, new_player_y) != 1)
-	{
-		game->player.pos_x = new_player_x;
-		game->player.pos_y = new_player_y;
-		// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
-	}
-	cast_all_rays(game);
+		// game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
+		// double move_step = game->player.walk_direction * game->player.move_speed;
+		// double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
+		// double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
+		// if (has_wall_at(game, new_player_x, new_player_y) != 1)
+		// {
+		// 	game->player.pos_x = new_player_x;
+		// 	game->player.pos_y = new_player_y;
+		// 	// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
+		// }
+		// cast_all_rays(game);
     // Render the frame
     render_frame(game);
-    render_player(game);
+    // render_player(game);
 
 	// render_rays(game);
 
@@ -1056,7 +1066,7 @@ int main(int ac, char **av)
     printf("height = %d\n", game.map.height * 32);
     // game.mlx = mlx_init();
     // game.win = mlx_new_window(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE, "cube3d");
-    // game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
+    // game.img.img = mlx_new_image(get_data()->mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
     // game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
 
     // game.player.rotation_angle = 0;
@@ -1077,10 +1087,14 @@ int main(int ac, char **av)
     // mlx_hook(game.win, 3, 1L << 1, key_release, &game); // Register key release hook
     // mlx_loop_hook(game.mlx, loop_hook, &game);
 
+    // mlx_loop_hook(game.mlx, loop_hook, &game);
+
 	init_data(game);
 	init_background();
 	render_walls();
 	render_background();
+	// game.img.img = mlx_new_image(get_data()->mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
+    // game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
     mlx_loop(get_data()->mlx);
 
     return (0);
