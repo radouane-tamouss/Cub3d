@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/07 18:48:42 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 02:02:52 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	handle_keys(int keycode, void *garbage)
 		rotate_player(-2.  * (MY_PI / (float)180));
 	else
 		return (0);
+	get_data()->is_updated = 1;
 	// init_background();
 	// // draw_player();
 	// render_walls();
@@ -60,6 +61,8 @@ int mouse_event(int x, int y, void *par)
 	// 	rotate_player(.5 * (MY_PI / 180));
 	rotate_player(-.5 *(get_data()->mouse_pos.x - x) * (MY_PI / 180));
 	get_data()->mouse_pos.x = x;
+	get_data()->is_updated = 1;
+
 	// init_background();
 	// render_walls();
 	// render_background();

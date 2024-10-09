@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 01:24:06 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 02:27:58 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -867,10 +867,10 @@ void render_map(void)
 	while(i < get_data()->height)
 	{
 		j = 0;
+		y = (i + 5) * SQUARE_SIZE - (get_data()->player_pos.y / GRID_DIST) * SQUARE_SIZE;
 		while (j < get_data()->width)
 		{
-			x = j * SQUARE_SIZE;
-			y = i * SQUARE_SIZE;
+			x = (j +  5) * SQUARE_SIZE - (get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
 			if (get_data()->map[i][j] == '1')
 			{
 				render_wall(x, y);
@@ -914,8 +914,8 @@ void render_player()
 	int x, y;
 	int radius = 3;
 	// int radius = game->player.radius;
-	int center_x = (get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
-	int center_y = (get_data()->player_pos.y / GRID_DIST) * SQUARE_SIZE;
+	int center_x = 5 * SQUARE_SIZE;//(get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
+	int center_y = 5 * SQUARE_SIZE;//(get_data()->player_pos.y / GRID_DIST) * SQUARE_SIZE;
 
 	// fprintf(stderr, "x== %d,  y==%d\n", center_x, center_y);
 
@@ -935,21 +935,21 @@ void render_player()
 	render_line(center_x, center_y, end_x, end_y);
 	// render_rays(game);
 }
-void render_frame()
+void render_minimap()
 {
 	
-	// int	i = 0;
-	// int	j;
-	// while (i < SQUARE_SIZE * 10)
-	// {
-	// 	j = 0;
-	// 	while (j < SQUARE_SIZE * 10)
-	// 	{
-	// 		put_pixel(&(get_data()->background_img), i, j, BLACK);
-	// 		j++;
-	// 	}
-	// 	i++;
-	// }
+	int	i = 0;
+	int	j;
+	while (i < SQUARE_SIZE * 10)
+	{
+		j = 0;
+		while (j < SQUARE_SIZE * 10)
+		{
+			put_pixel(&(get_data()->background_img), i, j, BLACK);
+			j++;
+		}
+		i++;
+	}
 	render_map();
 	render_player();
 	// mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
@@ -965,43 +965,43 @@ void render_frame()
 // {
 	
 // }
-int key_press(int keycode, t_game *game)
-{
-   if (keycode == ESC_MAC)
-	{
-		exit(0);
-	}
-	else if (keycode == UP_MAC)
-	{
-		printf("UP\n");
-		game->player.walk_direction = 1;
-	}
-	else if (keycode == DOWN_MAC)
-	{
-		printf("Down\n");
-		game->player.walk_direction = -1;
-	}
-	else if (keycode == LEFT_MAC)
-	{
-		printf("Left\n");
-		game->player.turn_direction = -1;
-	}
-	else if (keycode == RIGHT_MAC)
-	{
-		printf("Right\n");
-		game->player.turn_direction = 1;
-	} 
-	return (0);
-}
+// int key_press(int keycode, t_game *game)
+// {
+//    if (keycode == ESC_MAC)
+// 	{
+// 		exit(0);
+// 	}
+// 	else if (keycode == UP_MAC)
+// 	{
+// 		printf("UP\n");
+// 		game->player.walk_direction = 1;
+// 	}
+// 	else if (keycode == DOWN_MAC)
+// 	{
+// 		printf("Down\n");
+// 		game->player.walk_direction = -1;
+// 	}
+// 	else if (keycode == LEFT_MAC)
+// 	{
+// 		printf("Left\n");
+// 		game->player.turn_direction = -1;
+// 	}
+// 	else if (keycode == RIGHT_MAC)
+// 	{
+// 		printf("Right\n");
+// 		game->player.turn_direction = 1;
+// 	} 
+// 	return (0);
+// }
 
-int key_release(int keycode, t_game *game)
-{
-    if (keycode == UP_MAC || keycode == DOWN_MAC)
-        game->player.walk_direction = 0;
-    if (keycode == LEFT_MAC || keycode == RIGHT_MAC)
-        game->player.turn_direction = 0;
-    return (0);
-}
+// int key_release(int keycode, t_game *game)
+// {
+//     if (keycode == UP_MAC || keycode == DOWN_MAC)
+//         game->player.walk_direction = 0;
+//     if (keycode == LEFT_MAC || keycode == RIGHT_MAC)
+//         game->player.turn_direction = 0;
+//     return (0);
+// }
 // void update_player(t_game *game)
 // {
 //     // game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
@@ -1071,14 +1071,18 @@ int loop_hook(t_game *game)
 		// cast_all_rays(game);
 
 	// render_rays(game);
-	init_background();
-	render_walls();
-    // Render the frame
-    // render_player(game);
-    render_frame();
-	render_background();
-	// draw_player();
-	// mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->minimap.img_data.img, 0, 0);
+	if (get_data()->is_updated)
+	{
+		init_background();
+		render_walls();
+		// Render the frame
+		// render_player(game);
+		render_minimap();
+		render_background();
+		// draw_player();
+		// mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->minimap.img_data.img, 0, 0);
+		get_data()->is_updated = 0;
+	}
 
     return (0);
 }

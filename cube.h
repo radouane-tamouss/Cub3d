@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 00:14:11 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 02:02:04 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,7 @@ typedef struct s_data
 	t_vector	player_dir;
 	t_vector	mouse_pos;
 	t_texture	minimap;
+	int			is_updated;
 	
 	//TODO comlete this
 } t_data;
