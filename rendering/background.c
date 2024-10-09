@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:33:12 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/05 22:05:49 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:50:21 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	init_background()
 	int	y;
 	int	color;
 
-	get_data()->background_img.img = mlx_new_image(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT);// TODO protect failing
-		get_data()->background_img.addr = mlx_get_data_addr(get_data()->background_img.img,
-			&(get_data()->background_img.bits_per_pixel), &(get_data()->background_img.line_length),
-			&(get_data()->background_img.endian)); // TODO protect failing
+	// get_data()->background_img.img = mlx_new_image(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT);// TODO protect failing
+	// 	get_data()->background_img.addr = mlx_get_data_addr(get_data()->background_img.img,
+	// 		&(get_data()->background_img.bits_per_pixel), &(get_data()->background_img.line_length),
+	// 		&(get_data()->background_img.endian)); // TODO protect failing
 	y = 0;
 	while (y < WIN_HEIGHT)
 	{

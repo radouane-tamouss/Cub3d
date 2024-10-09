@@ -51,12 +51,9 @@ void calc_step_and_side_dist_y(t_ray_data *ray)
     }
 }
 // traveling till hit the wall and save the data
-int perform_dda(t_ray_data *ray)
+void	perform_dda(t_ray_data *ray)
 {
-    int hit;
-
-    hit = 0;
-    while (hit == 0)
+    while (1)
     {
         if (ray->side_dist.x < ray->side_dist.y)
         {
@@ -71,9 +68,16 @@ int perform_dda(t_ray_data *ray)
             ray->side = 1;
         }
         if (get_data()->map[ray->map_y][ray->map_x] == '1')
-            hit = 1;
+		{
+			ray->object_hitted = 0;// hitted a wall
+			return ;
+		}
+		else if (get_data()->map[ray->map_y][ray->map_x] == 'S')// TODO this must ont stay S, and parsing must change accordinlgy
+		{
+			ray->object_hitted = 1;// hitted a door
+			return ;
+		}
     }
-    return hit;
 }
 
 void	calculate_distance(t_ray_data *ray)
@@ -108,10 +112,13 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
     t_texture texture;
     // float tex_pos;
 
+		
     if (ray.side == 0) // if it hits on the vertical side
     {
         hit_point = get_data()->player_pos.y + (ray.dist * ray.ray_dir.y);
-		if (ray.ray_dir.x > 0)
+		if (ray.object_hitted == 1)
+			texture = get_data()->door_img;
+		else if (ray.ray_dir.x > 0)
 			texture = get_data()->east_img;
 		else
 			texture = get_data()->west_img;
@@ -119,7 +126,9 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
     else // else if it ray hit on horizontal side
     {
         hit_point = get_data()->player_pos.x + (ray.dist * ray.ray_dir.x);
-        if (ray.ray_dir.y > 0)
+		if (ray.object_hitted == 1)
+			texture = get_data()->door_img;
+        else if (ray.ray_dir.y > 0)
 			texture = get_data()->north_img;
 		else
 			texture = get_data()->south_img;

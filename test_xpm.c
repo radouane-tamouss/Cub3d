@@ -25,8 +25,8 @@ unsigned int	pull_pixel(t_texture img, int x, int y)
 
 	if (y >= img.height || x >= img.width || x < 0 || y < 0)
 		return 0x0;
-	offset = y * img.img.line_length + x * (img.img.bits_per_pixel / 8);
-	dst = img.img.addr + offset;
+	offset = y * img.img_data.line_length + x * (img.img_data.bits_per_pixel / 8);
+	dst = img.img_data.addr + offset;
 	ptr = (unsigned int *)dst;
 	return (*ptr);
 }
@@ -42,7 +42,7 @@ int	main(void)
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, 1000, 1000, "Hello world!");
 
-	img.img.img = mlx_xpm_file_to_image(mlx, "ArtStation-Explore.xpm", &(img.width), &(img.height));
+	img.img_data.img = mlx_xpm_file_to_image(mlx, "ArtStation-Explore.xpm", &(img.width), &(img.height));
 	img.img.addr = mlx_get_data_addr(img.img.img, &(img.img.bits_per_pixel), &(img.img.line_length), &(img.img.endian));
 
 	if (img.img.img == NULL)

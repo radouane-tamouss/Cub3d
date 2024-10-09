@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/06 00:21:51 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/07 18:48:42 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ int	handle_keys(int keycode, void *garbage)
 		rotate_player(-2.  * (MY_PI / (float)180));
 	else
 		return (0);
-	init_background();
-	// draw_player();
-	render_walls();
-	render_background();
+	// init_background();
+	// // draw_player();
+	// render_walls();
+	// render_background();
 	// printf("\n\n\n");
 	// printf("===== coords (%f, %f)\n", get_data()->player_pos.x / GRID_DIST, get_data()->player_pos.y/ GRID_DIST);
 	// printf("===== directoin vector (%f, %f)\n", get_data()->player_dir.x, get_data()->player_dir.y);
@@ -60,9 +60,9 @@ int mouse_event(int x, int y, void *par)
 	// 	rotate_player(.5 * (MY_PI / 180));
 	rotate_player(-.5 *(get_data()->mouse_pos.x - x) * (MY_PI / 180));
 	get_data()->mouse_pos.x = x;
-	init_background();
-	render_walls();
-	render_background();
+	// init_background();
+	// render_walls();
+	// render_background();
 	// fprintf(stderr,"mouse moved x = %d, y = %d\n", x, y);
 	// exit(0);
 	return (0);
