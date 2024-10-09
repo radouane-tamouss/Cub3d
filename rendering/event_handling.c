@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 02:02:52 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:31:16 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,13 @@ int	handle_keys(int keycode, void *garbage)
 		rotate_player(2.  * (MY_PI / (float)180));
 	else if (keycode == LEFT_ARROW)
 		rotate_player(-2.  * (MY_PI / (float)180));
+	else if (keycode == SPACE)
+	{
+		if (get_data()->dark_mode == 1)
+			get_data()->dark_mode = 0;
+		else
+			get_data()->dark_mode = 1;
+	}
 	else
 		return (0);
 	get_data()->is_updated = 1;

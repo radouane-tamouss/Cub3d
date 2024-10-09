@@ -155,10 +155,11 @@ int calc_color(t_ray_data ray, int start, int i, int end)
 
     projected_wall = end - start;
 	color = get_right_pixel(i, ray);
-	color = CREATE_TRGB(0,
-		((int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
-		((int)(GET_G(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
-		((int)(GET_B(color) * ((float)projected_wall / (float)WIN_HEIGHT))));
+	if (get_data()->dark_mode)
+		color = CREATE_TRGB(0,
+			((int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
+			((int)(GET_G(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
+			((int)(GET_B(color) * ((float)projected_wall / (float)WIN_HEIGHT))));
 	return (color);
 }
 
