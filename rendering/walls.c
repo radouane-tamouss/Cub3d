@@ -38,7 +38,6 @@ void calc_step_and_side_dist_y(t_ray_data *ray)
     float player_y;
 
     player_y = get_data()->player_pos.y / GRID_DIST;
-
     if (ray->ray_dir.y < 0)
     {
         ray->step_y = -1;
@@ -50,9 +49,17 @@ void calc_step_and_side_dist_y(t_ray_data *ray)
         ray->side_dist.y = (ray->map_y + 1.0 - player_y) * ray->delta_dist.y;
     }
 }
+void	calculate_distance(t_ray_data *ray)
+{
+    if (ray->side == 0)
+        ray->dist = (ray->side_dist.x - ray->delta_dist.x) * GRID_DIST;
+    else
+        ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
+}
 // traveling till hit the wall and save the data
 void	perform_dda(t_ray_data *ray)
 {
+	int	data_taken = 0;
     while (1)
     {
         if (ray->side_dist.x < ray->side_dist.y)
@@ -70,23 +77,38 @@ void	perform_dda(t_ray_data *ray)
         if (get_data()->map[ray->map_y][ray->map_x] == '1')
 		{
 			ray->object_hitted = 0;// hitted a wall
+			if (!data_taken && ray->angle == get_data()->player_angle)
+			{
+				get_data()->front_ray = *ray;
+				calculate_distance(&(get_data()->front_ray));
+				data_taken = 1;
+			}
 			return ;
 		}
 		else if (get_data()->map[ray->map_y][ray->map_x] == 'S')// TODO this must ont stay S, and parsing must change accordinlgy
 		{
-			ray->object_hitted = 1;// hitted a door
+			ray->object_hitted = 1;// hitted a closed door
+			if (!data_taken && ray->angle == get_data()->player_angle)
+			{
+				get_data()->front_ray = *ray;
+				calculate_distance(&(get_data()->front_ray));
+				data_taken = 1;
+			}
 			return ;
+		}
+		else if (get_data()->map[ray->map_y][ray->map_x] == 'D')
+		{
+			if (!data_taken && ray->angle == get_data()->player_angle)
+			{
+				ray->object_hitted = 2;// hitted a open door
+				get_data()->front_ray = *ray;
+				calculate_distance(&(get_data()->front_ray));
+				data_taken = 1;
+			}
 		}
     }
 }
 
-void	calculate_distance(t_ray_data *ray)
-{
-    if (ray->side == 0)
-        ray->dist = (ray->side_dist.x - ray->delta_dist.x) * GRID_DIST;
-    else
-        ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
-}
 
 // casting the ray and grab all wanted data (coords of wall, side, ...)
 t_ray_data cast_ray(float ray_angle)

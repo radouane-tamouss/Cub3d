@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 03:31:16 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 18:47:23 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,14 @@ int	handle_keys(int keycode, void *garbage)
 			get_data()->dark_mode = 0;
 		else
 			get_data()->dark_mode = 1;
+	}
+	else if (keycode == E)
+	{
+		if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
+			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+		else if (get_data()->front_ray.object_hitted == 2 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
+			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
+		// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
 	}
 	else
 		return (0);
