@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 00:59:00 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 01:24:06 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,37 +76,37 @@ void	init_data(t_game game)
 	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 }
 
-void	draw_circle(t_img_data *img, int cho3a3, t_vector point)
-{
-	int i = point.y - cho3a3;
-	int j;
+// void	draw_circle(t_img_data *img, int cho3a3, t_vector point)
+// {
+// 	int i = point.y - cho3a3;
+// 	int j;
 
-	while (i < point.y + cho3a3)
-	{
-		j = point.x - cho3a3;
-		while (j < point.x + cho3a3)
-		{
-			if (calc_dist(j, i, point) <= cho3a3)
-			{
-				// printf("pixeled the point x ==%d  | y == %d | with dist == %d\n", j, i, calc_dist(j, i, point));
-				put_pixel(img, j, i, RED);
-			}
-			j++;
-		}
-		i++;
-	}
-}
+// 	while (i < point.y + cho3a3)
+// 	{
+// 		j = point.x - cho3a3;
+// 		while (j < point.x + cho3a3)
+// 		{
+// 			if (calc_dist(j, i, point) <= cho3a3)
+// 			{
+// 				// printf("pixeled the point x ==%d  | y == %d | with dist == %d\n", j, i, calc_dist(j, i, point));
+// 				put_pixel(img, j, i, RED);
+// 			}
+// 			j++;
+// 		}
+// 		i++;
+// 	}
+// }
 
-void	draw_player(void)
-{
-	t_vector player_front;
+// void	draw_player(void)
+// {
+// 	t_vector player_front;
 
-	player_front.x = get_data()->player_pos.x / SQUARE_SIZE + 5 * get_data()->player_dir.x;
-	player_front.y = get_data()->player_pos.y  / SQUARE_SIZE + 5 * get_data()->player_dir.y;
-	draw_circle(&(get_data()->background_img), 7, get_data()->player_pos);
-	line_between_2points(get_data()->player_pos,
-				player_front, RED);
-}
+// 	player_front.x = get_data()->player_pos.x / SQUARE_SIZE + 5 * get_data()->player_dir.x;
+// 	player_front.y = get_data()->player_pos.y  / SQUARE_SIZE + 5 * get_data()->player_dir.y;
+// 	draw_circle(&(get_data()->background_img), 7, get_data()->player_pos);
+// 	line_between_2points(get_data()->player_pos,
+// 				player_front, RED);
+// }
 
 // check file 
 	// check extension
@@ -796,7 +796,7 @@ void render_wall(int x, int y)
 		while (j < SQUARE_SIZE - 1)
 		{
 			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
-			put_pixel(&(get_data()->minimap.img_data), j + x, i + y, CYAN);
+			put_pixel(&(get_data()->background_img), j + x, i + y, CYAN);
 			j++;
 		}
 		i++;
@@ -817,7 +817,7 @@ void render_line(int x1, int y1, int x2, int y2)
 
     for (int i = 0; i <= max; i++)
     {
-        put_pixel(&(get_data()->minimap.img_data), x, y, RED);
+        put_pixel(&(get_data()->background_img), x, y, RED);
         x += x_step;
         y += y_step;
     }
@@ -853,7 +853,7 @@ void render_floor(int x, int y)
 		while(j < SQUARE_SIZE - 1)
 		{
 			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
-			put_pixel(&(get_data()->minimap.img_data), j + x, i + y, get_data()->floor_color);
+			put_pixel(&(get_data()->background_img), j + x, i + y, get_data()->floor_color);
 			j++;
 		}
 		i++;
@@ -889,26 +889,26 @@ void render_map(void)
 	}
 }
 
-void render_ray(t_game *game, t_ray ray)
-{
-	// Calculate the end point of the ray
-	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int end_x = center_x + cos(ray.ray_angle) * 80;
-	int end_y = center_y + sin(ray.ray_angle) * 80;
+// void render_ray(t_game *game, t_ray ray)
+// {
+// 	// Calculate the end point of the ray
+// 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+// 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+// 	int end_x = center_x + cos(ray.ray_angle) * 80;
+// 	int end_y = center_y + sin(ray.ray_angle) * 80;
 
-	// Render the ray
-	render_line(center_x, center_y, end_x, end_y);
-}
-void render_rays(t_game *game)
-{
-	int i = 0;
-	while (i < game->num_rays)
-	{
-		render_ray(game, game->rays[i]);
-		i++;
-	}
-}
+// 	// Render the ray
+// 	render_line(center_x, center_y, end_x, end_y);
+// }
+// void render_rays(t_game *game)
+// {
+// 	int i = 0;
+// 	while (i < game->num_rays)
+// 	{
+// 		render_ray(game, game->rays[i]);
+// 		i++;
+// 	}
+// }
 void render_player()
 {
 	int x, y;
@@ -925,7 +925,7 @@ void render_player()
 		{
 			if (x * x + y * y <= radius * radius)
 			{
-				put_pixel(&(get_data()->minimap.img_data), center_x + x, center_y + y, RED);
+				put_pixel(&(get_data()->background_img), center_x + x, center_y + y, RED);
 			}
 		}
 	}
@@ -937,8 +937,19 @@ void render_player()
 }
 void render_frame()
 {
-	ft_memset(get_data()->minimap.img_data.addr, 0, get_data()->width * SQUARE_SIZE * get_data()->height * SQUARE_SIZE * (get_data()->minimap.img_data.bits_per_pixel / 8));
-
+	
+	// int	i = 0;
+	// int	j;
+	// while (i < SQUARE_SIZE * 10)
+	// {
+	// 	j = 0;
+	// 	while (j < SQUARE_SIZE * 10)
+	// 	{
+	// 		put_pixel(&(get_data()->background_img), i, j, BLACK);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
 	render_map();
 	render_player();
 	// mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
@@ -1064,10 +1075,10 @@ int loop_hook(t_game *game)
 	render_walls();
     // Render the frame
     // render_player(game);
-	render_background();
     render_frame();
+	render_background();
 	// draw_player();
-	mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->minimap.img_data.img, 0, 0);
+	// mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->minimap.img_data.img, 0, 0);
 
     return (0);
 }
@@ -1116,8 +1127,8 @@ int main(int ac, char **av)
 	init_background();
 	render_walls();
 	render_background();
-	get_data()->minimap.img_data.img = mlx_new_image(get_data()->mlx, get_data()->width * SQUARE_SIZE, get_data()->height * SQUARE_SIZE);
-    get_data()->minimap.img_data.addr = mlx_get_data_addr(get_data()->minimap.img_data.img, &get_data()->minimap.img_data.bits_per_pixel, &get_data()->minimap.img_data.line_length, &get_data()->minimap.img_data.endian);
+	// get_data()->minimap.img_data.img = mlx_new_image(get_data()->mlx, get_data()->width * SQUARE_SIZE, get_data()->height * SQUARE_SIZE);
+    // get_data()->minimap.img_data.addr = mlx_get_data_addr(get_data()->minimap.img_data.img, &get_data()->minimap.img_data.bits_per_pixel, &get_data()->minimap.img_data.line_length, &get_data()->minimap.img_data.endian);
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
