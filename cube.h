@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 02:02:04 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 03:42:01 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 # define WIN_HEIGHT 1000
 # define WIN_WIDTH 1000
 # define MY_PI 3.14159265358979323846
-# define FOV (100 * (MY_PI / 180))
+# define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 32
 # define ZOOM 100
 # define SPEED 3
@@ -259,8 +259,7 @@ typedef struct s_data
 	t_vector	mouse_pos;
 	t_texture	minimap;
 	int			is_updated;
-	
-	//TODO comlete this
+	int			dark_mode;
 } t_data;
 
 
@@ -308,6 +307,7 @@ float	normalise_angle(float angle);
 //
 
 void	render_walls(void);
+void render_minimap(void);
 //=== garbage collector =================================
 
 void	*mallocate(size_t size);
