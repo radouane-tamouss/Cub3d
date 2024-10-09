@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/06 16:43:29 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 00:14:11 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,19 +160,19 @@ typedef struct s_map
 typedef struct s_texture
 {
     char *path;
-    t_img_data img;
+    t_img_data img_data;
     int width;
     int height;
 } t_texture;
 
-typedef struct s_image_data
-{
-    void *img;
-    char *addr;
-    int bits_per_pixel;
-    int line_length;
-    int endian;
-} t_image_data;
+// typedef struct s_image_data
+// {
+//     void *img;
+//     char *addr;
+//     int bits_per_pixel;
+//     int line_length;
+//     int endian;
+// } t_image_data;
 
 typedef struct s_ray
 {
@@ -192,7 +192,7 @@ typedef struct s_game
 {
     void *mlx;
     void *win;
-    t_image_data img;
+    t_img_data img;
 
     
     t_texture north;
@@ -233,6 +233,7 @@ typedef struct s_ray_data {
 	float	angle;
 	float	dist;
 	float	wall_height;
+	int		object_hitted;// wall 0 or door 1
 } t_ray_data;
 //==== data =================
 
@@ -245,6 +246,7 @@ typedef struct s_data
 	t_texture	south_img;
 	t_texture	east_img;
 	t_texture	west_img;
+	t_texture	door_img;
 	t_img_data	background_img;
 	int			ceiling_color;
 	int			floor_color;
@@ -255,6 +257,8 @@ typedef struct s_data
 	t_vector	player_pos;
 	t_vector	player_dir;
 	t_vector	mouse_pos;
+	t_texture	minimap;
+	
 	//TODO comlete this
 } t_data;
 
