@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 03:42:01 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 18:11:15 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,6 +260,7 @@ typedef struct s_data
 	t_texture	minimap;
 	int			is_updated;
 	int			dark_mode;
+	t_ray_data		front_ray;
 } t_data;
 
 
@@ -280,6 +281,8 @@ t_data	*get_data(void);
 
 char	**ft_split2(char const *s, char *charset);
 int	check_charset(char *charset, char c);
+t_game check_map(int fd, char *file);
+int check_file(char *str, int *fd);
 
 //=======================================================
 //=== rendering =========================================

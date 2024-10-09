@@ -3,13 +3,13 @@ CC = cc
 # MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
-CFLAGS =  -g3#-Werror -Wextra -Wall  #-g3 #-fsanitize=address
+CFLAGS =  -g3 #-Werror -Wextra -Wall  #-g3 #-fsanitize=address
 MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
 RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
 RENDER_FILES = rendering/put_pixel.c rendering/background.c rendering/event_handling.c rendering/rotation.c rendering/movement.c rendering/ft_math.c rendering/walls.c rendering/minimap.c
-PARSING_FILES =
+PARSING_FILES = parsing/parsing.c
 CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR} ${GET_NEXT_LINE_FILES} ft_split_charset.c
 OFILES = ${CFILES:.c=.o}
 NAME = cub3D

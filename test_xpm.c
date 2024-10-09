@@ -34,44 +34,44 @@ unsigned int	pull_pixel(t_texture img, int x, int y)
 int	main(void)
 {
 	void	*mlx;
-	t_texture	img;
+	t_texture	background;
+	t_texture	hand;
 	char	*relative_path = "ArtStation-Explore.xpm";
 
 	void	*mlx_win;
 
 	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, 1000, 1000, "Hello world!");
+	mlx_win = mlx_new_window(mlx, 1000, 1000, "test");
 
-	img.img_data.img = mlx_xpm_file_to_image(mlx, "ArtStation-Explore.xpm", &(img.width), &(img.height));
-	img.img.addr = mlx_get_data_addr(img.img.img, &(img.img.bits_per_pixel), &(img.img.line_length), &(img.img.endian));
-
-	if (img.img.img == NULL)
+	background.img_data.img = mlx_xpm_file_to_image(mlx, "textures/north.xpm", &(background.width), &(background.height));
+	hand.img_data.img = mlx_xpm_file_to_image(mlx, "textures/torch.xpm", &(hand.width), &(hand.height));
+	background.img_data.addr = mlx_get_data_addr(background.img_data.img, &(background.img_data.bits_per_pixel), &(background.img_data.line_length), &(background.img_data.endian));
+	hand.img_data.addr = mlx_get_data_addr(hand.img_data.img, &(hand.img_data.bits_per_pixel), &(hand.img_data.line_length), &(hand.img_data.endian));
+	if (background.img_data.img == NULL || hand.img_data.img == NULL)
 	{
 		printf("err\n");
 		exit(1);
 	}
-
-	t_img_data drawn_img;
-
-	drawn_img.img = mlx_new_image(mlx, img.width, img.height);
-	drawn_img.addr = mlx_get_data_addr(drawn_img.img, &(drawn_img.bits_per_pixel), &(drawn_img.line_length), &(drawn_img.endian));
-
 	int i = 0;
 	int j = 0;
-	int color;
+	int	color;
 
-	while (i < img.height)
+	while (i < background.height)
 	{
 		j = 0;
-		while (j < img.width)
+		while (j < background.width)
 		{
-			color = pull_pixel(img, j, i);
-			put_pixel(&(drawn_img), j, i, color);
+			color = pull_pixel(hand, j, i);
+			if (color != WHITE)
+				put_pixel(&(background.img_data), j, i, color);
 			j++;
 		}
 		i++;
 	}
-	
-	mlx_put_image_to_window(mlx, mlx_win, drawn_img.img, 200, 200);
+
+	mlx_put_image_to_window(mlx, mlx_win, background.img_data.img, 0, 0);
+
+
+
 	mlx_loop(mlx);
 }
