@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 18:11:15 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:06:06 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,6 +283,7 @@ char	**ft_split2(char const *s, char *charset);
 int	check_charset(char *charset, char c);
 t_game check_map(int fd, char *file);
 int check_file(char *str, int *fd);
+int check_if_player_direction(char c);
 
 //=======================================================
 //=== rendering =========================================
@@ -307,6 +308,7 @@ void	move_left();
 void	move_right();
 void	draw_player();
 float	normalise_angle(float angle);
+
 //
 
 void	render_walls(void);

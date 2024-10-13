@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 03:43:28 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/11 15:38:07 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void render_line(int x1, int y1, int x2, int y2)
     }
 }
 
-void render_wall(int x, int y)
+void render_square(int x, int y, int color)
 {
 	int i = 0;
 	int j = 0;
@@ -43,33 +43,18 @@ void render_wall(int x, int y)
 		while (j < SQUARE_SIZE - 1)
 		{
 			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
-			put_pixel(&(get_data()->background_img), j + x, i + y, CYAN);
+			put_pixel(&(get_data()->background_img), j + x, i + y, color);
 			j++;
 		}
 		i++;
 	}
 }
 
-void render_floor(int x, int y)
-{
-	int i = 0;
-	int j = 0;
-	while(i < SQUARE_SIZE - 1)
-	{
-		j = 0;
-		while(j < SQUARE_SIZE - 1)
-		{
-			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
-			put_pixel(&(get_data()->background_img), j + x, i + y, get_data()->floor_color);
-			j++;
-		}
-		i++;
-	}
-}
 void render_map(void)
 {
 	int i,j;
 	int x,y;
+	int	color;
 	i = ft_max((get_data()->player_pos.y / GRID_DIST) - 5, 0);
 	while(i < get_data()->height && (i - (get_data()->player_pos.y / GRID_DIST)) < 5)
 	{
@@ -79,17 +64,13 @@ void render_map(void)
 		{
 			x = (j +  5) * SQUARE_SIZE - (get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
 			if (get_data()->map[i][j] == '1')
-			{
-				render_wall(x, y);
-			}
-			else
-			{
-				render_floor(x, y);
-			}
-			// else if (check_if_player_direction(get_data()->map[i][j]) == 1)
-			// {
-			// 	render_floor(x, y);
-			// }
+				render_square(x, y, CYAN);
+			else if (get_data()->map[i][j] == '0')
+				render_square(x, y, GREEN);
+			else if (check_if_player_direction(get_data()->map[i][j]) == 1)
+				render_square(x, y, RED);
+			else if (get_data()->map[i][j] == 'D')
+				render_square(x, y, BLUE);
 			j++;
 		}
 		i++;
@@ -144,7 +125,6 @@ void render_player()
 }
 void render_minimap(void)
 {
-	
 	int	i = 0;
 	int	j;
 	while (i < SQUARE_SIZE * 11)
