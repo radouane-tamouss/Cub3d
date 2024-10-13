@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 18:47:23 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:08:06 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	ft_close(void)
 	exiter(0);
 	return (0);
 }
+
+
 
 int	handle_keys(int keycode, void *garbage)
 {
@@ -67,6 +69,14 @@ int	handle_keys(int keycode, void *garbage)
 	// printf("===== angle %f degree\n", get_data()->player_angle * (180 / MY_PI));
 	return (0);
 }
+
+// int	handle_realise(int keycode, void *garbage)
+// {
+// 	// if (keycode == W || keycode == A || keycode == S || keycode == D || keycode == )
+// 		get_data()->is_updated = 0;
+
+// }
+
 int mouse_event(int x, int y, void *par)
 {
 	(void)par;

@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 17:21:32 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/11 18:08:00 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	init_data(t_game game)
 	get_data()->ceiling_color = CREATE_TRGB(0, game.ceiling.r, game.ceiling.g, game.ceiling.b);//CYAN;// TODO this just for startin befroe parsing is complete
 	// init_background();
 	mlx_hook(get_data()->win, 2, 1L << 0, handle_keys, NULL);// this to handle when a key pressed
+	// mlx_hook(get_data()->win, 3, 1L << 1, handle_realise, NULL);// this to handle when a key released
 	mlx_hook(get_data()->win, 17, 1L << 0, ft_close, NULL);// this to handle when red arrow clicked
 	mlx_hook(get_data()->win, 6, 1L<<6, mouse_event, NULL);
 	get_data()->player_pos.x = game.player.pos_x * GRID_DIST + GRID_DIST/2;//1. * GRID_DIST;// TODO for test only
@@ -221,7 +222,7 @@ int loop_hook(t_game *game)
 		render_background();
 		// draw_player();
 		// mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->minimap.img_data.img, 0, 0);
-		get_data()->is_updated = 0;
+		// get_data()->is_updated = 0;
 	}
 
     return (0);

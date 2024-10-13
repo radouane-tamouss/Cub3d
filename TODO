@@ -1,4 +1,7 @@
 TODO impelemnt HEAP COTORLLER to remove leaks
-TODO add animations
-TODO doors must be interacted
-TODO make sure to split bonus part from mendatory
+TODO add animations (to doors and maybe player hand)
+TODO make sure to split bonus part from mendatory (parsing should accept symbol for doors in bonus an no in mendatory part)
+TODO 42 norms
+TODO work only with t_data structure instead of t_game
+
+TODO  optianally add extra bonus (like enemy or collectibles or specific key to open some doors ...)
