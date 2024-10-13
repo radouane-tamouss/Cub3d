@@ -758,7 +758,7 @@ void render_line(t_game *game, int x1, int y1, int x2, int y2)
 
     for (int i = 0; i <= max; i++)
     {
-        mlx_pixel_put(game->mlx, game->win, round(x), round(y), GREEN);
+        mlx_pixel_put(game->mlx, game->win, round(x), round(y), RED);
         x += x_step;
         y += y_step;
     }
@@ -835,9 +835,8 @@ void render_ray(t_game *game, t_ray ray)
 	// Calculate the end point of the ray
 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int end_x = center_x + cos(ray.ray_angle) * 80;
-	int end_y = center_y + sin(ray.ray_angle) * 80;
-
+	int end_x = center_x + cos(ray.ray_angle) * 980;
+	int end_y = center_y + sin(ray.ray_angle) * 980;
 	// Render the ray
 	render_line(game, center_x, center_y, end_x, end_y);
 }
@@ -853,8 +852,8 @@ void render_rays(t_game *game)
 void render_player(t_game *game)
 {
 	int x, y;
-	// int radius = SQUARE_SIZE / 6;
-	int radius = game->player.radius;
+	int radius = SQUARE_SIZE / 6;
+	// int radius = game->player.radius;
 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
 
@@ -868,11 +867,11 @@ void render_player(t_game *game)
 			}
 		}
 	}
-	// Calculate the end point of the direction line
-    int end_x = center_x + cos(game->player.rotation_angle) * 80;
-    int end_y = center_y + sin(game->player.rotation_angle) * 80;
+    int end_x = center_x + cos(game->player.rotation_angle) * 800;
+    int end_y = center_y + sin(game->player.rotation_angle) * 880;
 	render_line(game, center_x, center_y, end_x, end_y);
 	render_rays(game);
+	// Calculate the end point of the direction line
 }
 void render_frame(t_game *game)
 {
@@ -934,33 +933,64 @@ void update_player(t_game *game)
 
 
 }
+double normalize_angle(double angle)
+{
+	angle = fmod(angle, 2 * PI);
+	if (angle < 0)
+		angle = (2 * PI) + angle;
+	return angle;
+}
+
 void cast_all_rays(t_game *game)
 {
 	int column_id = 0;
 
-	game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+	// game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+	game->ray_angle = normalize_angle(game->player.rotation_angle - (FOV_ANGLE / 2));
+	game->num_rays = 1;
 	game->rays = malloc(sizeof(t_ray) * game->num_rays);
 	while (column_id < game->num_rays)
 	{
-		// game->rays[column_id].ray_angle = normalize_angle(game->ray_angle);
-		// game->rays[column_id].wall_hit_x = 0;
-		// game->rays[column_id].wall_hit_y = 0;
-		// game->rays[column_id].distance = 0;
-		// game->rays[column_id].was_hit_vertical = 0;
-		// cast_ray(game, column_id);
 		game->rays[column_id].ray_angle = game->ray_angle;
 		game->ray_angle += FOV_ANGLE / game->num_rays;
+		game->rays[column_id].is_ray_facing_down = game->ray_angle > 0 && game->ray_angle < PI;
+		game->rays[column_id].is_ray_facing_up = !game->rays[column_id].is_ray_facing_down;
+		game->rays[column_id].is_ray_facing_right = game->ray_angle < 0.5 * PI || game->ray_angle > 1.5 * PI;
+		game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
+		printf("is facing down = %d\n", game->rays[column_id].is_ray_facing_down);
 		column_id++;
 	}
 
-	// printf("%s========RAYS========%s\n", CRED, CRESET);
-	// int i = 0;
-	// while (i < game->num_rays)
-	// {
-	// 	printf("ray_angle = %f\n", game->rays[i].ray_angle);
-	// 	i++;
-	// }
-	// printf("%s====================%s\n", CRED, CRESET);
+}
+void cast(t_game *game, int column_id)
+{
+	///////////////////////////////////////////
+	// HORZIONTAL RAY-GRID INTERSECTION CODE //
+	///////////////////////////////////////////
+	double xstep = 0;
+	double ystep = 0;
+	double xintercept = 0;
+	double yintercept = 0;
+
+
+	// Find the y-coordinate of the closest horizontal grid intersection
+	yintercept = floor(game->player.pos_y / SQUARE_SIZE) * SQUARE_SIZE;
+	if (game->rays[column_id].is_ray_facing_down)
+		yintercept += SQUARE_SIZE;
+	// Find the x-coordinate of the closest horizontal grid intersection
+	xintercept = game->player.pos_x + (yintercept - game->player.pos_y) / tan(game->ray_angle);
+
+
+	// Calculate the increment xstep and ystep
+	ystep = SQUARE_SIZE;
+	if (game->rays[column_id].is_ray_facing_up)
+		ystep *= -1;
+	xstep = SQUARE_SIZE / tan(game->ray_angle);
+	if (game->rays[column_id].is_ray_facing_left && xstep > 0)
+		xstep *= -1;
+	if (game->rays[column_id].is_ray_facing_right && xstep < 0)
+		xstep *= -1;
+	
 }
 int loop_hook(t_game *game)
 {

@@ -33,7 +33,7 @@
 # define PI 3.14159265359
 #define ROTATION_SPEED 0.1
 #define MOVE_SPEED 0.1
-#define WALL_STRIP_WIDTH 100 
+#define WALL_STRIP_WIDTH 10 
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
 //====== mlx img struct ===== 
