@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   event_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/11 18:08:06 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/17 21:06:42 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,31 @@ int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
 	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC)
+	if (keycode == ESC_MAC)
 	{
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
-	else if (keycode == W)
+	else if (keycode == W_MAC)
 		move_forward();
-	else if (keycode == S)
+	else if (keycode == S_MAC)
 		move_backward();
-	else if (keycode == D)
+	else if (keycode == D_MAC)
 		move_right();
-	else if (keycode == A)
+	else if (keycode == A_MAC)
 		move_left();
-	else if (keycode == RIGHT_ARROW)
+	else if (keycode == RIGHT_MAC)
 		rotate_player(2.  * (MY_PI / (float)180));
-	else if (keycode == LEFT_ARROW)
+	else if (keycode == LEFT_MAC)
 		rotate_player(-2.  * (MY_PI / (float)180));
-	else if (keycode == SPACE)
+	else if (keycode == SPACE_MAC)
 	{
 		if (get_data()->dark_mode == 1)
 			get_data()->dark_mode = 0;
 		else
 			get_data()->dark_mode = 1;
 	}
-	else if (keycode == E)
+	else if (keycode == E_MAC)
 	{
 		if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
 			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
