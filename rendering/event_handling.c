@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/17 21:06:42 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/22 02:45:42 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,12 @@ int	handle_keys(int keycode, void *garbage)
 			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
 		// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
 	}
+	else  if (keycode == T_MAC)  // Add proper key define if needed
+    {
+        get_data()->gun.is_shooting = 1;
+        get_data()->gun.current_frame = 0;
+        get_data()->gun.frame_delay = 0;
+    }
 	else
 		return (0);
 	get_data()->is_updated = 1;
