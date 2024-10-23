@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/11 18:08:00 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/23 02:31:12 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,6 +186,76 @@ void	init_data(t_game game)
 // 	// }
 // 	// printf("%s====================%s\n", CRED, CRESET);
 // }
+// -------------
+
+// Implementation of gun loading and animation functions
+void    load_frames(void)
+{
+    char    *frame_paths[4] = {
+        "textures/frame1.xpm",
+        "textures/frame2.xpm",
+        "textures/frame3.xpm",
+        "textures/frame4.xpm"
+    };
+    int     i;
+
+    i = 0;
+    while (i < 4)
+    {
+        get_data()->gun.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->gun.width, &get_data()->gun.height);
+        if (!get_data()->gun.img[i])
+        {
+            print_err("Failed to load gun frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->gun.current_frame = 0;
+    get_data()->gun.frame_delay = 0;
+    get_data()->gun.is_shooting = 0;
+}
+
+void    render_gun(void)
+{
+    // static int  idle_delay = 0;
+    int         gun_pos_x;
+    int         gun_pos_y;
+
+    // Calculate gun position
+    gun_pos_x = WIN_WIDTH / 2 - get_data()->gun.width / 2;
+    gun_pos_y = WIN_HEIGHT - get_data()->gun.height + 4;
+
+    // Handle shooting animation
+    if (get_data()->gun.is_shooting)
+    {
+        if (get_data()->gun.frame_delay++ >= 5)  // Adjust delay value as needed
+        {
+            get_data()->gun.frame_delay = 0;
+            get_data()->gun.current_frame++;
+            if (get_data()->gun.current_frame >= 4) 
+            {
+                get_data()->gun.current_frame = 0;
+                get_data()->gun.is_shooting = 0;
+            }
+        }
+    }
+    // Handle idle animation (only frames 1 and 2)
+    // else
+    // {
+    //     if (idle_delay++ >= 20)  // Slower animation for idle state
+    //     {
+    //         idle_delay = 0;
+    //         get_data()->gun.current_frame = (get_data()->gun.current_frame == 0) ? 1 : 0;
+    //     }
+    // }
+
+    // Render the current frame
+    mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+        get_data()->gun.img[get_data()->gun.current_frame], 
+        gun_pos_x, gun_pos_y);
+}
+
 int loop_hook(t_game *game)
 {
     // Update player position based on key presses
@@ -220,6 +290,7 @@ int loop_hook(t_game *game)
 		// render_player(game);
 		render_minimap();
 		render_background();
+		render_gun();
 		// draw_player();
 		// mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->minimap.img_data.img, 0, 0);
 		// get_data()->is_updated = 0;
@@ -266,12 +337,12 @@ int main(int ac, char **av)
     // mlx_loop_hook(game.mlx, loop_hook, &game);
 
     // mlx_loop_hook(game.mlx, loop_hook, &game);
-
+	
 	init_data(game);
-
 	init_background();
 	render_walls();
 	render_background();
+	load_frames();
 	// get_data()->minimap.img_data.img = mlx_new_image(get_data()->mlx, get_data()->width * SQUARE_SIZE, get_data()->height * SQUARE_SIZE);
     // get_data()->minimap.img_data.addr = mlx_get_data_addr(get_data()->minimap.img_data.img, &get_data()->minimap.img_data.bits_per_pixel, &get_data()->minimap.img_data.line_length, &get_data()->minimap.img_data.endian);
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
