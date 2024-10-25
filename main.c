@@ -935,7 +935,7 @@ void update_player(t_game *game)
 }
 double normalize_angle(double angle)
 {
-	angle = fmod(angle, 2 * PI);
+	angle = fmod(angle, (2 * PI));
 	if (angle < 0)
 		angle = (2 * PI) + angle;
 	return angle;
@@ -951,13 +951,17 @@ void cast_all_rays(t_game *game)
 	game->rays = malloc(sizeof(t_ray) * game->num_rays);
 	while (column_id < game->num_rays)
 	{
+		game->rays[column_id].wall_hit_x = 0;
+		game->rays[column_id].wall_hit_y = 0;
+		game->rays[column_id].distance = 0;
 		game->rays[column_id].ray_angle = game->ray_angle;
 		game->ray_angle += FOV_ANGLE / game->num_rays;
 		game->rays[column_id].is_ray_facing_down = game->ray_angle > 0 && game->ray_angle < PI;
 		game->rays[column_id].is_ray_facing_up = !game->rays[column_id].is_ray_facing_down;
 		game->rays[column_id].is_ray_facing_right = game->ray_angle < 0.5 * PI || game->ray_angle > 1.5 * PI;
 		game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
-		printf("is facing down = %d\n", game->rays[column_id].is_ray_facing_down);
+		
+		printf("is facing up = %d\n", game->rays[column_id].is_ray_facing_up);
 		column_id++;
 	}
 
@@ -1034,7 +1038,7 @@ int main(int ac, char **av)
     int fd;
     t_game game;
 
-    if (ac != 2 || check_file(av[1], &fd) == 0)
+  if (ac != 2 || check_file(av[1], &fd) == 0)
         return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
     game = check_map(fd, av[1]);
     close(fd);
