@@ -744,7 +744,7 @@ void render_wall(t_game *game, int x, int y)
 	}
 }
 
-void render_line(t_game *game, int x1, int y1, int x2, int y2)
+void render_line(t_game *game, int x1, int y1, int x2, int y2, int color)
 {
     double dx = x2 - x1;
     double dy = y2 - y1;
@@ -758,7 +758,7 @@ void render_line(t_game *game, int x1, int y1, int x2, int y2)
 
     for (int i = 0; i <= max; i++)
     {
-        mlx_pixel_put(game->mlx, game->win, round(x), round(y), RED);
+        mlx_pixel_put(game->mlx, game->win, round(x), round(y), color);
         x += x_step;
         y += y_step;
     }
@@ -838,7 +838,7 @@ void render_ray(t_game *game, t_ray ray)
 	int end_x = center_x + cos(ray.ray_angle) * 980;
 	int end_y = center_y + sin(ray.ray_angle) * 980;
 	// Render the ray
-	render_line(game, center_x, center_y, end_x, end_y);
+	render_line(game, center_x, center_y, end_x, end_y, RED);
 }
 void render_rays(t_game *game)
 {
@@ -869,7 +869,7 @@ void render_player(t_game *game)
 	}
     int end_x = center_x + cos(game->player.rotation_angle) * 800;
     int end_y = center_y + sin(game->player.rotation_angle) * 880;
-	render_line(game, center_x, center_y, end_x, end_y);
+	render_line(game, center_x, center_y, end_x, end_y, GREEN);
 	render_rays(game);
 	// Calculate the end point of the direction line
 }
@@ -940,32 +940,83 @@ double normalize_angle(double angle)
 		angle = (2 * PI) + angle;
 	return angle;
 }
-
 void cast_all_rays(t_game *game)
 {
-	int column_id = 0;
+    int column_id = 0;
 
-	// game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
-	game->ray_angle = normalize_angle(game->player.rotation_angle - (FOV_ANGLE / 2));
+    // Calculate the initial ray angle
+    double initial_ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+    initial_ray_angle = normalize_angle(initial_ray_angle);
+
+    // Allocate memory for rays
+    // game->num_rays = game->win_width / WALL_STRIP_WIDTH;
 	game->num_rays = 1;
-	game->rays = malloc(sizeof(t_ray) * game->num_rays);
-	while (column_id < game->num_rays)
-	{
-		game->rays[column_id].wall_hit_x = 0;
-		game->rays[column_id].wall_hit_y = 0;
-		game->rays[column_id].distance = 0;
-		game->rays[column_id].ray_angle = game->ray_angle;
-		game->ray_angle += FOV_ANGLE / game->num_rays;
-		game->rays[column_id].is_ray_facing_down = game->ray_angle > 0 && game->ray_angle < PI;
-		game->rays[column_id].is_ray_facing_up = !game->rays[column_id].is_ray_facing_down;
-		game->rays[column_id].is_ray_facing_right = game->ray_angle < 0.5 * PI || game->ray_angle > 1.5 * PI;
-		game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
-		
-		printf("is facing up = %d\n", game->rays[column_id].is_ray_facing_up);
-		column_id++;
-	}
+    game->rays = malloc(sizeof(t_ray) * game->num_rays);
+    if (!game->rays)
+    {
+        fprintf(stderr, "Failed to allocate memory for rays\n");
+        exit(EXIT_FAILURE);
+    }
 
+    // Cast each ray
+    while (column_id < game->num_rays)
+    {
+        game->rays[column_id].ray_angle = normalize_angle(initial_ray_angle + (column_id * (FOV_ANGLE / game->num_rays)));
+        game->rays[column_id].wall_hit_x = 0;
+        game->rays[column_id].wall_hit_y = 0;
+        game->rays[column_id].distance = 0;
+
+        // Determine the ray's facing direction
+        game->rays[column_id].is_ray_facing_down = sin(game->rays[column_id].ray_angle) > 0;
+        game->rays[column_id].is_ray_facing_up = !game->rays[column_id].is_ray_facing_down;
+        game->rays[column_id].is_ray_facing_right = cos(game->rays[column_id].ray_angle) > 0;
+        game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
+
+        printf("Ray %d: angle = %f, facing down = %d, facing right = %d\n",
+               column_id,
+               game->rays[column_id].ray_angle * 180 / PI,
+               game->rays[column_id].is_ray_facing_down,
+               game->rays[column_id].is_ray_facing_right);
+
+        column_id++;
+    }
 }
+// void cast_all_rays(t_game *game)
+// {
+// 	int column_id = 0;
+
+// 	// game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+// 	// game->ray_angle = normalize_angle(game->player.rotation_angle - (FOV_ANGLE / 2));
+// 	double initial_ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+// 	initial_ray_angle = normalize_angle(initial_ray_angle);
+
+// 	printf("ray_angle = %f\n", game->ray_angle * 180 / PI);
+// 	game->num_rays = 1;
+// 	game->rays = malloc(sizeof(t_ray) * game->num_rays);
+// 	while (column_id < game->num_rays)
+// 	{
+// 		game->rays[column_id].wall_hit_x = 0;
+// 		game->rays[column_id].wall_hit_y = 0;
+// 		game->rays[column_id].distance = 0;
+// 		// game->rays[column_id].ray_angle = game->ray_angle;
+// 		game->rays[column_id].ray_angle = normalize_angle(initial_ray_angle + column_id * FOV_ANGLE / game->num_rays);
+// 		game->ray_angle += FOV_ANGLE / game->num_rays;
+// 		// game->ray_angle = normalize_angle(game->ray_angle);
+// 		// game->rays[column_id].is_ray_facing_down = game->ray_angle > 0 && game->ray_angle < PI;
+// 		game->rays[column_id].is_ray_facing_down = sin(game->ray_angle) > 0;
+// 		game->rays[column_id].is_ray_facing_up = !game->rays[column_id].is_ray_facing_down;
+// 		game->rays[column_id].is_ray_facing_right = game->ray_angle < 0.5 * PI || game->ray_angle > 1.5 * PI;
+// 		game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
+
+// 		      printf("Ray %d: angle = %f, facing down = %d, facing right = %d\n",
+//                column_id,
+//                game->rays[column_id].ray_angle * 180 / PI,
+//                game->rays[column_id].is_ray_facing_down,
+//                game->rays[column_id].is_ray_facing_right);	
+// 		column_id++;
+// 	}
+
+// }
 void cast(t_game *game, int column_id)
 {
 	///////////////////////////////////////////
