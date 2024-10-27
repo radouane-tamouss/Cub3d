@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/27 12:38:35 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/27 19:35:34 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,13 @@
 # define WIN_WIDTH 1000
 
 
+
 # define SQUARE_SIZE 64
 # define PI 3.14159265359
-#define ROTATION_SPEED 0.05
-#define MOVE_SPEED 0.05
+#define ROTATION_SPEED 1 * (PI / 180)
+#define MOVE_SPEED 0.01
+#define FALSE 0
+#define TRUE 1
 #define WALL_STRIP_WIDTH 10 
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
@@ -112,8 +115,8 @@ typedef struct s_texture
 typedef struct s_player
 {
     int radius;
-    double pos_x;
-    double pos_y;
+    float pos_x;
+    float pos_y;
     int turn_direction; // -1 if left, +1 if right
     int walk_direction; // -1 if back, +1 if front
     double rotation_angle;

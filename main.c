@@ -768,21 +768,6 @@ void render_line(t_game *game, int x1, int y1, int x2, int y2, int color)
 // 	game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
 
 // }
-int has_wall_at(t_game *game, double x, double y)
-{
-	// printf("x = %f\n", x);
-	// printf("y = %f\n", y);
-	int map_x = round(x);
-	int map_y = round(y);
-	// printf("map_x = %d\n", map_x);
-	// printf("map_y = %d\n", map_y);
-	// printf("map[map_x][map_y] = %c\n", game->map.grid[map_x][map_y]);
-	if (map_x < 0 || map_x >= game->map.height || map_y < 0 || map_y >= game->map.width)
-		return (1);
-	if (game->map.grid[map_x][map_y] == '1')
-		return (1);
-	return (0);
-}
 
 void render_floor(t_game *game, int x, int y)
 {
@@ -833,8 +818,8 @@ void render_map(t_game *game)
 void render_ray(t_game *game, t_ray ray, int end_x, int end_y)
 {
 	// Calculate the end point of the ray
-	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_x = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_y = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
 	// int end_x = center_x + cos(ray.ray_angle) * 980;
 	// int end_y = center_y + sin(ray.ray_angle) * 980;
 	// Render the ray
@@ -861,11 +846,13 @@ void render_ray(t_game *game, t_ray ray, int end_x, int end_y)
 // }
 void render_player(t_game *game)
 {
+	game->win_width = game->map.width * SQUARE_SIZE;
+	game->win_height = game->map.height * SQUARE_SIZE;
 	int x, y;
 	int radius = SQUARE_SIZE / 6;
 	// int radius = game->player.radius;
-	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+ 	int center_x = game->player.pos_x;
+    int center_y = game->player.pos_y;
 
 	for (y = -radius; y <= radius; y++)
 	{
@@ -950,6 +937,18 @@ double normalize_angle(double angle)
 		angle = (2 * PI) + angle;
 	return angle;
 }
+int has_wall_at(t_game *game, double x, double y)
+{
+	int map_grid_index_x;
+	int map_grid_index_y;
+	if (x < 0 || x > game->map.width * SQUARE_SIZE || y < 0 || y > game->map.height * SQUARE_SIZE)
+		return 1;
+	map_grid_index_x = floor(x / SQUARE_SIZE);
+	map_grid_index_y = floor(y / SQUARE_SIZE);
+	if (game->map.grid[map_grid_index_y][map_grid_index_x] == '1')
+		return 1;
+	return 0;
+}
 void cast(t_game *game, int column_id);
 void cast_all_rays(t_game *game)
 {
@@ -1007,59 +1006,49 @@ void cast(t_game *game, int column_id)
     double wall_hit_x = 0;
     double wall_hit_y = 0;
 
-    // Important: In your code, player coordinates are inverted (pos_x is y, pos_y is x)
-    double player_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
-    double player_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
 
-    // Find the y-coordinate of the closest horizontal grid intersection
-    yintercept = floor(game->player.pos_x * SQUARE_SIZE / SQUARE_SIZE) * SQUARE_SIZE;
-    if (game->rays[column_id].is_ray_facing_down)
-        yintercept += SQUARE_SIZE;
+	// Find the y-coordinate of the closest horizontal grid intersection
+	yintercept = round(game->player.pos_y / SQUARE_SIZE) * SQUARE_SIZE;
+	if (game->rays[column_id].is_ray_facing_down)
+		yintercept += SQUARE_SIZE;
+	
+	// Find the x-coordinate of the closest horizontal grid intersection
+	xintercept = game->player.pos_x + (yintercept - game->player.pos_y) / tan(game->rays[column_id].ray_angle);
 
-    // Find the x-coordinate of the closest horizontal grid intersection
-    xintercept = player_x + (yintercept - player_y) / tan(game->rays[column_id].ray_angle);
+	// Calculate the increment xstep and ystep
+	ystep = SQUARE_SIZE;
+	if (game->rays[column_id].is_ray_facing_up)
+		ystep *= -1;
+	xstep = SQUARE_SIZE / tan(game->rays[column_id].ray_angle);
+	if (game->rays[column_id].is_ray_facing_left && xstep > 0)
+		xstep *= -1;
+	if (game->rays[column_id].is_ray_facing_right && xstep < 0)
+		xstep *= -1;
+	
+	double next_horz_touch_x = xintercept;
+	double next_horz_touch_y = yintercept;
 
-    // Calculate the increment xstep and ystep
-    ystep = SQUARE_SIZE;
-    if (game->rays[column_id].is_ray_facing_up)
-        ystep *= -1;
+	// Increment xstep and ystep until we find a wall
+	while (next_horz_touch_x >= 0 && next_horz_touch_x <= game->map.width * SQUARE_SIZE && next_horz_touch_y >= 0 && next_horz_touch_y <= game->map.height * SQUARE_SIZE)
+	{
+		if (has_wall_at(game, next_horz_touch_x, next_horz_touch_y - (game->rays[column_id].is_ray_facing_up ? 1 : 0)) == 1)
+		{
+			found_horz_wall_hit = 1;
+			wall_hit_x = next_horz_touch_x;
+			wall_hit_y = next_horz_touch_y;
 
-    xstep = SQUARE_SIZE / tan(game->rays[column_id].ray_angle);
-
-    // Fix the xstep direction logic
-    if (game->rays[column_id].is_ray_facing_left && xstep > 0)
-        xstep *= -1;
-    if (game->rays[column_id].is_ray_facing_right && xstep < 0)
-        xstep *= -1;
-
-    double next_horz_x = xintercept;
-    double next_horz_y = yintercept;
-
-    // Adjust for up-facing rays
-    if (game->rays[column_id].is_ray_facing_up)
-        next_horz_y--;
-
-    // Increment xstep and ystep until we find a wall
-	int i = 0;
-    while (next_horz_x >= 0 && next_horz_x < game->map.width * SQUARE_SIZE &&
-           next_horz_y >= 0 && next_horz_y < game->map.height * SQUARE_SIZE)
-    {
-        if (has_wall_at(game, next_horz_x, next_horz_y))
-        {
-            wall_hit_x = next_horz_x;
-            wall_hit_y = next_horz_y;
-            found_horz_wall_hit = 1;
-            render_ray(game, game->rays[column_id], wall_hit_x, wall_hit_y);
-            break;
-        }
-        else
-        {
-            next_horz_x += xstep;
-            next_horz_y += ystep;
-        }
-    }
+			double center_x = game->player.pos_x;
+			double center_y = game->player.pos_y;
+			render_line(game, center_x, center_y, wall_hit_x, wall_hit_y, RED);
+			break;
+		}
+		else
+		{
+			next_horz_touch_x += xstep;
+			next_horz_touch_y += ystep;
+		}
+	}
 }
-
 
 int loop_hook(t_game *game)
 {
@@ -1075,15 +1064,20 @@ int loop_hook(t_game *game)
     // }
 
     game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
-	double move_step = game->player.walk_direction * game->player.move_speed;
-	double new_player_x = game->player.pos_x + sin(game->player.rotation_angle) * move_step;
-	double new_player_y = game->player.pos_y + cos(game->player.rotation_angle) * move_step;
-	if (has_wall_at(game, new_player_x, new_player_y) != 1)
-	{
-		game->player.pos_x = new_player_x;
-		game->player.pos_y = new_player_y;
+	float move_step = game->player.walk_direction * game->player.move_speed;
+
+
+	float new_player_x = game->player.pos_x + cos(game->player.rotation_angle) * move_step;
+	float new_player_y = game->player.pos_y + sin(game->player.rotation_angle) * move_step;
+
+	printf("pos_x = %.2f, pos_y = %.2f\n", game->player.pos_x, game->player.pos_y);
+	if (!has_wall_at(game, new_player_x, new_player_y))
+    {
+        game->player.pos_x = new_player_x;
+        game->player.pos_y = new_player_y;
+    }
+	
 		// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
-	}
     // Render the frame
     render_frame(game);
     render_player(game);
@@ -1107,18 +1101,21 @@ int main(int ac, char **av)
         return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
     game = check_map(fd, av[1]);
     close(fd);
-    printf("width = %d\n", game.map.width * 32);
-    printf("height = %d\n", game.map.height * 32);
+    printf("width = %d\n", game.map.width * SQUARE_SIZE);
+    printf("height = %d\n", game.map.height * SQUARE_SIZE);
     game.mlx = mlx_init();
     game.win = mlx_new_window(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE, "cube3d");
     game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
     game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
 
-    game.player.rotation_angle = 0;
+    game.player.rotation_angle = PI;
     game.player.radius = 3;
-    game.player.pos_x = game.map.height / 2;
-    game.player.pos_y = game.map.width / 2;
-    game.player.move_speed = MOVE_SPEED;
+    // game.player.pos_x = game.map.height / 2;
+    // game.player.pos_y = game.map.width / 2;
+	game.player.pos_x = 10 * SQUARE_SIZE + (SQUARE_SIZE / 2);
+    game.player.pos_y = 2 * SQUARE_SIZE + (SQUARE_SIZE / 2); 
+
+    game.player.move_speed = 3.0;
     game.player.rotation_speed = ROTATION_SPEED;
     game.player.turn_direction = 0;
     game.player.walk_direction = 0;
