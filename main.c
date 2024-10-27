@@ -830,25 +830,35 @@ void render_map(t_game *game)
 	}
 }
 
-void render_ray(t_game *game, t_ray ray)
+void render_ray(t_game *game, t_ray ray, int end_x, int end_y)
 {
 	// Calculate the end point of the ray
 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int end_x = center_x + cos(ray.ray_angle) * 980;
-	int end_y = center_y + sin(ray.ray_angle) * 980;
+	// int end_x = center_x + cos(ray.ray_angle) * 980;
+	// int end_y = center_y + sin(ray.ray_angle) * 980;
 	// Render the ray
 	render_line(game, center_x, center_y, end_x, end_y, RED);
 }
-void render_rays(t_game *game)
-{
-	int i = 0;
-	while (i < game->num_rays)
-	{
-		render_ray(game, game->rays[i]);
-		i++;
-	}
-}
+
+// {
+// 	// Calculate the end point of the ray
+// 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+// 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
+// 	int end_x = center_x + cos(ray.ray_angle) * 980;
+// 	int end_y = center_y + sin(ray.ray_angle) * 980;
+// 	// Render the ray
+// 	render_line(game, center_x, center_y, end_x, end_y, RED);
+// }
+// void render_rays(t_game *game)
+// {
+// 	int i = 0;
+// 	while (i < game->num_rays)
+// 	{
+// 		render_ray(game, game->rays[i]);
+// 		i++;
+// 	}
+// }
 void render_player(t_game *game)
 {
 	int x, y;
@@ -870,7 +880,7 @@ void render_player(t_game *game)
     int end_x = center_x + cos(game->player.rotation_angle) * 800;
     int end_y = center_y + sin(game->player.rotation_angle) * 880;
 	render_line(game, center_x, center_y, end_x, end_y, GREEN);
-	render_rays(game);
+	// render_rays(game);
 	// Calculate the end point of the direction line
 }
 void render_frame(t_game *game)
@@ -940,13 +950,14 @@ double normalize_angle(double angle)
 		angle = (2 * PI) + angle;
 	return angle;
 }
+void cast(t_game *game, int column_id);
 void cast_all_rays(t_game *game)
 {
     int column_id = 0;
 
     // Calculate the initial ray angle
-    double initial_ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
-    initial_ray_angle = normalize_angle(initial_ray_angle);
+	game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+	game->ray_angle = normalize_angle(game->ray_angle);
 
     // Allocate memory for rays
     // game->num_rays = game->win_width / WALL_STRIP_WIDTH;
@@ -961,7 +972,7 @@ void cast_all_rays(t_game *game)
     // Cast each ray
     while (column_id < game->num_rays)
     {
-        game->rays[column_id].ray_angle = normalize_angle(initial_ray_angle + (column_id * (FOV_ANGLE / game->num_rays)));
+		game->rays[column_id].ray_angle = normalize_angle(game->ray_angle + (column_id * (FOV_ANGLE / game->num_rays)));
         game->rays[column_id].wall_hit_x = 0;
         game->rays[column_id].wall_hit_y = 0;
         game->rays[column_id].distance = 0;
@@ -972,81 +983,84 @@ void cast_all_rays(t_game *game)
         game->rays[column_id].is_ray_facing_right = cos(game->rays[column_id].ray_angle) > 0;
         game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
 
-        printf("Ray %d: angle = %f, facing down = %d, facing right = %d\n",
-               column_id,
-               game->rays[column_id].ray_angle * 180 / PI,
-               game->rays[column_id].is_ray_facing_down,
-               game->rays[column_id].is_ray_facing_right);
-
+		cast(game, column_id);
+        // printf("Ray %d: angle = %f, facing down = %d, facing right = %d\n",
+        //        column_id,
+        //        game->rays[column_id].ray_angle * 180 / PI,
+        //        game->rays[column_id].is_ray_facing_down,
+        //        game->rays[column_id].is_ray_facing_right);
+		game->ray_angle = FOV_ANGLE / game->num_rays;
         column_id++;
     }
 }
-// void cast_all_rays(t_game *game)
-// {
-// 	int column_id = 0;
 
-// 	// game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
-// 	// game->ray_angle = normalize_angle(game->player.rotation_angle - (FOV_ANGLE / 2));
-// 	double initial_ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
-// 	initial_ray_angle = normalize_angle(initial_ray_angle);
-
-// 	printf("ray_angle = %f\n", game->ray_angle * 180 / PI);
-// 	game->num_rays = 1;
-// 	game->rays = malloc(sizeof(t_ray) * game->num_rays);
-// 	while (column_id < game->num_rays)
-// 	{
-// 		game->rays[column_id].wall_hit_x = 0;
-// 		game->rays[column_id].wall_hit_y = 0;
-// 		game->rays[column_id].distance = 0;
-// 		// game->rays[column_id].ray_angle = game->ray_angle;
-// 		game->rays[column_id].ray_angle = normalize_angle(initial_ray_angle + column_id * FOV_ANGLE / game->num_rays);
-// 		game->ray_angle += FOV_ANGLE / game->num_rays;
-// 		// game->ray_angle = normalize_angle(game->ray_angle);
-// 		// game->rays[column_id].is_ray_facing_down = game->ray_angle > 0 && game->ray_angle < PI;
-// 		game->rays[column_id].is_ray_facing_down = sin(game->ray_angle) > 0;
-// 		game->rays[column_id].is_ray_facing_up = !game->rays[column_id].is_ray_facing_down;
-// 		game->rays[column_id].is_ray_facing_right = game->ray_angle < 0.5 * PI || game->ray_angle > 1.5 * PI;
-// 		game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
-
-// 		      printf("Ray %d: angle = %f, facing down = %d, facing right = %d\n",
-//                column_id,
-//                game->rays[column_id].ray_angle * 180 / PI,
-//                game->rays[column_id].is_ray_facing_down,
-//                game->rays[column_id].is_ray_facing_right);	
-// 		column_id++;
-// 	}
-
-// }
 void cast(t_game *game, int column_id)
 {
-	///////////////////////////////////////////
-	// HORZIONTAL RAY-GRID INTERSECTION CODE //
-	///////////////////////////////////////////
-	double xstep = 0;
-	double ystep = 0;
-	double xintercept = 0;
-	double yintercept = 0;
+    ///////////////////////////////////////////
+    // HORIZONTAL RAY-GRID INTERSECTION CODE //
+    ///////////////////////////////////////////
+    double xstep = 0;
+    double ystep = 0;
+    double xintercept = 0;
+    double yintercept = 0;
+    int found_horz_wall_hit = 0;
+    double wall_hit_x = 0;
+    double wall_hit_y = 0;
 
+    // Important: In your code, player coordinates are inverted (pos_x is y, pos_y is x)
+    double player_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+    double player_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
 
-	// Find the y-coordinate of the closest horizontal grid intersection
-	yintercept = floor(game->player.pos_y / SQUARE_SIZE) * SQUARE_SIZE;
-	if (game->rays[column_id].is_ray_facing_down)
-		yintercept += SQUARE_SIZE;
-	// Find the x-coordinate of the closest horizontal grid intersection
-	xintercept = game->player.pos_x + (yintercept - game->player.pos_y) / tan(game->ray_angle);
+    // Find the y-coordinate of the closest horizontal grid intersection
+    yintercept = floor(game->player.pos_x * SQUARE_SIZE / SQUARE_SIZE) * SQUARE_SIZE;
+    if (game->rays[column_id].is_ray_facing_down)
+        yintercept += SQUARE_SIZE;
 
+    // Find the x-coordinate of the closest horizontal grid intersection
+    xintercept = player_x + (yintercept - player_y) / tan(game->rays[column_id].ray_angle);
 
-	// Calculate the increment xstep and ystep
-	ystep = SQUARE_SIZE;
-	if (game->rays[column_id].is_ray_facing_up)
-		ystep *= -1;
-	xstep = SQUARE_SIZE / tan(game->ray_angle);
-	if (game->rays[column_id].is_ray_facing_left && xstep > 0)
-		xstep *= -1;
-	if (game->rays[column_id].is_ray_facing_right && xstep < 0)
-		xstep *= -1;
-	
+    // Calculate the increment xstep and ystep
+    ystep = SQUARE_SIZE;
+    if (game->rays[column_id].is_ray_facing_up)
+        ystep *= -1;
+
+    xstep = SQUARE_SIZE / tan(game->rays[column_id].ray_angle);
+
+    // Fix the xstep direction logic
+    if (game->rays[column_id].is_ray_facing_left && xstep > 0)
+        xstep *= -1;
+    if (game->rays[column_id].is_ray_facing_right && xstep < 0)
+        xstep *= -1;
+
+    double next_horz_x = xintercept;
+    double next_horz_y = yintercept;
+
+    // Adjust for up-facing rays
+    if (game->rays[column_id].is_ray_facing_up)
+        next_horz_y--;
+
+    // Increment xstep and ystep until we find a wall
+	int i = 0;
+    while (next_horz_x >= 0 && next_horz_x < game->map.width * SQUARE_SIZE &&
+           next_horz_y >= 0 && next_horz_y < game->map.height * SQUARE_SIZE)
+    {
+        if (has_wall_at(game, next_horz_x, next_horz_y))
+        {
+            wall_hit_x = next_horz_x;
+            wall_hit_y = next_horz_y;
+            found_horz_wall_hit = 1;
+            render_ray(game, game->rays[column_id], wall_hit_x, wall_hit_y);
+            break;
+        }
+        else
+        {
+            next_horz_x += xstep;
+            next_horz_y += ystep;
+        }
+    }
 }
+
+
 int loop_hook(t_game *game)
 {
     // Update player position based on key presses
@@ -1070,10 +1084,10 @@ int loop_hook(t_game *game)
 		game->player.pos_y = new_player_y;
 		// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
 	}
-	cast_all_rays(game);
     // Render the frame
     render_frame(game);
     render_player(game);
+	cast_all_rays(game);
 
 	// render_rays(game);
 

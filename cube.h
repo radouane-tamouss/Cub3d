@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/03 11:39:51 rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/27 12:38:35 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <stdio.h>
 # include "lib/get_next_line.h"
 # include <math.h>
-# include <mlx.h>
+# include "mlx/mlx.h"
 
 //== const sizes =========
 
@@ -29,10 +29,10 @@
 # define WIN_WIDTH 1000
 
 
-# define SQUARE_SIZE 32 
+# define SQUARE_SIZE 64
 # define PI 3.14159265359
-#define ROTATION_SPEED 0.01
-#define MOVE_SPEED 0.01
+#define ROTATION_SPEED 0.05
+#define MOVE_SPEED 0.05
 #define WALL_STRIP_WIDTH 10 
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
