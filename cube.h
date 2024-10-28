@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/27 19:35:34 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/28 20:37:35 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@
 
 # define SQUARE_SIZE 64
 # define PI 3.14159265359
-#define ROTATION_SPEED 1 * (PI / 180)
+#define ROTATION_SPEED 5 * (PI / 180)
 #define MOVE_SPEED 0.01
 #define FALSE 0
 #define TRUE 1
-#define WALL_STRIP_WIDTH 10 
+#define WALL_STRIP_WIDTH 0
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
 //====== mlx img struct ===== 

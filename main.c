@@ -937,35 +937,59 @@ double normalize_angle(double angle)
 		angle = (2 * PI) + angle;
 	return angle;
 }
+// int has_wall_at(t_game *game, double x, double y)
+// {
+// 	int map_grid_index_x;
+// 	int map_grid_index_y;
+// 	if (x < 0 || x > game->map.width * SQUARE_SIZE || y < 0 || y > game->map.height * SQUARE_SIZE)
+// 		return 1;
+// 	map_grid_index_x = floor(x / SQUARE_SIZE);
+// 	map_grid_index_y = floor(y / SQUARE_SIZE);
+// 	if (game->map.grid[map_grid_index_y][map_grid_index_x] == '1')
+// 		return 1;
+// 	return 0;
+// }
 int has_wall_at(t_game *game, double x, double y)
 {
-	int map_grid_index_x;
-	int map_grid_index_y;
-	if (x < 0 || x > game->map.width * SQUARE_SIZE || y < 0 || y > game->map.height * SQUARE_SIZE)
-		return 1;
-	map_grid_index_x = floor(x / SQUARE_SIZE);
-	map_grid_index_y = floor(y / SQUARE_SIZE);
-	if (game->map.grid[map_grid_index_y][map_grid_index_x] == '1')
-		return 1;
-	return 0;
+    int map_grid_index_x;
+    int map_grid_index_y;
+    
+    // First check boundaries
+    if (x < 0 || y < 0)
+        return 1;
+        
+    map_grid_index_x = floor(x / SQUARE_SIZE);
+    map_grid_index_y = floor(y / SQUARE_SIZE);
+    
+    // Check if indices are within map bounds
+    if (map_grid_index_x >= game->map.width || 
+        map_grid_index_y >= game->map.height)
+        return 1;
+    
+    // Check for wall
+    return (game->map.grid[map_grid_index_y][map_grid_index_x] == '1');
 }
 void cast(t_game *game, int column_id);
 void cast_all_rays(t_game *game)
 {
+    if (game->rays != NULL)
+    {
+        free(game->rays);
+        game->rays = NULL;
+    }
+    
     int column_id = 0;
+    game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
+    game->ray_angle = normalize_angle(game->ray_angle);
+    
+    // Allocate new rays
+	// game->num_rays = 1;
 
-    // Calculate the initial ray angle
-	game->ray_angle = game->player.rotation_angle - (FOV_ANGLE / 2);
-	game->ray_angle = normalize_angle(game->ray_angle);
-
-    // Allocate memory for rays
-    // game->num_rays = game->win_width / WALL_STRIP_WIDTH;
-	game->num_rays = 1;
     game->rays = malloc(sizeof(t_ray) * game->num_rays);
     if (!game->rays)
     {
         fprintf(stderr, "Failed to allocate memory for rays\n");
-        exit(EXIT_FAILURE);
+        return; // Return instead of exit to avoid crash
     }
 
     // Cast each ray
@@ -983,37 +1007,41 @@ void cast_all_rays(t_game *game)
         game->rays[column_id].is_ray_facing_left = !game->rays[column_id].is_ray_facing_right;
 
 		cast(game, column_id);
-        // printf("Ray %d: angle = %f, facing down = %d, facing right = %d\n",
-        //        column_id,
-        //        game->rays[column_id].ray_angle * 180 / PI,
-        //        game->rays[column_id].is_ray_facing_down,
-        //        game->rays[column_id].is_ray_facing_right);
-		game->ray_angle = FOV_ANGLE / game->num_rays;
         column_id++;
     }
 }
-
+double distance_between_points(double x1, double y1, double x2, double y2)
+{
+	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
 void cast(t_game *game, int column_id)
 {
+	 if (column_id >= game->num_rays) // Safety check
+        return;
     ///////////////////////////////////////////
     // HORIZONTAL RAY-GRID INTERSECTION CODE //
     ///////////////////////////////////////////
-    double xstep = 0;
+ 	double xstep = 0;
     double ystep = 0;
     double xintercept = 0;
     double yintercept = 0;
+    double horz_wall_hit_x = 0;
+    double horz_wall_hit_y = 0;
     int found_horz_wall_hit = 0;
-    double wall_hit_x = 0;
-    double wall_hit_y = 0;
 
 
 	// Find the y-coordinate of the closest horizontal grid intersection
-	yintercept = round(game->player.pos_y / SQUARE_SIZE) * SQUARE_SIZE;
-	if (game->rays[column_id].is_ray_facing_down)
-		yintercept += SQUARE_SIZE;
+
+	
+	yintercept = floor(game->player.pos_y / SQUARE_SIZE) * SQUARE_SIZE;
+    if (game->rays[column_id].is_ray_facing_down)
+        yintercept += SQUARE_SIZE;
+
 	
 	// Find the x-coordinate of the closest horizontal grid intersection
-	xintercept = game->player.pos_x + (yintercept - game->player.pos_y) / tan(game->rays[column_id].ray_angle);
+	// xintercept = game->player.pos_x + (yintercept - game->player.pos_y) / tan(game->rays[column_id].ray_angle);
+	xintercept = game->player.pos_x + (yintercept - game->player.pos_y) / 
+        (tan(game->rays[column_id].ray_angle) + 0.0001); // Avoid division by zero
 
 	// Calculate the increment xstep and ystep
 	ystep = SQUARE_SIZE;
@@ -1028,18 +1056,20 @@ void cast(t_game *game, int column_id)
 	double next_horz_touch_x = xintercept;
 	double next_horz_touch_y = yintercept;
 
+
+	if (game->rays[column_id].is_ray_facing_up)
+		next_horz_touch_y--;
 	// Increment xstep and ystep until we find a wall
-	while (next_horz_touch_x >= 0 && next_horz_touch_x <= game->map.width * SQUARE_SIZE && next_horz_touch_y >= 0 && next_horz_touch_y <= game->map.height * SQUARE_SIZE)
+	while (next_horz_touch_x >= 0 && next_horz_touch_x <= game->win_width &&
+       next_horz_touch_y >= 0 && next_horz_touch_y <= game->win_height)
 	{
-		if (has_wall_at(game, next_horz_touch_x, next_horz_touch_y - (game->rays[column_id].is_ray_facing_up ? 1 : 0)) == 1)
+		if (has_wall_at(game, next_horz_touch_x, next_horz_touch_y))
 		{
 			found_horz_wall_hit = 1;
-			wall_hit_x = next_horz_touch_x;
-			wall_hit_y = next_horz_touch_y;
-
-			double center_x = game->player.pos_x;
-			double center_y = game->player.pos_y;
-			render_line(game, center_x, center_y, wall_hit_x, wall_hit_y, RED);
+			horz_wall_hit_x = next_horz_touch_x;
+			horz_wall_hit_y = next_horz_touch_y;
+			// render_line(game, game->player.pos_x, game->player.pos_y, 
+					// horz_wall_hit_x, horz_wall_hit_y, RED);
 			break;
 		}
 		else
@@ -1048,43 +1078,120 @@ void cast(t_game *game, int column_id)
 			next_horz_touch_y += ystep;
 		}
 	}
+
+	///////////////////////////////////////////
+    // VERTICAL RAY-GRID INTERSECTION CODE ////
+    ///////////////////////////////////////////
+    double vert_wall_hit_x = 0;
+    double vert_wall_hit_y = 0;
+	int was_hit_vertical = 0;
+    int found_vert_wall_hit = 0;
+
+
+	// Find the y-coordinate of the closest horizontal grid intersection
+
+	
+	xintercept = floor(game->player.pos_x / SQUARE_SIZE) * SQUARE_SIZE;
+    if (game->rays[column_id].is_ray_facing_right)
+        xintercept += SQUARE_SIZE;
+
+	
+	// Find the x-coordinate of the closest horizontal grid intersection
+	yintercept = game->player.pos_y + (xintercept - game->player.pos_x) *
+        (tan(game->rays[column_id].ray_angle) + 0.0001); // Avoid division by zero
+
+	// Calculate the increment xstep and ystep
+	xstep = SQUARE_SIZE;
+	if (game->rays[column_id].is_ray_facing_left)
+		xstep *= -1;
+	ystep = SQUARE_SIZE * tan(game->rays[column_id].ray_angle);
+	if (game->rays[column_id].is_ray_facing_up && ystep > 0)
+		ystep *= -1;
+	if (game->rays[column_id].is_ray_facing_down && ystep < 0)
+		ystep *= -1;
+	
+	double next_vert_touch_x = xintercept;
+	double next_vert_touch_y = yintercept;
+
+	if (game->rays[column_id].is_ray_facing_left)
+		next_vert_touch_x--;
+	// Increment xstep and ystep until we find a wall
+	while (next_vert_touch_x >= 0 && next_vert_touch_x <= game->win_width &&
+       next_vert_touch_y >= 0 && next_vert_touch_y <= game->win_height)
+	{
+		if (has_wall_at(game, next_vert_touch_x, next_vert_touch_y))
+		{
+			found_vert_wall_hit = 1;
+			vert_wall_hit_x = next_vert_touch_x;
+			vert_wall_hit_y = next_vert_touch_y;
+			// render_line(game, game->player.pos_x, game->player.pos_y, 
+			// 		vert_wall_hit_x, vert_wall_hit_y, BLUE);
+			break;
+		}
+		else
+		{
+			next_vert_touch_x += xstep;
+			next_vert_touch_y += ystep;
+		}
+	}
+
+	// Calculate the distance to the horizontal wall hit and the vertical wall hit and use the smallest one
+	// double horz_hit_distance = (found_horz_wall_hit) ? distance_between_points(game->player.pos_x, game->player.pos_y, horz_wall_hit_x, horz_wall_hit_y) : INT_MAX;
+	double horz_hit_distance;
+	double vert_hit_distance;
+	horz_hit_distance = (found_horz_wall_hit) ? distance_between_points(game->player.pos_x, game->player.pos_y, horz_wall_hit_x, horz_wall_hit_y) : INT_MAX;
+	vert_hit_distance = (found_vert_wall_hit) ? distance_between_points(game->player.pos_x, game->player.pos_y, vert_wall_hit_x, vert_wall_hit_y) : INT_MAX;
+	// if (found_horz_wall_hit)
+	// 	horz_hit_distance = distance_between_points(game->player.pos_x, game->player.pos_y, horz_wall_hit_x, horz_wall_hit_y);
+	// else
+	// 	horz_hit_distance = INT_MAX;
+	// if (found_vert_wall_hit)
+	// 	vert_hit_distance = distance_between_points(game->player.pos_x, game->player.pos_y, vert_wall_hit_x, vert_wall_hit_y);
+	// else
+	// 	vert_hit_distance = INT_MAX;
+	
+	if (horz_hit_distance < vert_hit_distance)
+	{
+		game->rays[column_id].distance = horz_hit_distance;
+		game->rays[column_id].wall_hit_x = horz_wall_hit_x;
+		game->rays[column_id].wall_hit_y = horz_wall_hit_y;
+		game->rays[column_id].was_hit_vertical = 1;
+	}
+	else
+	{
+		game->rays[column_id].distance = vert_hit_distance;
+		game->rays[column_id].wall_hit_x = vert_wall_hit_x;
+		game->rays[column_id].wall_hit_y = vert_wall_hit_y;
+		game->rays[column_id].was_hit_vertical = 0;
+	}
+	render_line(game, game->player.pos_x, game->player.pos_y, 
+			game->rays[column_id].wall_hit_x, game->rays[column_id].wall_hit_y, GREEN);	
+
+
 }
 
 int loop_hook(t_game *game)
 {
-    // Update player position based on key presses
-    // if (game->player.walk_direction != 0)
-    // {
-    //     game->player.pos_x += game->player.walk_direction * game->player.move_speed * sin(game->player.rotation_angle);
-    //     game->player.pos_y += game->player.walk_direction * game->player.move_speed * cos(game->player.rotation_angle);
-    // }
-    // if (game->player.turn_direction != 0)
-    // {
-    //     game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
-    // }
-
+    // Update rotation
     game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
-	float move_step = game->player.walk_direction * game->player.move_speed;
-
-
-	float new_player_x = game->player.pos_x + cos(game->player.rotation_angle) * move_step;
-	float new_player_y = game->player.pos_y + sin(game->player.rotation_angle) * move_step;
-
-	printf("pos_x = %.2f, pos_y = %.2f\n", game->player.pos_x, game->player.pos_y);
-	if (!has_wall_at(game, new_player_x, new_player_y))
-    {
-        game->player.pos_x = new_player_x;
-        game->player.pos_y = new_player_y;
-    }
-	
-		// printf("%snew_player_x = %.2f, new_player_y = %.2f\n%s",CRED,  new_player_x, new_player_y, CRESET);
-    // Render the frame
+    game->player.rotation_angle = normalize_angle(game->player.rotation_angle);
+    
+    // Calculate movement
+    float move_step = game->player.walk_direction * game->player.move_speed;
+    float new_x = game->player.pos_x + cos(game->player.rotation_angle) * move_step;
+    float new_y = game->player.pos_y + sin(game->player.rotation_angle) * move_step;
+    
+    // Check both x and y movements separately for sliding along walls
+    if (!has_wall_at(game, new_x, game->player.pos_y))
+        game->player.pos_x = new_x;
+    if (!has_wall_at(game, game->player.pos_x, new_y))
+        game->player.pos_y = new_y;
+    
+    // Render frame
     render_frame(game);
-    render_player(game);
-	cast_all_rays(game);
-
-	// render_rays(game);
-
+	render_player(game);
+    cast_all_rays(game);
+    
     return (0);
 }
 // cast all rays
@@ -1115,7 +1222,7 @@ int main(int ac, char **av)
 	game.player.pos_x = 10 * SQUARE_SIZE + (SQUARE_SIZE / 2);
     game.player.pos_y = 2 * SQUARE_SIZE + (SQUARE_SIZE / 2); 
 
-    game.player.move_speed = 3.0;
+    game.player.move_speed = 7.0;
     game.player.rotation_speed = ROTATION_SPEED;
     game.player.turn_direction = 0;
     game.player.walk_direction = 0;
