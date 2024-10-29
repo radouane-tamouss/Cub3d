@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/28 20:37:35 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/29 19:10:46 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,13 @@
 # define WIN_HEIGHT 1000
 # define WIN_WIDTH 1000
 
-
-
-# define SQUARE_SIZE 64
+# define SQUARE_SIZE 100 
 # define PI 3.14159265359
 #define ROTATION_SPEED 5 * (PI / 180)
 #define MOVE_SPEED 0.01
 #define FALSE 0
 #define TRUE 1
-#define WALL_STRIP_WIDTH 0
+#define WALL_STRIP_WIDTH 9
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
 //====== mlx img struct ===== 
@@ -48,9 +46,7 @@ typedef struct s_img_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}				t_img_data;
-
-//=========================
+}				t_img_data; //=========================
 //======== colors =========
 
 # define WHITE 0xffffff

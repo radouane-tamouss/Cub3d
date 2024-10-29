@@ -864,8 +864,8 @@ void render_player(t_game *game)
 			}
 		}
 	}
-    int end_x = center_x + cos(game->player.rotation_angle) * 800;
-    int end_y = center_y + sin(game->player.rotation_angle) * 880;
+    int end_x = center_x + cos(game->player.rotation_angle) * 100;
+    int end_y = center_y + sin(game->player.rotation_angle) * 100;
 	render_line(game, center_x, center_y, end_x, end_y, GREEN);
 	// render_rays(game);
 	// Calculate the end point of the direction line
@@ -1057,13 +1057,22 @@ void cast(t_game *game, int column_id)
 	double next_horz_touch_y = yintercept;
 
 
-	if (game->rays[column_id].is_ray_facing_up)
-		next_horz_touch_y--;
+	
+
 	// Increment xstep and ystep until we find a wall
 	while (next_horz_touch_x >= 0 && next_horz_touch_x <= game->win_width &&
        next_horz_touch_y >= 0 && next_horz_touch_y <= game->win_height)
 	{
-		if (has_wall_at(game, next_horz_touch_x, next_horz_touch_y))
+
+		double check_x = next_horz_touch_x;
+    	double check_y;
+
+    	if (game->rays[column_id].is_ray_facing_up) {
+        	check_y = next_horz_touch_y - 1;
+    	} else {
+        	check_y = next_horz_touch_y;
+    	}
+		if (has_wall_at(game, check_x, check_y))
 		{
 			found_horz_wall_hit = 1;
 			horz_wall_hit_x = next_horz_touch_x;
@@ -1113,13 +1122,19 @@ void cast(t_game *game, int column_id)
 	double next_vert_touch_x = xintercept;
 	double next_vert_touch_y = yintercept;
 
-	if (game->rays[column_id].is_ray_facing_left)
-		next_vert_touch_x--;
 	// Increment xstep and ystep until we find a wall
 	while (next_vert_touch_x >= 0 && next_vert_touch_x <= game->win_width &&
        next_vert_touch_y >= 0 && next_vert_touch_y <= game->win_height)
 	{
-		if (has_wall_at(game, next_vert_touch_x, next_vert_touch_y))
+		double check_x = next_vert_touch_x;
+    	double check_y = next_vert_touch_y;
+
+    	if (game->rays[column_id].is_ray_facing_left) {
+        	check_x = next_vert_touch_x - 1;
+    	} else {
+        	check_x = next_vert_touch_x;
+    	}
+		if (has_wall_at(game, check_x, check_y))
 		{
 			found_vert_wall_hit = 1;
 			vert_wall_hit_x = next_vert_touch_x;
