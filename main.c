@@ -731,10 +731,10 @@ void render_wall(t_game *game, int x, int y)
 	int i = 0;
 	int j = 0;
 
-	while (i < SQUARE_SIZE - 1)
+	while (i < (SQUARE_SIZE * MINIMAP_SCALE_FACTOR) - 1)
 	{
 		j = 0;
-		while (j < SQUARE_SIZE - 1)
+		while (j < (SQUARE_SIZE * MINIMAP_SCALE_FACTOR) - 1)
 		{
 			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
 			my_mlx_pixel_put(&game->img, j + x, i + y, CYAN);
@@ -746,6 +746,10 @@ void render_wall(t_game *game, int x, int y)
 
 void render_line(t_game *game, int x1, int y1, int x2, int y2, int color)
 {
+	x1 = x1 * MINIMAP_SCALE_FACTOR;
+	y1 = y1 * MINIMAP_SCALE_FACTOR;
+	x2 = x2 * MINIMAP_SCALE_FACTOR;
+	y2 = y2 * MINIMAP_SCALE_FACTOR;
     double dx = x2 - x1;
     double dy = y2 - y1;
     double max = fmax(fabs(dx), fabs(dy));
@@ -773,10 +777,10 @@ void render_floor(t_game *game, int x, int y)
 {
 	int i = 0;
 	int j = 0;
-	while(i < SQUARE_SIZE - 1)
+	while(i < (SQUARE_SIZE * MINIMAP_SCALE_FACTOR) - 1)
 	{
 		j = 0;
-		while(j < SQUARE_SIZE - 1)
+		while(j < (SQUARE_SIZE * MINIMAP_SCALE_FACTOR) - 1)
 		{
 			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
 			my_mlx_pixel_put(&game->img, j + x, i + y, game->floor.r << 16 | game->floor.g << 8 | game->floor.b);
@@ -795,8 +799,8 @@ void render_map(t_game *game)
 		j = 0;
 		while (j < game->map.width)
 		{
-			x = j * SQUARE_SIZE;
-			y = i * SQUARE_SIZE;
+			x = j * SQUARE_SIZE * MINIMAP_SCALE_FACTOR;
+			y = i * SQUARE_SIZE * MINIMAP_SCALE_FACTOR;
 			if (game->map.grid[i][j] == '1')
 			{
 				render_wall(game, x, y);
@@ -818,8 +822,8 @@ void render_map(t_game *game)
 void render_ray(t_game *game, t_ray ray, int end_x, int end_y)
 {
 	// Calculate the end point of the ray
-	int center_x = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
-	int center_y = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
+	int center_x = game->player.pos_x * SQUARE_SIZE * MINIMAP_SCALE_FACTOR + (SQUARE_SIZE * MINIMAP_SCALE_FACTOR) / 2;
+    int center_y = game->player.pos_y * SQUARE_SIZE * MINIMAP_SCALE_FACTOR + (SQUARE_SIZE * MINIMAP_SCALE_FACTOR) / 2;
 	// int end_x = center_x + cos(ray.ray_angle) * 980;
 	// int end_y = center_y + sin(ray.ray_angle) * 980;
 	// Render the ray
@@ -846,29 +850,29 @@ void render_ray(t_game *game, t_ray ray, int end_x, int end_y)
 // }
 void render_player(t_game *game)
 {
-	game->win_width = game->map.width * SQUARE_SIZE;
-	game->win_height = game->map.height * SQUARE_SIZE;
-	int x, y;
-	int radius = SQUARE_SIZE / 6;
-	// int radius = game->player.radius;
- 	int center_x = game->player.pos_x;
+    game->win_width = game->map.width * SQUARE_SIZE;
+    game->win_height = game->map.height * SQUARE_SIZE;
+    int x, y;
+    int radius = SQUARE_SIZE / 10;
+    // int radius = game->player.radius;
+     int center_x = game->player.pos_x;
     int center_y = game->player.pos_y;
 
-	for (y = -radius; y <= radius; y++)
-	{
-		for (x = -radius; x <= radius; x++)
-		{
-			if (x * x + y * y <= radius * radius)
-			{
-				mlx_pixel_put(game->mlx, game->win, center_x + x, center_y + y, BLUE);
-			}
-		}
-	}
+    for (y = -radius; y <= radius; y++)
+    {
+        for (x = -radius; x <= radius; x++)
+        {
+            if (x * x + y * y <= radius * radius)
+            {
+                mlx_pixel_put(game->mlx, game->win, (center_x * MINIMAP_SCALE_FACTOR) + x, (center_y * MINIMAP_SCALE_FACTOR) + y, BLUE);
+            }
+        }
+    }
     int end_x = center_x + cos(game->player.rotation_angle) * 100;
     int end_y = center_y + sin(game->player.rotation_angle) * 100;
-	render_line(game, center_x, center_y, end_x, end_y, GREEN);
-	// render_rays(game);
-	// Calculate the end point of the direction line
+    render_line(game, center_x, center_y, end_x, end_y, RED);
+    // render_rays(game);
+    // Calculate the end point of the direction line
 }
 void render_frame(t_game *game)
 {
