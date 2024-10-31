@@ -901,7 +901,9 @@ void render_3d_projected_walls(t_game *game)
         int rect_y = (WIN_HEIGHT / 2) - (wall_strip_height / 2);
         int rect_width = WALL_STRIP_WIDTH;
         int rect_height = wall_strip_height;
-		int color_intensity = (int)(255 / (1 + correct_distance * correct_distance * 0.0001));
+
+
+		int color_intensity = (int)(250 / (1 + correct_distance * correct_distance * 0.0001));
         int color = (color_intensity << 16) | (color_intensity << 8) | color_intensity; // Grayscale color
 
         // Draw the rectangle using the new function
@@ -1232,7 +1234,7 @@ int loop_hook(t_game *game)
 	double strafe_step = game->player.strafe_direction * game->player.move_speed;
     float new_x = game->player.pos_x + cos(game->player.rotation_angle) * move_step;
     float new_y = game->player.pos_y + sin(game->player.rotation_angle) * move_step;
-    
+
     // Check both x and y movements separately for sliding along walls
     if (!has_wall_at(game, new_x, game->player.pos_y))
         game->player.pos_x = new_x;
