@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/29 19:33:10 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/10/31 02:27:50 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,16 @@
 //== const sizes =========
 
 # define WIN_HEIGHT 1000
-# define WIN_WIDTH 1000
+# define WIN_WIDTH 2000
 
 # define SQUARE_SIZE 64
 # define PI 3.14159265359
-# define MINIMAP_SCALE_FACTOR 0.4
-#define ROTATION_SPEED 1 * (PI / 180)
-#define MOVE_SPEED 0.0001
+# define MINIMAP_SCALE_FACTOR  0.25 
+#define ROTATION_SPEED 3 * (PI / 180)
+#define MOVE_SPEED 0.001
 #define FALSE 0
 #define TRUE 1
-#define WALL_STRIP_WIDTH 20 
+#define WALL_STRIP_WIDTH 1 
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
 //====== mlx img struct ===== 
@@ -117,6 +117,7 @@ typedef struct s_player
     int turn_direction; // -1 if left, +1 if right
     int walk_direction; // -1 if back, +1 if front
     double rotation_angle;
+    double strafe_direction;
     double move_speed;
     double rotation_speed;
 } t_player;

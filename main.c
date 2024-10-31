@@ -718,14 +718,15 @@ t_game check_map(int fd, char *file)
 // 		i++;
 // 	}
 // }
-void my_mlx_pixel_put(t_image_data *img, int x, int y, int color)
+void my_mlx_pixel_put(t_image_data *data, int x, int y, int color)
 {
-	char *dst;
+    // Ensure the coordinates are within the valid range
+    if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+        return;
 
-	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
+    char *dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+    *(unsigned int*)dst = color;
 }
-
 void render_wall(t_game *game, int x, int y)
 {
 	int i = 0;
@@ -874,41 +875,68 @@ void render_player(t_game *game)
     // render_rays(game);
     // Calculate the end point of the direction line
 }
+void draw_rectangle(t_image_data *img, int x, int y, int width, int height, int color)
+{
+    for (int i = y; i < y + height; i++)
+    {
+        for (int j = x; j < x + width; j++)
+        {
+            my_mlx_pixel_put(img, j, i, color);
+        }
+    }
+}
+void render_3d_projected_walls(t_game *game)
+{
+    int i = 0;
+    while (i < game->num_rays)
+    {
+        t_ray ray = game->rays[i];
+		double correct_distance = ray.distance * cos(ray.ray_angle - game->player.rotation_angle);
+        double distance_proj_plane = (WIN_WIDTH / 2) / tan(FOV_ANGLE / 2);
+        // Projected Wall height
+        double wall_strip_height = (SQUARE_SIZE / correct_distance) * distance_proj_plane;
+
+        // Calculate the position and dimensions of the rectangle
+        int rect_x = i * WALL_STRIP_WIDTH;
+        int rect_y = (WIN_HEIGHT / 2) - (wall_strip_height / 2);
+        int rect_width = WALL_STRIP_WIDTH;
+        int rect_height = wall_strip_height;
+		int color_intensity = (int)(255 / (1 + correct_distance * correct_distance * 0.0001));
+        int color = (color_intensity << 16) | (color_intensity << 8) | color_intensity; // Grayscale color
+
+        // Draw the rectangle using the new function
+        draw_rectangle(&game->img, rect_x, rect_y, rect_width, rect_height, color);
+        // Draw the rectangle using the new function
+
+        i++;
+    }
+}
 void render_frame(t_game *game)
 {
-	ft_memset(game->img.addr, 0, game->map.width * SQUARE_SIZE * game->map.height * SQUARE_SIZE * (game->img.bits_per_pixel / 8));
+    ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bits_per_pixel / 8));
 
-	render_map(game);
-	render_player(game);
-	mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
+    render_3d_projected_walls(game);
+    render_map(game);
+    render_player(game);
+    mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
 int key_press(int keycode, t_game *game)
 {
-   if (keycode == ESC_MAC)
-	{
-		exit(0);
-	}
-	else if (keycode == UP_MAC)
-	{
-		printf("UP\n");
-		game->player.walk_direction = 1;
-	}
-	else if (keycode == DOWN_MAC)
-	{
-		printf("Down\n");
-		game->player.walk_direction = -1;
-	}
-	else if (keycode == LEFT_MAC)
-	{
-		printf("Left\n");
-		game->player.turn_direction = -1;
-	}
-	else if (keycode == RIGHT_MAC)
-	{
-		printf("Right\n");
-		game->player.turn_direction = 1;
-	} 
-	return (0);
+    if (keycode == W_MAC)
+        game->player.walk_direction = 1;
+    else if (keycode == S_MAC)
+        game->player.walk_direction = -1;
+    else if (keycode == A_MAC)
+        game->player.strafe_direction = -1;
+    else if (keycode == D_MAC)
+        game->player.strafe_direction = 1;
+    else if (keycode == LEFT_MAC)
+        game->player.turn_direction = -1;
+    else if (keycode == RIGHT_MAC)
+        game->player.turn_direction = 1;
+    else if (keycode == ESC_MAC)
+        exit(0);
+    return 0;
 }
 
 int key_release(int keycode, t_game *game)
@@ -917,6 +945,10 @@ int key_release(int keycode, t_game *game)
         game->player.walk_direction = 0;
     if (keycode == LEFT_MAC || keycode == RIGHT_MAC)
         game->player.turn_direction = 0;
+	 if (keycode == W_MAC || keycode == S_MAC)
+        game->player.walk_direction = 0;
+    else if (keycode == A_MAC || keycode == D_MAC)
+        game->player.strafe_direction = 0;
     return (0);
 }
 void update_player(t_game *game)
@@ -1183,8 +1215,8 @@ void cast(t_game *game, int column_id)
 		game->rays[column_id].wall_hit_y = vert_wall_hit_y;
 		game->rays[column_id].was_hit_vertical = 0;
 	}
-	render_line(game, game->player.pos_x, game->player.pos_y, 
-			game->rays[column_id].wall_hit_x, game->rays[column_id].wall_hit_y, GREEN);	
+	// render_line(game, game->player.pos_x, game->player.pos_y, 
+	// 		game->rays[column_id].wall_hit_x, game->rays[column_id].wall_hit_y, GREEN);	
 
 
 }
@@ -1197,6 +1229,7 @@ int loop_hook(t_game *game)
     
     // Calculate movement
     float move_step = game->player.walk_direction * game->player.move_speed;
+	double strafe_step = game->player.strafe_direction * game->player.move_speed;
     float new_x = game->player.pos_x + cos(game->player.rotation_angle) * move_step;
     float new_y = game->player.pos_y + sin(game->player.rotation_angle) * move_step;
     
@@ -1205,7 +1238,8 @@ int loop_hook(t_game *game)
         game->player.pos_x = new_x;
     if (!has_wall_at(game, game->player.pos_x, new_y))
         game->player.pos_y = new_y;
-    
+
+	game->player.rotation_angle += game->player.turn_direction * game->player.rotation_speed;
     // Render frame
     render_frame(game);
 	render_player(game);
@@ -1227,11 +1261,9 @@ int main(int ac, char **av)
         return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
     game = check_map(fd, av[1]);
     close(fd);
-    printf("width = %d\n", game.map.width * SQUARE_SIZE);
-    printf("height = %d\n", game.map.height * SQUARE_SIZE);
     game.mlx = mlx_init();
-    game.win = mlx_new_window(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE, "cube3d");
-    game.img.img = mlx_new_image(game.mlx, game.map.width * SQUARE_SIZE, game.map.height * SQUARE_SIZE);
+    game.win = mlx_new_window(game.mlx, WIN_WIDTH, WIN_HEIGHT, "cube3d");
+    game.img.img = mlx_new_image(game.mlx, WIN_WIDTH, WIN_HEIGHT);
     game.img.addr = mlx_get_data_addr(game.img.img, &game.img.bits_per_pixel, &game.img.line_length, &game.img.endian);
 
     game.player.rotation_angle = PI;
@@ -1243,11 +1275,12 @@ int main(int ac, char **av)
 
     game.player.move_speed = 7.0;
     game.player.rotation_speed = ROTATION_SPEED;
+	game.player.strafe_direction = 0;
     game.player.turn_direction = 0;
     game.player.walk_direction = 0;
-	game.win_width = game.map.width * SQUARE_SIZE;
-	game.win_height= game.map.height* SQUARE_SIZE;
-	game.num_rays = game.win_width / WALL_STRIP_WIDTH;
+	game.win_width = WIN_WIDTH;
+	game.win_height= WIN_HEIGHT;
+	game.num_rays = WIN_WIDTH / WALL_STRIP_WIDTH;
 	printf("num_rays = %d\n", game.num_rays);
 	// render_background(&game);
 	cast_all_rays(&game);

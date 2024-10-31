@@ -2,6 +2,7 @@ CC = cc
 # CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
 MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
+FSANTIIZE = -fsanitize=address
 # GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
 # UTILS_FILES =
 # RENDER_FILES =
@@ -20,7 +21,7 @@ all : ${NAME}
 
 
 ${NAME} : ${OFILES} ${LIBFT}
-	$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
+	$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS) $(FSANTIIZE)
 
 ${LIBFT} :
 	@make -C $(LIBFT_DIR)
