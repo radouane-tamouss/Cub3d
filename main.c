@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/23 02:31:12 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/09 22:54:00 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,7 @@ void	init_data(t_game game)
 // 	{
 // 		exit(0);
 // 	}
-// 	else if (keycode == UP_MAC)
-// 	{
+// 	else if (keycode == UP_MAC) // 	{
 // 		printf("UP\n");
 // 		game->player.walk_direction = 1;
 // 	}
@@ -191,16 +190,30 @@ void	init_data(t_game game)
 // Implementation of gun loading and animation functions
 void    load_frames(void)
 {
-    char    *frame_paths[4] = {
-        "textures/frame1.xpm",
-        "textures/frame2.xpm",
-        "textures/frame3.xpm",
-        "textures/frame4.xpm"
+    char    *frame_paths[18] = {
+        "textures/1.xpm",
+        "textures/2.xpm",
+        "textures/3.xpm",
+        "textures/4.xpm",
+        "textures/5.xpm",
+        "textures/6.xpm",
+        "textures/7.xpm",
+        "textures/8.xpm",
+        "textures/9.xpm",
+        "textures/10.xpm",
+        "textures/11.xpm",
+        "textures/12.xpm",
+        "textures/13.xpm",
+        "textures/14.xpm",
+        "textures/15.xpm",
+        "textures/16.xpm",
+        "textures/17.xpm",
+        "textures/18.xpm",
     };
     int     i;
 
     i = 0;
-    while (i < 4)
+    while (i < 18)
     {
         get_data()->gun.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun.width, &get_data()->gun.height);
@@ -229,11 +242,11 @@ void    render_gun(void)
     // Handle shooting animation
     if (get_data()->gun.is_shooting)
     {
-        if (get_data()->gun.frame_delay++ >= 5)  // Adjust delay value as needed
+        if (get_data()->gun.frame_delay++ >= 2)  // Adjust delay value as needed
         {
             get_data()->gun.frame_delay = 0;
             get_data()->gun.current_frame++;
-            if (get_data()->gun.current_frame >= 4) 
+            if (get_data()->gun.current_frame >= 18) 
             {
                 get_data()->gun.current_frame = 0;
                 get_data()->gun.is_shooting = 0;

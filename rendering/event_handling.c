@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/22 02:45:42 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/1:45:42 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,31 +24,31 @@ int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
 	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC_MAC)
+	if (keycode == ESC_LIN)
 	{
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
-	else if (keycode == W_MAC)
+	else if (keycode == W_LIN)
 		move_forward();
-	else if (keycode == S_MAC)
+	else if (keycode == S_LIN)
 		move_backward();
-	else if (keycode == D_MAC)
+	else if (keycode == D_LIN)
 		move_right();
-	else if (keycode == A_MAC)
+	else if (keycode == A_LIN)
 		move_left();
-	else if (keycode == RIGHT_MAC)
+	else if (keycode == RIGHT_LIN)
 		rotate_player(2.  * (MY_PI / (float)180));
-	else if (keycode == LEFT_MAC)
+	else if (keycode == LEFT_LIN)
 		rotate_player(-2.  * (MY_PI / (float)180));
-	else if (keycode == SPACE_MAC)
+	else if (keycode == SPACE)
 	{
 		if (get_data()->dark_mode == 1)
 			get_data()->dark_mode = 0;
 		else
 			get_data()->dark_mode = 1;
 	}
-	else if (keycode == E_MAC)
+	else if (keycode == E_LIN)
 	{
 		if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
 			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
@@ -56,7 +56,7 @@ int	handle_keys(int keycode, void *garbage)
 			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
 		// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
 	}
-	else  if (keycode == T_MAC)  // Add proper key define if needed
+	else  if (keycode == T_LIN)  // Add proper key define if needed
     {
         get_data()->gun.is_shooting = 1;
         get_data()->gun.current_frame = 0;
