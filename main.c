@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/09 22:54:00 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/09 23:27:28 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,7 @@ void    render_gun(void)
     // Handle shooting animation
     if (get_data()->gun.is_shooting)
     {
-        if (get_data()->gun.frame_delay++ >= 2)  // Adjust delay value as needed
+        if (get_data()->gun.frame_delay++ >= 5)  // Adjust delay value as needed
         {
             get_data()->gun.frame_delay = 0;
             get_data()->gun.current_frame++;
