@@ -24,22 +24,22 @@ int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
 	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC_LIN)
+	if (keycode == ESC_MAC)
 	{
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
-	else if (keycode == W_LIN)
+	else if (keycode == W_MAC)
 		move_forward();
-	else if (keycode == S_LIN)
+	else if (keycode == S_MAC)
 		move_backward();
-	else if (keycode == D_LIN)
+	else if (keycode == D_MAC)
 		move_right();
-	else if (keycode == A_LIN)
+	else if (keycode == A_MAC)
 		move_left();
-	else if (keycode == RIGHT_LIN)
+	else if (keycode == RIGHT_MAC)
 		rotate_player(2.  * (MY_PI / (float)180));
-	else if (keycode == LEFT_LIN)
+	else if (keycode == LEFT_MAC)
 		rotate_player(-2.  * (MY_PI / (float)180));
 	else if (keycode == SPACE)
 	{
@@ -48,7 +48,7 @@ int	handle_keys(int keycode, void *garbage)
 		else
 			get_data()->dark_mode = 1;
 	}
-	else if (keycode == E_LIN)
+	else if (keycode == E_MAC)
 	{
 		if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
 			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
@@ -56,7 +56,7 @@ int	handle_keys(int keycode, void *garbage)
 			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
 		// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
 	}
-	else  if (keycode == T_LIN)  // Add proper key define if needed
+	else  if (keycode == T_MAC)  // Add proper key define if needed
     {
         get_data()->gun.is_shooting = 1;
         get_data()->gun.current_frame = 0;
