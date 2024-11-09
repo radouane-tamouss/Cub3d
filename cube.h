@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/23 02:27:53 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/09 22:51:34 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,9 @@ typedef struct s_img_data
 # define UP_LIN 65362
 # define DOWN_LIN 65364
 # define E_LIN 101
+# define T_LIN 116
+# define SPACE_LIN 32
+
 
 // ANSI escape codes for colors
 #define CRESET   "\033[0m"
@@ -133,13 +136,14 @@ typedef struct s_img_data
 
 
 typedef struct s_gun {
-    void    *img[4];        // Array to store gun frame images
+    void    *img[18];        // Array to store gun frame images
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
     int     frame_delay;    // Delay counter for animation
     int     is_shooting;    // Flag for shooting animation
 } t_gun;
+
 
 typedef struct s_color
 {

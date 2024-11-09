@@ -1,10 +1,10 @@
 CC = cc
 # CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
-MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit -O3
+# MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit -O3
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -g3 #-Werror -Wextra -Wall  #-g3 #-fsanitize=address
-# MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
+MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
 RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
@@ -24,7 +24,7 @@ all : ${NAME}
 # ${NAME} : ${OFILES} ${LIBFT}
 # 	$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
 ${NAME} : ${OFILES} ${LIBFT}
-	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_MAC_FLAGS}
+	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
 
 ${LIBFT} :
 	@make -C $(LIBFT_DIR)
