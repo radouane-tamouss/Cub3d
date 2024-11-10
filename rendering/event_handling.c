@@ -41,7 +41,7 @@ int	handle_keys(int keycode, void *garbage)
 		rotate_player(2.  * (MY_PI / (float)180));
 	else if (keycode == LEFT_MAC)
 		rotate_player(-2.  * (MY_PI / (float)180));
-	else if (keycode == SPACE)
+	else if (keycode == SPACE_MAC)
 	{
 		if (get_data()->dark_mode == 1)
 			get_data()->dark_mode = 0;
