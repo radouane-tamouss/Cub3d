@@ -85,7 +85,7 @@ void	perform_dda(t_ray_data *ray)
 			}
 			return ;
 		}
-		else if (get_data()->map[ray->map_y][ray->map_x] == 'S')// TODO this must ont stay S, and parsing must change accordinlgy
+		else if (get_data()->map[ray->map_y][ray->map_x] == 'D')// TODO this must ont stay S, and parsing must change accordinlgy
 		{
 			ray->object_hitted = 1;// hitted a closed door
 			if (!data_taken && ray->angle == get_data()->player_angle)
