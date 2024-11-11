@@ -19,7 +19,32 @@ t_data	*get_data(void)
 
 	return (&data);
 }
+void    load_door_frames(void)
+{
+    char    *frame_paths[20];
+    int     i;
+    char    path[50];
 
+    i = 0;
+    while (i < 20)
+    {
+        sprintf(path, "textures/door%d.xpm", i + 1);
+        frame_paths[i] = ft_strdup(path);
+        get_data()->door.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->door.width, &get_data()->door.height);
+        if (!get_data()->door.img[i])
+        {
+            print_err("Failed to load door frame\n");
+            exiter(1);
+        }
+        free(frame_paths[i]);
+        i++;
+    }
+    get_data()->door.current_frame = 0;
+    get_data()->door.frame_delay = 0;
+    get_data()->door.is_opening = 0;
+    get_data()->door.is_open = 0;
+}
 void	init_data(t_game game)
 {
 	get_data()->mlx = mlx_init();
@@ -66,6 +91,7 @@ void	init_data(t_game game)
 	//===
 	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/door1.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
 	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
+    load_door_frames();
 }
 
 // void	draw_circle(t_img_data *img, int cho3a3, t_vector point)
@@ -156,6 +182,36 @@ void	init_data(t_game game)
 // 	// }
 
 
+
+
+void    update_door_animation(void)
+{
+    if (get_data()->door.is_opening)
+    {
+        if (get_data()->door.frame_delay++ >= 3)  // Adjust delay value as needed
+        {
+            get_data()->door.frame_delay = 0;
+            get_data()->door.current_frame++;
+            
+            if (get_data()->door.current_frame >= 20)
+            {
+                get_data()->door.current_frame = 19;  // Keep at last frame
+                get_data()->door.is_opening = 0;
+                get_data()->door.is_open = 1;
+            }
+            
+            // Update the door texture
+            get_data()->door_img.img_data.img = get_data()->door.img[get_data()->door.current_frame];
+            get_data()->door_img.img_data.addr = mlx_get_data_addr(
+                get_data()->door_img.img_data.img,
+                &get_data()->door_img.img_data.bits_per_pixel,
+                &get_data()->door_img.img_data.line_length,
+                &get_data()->door_img.img_data.endian
+            );
+        }
+    }
+}
+
 // }
 // void cast_all_rays(t_game *game)
 // {
@@ -242,7 +298,7 @@ void    render_gun(void)
     // Handle shooting animation
     if (get_data()->gun.is_shooting)
     {
-        if (get_data()->gun.frame_delay++ >= 5)  // Adjust delay value as needed
+        if (get_data()->gun.frame_delay++ >= 3)  // Adjust delay value as needed
         {
             get_data()->gun.frame_delay = 0;
             get_data()->gun.current_frame++;
@@ -302,6 +358,7 @@ int loop_hook(t_game *game)
 		// Render the frame
 		// render_player(game);
 		render_minimap();
+        update_door_animation();  
 		render_background();
 		render_gun();
 		// draw_player();

@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/11 11:52:06 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/11 15:20:40 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,17 @@ typedef struct s_gun {
     int     is_shooting;    // Flag for shooting animation
 } t_gun;
 
+typedef struct s_door {
+    void    *img[20];       // Array to store door frame images
+    int     width;          // Width of door image
+    int     height;         // Height of door image
+    int     current_frame;  // Current frame being displayed
+    int     frame_delay;    // Delay counter for animation
+    int     is_opening;     // Flag for opening animation
+    int     is_open;        // Flag to indicate if door is fully open
+    int     is_closing;     // Flag for closing animation
+    int    is_closed;      // Flag to indicate if door is fully closed
+} t_door;
 
 typedef struct s_color
 {
@@ -279,6 +290,8 @@ typedef struct s_data
 	int			dark_mode;
 	t_ray_data		front_ray;
     t_gun          gun;
+    t_door          door;
+
 } t_data;
 
 

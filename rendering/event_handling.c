@@ -49,13 +49,47 @@ int	handle_keys(int keycode, void *garbage)
 			get_data()->dark_mode = 1;
 	}
 	else if (keycode == E_MAC)
-	{
-		if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
-			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
-		else if (get_data()->front_ray.object_hitted == 2 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
-			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
-		// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
-	}
+{
+    if (get_data()->front_ray.object_hitted == 1 && get_data()->front_ray.dist < 2 * GRID_DIST)
+    {
+        get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+        if (!get_data()->door.is_open && !get_data()->door.is_opening)
+        {
+            get_data()->door.is_opening = 1;
+            get_data()->door.current_frame = 0;
+            get_data()->door.frame_delay = 0;
+        }
+        else if (get_data()->door.is_open && !get_data()->door.is_closing)
+        {
+            get_data()->door.is_closing = 1;
+            get_data()->door.current_frame = 0;
+            get_data()->door.frame_delay = 0;
+        }
+    }
+}
+
+	// else if (keycode == E_MAC)
+	// {
+    // 	if (get_data()->front_ray.object_hitted == 1 && 
+    //     	get_data()->front_ray.dist < 2 * GRID_DIST)
+    // 	{
+    //     	get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+    //     	if (!get_data()->door.is_open && !get_data()->door.is_opening)
+    //     	{
+    //         	get_data()->door.is_opening = 1;
+    //         	get_data()->door.current_frame = 0;
+    //         	get_data()->door.frame_delay = 0;
+    //     	}
+    // 	}
+	// }	
+	// else if (keycode == E_MAC)
+	// {
+	// 	if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
+	// 		get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+	// 	else if (get_data()->front_ray.object_hitted == 2 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
+	// 		get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
+	// 	// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
+	// }
 	else  if (keycode == T_MAC)  // Add proper key define if needed
     {
         get_data()->gun.is_shooting = 1;

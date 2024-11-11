@@ -1,6 +1,6 @@
 CC = cc
-# CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
-MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit -O3
+CFLAGS = -Werror -Wextra -Wall -O3 -flto 
+MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -g3 #-Werror -Wextra -Wall  #-g3 #-fsanitize=address
@@ -18,6 +18,7 @@ LIBFT_DIR = lib/libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
 all : ${NAME}
+
 
 
 
