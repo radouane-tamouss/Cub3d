@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/11 15:20:40 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/11 21:12:29 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 
 //== const sizes =========
 
-# define WIN_HEIGHT 800
-# define WIN_WIDTH 1600 
+# define WIN_HEIGHT 900
+# define WIN_WIDTH 1100 
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 64 

@@ -184,18 +184,46 @@ void	init_data(t_game game)
 
 
 
-void    update_door_animation(void)
+// void    update_door_animation(void)
+// {
+//     if (get_data()->door.is_opening)
+//     {
+//         if (get_data()->door.frame_delay++ >= 3)  // Adjust delay value as needed
+//         {
+//             get_data()->door.frame_delay = 0;
+//             get_data()->door.current_frame++;
+            
+//             if (get_data()->door.current_frame >= 20)
+//             {
+//                 get_data()->door.current_frame = 19;  // Keep at last frame
+//                 get_data()->door.is_opening = 0;
+//                 get_data()->door.is_open = 1;
+//             }
+            
+//             // Update the door texture
+//             get_data()->door_img.img_data.img = get_data()->door.img[get_data()->door.current_frame];
+//             get_data()->door_img.img_data.addr = mlx_get_data_addr(
+//                 get_data()->door_img.img_data.img,
+//                 &get_data()->door_img.img_data.bits_per_pixel,
+//                 &get_data()->door_img.img_data.line_length,
+//                 &get_data()->door_img.img_data.endian
+//             );
+//         }
+//     }
+// }
+
+void update_door_animation(void)
 {
     if (get_data()->door.is_opening)
     {
-        if (get_data()->door.frame_delay++ >= 3)  // Adjust delay value as needed
+        if (get_data()->door.frame_delay++ >= 3)
         {
             get_data()->door.frame_delay = 0;
             get_data()->door.current_frame++;
             
             if (get_data()->door.current_frame >= 20)
             {
-                get_data()->door.current_frame = 19;  // Keep at last frame
+                get_data()->door.current_frame = 19;
                 get_data()->door.is_opening = 0;
                 get_data()->door.is_open = 1;
             }
@@ -210,7 +238,32 @@ void    update_door_animation(void)
             );
         }
     }
+    else if (get_data()->door.is_closing)
+    {
+        if (get_data()->door.frame_delay++ >= 3)
+        {
+            get_data()->door.frame_delay = 0;
+            get_data()->door.current_frame--;
+            
+            if (get_data()->door.current_frame <= 0)
+            {
+                get_data()->door.current_frame = 0;
+                get_data()->door.is_closing = 0;
+                get_data()->door.is_open = 0;
+            }
+            
+            // Update the door texture
+            get_data()->door_img.img_data.img = get_data()->door.img[get_data()->door.current_frame];
+            get_data()->door_img.img_data.addr = mlx_get_data_addr(
+                get_data()->door_img.img_data.img,
+                &get_data()->door_img.img_data.bits_per_pixel,
+                &get_data()->door_img.img_data.line_length,
+                &get_data()->door_img.img_data.endian
+            );
+        }
+    }
 }
+
 
 // }
 // void cast_all_rays(t_game *game)
