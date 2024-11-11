@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/09 23:27:28 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/10 21:24:26y rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,19 @@ void	init_data(t_game game)
 	get_data()->height = game.map.height;
 	get_data()->width = game.map.width;
 
-	get_data()->north_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/north.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
+	get_data()->north_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/wall.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
 	get_data()->north_img.img_data.addr = mlx_get_data_addr(get_data()->north_img.img_data.img, &(get_data()->north_img.img_data.bits_per_pixel), &(get_data()->north_img.img_data.line_length), &(get_data()->north_img.img_data.endian));
 
-	get_data()->south_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/north.xpm", &(get_data()->south_img.width), &(get_data()->south_img.height));
+	get_data()->south_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/wall.xpm", &(get_data()->south_img.width), &(get_data()->south_img.height));
 	get_data()->south_img.img_data.addr = mlx_get_data_addr(get_data()->south_img.img_data.img, &(get_data()->south_img.img_data.bits_per_pixel), &(get_data()->south_img.img_data.line_length), &(get_data()->south_img.img_data.endian));
 
-	get_data()->east_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/north.xpm", &(get_data()->east_img.width), &(get_data()->east_img.height));
+	get_data()->east_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/wall.xpm", &(get_data()->east_img.width), &(get_data()->east_img.height));
 	get_data()->east_img.img_data.addr = mlx_get_data_addr(get_data()->east_img.img_data.img, &(get_data()->east_img.img_data.bits_per_pixel), &(get_data()->east_img.img_data.line_length), &(get_data()->east_img.img_data.endian));
 	
-	get_data()->west_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/north.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
+	get_data()->west_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/wall.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
 	get_data()->west_img.img_data.addr = mlx_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
 	//===
-	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/gate.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
+	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/door1.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
 	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 }
 
