@@ -48,21 +48,29 @@ int	handle_keys(int keycode, void *garbage)
 		else
 			get_data()->dark_mode = 1;
 	}
-	else if (keycode == E_MAC)
+else if (keycode == E_MAC)
 {
-    if (get_data()->front_ray.object_hitted == 1 && get_data()->front_ray.dist < 2 * GRID_DIST)
+    if (get_data()->front_ray.object_hitted == 1 && 
+        get_data()->front_ray.dist < 2 * GRID_DIST)
     {
-        get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+        // Change door state from closed to open
+        get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'O';
         if (!get_data()->door.is_open && !get_data()->door.is_opening)
         {
             get_data()->door.is_opening = 1;
             get_data()->door.current_frame = 0;
             get_data()->door.frame_delay = 0;
         }
-        else if (get_data()->door.is_open && !get_data()->door.is_closing)
+    }
+    else if (get_data()->front_ray.object_hitted == 2 && 
+             get_data()->front_ray.dist < 2 * GRID_DIST)
+    {
+        // Change door state from open to closed
+        get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+        if (get_data()->door.is_open && !get_data()->door.is_closing)
         {
             get_data()->door.is_closing = 1;
-            get_data()->door.current_frame = 0;
+            get_data()->door.current_frame = 19; // Start from last frame
             get_data()->door.frame_delay = 0;
         }
     }
