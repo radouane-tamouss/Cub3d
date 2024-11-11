@@ -1,5 +1,5 @@
 CC = cc
-# CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
+CFLAGS =   -O3 -flto
 MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 FSANTIIZE = -fsanitize=address

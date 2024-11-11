@@ -1116,7 +1116,7 @@ void cast(t_game *game, int column_id)
 			horz_wall_hit_x = next_horz_touch_x;
 			horz_wall_hit_y = next_horz_touch_y;
 			// render_line(game, game->player.pos_x, game->player.pos_y, 
-					// horz_wall_hit_x, horz_wall_hit_y, RED);
+			// 		horz_wall_hit_x, horz_wall_hit_y, RED);
 			break;
 		}
 		else
@@ -1217,8 +1217,8 @@ void cast(t_game *game, int column_id)
 		game->rays[column_id].wall_hit_y = vert_wall_hit_y;
 		game->rays[column_id].was_hit_vertical = 0;
 	}
-	// render_line(game, game->player.pos_x, game->player.pos_y, 
-	// 		game->rays[column_id].wall_hit_x, game->rays[column_id].wall_hit_y, GREEN);	
+	render_line(game, game->player.pos_x, game->player.pos_y, 
+			game->rays[column_id].wall_hit_x, game->rays[column_id].wall_hit_y, GREEN);	
 
 
 }
