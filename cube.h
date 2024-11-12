@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/11 12:03:35 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/12 09:39:42 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 //== const sizes =========
 
-# define WIN_HEIGHT 1000
-# define WIN_WIDTH 2000
+# define WIN_HEIGHT 800
+# define WIN_WIDTH 1600
 
 # define SQUARE_SIZE 64
 # define PI 3.14159265359
@@ -35,7 +35,7 @@
 #define MOVE_SPEED 0.001
 #define FALSE 0
 #define TRUE 1
-#define WALL_STRIP_WIDTH 8 
+#define WALL_STRIP_WIDTH 4 
 #define FOV_ANGLE 60 * (PI / 180)
 //===========================
 //====== mlx img struct ===== 
