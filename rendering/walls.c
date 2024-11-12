@@ -56,58 +56,6 @@ void	calculate_distance(t_ray_data *ray)
     else
         ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
 }
-// traveling till hit the wall and save the data
-// void	perform_dda(t_ray_data *ray)
-// {
-// 	int	data_taken = 0;
-//     while (1)
-//     {
-//         if (ray->side_dist.x < ray->side_dist.y)
-//         {
-//             ray->side_dist.x += ray->delta_dist.x;
-//             ray->map_x += ray->step_x;
-//             ray->side = 0;
-//         }
-//         else
-//         {
-//             ray->side_dist.y += ray->delta_dist.y;
-//             ray->map_y += ray->step_y;
-//             ray->side = 1;
-//         }
-//         if (get_data()->map[ray->map_y][ray->map_x] == '1')
-// 		{
-// 			ray->object_hitted = 0;// hitted a wall
-// 			if (!data_taken && ray->angle == get_data()->player_angle)
-// 			{
-// 				get_data()->front_ray = *ray;
-// 				calculate_distance(&(get_data()->front_ray));
-// 				data_taken = 1;
-// 			}
-// 			return ;
-// 		}
-// 		else if (get_data()->map[ray->map_y][ray->map_x] == 'D')// TODO this must ont stay S, and parsing must change accordinlgy
-// 		{
-// 			ray->object_hitted = 1;// hitted a closed door
-// 			if (!data_taken && ray->angle == get_data()->player_angle)
-// 			{
-// 				get_data()->front_ray = *ray;
-// 				calculate_distance(&(get_data()->front_ray));
-// 				data_taken = 1;
-// 			}
-// 			return ;
-// 		}
-// 		else if (get_data()->map[ray->map_y][ray->map_x] == 'D')
-// 		{
-// 			if (!data_taken && ray->angle == get_data()->player_angle)
-// 			{
-// 				ray->object_hitted = 2;// hitted a open door
-// 				get_data()->front_ray = *ray;
-// 				calculate_distance(&(get_data()->front_ray));
-// 				data_taken = 1;
-// 			}
-// 		}
-//     }
-// }
 void perform_dda(t_ray_data *ray)
 {
     int data_taken = 0;
@@ -283,6 +231,7 @@ void	render_walls(void)
 	i = 0;
 	while (i < WIN_WIDTH)
 	{
+        mlx_clear_window(get_data()->mlx, get_data()->win);
 		render_col(i++);// render each column of the window
 	}
 }
