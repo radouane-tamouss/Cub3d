@@ -223,13 +223,21 @@ int loop_hook(t_game *game)
     	if (get_data()->front_ray.object_hitted == 1 && 
         	get_data()->front_ray.dist < 2 * GRID_DIST)
         {
-            int text_width = 200;
-            int text_height = 20;
-            int text_x = (WIN_WIDTH - text_width) / 2;
-            int text_y = WIN_HEIGHT - text_height - 10;
 
-            // Draw white text
-            mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to open the door]");
+            /**
+             * mlx_xpm_file_to_image - Converts an XPM file to an image.
+             * @mlx_ptr: Pointer to the MLX instance.
+             * @filename: Path to the XPM file.
+             * @width: Pointer to an integer where the width of the image will be stored.
+             * @height: Pointer to an integer where the height of the image will be stored.
+             *
+             * This function loads an XPM (X PixMap) file and converts it into an image
+             * that can be used with the MLX library. The width and height of the image
+             * are stored in the provided pointers.
+             *
+             * Returns: A pointer to the created image, or NULL if the operation fails.
+             */
+
         }
     	if (get_data()->front_ray.object_hitted == 2 && 
         	get_data()->front_ray.dist < 2 * GRID_DIST)
