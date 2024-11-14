@@ -18,6 +18,22 @@ int	ft_close(void)
 	return (0);
 }
 
+void update_movement()
+{
+    if (get_data()->move_forward)
+        move_forward();
+    if (get_data()->move_backward)
+        move_backward();
+    if (get_data()->move_left)
+        move_left();
+    if (get_data()->move_right)
+        move_right();
+    if (get_data()->rotate_left)
+        rotate_player(-2.  * (MY_PI / (float)180));
+    if (get_data()->rotate_right)
+        rotate_player(2.  * (MY_PI / (float)180));
+    get_data()->is_updated = 1;
+}
 
 
 int	handle_keys(int keycode, void *garbage)
@@ -29,18 +45,28 @@ int	handle_keys(int keycode, void *garbage)
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
-	else if (keycode == W_MAC)
-		move_forward();
-	else if (keycode == S_MAC)
-		move_backward();
-	else if (keycode == D_MAC)
-		move_right();
-	else if (keycode == A_MAC)
-		move_left();
-	else if (keycode == RIGHT_MAC)
-		rotate_player(2.  * (MY_PI / (float)180));
+	// else if (keycode == W_MAC)
+	// 	move_forward();
+	// else if (keycode == S_MAC)
+	// 	move_backward();
+	// else if (keycode == D_MAC)
+	// 	move_right();
+	// else if (keycode == A_MAC)
+	// 	move_left();
+    else if (keycode == W_MAC)
+        get_data()->move_forward = 1;
+    else if (keycode == S_MAC)
+        get_data()->move_backward = 1;
+    else if (keycode == D_MAC)
+        get_data()->move_right = 1;
+    else if (keycode == A_MAC)
+        get_data()->move_left = 1;
+	if (keycode == RIGHT_MAC)
+		// rotate_player(2.  * (MY_PI / (float)180));
+        get_data()->rotate_right = 1;
 	else if (keycode == LEFT_MAC)
-		rotate_player(-2.  * (MY_PI / (float)180));
+		// rotate_player(-2.  * (MY_PI / (float)180));
+        get_data()->rotate_left = 1;
 	else if (keycode == SPACE_MAC)
 	{
 		if (get_data()->dark_mode == 1)
@@ -50,30 +76,20 @@ int	handle_keys(int keycode, void *garbage)
 	}
 	else if (keycode == E_MAC)
 	{
-    	if (get_data()->front_ray.object_hitted == 1 && 
-        	get_data()->front_ray.dist < 2 * GRID_DIST)
-    	{
-        	// Change door state from closed to open
-        	get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'O';
-        	if (!get_data()->door.is_open && !get_data()->door.is_opening)
-        	{
-            	get_data()->door.is_opening = 1;
-            	get_data()->door.current_frame = 0;
-            	get_data()->door.frame_delay = 0;
-        	}
-    	}
-    	else if (get_data()->front_ray.object_hitted == 2 && 
-             	get_data()->front_ray.dist < 2 * GRID_DIST)
-    	{
-        	// Change door state from open to closed
-        	get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
-        	if (get_data()->door.is_open && !get_data()->door.is_closing)
-        	{
-            	get_data()->door.is_closing = 1;
-            	get_data()->door.current_frame = 19; // Start from last frame
-            	get_data()->door.frame_delay = 0;
-        	}
-    	}
+    
+        if (get_data()->front_ray.dist < 2 * GRID_DIST)
+        {
+            int map_x = get_data()->front_ray.map_x;
+            int map_y = get_data()->front_ray.map_y;
+            char *current_tile = &get_data()->map[map_y][map_x];
+        
+            if (*current_tile == 'D')
+                *current_tile = 'O';
+            else if (*current_tile == 'O')
+                *current_tile = 'D';
+        }
+    
+        get_data()->is_updated = 1;
 	}
 	else  if (keycode == T_MAC)  // Add proper key define if needed
     {
@@ -88,7 +104,23 @@ int	handle_keys(int keycode, void *garbage)
 	return (0);
 }
 
-
+int key_release(int keycode, void *garbage)
+{
+    (void)garbage;
+    if (keycode == W_MAC)
+        get_data()->move_forward = 0;
+    else if (keycode == S_MAC)
+        get_data()->move_backward = 0;
+    else if (keycode == D_MAC)
+        get_data()->move_right = 0;
+    else if (keycode == A_MAC)
+        get_data()->move_left = 0;
+    if (keycode == RIGHT_MAC)
+        get_data()->rotate_right = 0;
+    else if (keycode == LEFT_MAC)
+        get_data()->rotate_left = 0;
+    return (0);
+}
 
 int mouse_event(int x, int y, void *par)
 {

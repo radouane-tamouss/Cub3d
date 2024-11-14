@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Werror -Wextra -Wall -O3 -flto 
+CFLAGS = -Werror -Wextra -Wall -O3 -flto -g3
 MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
