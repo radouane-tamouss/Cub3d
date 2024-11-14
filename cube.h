@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/14 15:12:05 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/14 18:09:45 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 //== const sizes =========
 
-# define WIN_HEIGHT 900
+# define WIN_HEIGHT 800
 # define WIN_WIDTH 1600 
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
@@ -108,6 +108,7 @@ typedef struct s_img_data
 # define SPACE_MAC 49
 # define E_MAC 14
 # define T_MAC 17
+# define Z_MAC 6
 
 # define W_LIN 119
 # define A_LIN 97
@@ -277,11 +278,14 @@ typedef struct s_data
     int move_right;
     int rotate_left;
     int rotate_right;
+    int show_scope;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
 	t_texture	west_img;
 	t_texture	door_img;
+
+    t_img_data scope; 
 	t_img_data	background_img;
 	int			ceiling_color;
 	int			floor_color;
@@ -348,6 +352,7 @@ void	draw_player();
 float	normalise_angle(float angle);
 int	key_release(int keycode, void *garbage);
 void update_movement();
+void render_scope();
 //
 
 void	render_walls(void);

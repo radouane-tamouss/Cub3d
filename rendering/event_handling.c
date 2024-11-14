@@ -17,7 +17,18 @@ int	ft_close(void)
 	exiter(0);
 	return (0);
 }
+void render_scope()
+{
+    void *img;
+    int width;
+    int height;
 
+    img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
+    if (get_data()->show_scope)
+    {
+        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+    }
+}
 void update_movement()
 {
     if (get_data()->move_forward)
@@ -91,6 +102,10 @@ int	handle_keys(int keycode, void *garbage)
     
         get_data()->is_updated = 1;
 	}
+    else if (keycode == Z_MAC)
+    {
+        get_data()->show_scope = 1;
+    }
 	else  if (keycode == T_MAC)  // Add proper key define if needed
     {
 		get_data()->gun.shooted = 1;
@@ -119,6 +134,8 @@ int key_release(int keycode, void *garbage)
         get_data()->rotate_right = 0;
     else if (keycode == LEFT_MAC)
         get_data()->rotate_left = 0;
+    else if (keycode == Z_MAC)
+        get_data()->show_scope = 0;
     return (0);
 }
 
