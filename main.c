@@ -83,6 +83,7 @@ void	init_data(t_game game)
     get_data()->move_right = 0;
     get_data()->rotate_left = 0;
     get_data()->rotate_right = 0;
+    get_data()->show_scope = 0;
 
 	get_data()->north_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
 	get_data()->north_img.img_data.addr = mlx_get_data_addr(get_data()->north_img.img_data.img, &(get_data()->north_img.img_data.bits_per_pixel), &(get_data()->north_img.img_data.line_length), &(get_data()->north_img.img_data.endian));
@@ -98,6 +99,12 @@ void	init_data(t_game game)
 	//===
 	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/1door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
 	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
+
+
+    
+
+
+
 }
 
 
@@ -178,6 +185,7 @@ int player_is_close_to_door(void)
 {
     return (get_data()->front_ray.dist < 2 * GRID_DIST);
 }
+
 int loop_hook(t_game *game)
 {
 	if (get_data()->is_updated)
@@ -187,7 +195,9 @@ int loop_hook(t_game *game)
 		render_walls();
 		render_minimap();
 		render_background();
+        if (!get_data()->show_scope)
 		render_gun();
+        render_scope();
     	if (get_data()->front_ray.object_hitted == 2 && 
         	get_data()->front_ray.dist < 2 * GRID_DIST)
         {
