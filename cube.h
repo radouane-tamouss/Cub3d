@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/12 15:10:03 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/14 15:12:05 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@
 # define WIN_WIDTH 1600 
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
-# define GRID_DIST 64 
+# define GRID_DIST 80 
 # define ZOOM 100
-# define SPEED 6
+# define SPEED 4
 
 
 # define SQUARE_SIZE 16 
 # define PI 3.14159265359
-#define ROTATION_SPEED 0.1
+#define ROTATION_SPEED 0.2
 #define MOVE_SPEED 0.1
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
@@ -271,6 +271,12 @@ typedef struct s_data
 	void		*mlx;
 	void		*win;
 	// t_img_data	walls;
+    int move_forward;
+    int move_backward;
+    int move_left;
+    int move_right;
+    int rotate_left;
+    int rotate_right;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
@@ -340,7 +346,8 @@ void	move_left();
 void	move_right();
 void	draw_player();
 float	normalise_angle(float angle);
-
+int	key_release(int keycode, void *garbage);
+void update_movement();
 //
 
 void	render_walls(void);

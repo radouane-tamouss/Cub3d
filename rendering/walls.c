@@ -2,7 +2,7 @@
 // this init the direction (vector) of the ray
 void init_ray_dir(t_ray_data *ray, float ray_angle)
 {
-	ray->angle = ray_angle;
+ray->angle = ray_angle;
     ray->ray_dir.x = cos(ray_angle);
     ray->ray_dir.y = sin(ray_angle);
     ray->map_x = (int)(get_data()->player_pos.x / GRID_DIST);
@@ -55,7 +55,9 @@ void	calculate_distance(t_ray_data *ray)
         ray->dist = (ray->side_dist.x - ray->delta_dist.x) * GRID_DIST;
     else
         ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
+    // ray->dist *= cos(ray->angle - get_data()->player_angle);    
 }
+
 void perform_dda(t_ray_data *ray)
 {
     int data_taken = 0;
@@ -229,7 +231,6 @@ void	render_walls(void)
 	int i;
 
 	i = 0;
-    render_background();
 	while (i < WIN_WIDTH)
 	{
 		render_col(i++);// render each column of the window
