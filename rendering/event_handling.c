@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/1:45:42 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/17 22:15:21 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void update_movement()
     if (get_data()->move_right)
         move_right();
     if (get_data()->rotate_left)
-        rotate_player(-2.  * (MY_PI / (float)180));
+        rotate_player(-3.  * (MY_PI / (float)180));
     if (get_data()->rotate_right)
-        rotate_player(2.  * (MY_PI / (float)180));
+        rotate_player(3.  * (MY_PI / (float)180));
     get_data()->is_updated = 1;
 }
 
