@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/14 18:09:45 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/17 21:06:52 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 80 
 # define ZOOM 100
-# define SPEED 4
+# define SPEED 9
 
 
 # define SQUARE_SIZE 16 
