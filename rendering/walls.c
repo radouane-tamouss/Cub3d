@@ -2,7 +2,7 @@
 // this init the direction (vector) of the ray
 void init_ray_dir(t_ray_data *ray, float ray_angle)
 {
-	ray->angle = ray_angle;
+ray->angle = ray_angle;
     ray->ray_dir.x = cos(ray_angle);
     ray->ray_dir.y = sin(ray_angle);
     ray->map_x = (int)(get_data()->player_pos.x / GRID_DIST);
@@ -55,11 +55,12 @@ void	calculate_distance(t_ray_data *ray)
         ray->dist = (ray->side_dist.x - ray->delta_dist.x) * GRID_DIST;
     else
         ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
+    // ray->dist *= cos(ray->angle - get_data()->player_angle);    
 }
-// traveling till hit the wall and save the data
-void	perform_dda(t_ray_data *ray)
+
+void perform_dda(t_ray_data *ray)
 {
-	int	data_taken = 0;
+    int data_taken = 0;
     while (1)
     {
         if (ray->side_dist.x < ray->side_dist.y)
@@ -74,38 +75,42 @@ void	perform_dda(t_ray_data *ray)
             ray->map_y += ray->step_y;
             ray->side = 1;
         }
-        if (get_data()->map[ray->map_y][ray->map_x] == '1')
-		{
-			ray->object_hitted = 0;// hitted a wall
-			if (!data_taken && ray->angle == get_data()->player_angle)
-			{
-				get_data()->front_ray = *ray;
-				calculate_distance(&(get_data()->front_ray));
-				data_taken = 1;
-			}
-			return ;
-		}
-		else if (get_data()->map[ray->map_y][ray->map_x] == 'S')// TODO this must ont stay S, and parsing must change accordinlgy
-		{
-			ray->object_hitted = 1;// hitted a closed door
-			if (!data_taken && ray->angle == get_data()->player_angle)
-			{
-				get_data()->front_ray = *ray;
-				calculate_distance(&(get_data()->front_ray));
-				data_taken = 1;
-			}
-			return ;
-		}
-		else if (get_data()->map[ray->map_y][ray->map_x] == 'D')
-		{
-			if (!data_taken && ray->angle == get_data()->player_angle)
-			{
-				ray->object_hitted = 2;// hitted a open door
-				get_data()->front_ray = *ray;
-				calculate_distance(&(get_data()->front_ray));
-				data_taken = 1;
-			}
-		}
+        
+        char current_tile = get_data()->map[ray->map_y][ray->map_x];
+        
+        if (current_tile == '1')
+        {
+            ray->object_hitted = 0; // hit a wall
+            if (!data_taken && ray->angle == get_data()->player_angle)
+            {
+                get_data()->front_ray = *ray;
+                calculate_distance(&(get_data()->front_ray));
+                data_taken = 1;
+            }
+            return;
+        }
+        else if (current_tile == 'D') // Closed door
+        {
+            ray->object_hitted = 1; // hit a closed door
+            if (!data_taken && ray->angle == get_data()->player_angle)
+            {
+                get_data()->front_ray = *ray;
+                calculate_distance(&(get_data()->front_ray));
+                data_taken = 1;
+            }
+            return;
+        }
+        else if (current_tile == 'O') // Open door - we'll use 'O' for open doors
+        {
+            if (!data_taken && ray->angle == get_data()->player_angle)
+            {
+                ray->object_hitted = 2; // hit an open door
+                get_data()->front_ray = *ray;
+                calculate_distance(&(get_data()->front_ray));
+                data_taken = 1;
+            }
+            // Don't return, continue raycasting through open door
+        }
     }
 }
 

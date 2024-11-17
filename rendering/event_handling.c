@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/17 21:06:42 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/17 22:15:21 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,34 @@ int	ft_close(void)
 	exiter(0);
 	return (0);
 }
+void render_scope()
+{
+    void *img;
+    int width;
+    int height;
 
+    img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
+    if (get_data()->show_scope)
+    {
+        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+    }
+}
+void update_movement()
+{
+    if (get_data()->move_forward)
+        move_forward();
+    if (get_data()->move_backward)
+        move_backward();
+    if (get_data()->move_left)
+        move_left();
+    if (get_data()->move_right)
+        move_right();
+    if (get_data()->rotate_left)
+        rotate_player(-3.  * (MY_PI / (float)180));
+    if (get_data()->rotate_right)
+        rotate_player(3.  * (MY_PI / (float)180));
+    get_data()->is_updated = 1;
+}
 
 
 int	handle_keys(int keycode, void *garbage)
@@ -29,18 +56,28 @@ int	handle_keys(int keycode, void *garbage)
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
-	else if (keycode == W_MAC)
-		move_forward();
-	else if (keycode == S_MAC)
-		move_backward();
-	else if (keycode == D_MAC)
-		move_right();
-	else if (keycode == A_MAC)
-		move_left();
-	else if (keycode == RIGHT_MAC)
-		rotate_player(2.  * (MY_PI / (float)180));
+	// else if (keycode == W_MAC)
+	// 	move_forward();
+	// else if (keycode == S_MAC)
+	// 	move_backward();
+	// else if (keycode == D_MAC)
+	// 	move_right();
+	// else if (keycode == A_MAC)
+	// 	move_left();
+    else if (keycode == W_MAC)
+        get_data()->move_forward = 1;
+    else if (keycode == S_MAC)
+        get_data()->move_backward = 1;
+    else if (keycode == D_MAC)
+        get_data()->move_right = 1;
+    else if (keycode == A_MAC)
+        get_data()->move_left = 1;
+	if (keycode == RIGHT_MAC)
+		// rotate_player(2.  * (MY_PI / (float)180));
+        get_data()->rotate_right = 1;
 	else if (keycode == LEFT_MAC)
-		rotate_player(-2.  * (MY_PI / (float)180));
+		// rotate_player(-2.  * (MY_PI / (float)180));
+        get_data()->rotate_left = 1;
 	else if (keycode == SPACE_MAC)
 	{
 		if (get_data()->dark_mode == 1)
@@ -50,32 +87,57 @@ int	handle_keys(int keycode, void *garbage)
 	}
 	else if (keycode == E_MAC)
 	{
-		if (get_data()->front_ray.object_hitted == 1 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
-			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
-		else if (get_data()->front_ray.object_hitted == 2 &&  get_data()->front_ray.dist < 2 * GRID_DIST)
-			get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'S';
-		// fprintf(stderr, "the next grid %c\n", get_data()->map[(int)next_step_y/GRID_DIST][next_step_x/GRID_DIST]);
+    
+        if (get_data()->front_ray.dist < 2 * GRID_DIST)
+        {
+            int map_x = get_data()->front_ray.map_x;
+            int map_y = get_data()->front_ray.map_y;
+            char *current_tile = &get_data()->map[map_y][map_x];
+        
+            if (*current_tile == 'D')
+                *current_tile = 'O';
+            else if (*current_tile == 'O')
+                *current_tile = 'D';
+        }
+    
+        get_data()->is_updated = 1;
 	}
+    else if (keycode == Z_MAC)
+    {
+        get_data()->show_scope = 1;
+    }
+	else  if (keycode == T_MAC)  // Add proper key define if needed
+    {
+		get_data()->gun.shooted = 1;
+        get_data()->gun.is_shooting = 1;
+        get_data()->gun.current_frame = 0;
+        get_data()->gun.frame_delay = 0;
+    }
 	else
 		return (0);
 	get_data()->is_updated = 1;
-	// init_background();
-	// // draw_player();
-	// render_walls();
-	// render_background();
-	// printf("\n\n\n");
-	// printf("===== coords (%f, %f)\n", get_data()->player_pos.x / GRID_DIST, get_data()->player_pos.y/ GRID_DIST);
-	// printf("===== directoin vector (%f, %f)\n", get_data()->player_dir.x, get_data()->player_dir.y);
-	// printf("===== angle %f degree\n", get_data()->player_angle * (180 / MY_PI));
 	return (0);
 }
 
-// int	handle_realise(int keycode, void *garbage)
-// {
-// 	// if (keycode == W || keycode == A || keycode == S || keycode == D || keycode == )
-// 		get_data()->is_updated = 0;
-
-// }
+int key_release(int keycode, void *garbage)
+{
+    (void)garbage;
+    if (keycode == W_MAC)
+        get_data()->move_forward = 0;
+    else if (keycode == S_MAC)
+        get_data()->move_backward = 0;
+    else if (keycode == D_MAC)
+        get_data()->move_right = 0;
+    else if (keycode == A_MAC)
+        get_data()->move_left = 0;
+    if (keycode == RIGHT_MAC)
+        get_data()->rotate_right = 0;
+    else if (keycode == LEFT_MAC)
+        get_data()->rotate_left = 0;
+    else if (keycode == Z_MAC)
+        get_data()->show_scope = 0;
+    return (0);
+}
 
 int mouse_event(int x, int y, void *par)
 {
@@ -87,12 +149,5 @@ int mouse_event(int x, int y, void *par)
 	rotate_player(-.5 *(get_data()->mouse_pos.x - x) * (MY_PI / 180));
 	get_data()->mouse_pos.x = x;
 	get_data()->is_updated = 1;
-
-	// init_background();
-	// render_walls();
-	// render_background();
-	// fprintf(stderr,"mouse moved x = %d, y = %d\n", x, y);
-	// exit(0);
 	return (0);
-	// mlx_mouse_get_pos
 }
