@@ -1,6 +1,6 @@
 CC = cc
-# CFLAGS = -Werror -Wextra -Wall -O3 #-g3 #-fsanitize=address
-MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit -O3
+CFLAGS = -Werror -Wextra -Wall -O3 -flto -g3
+MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -g3 #-Werror -Wextra -Wall  #-g3 #-fsanitize=address
@@ -21,12 +21,14 @@ all : ${NAME}
 
 
 
-# ${NAME} : ${OFILES} ${LIBFT}
-# 	$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
+
 ${NAME} : ${OFILES} ${LIBFT}
-	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_MAC_FLAGS}
+	$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
+# ${NAME} : ${OFILES} ${LIBFT}
+# 	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
 
 ${LIBFT} :
+	@make re -C mlx
 	@make -C $(LIBFT_DIR)
 	@make bonus -C $(LIBFT_DIR)
 	@echo "\033[0;32m[LIBFT COMPILED]\033[0m"

@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/17 21:07:32 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/17 21:06:52 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@
 
 //== const sizes =========
 
-# define WIN_HEIGHT 1000
-# define WIN_WIDTH 1000
+# define WIN_HEIGHT 800
+# define WIN_WIDTH 1600 
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
-# define GRID_DIST 32
+# define GRID_DIST 80 
 # define ZOOM 100
-# define SPEED 3
+# define SPEED 9
 
 
 # define SQUARE_SIZE 16 
 # define PI 3.14159265359
-#define ROTATION_SPEED 0.1
+#define ROTATION_SPEED 0.2
 #define MOVE_SPEED 0.1
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
@@ -73,6 +73,8 @@ typedef struct s_img_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+    int width;
+    int height;
 }				t_img_data;
 
 
@@ -105,6 +107,8 @@ typedef struct s_img_data
 # define DOWN_MAC 125
 # define SPACE_MAC 49
 # define E_MAC 14
+# define T_MAC 17
+# define Z_MAC 6
 
 # define W_LIN 119
 # define A_LIN 97
@@ -116,6 +120,9 @@ typedef struct s_img_data
 # define UP_LIN 65362
 # define DOWN_LIN 65364
 # define E_LIN 101
+# define T_LIN 116
+# define SPACE_LIN 32
+
 
 // ANSI escape codes for colors
 #define CRESET   "\033[0m"
@@ -128,6 +135,28 @@ typedef struct s_img_data
 #define CCYAN    "\033[36m"      /* Cyan */
 #define CWHITE   "\033[37m"      /* White */
 
+
+typedef struct s_gun {
+    void    *img[18];        // Array to store gun frame images
+    int     width;          // Width of gun image
+    int     height;         // Height of gun image
+    int     current_frame;  // Current frame being displayed
+    int     frame_delay;    // Delay counter for animation
+    int     is_shooting;    // Flag for shooting animation
+    int     shooted;
+} t_gun;
+
+typedef struct s_door {
+    void    *img[20];       // Array to store door frame images
+    int     width;          // Width of door image
+    int     height;         // Height of door image
+    int     current_frame;  // Current frame being displayed
+    int     frame_delay;    // Delay counter for animation
+    int     is_opening;     // Flag for opening animation
+    int     is_open;        // Flag to indicate if door is fully open
+    int     is_closing;     // Flag for closing animation
+    int    is_closed;      // Flag to indicate if door is fully closed
+} t_door;
 
 typedef struct s_color
 {
@@ -243,11 +272,20 @@ typedef struct s_data
 	void		*mlx;
 	void		*win;
 	// t_img_data	walls;
+    int move_forward;
+    int move_backward;
+    int move_left;
+    int move_right;
+    int rotate_left;
+    int rotate_right;
+    int show_scope;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
 	t_texture	west_img;
 	t_texture	door_img;
+
+    t_img_data scope; 
 	t_img_data	background_img;
 	int			ceiling_color;
 	int			floor_color;
@@ -262,6 +300,9 @@ typedef struct s_data
 	int			is_updated;
 	int			dark_mode;
 	t_ray_data		front_ray;
+    t_gun          gun;
+    t_door          door;
+
 } t_data;
 
 
@@ -309,7 +350,9 @@ void	move_left();
 void	move_right();
 void	draw_player();
 float	normalise_angle(float angle);
-
+int	key_release(int keycode, void *garbage);
+void update_movement();
+void render_scope();
 //
 
 void	render_walls(void);
