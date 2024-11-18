@@ -136,27 +136,37 @@ int	handle_keys(int keycode, void *garbage)
 	else  if (keycode == T_MAC)  // Add proper key define if needed
     {
 		get_data()->gun.shooted = 1;
-        get_data()->gun.is_shooting = 1;
+        get_data()->gun.is_reloading = 1;
         get_data()->gun.current_frame = 0;
         get_data()->gun.frame_delay = 0;
     }
     else if (keycode == Y_MAC)
     {
         get_data()->gun2.shooted = 1;
+        get_data()->gun2.is_reloading = 1;
+        get_data()->gun2.current_frame = 0;
+        get_data()->gun2.frame_delay = 0;
+    }
+    else if (keycode == N_MAC)
+    {
+        printf("n pressed\n");
         get_data()->gun2.is_shooting = 1;
         get_data()->gun2.current_frame = 0;
         get_data()->gun2.frame_delay = 0;
+        get_data()->gun2.is_reloading = 0;
+
     }
     else if (keycode == F_MAC)
     {
         get_data()->speed = 22;
     }
-    else if (keycode == TAB_MAC)
+    else if (keycode == TAB_MAC && !get_data()->is_tab_pressed)
     {
         get_data()->gun_id++;
         if (get_data()->gun_id >= 2)
             get_data()->gun_id = 0;
         get_data()->show_tab = 1;
+        get_data()->is_tab_pressed = 1;
     }
 	get_data()->is_updated = 1;
 	return (0);
@@ -184,7 +194,10 @@ int key_release(int keycode, void *garbage)
     else if (keycode == Z_MAC)
         get_data()->show_scope = 0;
     else if (keycode == TAB_MAC)
+    {
+        get_data()->is_tab_pressed = 0;
         get_data()->show_tab = 0;
+    }
     else if (keycode == F_MAC)
         get_data()->speed = 8;
     return (0);

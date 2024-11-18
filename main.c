@@ -110,7 +110,57 @@ void	init_data(t_game game)
 
 
 }
+void    load_shooting_gun2_frames(void)
+{
+    char    *frame_paths[27] = {
+        "textures/gun2shoot/1gun2shoot.xpm",
+        "textures/gun2shoot/2gun2shoot.xpm",
+        "textures/gun2shoot/3gun2shoot.xpm",
+        "textures/gun2shoot/4gun2shoot.xpm",
+        "textures/gun2shoot/5gun2shoot.xpm",
+        "textures/gun2shoot/6gun2shoot.xpm",
+        "textures/gun2shoot/7gun2shoot.xpm",
+        "textures/gun2shoot/8gun2shoot.xpm",
+        "textures/gun2shoot/9gun2shoot.xpm",
+        "textures/gun2shoot/10gun2shoot.xpm",
+        "textures/gun2shoot/11gun2shoot.xpm",
+        "textures/gun2shoot/12gun2shoot.xpm",
+        "textures/gun2shoot/13gun2shoot.xpm",
+        "textures/gun2shoot/14gun2shoot.xpm",
+        "textures/gun2shoot/15gun2shoot.xpm",
+        "textures/gun2shoot/16gun2shoot.xpm",
+        "textures/gun2shoot/17gun2shoot.xpm",
+        "textures/gun2shoot/18gun2shoot.xpm",
+        "textures/gun2shoot/19gun2shoot.xpm",
+        "textures/gun2shoot/20gun2shoot.xpm",
+        "textures/gun2shoot/21gun2shoot.xpm",
+        "textures/gun2shoot/22gun2shoot.xpm",
+        "textures/gun2shoot/23gun2shoot.xpm",
+        "textures/gun2shoot/24gun2shoot.xpm",
+        "textures/gun2shoot/25gun2shoot.xpm",
+        "textures/gun2shoot/26gun2shoot.xpm",
+        "textures/gun2shoot/27gun2shoot.xpm"
+    };
+    int     i;
 
+    i = 0;
+    while (i < 27)
+    {
+        get_data()->gun2.shooting_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
+        if (!get_data()->gun2.shooting_frames[i])
+        {
+            print_err("Failed to load gun frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->gun2.current_frame = 0;
+    get_data()->gun2.frame_delay = 0;
+    get_data()->gun2.is_reloading = 0;
+    get_data()->gun2.is_shooting = 0;
+    get_data()->gun2.shooted = 0;
+}
 void    load_first_gun_frames(void)
 {
     char    *frame_paths[18] = {
@@ -149,7 +199,7 @@ void    load_first_gun_frames(void)
     }
     get_data()->gun.current_frame = 0;
     get_data()->gun.frame_delay = 0;
-    get_data()->gun.is_shooting = 0;
+    get_data()->gun.is_reloading = 0;
     get_data()->gun.shooted = 0;
 }
 
@@ -216,7 +266,7 @@ void    load_frames(void)
     }
     get_data()->gun2.current_frame = 0;
     get_data()->gun2.frame_delay = 0;
-    get_data()->gun2.is_shooting = 0;
+    get_data()->gun2.is_reloading = 0;
     get_data()->gun2.shooted = 0;
 }
 
@@ -231,7 +281,7 @@ void    render_gun(void)
 
     if (get_data()->gun_id == 0)
     {
-        if (get_data()->gun.is_shooting)
+        if (get_data()->gun.is_reloading)
         {
             if (get_data()->gun.frame_delay++ >= 2)  // Adjust delay value as needed
             {
@@ -240,7 +290,7 @@ void    render_gun(void)
                 if (get_data()->gun.current_frame >= 18) 
                 {
                     get_data()->gun.current_frame = 0;
-                    get_data()->gun.is_shooting = 0;
+                    get_data()->gun.is_reloading = 0;
                 }
             }
         }
@@ -252,7 +302,7 @@ void    render_gun(void)
 
     if (get_data()->gun_id == 1)
     {
-        if (get_data()->gun2.is_shooting)
+        if (get_data()->gun2.is_reloading)
         {
             if (get_data()->gun2.frame_delay++ >= 2)  // Adjust delay value as needed
             {
@@ -261,14 +311,34 @@ void    render_gun(void)
                 if (get_data()->gun2.current_frame >= 20) 
                 {
                     get_data()->gun2.current_frame = 0;
+                    get_data()->gun2.is_reloading = 0;
+                }
+            }
+            mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+                get_data()->gun2.img[get_data()->gun2.current_frame], 
+                gun_pos_x, gun_pos_y);
+        }
+        else if (get_data()->gun2.is_shooting)
+        {
+            if (get_data()->gun2.frame_delay++ >= 1)  // Adjust delay value as needed
+            {
+                get_data()->gun2.frame_delay = 1;
+                get_data()->gun2.current_frame++;
+                if (get_data()->gun2.current_frame >= 27) 
+                {
+                    get_data()->gun2.current_frame = 0;
                     get_data()->gun2.is_shooting = 0;
                 }
             }
+            // mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+            //     get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
+            //     WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
         }
+        if (get_data()->gun2.is_reloading == 0)
+             mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+            get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
+            WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
         // Render the current frame
-        mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
-            get_data()->gun2.img[get_data()->gun2.current_frame], 
-            gun_pos_x, gun_pos_y);
     }
     // Handle shooting animation
 }
@@ -287,7 +357,7 @@ int loop_hook(t_game *game)
 		render_walls();
 		render_minimap();
 		render_background();
-        mlx_mouse_hide();
+        // mlx_mouse_hide();
         if (!get_data()->show_scope)
 		render_gun();
         render_scope();
@@ -341,6 +411,7 @@ int main(int ac, char **av)
 	render_background();
 	load_frames();
     load_first_gun_frames();
+    load_shooting_gun2_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
