@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 04:40:36 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/18 17:41:53 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 //== const sizes =========
 
 # define WIN_HEIGHT 800
-# define WIN_WIDTH 1600 
+# define WIN_WIDTH 1600
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 80 
@@ -112,6 +112,7 @@ typedef struct s_img_data
 # define F_MAC 3 
 # define CNTRL_MAC 256
 # define TAB_MAC 48
+# define N_MAC 45
 
 # define W_LIN 119
 # define A_LIN 97
@@ -141,11 +142,13 @@ typedef struct s_img_data
 
 typedef struct s_gun {
     void    *img[20];        // Array to store gun frame images
+    void *shooting_frames[30];
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
     int     frame_delay;    // Delay counter for animation
-    int     is_shooting;    // Flag for shooting animation
+    int is_shooting;
+    int     is_reloading;    // Flag for shooting animation
     int     shooted;
 } t_gun;
 
@@ -282,6 +285,7 @@ typedef struct s_data
     int rotate_left;
     int rotate_right;
     int show_scope;
+    int is_tab_pressed;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
