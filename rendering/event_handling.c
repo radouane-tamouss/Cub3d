@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/17 22:15:21 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/18 02:17:23 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ void render_scope()
     {
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
     }
+}
+
+void render_tab()
+{
+    void *img[4];
+    // void *img[4];
+    int width;
+    int height;
+
+    img[0] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon1.xpm", &width, &height);
+    img[1] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon2.xpm", &width, &height);
+    img[2] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+    img[3] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+
+
+    if (get_data()->gun_id == 0 && get_data()->show_tab)
+        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+    else if (get_data()->gun_id == 1 && get_data()->show_tab)
+        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+    
+
 }
 void update_movement()
 {
@@ -112,6 +133,17 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun.is_shooting = 1;
         get_data()->gun.current_frame = 0;
         get_data()->gun.frame_delay = 0;
+        get_data()->gun_id = 0;
+        get_data()->show_tab = 1;
+    }
+    else if (keycode == Y_MAC)
+    {
+        get_data()->gun2.shooted = 1;
+        get_data()->gun2.is_shooting = 1;
+        get_data()->gun2.current_frame = 0;
+        get_data()->gun2.frame_delay = 0;
+        get_data()->gun_id = 1;
+        get_data()->show_tab = 1;
     }
 	else
 		return (0);
@@ -136,6 +168,8 @@ int key_release(int keycode, void *garbage)
         get_data()->rotate_left = 0;
     else if (keycode == Z_MAC)
         get_data()->show_scope = 0;
+    else if (keycode == T_MAC || keycode == Y_MAC)
+        get_data()->show_tab = 0;
     return (0);
 }
 
