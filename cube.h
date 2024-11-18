@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 02:17:38 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/18 02:48:44 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ typedef struct s_img_data
 # define T_MAC 17
 # define Y_MAC 16 
 # define Z_MAC 6
+# define CNTRL_MAC 256
+# define TAB_MAC 48
 
 # define W_LIN 119
 # define A_LIN 97
@@ -295,6 +297,7 @@ typedef struct s_data
 	int			width;
 	float		player_angle;//
 	t_vector	player_pos;
+    int is_control_pressed;
 	t_vector	player_dir;
 	t_vector	mouse_pos;
 	t_texture	minimap;

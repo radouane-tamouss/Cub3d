@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 02:17:23 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/18 02:43:06by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void render_tab()
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
     else if (get_data()->gun_id == 1 && get_data()->show_tab)
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+    usleep(100000);
+
     
 
 }
@@ -77,6 +79,11 @@ int	handle_keys(int keycode, void *garbage)
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
+    if (keycode == CNTRL_MAC)
+    {
+        get_data()->is_control_pressed = 1;
+        get_data()->show_tab = 1;
+    }
 	// else if (keycode == W_MAC)
 	// 	move_forward();
 	// else if (keycode == S_MAC)
@@ -133,8 +140,6 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun.is_shooting = 1;
         get_data()->gun.current_frame = 0;
         get_data()->gun.frame_delay = 0;
-        get_data()->gun_id = 0;
-        get_data()->show_tab = 1;
     }
     else if (keycode == Y_MAC)
     {
@@ -142,11 +147,14 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun2.is_shooting = 1;
         get_data()->gun2.current_frame = 0;
         get_data()->gun2.frame_delay = 0;
-        get_data()->gun_id = 1;
+    }
+    else if (keycode == TAB_MAC)
+    {
+        get_data()->gun_id++;
+        if (get_data()->gun_id >= 2)
+            get_data()->gun_id = 0;
         get_data()->show_tab = 1;
     }
-	else
-		return (0);
 	get_data()->is_updated = 1;
 	return (0);
 }
@@ -154,6 +162,10 @@ int	handle_keys(int keycode, void *garbage)
 int key_release(int keycode, void *garbage)
 {
     (void)garbage;
+    if (keycode == CNTRL_MAC)
+    {
+        get_data()->is_control_pressed = 0;
+    }
     if (keycode == W_MAC)
         get_data()->move_forward = 0;
     else if (keycode == S_MAC)
@@ -168,7 +180,7 @@ int key_release(int keycode, void *garbage)
         get_data()->rotate_left = 0;
     else if (keycode == Z_MAC)
         get_data()->show_scope = 0;
-    else if (keycode == T_MAC || keycode == Y_MAC)
+    else if (keycode == TAB_MAC)
         get_data()->show_tab = 0;
     return (0);
 }
