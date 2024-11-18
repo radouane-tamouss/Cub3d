@@ -67,11 +67,12 @@ void	init_data(t_game game)
 	mlx_hook(get_data()->win, 3, 1L << 1, key_release, NULL);// this to handle when a key released
 	mlx_hook(get_data()->win, 17, 1L << 0, ft_close, NULL);// this to handle when red arrow clicked
 	mlx_hook(get_data()->win, 6, 1L<<6, mouse_event, NULL);
+    get_data()->speed = 7;
 	get_data()->player_pos.x = game.player.pos_x * GRID_DIST + GRID_DIST/2;//1. * GRID_DIST;// TODO for test only
 	get_data()->player_pos.y =  game.player.pos_y * GRID_DIST + GRID_DIST/2;//1. * GRID_DIST;// TODO for test only
 	get_data()->player_angle = 0;//MY_PI / 4;
-	get_data()->player_dir.x = cos(get_data()->player_angle) * SPEED;
-	get_data()->player_dir.y = sin(get_data()->player_angle) * SPEED;
+	get_data()->player_dir.x = cos(get_data()->player_angle) * get_data()->speed;
+	get_data()->player_dir.y = sin(get_data()->player_angle) * get_data()->speed;
 
 	get_data()->map = game.map.grid;
 	get_data()->height = game.map.height;
@@ -286,7 +287,7 @@ int loop_hook(t_game *game)
 		render_walls();
 		render_minimap();
 		render_background();
-        // mlx_mouse_hide();
+        mlx_mouse_hide();
         if (!get_data()->show_scope)
 		render_gun();
         render_scope();

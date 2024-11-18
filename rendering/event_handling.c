@@ -47,7 +47,6 @@ void render_tab()
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
     else if (get_data()->gun_id == 1 && get_data()->show_tab)
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
-    usleep(100000);
 
     
 
@@ -148,6 +147,10 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun2.current_frame = 0;
         get_data()->gun2.frame_delay = 0;
     }
+    else if (keycode == F_MAC)
+    {
+        get_data()->speed = 22;
+    }
     else if (keycode == TAB_MAC)
     {
         get_data()->gun_id++;
@@ -182,6 +185,8 @@ int key_release(int keycode, void *garbage)
         get_data()->show_scope = 0;
     else if (keycode == TAB_MAC)
         get_data()->show_tab = 0;
+    else if (keycode == F_MAC)
+        get_data()->speed = 8;
     return (0);
 }
 
