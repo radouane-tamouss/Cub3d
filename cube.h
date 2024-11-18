@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 02:48:44 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/18 04:40:36 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 80 
 # define ZOOM 100
-# define SPEED 9
 
 
 # define SQUARE_SIZE 16 
@@ -110,6 +109,7 @@ typedef struct s_img_data
 # define T_MAC 17
 # define Y_MAC 16 
 # define Z_MAC 6
+# define F_MAC 3 
 # define CNTRL_MAC 256
 # define TAB_MAC 48
 
@@ -285,6 +285,7 @@ typedef struct s_data
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
+    int speed;
 	t_texture	west_img;
 	t_texture	door_img;
 
