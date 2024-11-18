@@ -228,7 +228,6 @@ void    render_gun(void)
     gun_pos_x = WIN_WIDTH / 2 - get_data()->gun.width / 2;
     gun_pos_y = WIN_HEIGHT - get_data()->gun.height + 4;
 
-    printf("get_data()->gun_id = %d\n", get_data()->gun_id);
     if (get_data()->gun_id == 0)
     {
         if (get_data()->gun.is_shooting)
@@ -254,7 +253,6 @@ void    render_gun(void)
     {
         if (get_data()->gun2.is_shooting)
         {
-            printf("render here please\n");
             if (get_data()->gun2.frame_delay++ >= 2)  // Adjust delay value as needed
             {
                 get_data()->gun2.frame_delay = 1;
