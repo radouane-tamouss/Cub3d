@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/17 21:06:52 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/18 02:17:38 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct s_img_data
 # define SPACE_MAC 49
 # define E_MAC 14
 # define T_MAC 17
+# define Y_MAC 16 
 # define Z_MAC 6
 
 # define W_LIN 119
@@ -137,7 +138,7 @@ typedef struct s_img_data
 
 
 typedef struct s_gun {
-    void    *img[18];        // Array to store gun frame images
+    void    *img[20];        // Array to store gun frame images
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
@@ -301,6 +302,9 @@ typedef struct s_data
 	int			dark_mode;
 	t_ray_data		front_ray;
     t_gun          gun;
+    t_gun         gun2;
+    int show_tab;
+    int gun_id;
     t_door          door;
 
 } t_data;
@@ -326,6 +330,7 @@ int	check_charset(char *charset, char c);
 t_game check_map(int fd, char *file);
 int check_file(char *str, int *fd);
 int check_if_player_direction(char c);
+void render_tab();
 
 //=======================================================
 //=== rendering =========================================
