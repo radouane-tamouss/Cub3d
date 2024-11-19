@@ -161,6 +161,86 @@ void    load_shooting_gun2_frames(void)
     get_data()->gun2.is_shooting = 0;
     get_data()->gun2.shooted = 0;
 }
+void load_running_gun2_frames(void)
+{
+    char *frame_paths[23] = {
+        "textures/running_gun2/1running_gun2.xpm",
+        "textures/running_gun2/2running_gun2.xpm",
+        "textures/running_gun2/3running_gun2.xpm",
+        "textures/running_gun2/4running_gun2.xpm",
+        "textures/running_gun2/5running_gun2.xpm",
+        "textures/running_gun2/6running_gun2.xpm",
+        "textures/running_gun2/7running_gun2.xpm",
+        "textures/running_gun2/8running_gun2.xpm",
+        "textures/running_gun2/9running_gun2.xpm",
+        "textures/running_gun2/10running_gun2.xpm",
+        "textures/running_gun2/11running_gun2.xpm",
+        "textures/running_gun2/12running_gun2.xpm",
+        "textures/running_gun2/13running_gun2.xpm",
+        "textures/running_gun2/14running_gun2.xpm",
+        "textures/running_gun2/15running_gun2.xpm",
+        "textures/running_gun2/16running_gun2.xpm",
+        "textures/running_gun2/17running_gun2.xpm",
+        "textures/running_gun2/18running_gun2.xpm",
+        "textures/running_gun2/19running_gun2.xpm",
+        "textures/running_gun2/20running_gun2.xpm",
+        "textures/running_gun2/21running_gun2.xpm",
+        "textures/running_gun2/22running_gun2.xpm",
+        "textures/running_gun2/23running_gun2.xpm"
+    };
+
+    int i;
+    i = 0;
+
+    while(i < 23)
+    {
+        get_data()->gun2.running_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
+        if (!get_data()->gun2.running_frames[i])
+        {
+            print_err("Failed to load gun frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->gun2.current_frame = 0;
+    get_data()->gun2.frame_delay = 0;
+}
+void load_walking_gun2_frames(void)
+{
+    char *frame_paths[13] = {
+        "textures/moving_gun2_slow/1walk.xpm",
+        "textures/moving_gun2_slow/2walk.xpm",
+        "textures/moving_gun2_slow/3walk.xpm",
+        "textures/moving_gun2_slow/4walk.xpm",
+        "textures/moving_gun2_slow/5walk.xpm",
+        "textures/moving_gun2_slow/6walk.xpm",
+        "textures/moving_gun2_slow/7walk.xpm",
+        "textures/moving_gun2_slow/8walk.xpm",
+        "textures/moving_gun2_slow/9walk.xpm",
+        "textures/moving_gun2_slow/10walk.xpm",
+        "textures/moving_gun2_slow/11walk.xpm",
+        "textures/moving_gun2_slow/12walk.xpm",
+        "textures/moving_gun2_slow/13walk.xpm"
+    };
+
+    int i;
+    i = 0;
+
+    while(i < 13)
+    {
+        get_data()->gun2.walking_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
+        if (!get_data()->gun2.walking_frames[i])
+        {
+            print_err("Failed to load gun frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->gun2.current_frame = 0;
+    get_data()->gun2.frame_delay = 0;
+}
 void    load_first_gun_frames(void)
 {
     char    *frame_paths[18] = {
@@ -334,10 +414,40 @@ void    render_gun(void)
             //     get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
             //     WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
         }
-        if (get_data()->gun2.is_reloading == 0)
-             mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
-            get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
-            WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+        else if (get_data()->is_walking)
+        {
+            if (get_data()->gun2.frame_delay++ >= 2)  // Adjust delay value as needed
+            {
+                get_data()->gun2.frame_delay = 1;
+                get_data()->gun2.current_frame++;
+                if (get_data()->gun2.current_frame >= 13) 
+                {
+                    get_data()->gun2.current_frame = 0;
+                }
+            }
+            mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+                get_data()->gun2.walking_frames[get_data()->gun2.current_frame], 
+                WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+        }
+        else if (get_data()->is_running)
+        {
+            if (get_data()->gun2.frame_delay++ >= 2)  // Adjust delay value as needed
+            {
+                get_data()->gun2.frame_delay = 1;
+                get_data()->gun2.current_frame++;
+                if (get_data()->gun2.current_frame >= 22) 
+                {
+                    get_data()->gun2.current_frame = 1;
+                }
+            }
+            mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+                get_data()->gun2.running_frames[get_data()->gun2.current_frame], 
+                WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+        }
+        if (get_data()->gun2.is_reloading == 0  && get_data()->is_walking == 0 && get_data()->is_running == 0)
+                mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+                get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
+                WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
         // Render the current frame
     }
     // Handle shooting animation
@@ -412,6 +522,10 @@ int main(int ac, char **av)
 	load_frames();
     load_first_gun_frames();
     load_shooting_gun2_frames();
+    load_walking_gun2_frames();
+    load_first_gun_frames();
+    load_shooting_gun2_frames();
+    load_running_gun2_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
