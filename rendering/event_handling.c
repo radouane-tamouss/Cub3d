@@ -91,7 +91,20 @@ int	handle_keys(int keycode, void *garbage)
 	// 	move_right();
 	// else if (keycode == A_MAC)
 	// 	move_left();
-    else if (keycode == W_MAC)
+    if (keycode == W_MAC || keycode == S_MAC || keycode == D_MAC || keycode == A_MAC)
+    {
+        if (get_data()->speed >= 10)
+        {
+            get_data()->is_running = 1;
+            get_data()->is_walking = 0;
+        }
+        else
+        {
+            get_data()->is_running = 0;
+            get_data()->is_walking = 1;
+        }
+    }
+    if (keycode == W_MAC)
         get_data()->move_forward = 1;
     else if (keycode == S_MAC)
         get_data()->move_backward = 1;
@@ -154,11 +167,13 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun2.current_frame = 0;
         get_data()->gun2.frame_delay = 0;
         get_data()->gun2.is_reloading = 0;
+        get_data()->is_running = 0;
+        get_data()->is_walking = 0;
 
     }
-    else if (keycode == F_MAC)
+    else if (keycode == SHIFT_MAC)
     {
-        get_data()->speed = 22;
+        get_data()->speed = 15;
     }
     else if (keycode == TAB_MAC && !get_data()->is_tab_pressed)
     {
@@ -198,8 +213,18 @@ int key_release(int keycode, void *garbage)
         get_data()->is_tab_pressed = 0;
         get_data()->show_tab = 0;
     }
-    else if (keycode == F_MAC)
+    else if (keycode == SHIFT_MAC)
         get_data()->speed = 8;
+    if (keycode == W_MAC || keycode == S_MAC || keycode == D_MAC || keycode == A_MAC)
+    {
+        if (get_data()->move_backward == 0 && get_data()->move_forward == 0 && get_data()->move_left == 0 && get_data()->move_right == 0)
+        {
+            get_data()->is_running = 0;
+            get_data()->is_walking = 0;
+            get_data()->gun2.current_frame = 0;
+            get_data()->gun2.frame_delay = 0;
+        }
+    }
     return (0);
 }
 

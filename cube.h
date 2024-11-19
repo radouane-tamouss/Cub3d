@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 17:41:53 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/19 03:39:10 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ typedef struct s_img_data
 # define Z_MAC 6
 # define F_MAC 3 
 # define CNTRL_MAC 256
+# define SHIFT_MAC 257
 # define TAB_MAC 48
 # define N_MAC 45
 
@@ -143,6 +144,9 @@ typedef struct s_img_data
 typedef struct s_gun {
     void    *img[20];        // Array to store gun frame images
     void *shooting_frames[30];
+    void *walking_frames[13];
+    void *running_frames[23];
+
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
@@ -301,11 +305,14 @@ typedef struct s_data
 	int			height;
 	int			width;
 	float		player_angle;//
+    int player_is_moving;
 	t_vector	player_pos;
     int is_control_pressed;
 	t_vector	player_dir;
 	t_vector	mouse_pos;
 	t_texture	minimap;
+    int is_walking;
+    int is_running;
 	int			is_updated;
 	int			dark_mode;
 	t_ray_data		front_ray;
