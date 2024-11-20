@@ -26,9 +26,13 @@ void render_scope()
     img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
     if (get_data()->show_scope)
     {
-        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+        // mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+        render_transparent_frame(img, width, height);
+        printf("scope showed!\n");
+        
     }
 }
+
 
 void render_tab()
 {
@@ -42,15 +46,12 @@ void render_tab()
     img[2] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
     img[3] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
 
-
     if (get_data()->gun_id == 0 && get_data()->show_tab)
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
     else if (get_data()->gun_id == 1 && get_data()->show_tab)
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
-
-    
-
 }
+
 void update_movement()
 {
     if (get_data()->move_forward)
@@ -73,46 +74,46 @@ int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
 	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC_MAC)
+	if (keycode == ESC_LIN)
 	{
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
 		exiter(0);
 	}
-    if (keycode == CNTRL_MAC)
+    if (keycode == CNTRL_LIN)
     {
         get_data()->is_control_pressed = 1;
         get_data()->show_tab = 1;
     }
-	// else if (keycode == W_MAC)
+	// else if (keycode == W_LIN)
 	// 	move_forward();
-	// else if (keycode == S_MAC)
+	// else if (keycode == S_LIN)
 	// 	move_backward();
-	// else if (keycode == D_MAC)
+	// else if (keycode == D_LIN)
 	// 	move_right();
-	// else if (keycode == A_MAC)
+	// else if (keycode == A_LIN)
 	// 	move_left();
-    else if (keycode == W_MAC)
+    else if (keycode == W_LIN)
         get_data()->move_forward = 1;
-    else if (keycode == S_MAC)
+    else if (keycode == S_LIN)
         get_data()->move_backward = 1;
-    else if (keycode == D_MAC)
+    else if (keycode == D_LIN)
         get_data()->move_right = 1;
-    else if (keycode == A_MAC)
+    else if (keycode == A_LIN)
         get_data()->move_left = 1;
-	if (keycode == RIGHT_MAC)
+	if (keycode == RIGHT_LIN)
 		// rotate_player(2.  * (MY_PI / (float)180));
         get_data()->rotate_right = 1;
-	else if (keycode == LEFT_MAC)
+	else if (keycode == LEFT_LIN)
 		// rotate_player(-2.  * (MY_PI / (float)180));
         get_data()->rotate_left = 1;
-	else if (keycode == SPACE_MAC)
+	else if (keycode == SPACE_LIN)
 	{
 		if (get_data()->dark_mode == 1)
 			get_data()->dark_mode = 0;
 		else
 			get_data()->dark_mode = 1;
 	}
-	else if (keycode == E_MAC)
+	else if (keycode == E_LIN)
 	{
     
         if (get_data()->front_ray.dist < 2 * GRID_DIST)
@@ -129,25 +130,25 @@ int	handle_keys(int keycode, void *garbage)
     
         get_data()->is_updated = 1;
 	}
-    else if (keycode == Z_MAC)
+    else if (keycode == Z_LIN)
     {
         get_data()->show_scope = 1;
     }
-	else  if (keycode == T_MAC)  // Add proper key define if needed
+	else  if (keycode == T_LIN)  // Add proper key define if needed
     {
 		get_data()->gun.shooted = 1;
         get_data()->gun.is_reloading = 1;
         get_data()->gun.current_frame = 0;
         get_data()->gun.frame_delay = 0;
     }
-    else if (keycode == Y_MAC)
+    else if (keycode == Y_LIN)
     {
         get_data()->gun2.shooted = 1;
         get_data()->gun2.is_reloading = 1;
         get_data()->gun2.current_frame = 0;
         get_data()->gun2.frame_delay = 0;
     }
-    else if (keycode == N_MAC)
+    else if (keycode == N_LIN)
     {
         printf("n pressed\n");
         get_data()->gun2.is_shooting = 1;
@@ -156,11 +157,11 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun2.is_reloading = 0;
 
     }
-    else if (keycode == F_MAC)
+    else if (keycode == F_LIN)
     {
         get_data()->speed = 22;
     }
-    else if (keycode == TAB_MAC && !get_data()->is_tab_pressed)
+    else if (keycode == TAB_LIN && !get_data()->is_tab_pressed)
     {
         // get_data()->gun_id++;
         // if (get_data()->gun_id >= 2)
@@ -175,30 +176,30 @@ int	handle_keys(int keycode, void *garbage)
 int key_release(int keycode, void *garbage)
 {
     (void)garbage;
-    if (keycode == CNTRL_MAC)
+    if (keycode == CNTRL_LIN)
     {
         get_data()->is_control_pressed = 0;
     }
-    if (keycode == W_MAC)
+    if (keycode == W_LIN)
         get_data()->move_forward = 0;
-    else if (keycode == S_MAC)
+    else if (keycode == S_LIN)
         get_data()->move_backward = 0;
-    else if (keycode == D_MAC)
+    else if (keycode == D_LIN)
         get_data()->move_right = 0;
-    else if (keycode == A_MAC)
+    else if (keycode == A_LIN)
         get_data()->move_left = 0;
-    if (keycode == RIGHT_MAC)
+    if (keycode == RIGHT_LIN)
         get_data()->rotate_right = 0;
-    else if (keycode == LEFT_MAC)
+    else if (keycode == LEFT_LIN)
         get_data()->rotate_left = 0;
-    else if (keycode == Z_MAC)
+    else if (keycode == Z_LIN)
         get_data()->show_scope = 0;
-    else if (keycode == TAB_MAC)
+    else if (keycode == TAB_LIN)
     {
         get_data()->is_tab_pressed = 0;
         get_data()->show_tab = 0;
     }
-    else if (keycode == F_MAC)
+    else if (keycode == F_LIN)
         get_data()->speed = 8;
     return (0);
 }
