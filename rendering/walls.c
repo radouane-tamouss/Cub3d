@@ -2,11 +2,12 @@
 // this init the direction (vector) of the ray
 void init_ray_dir(t_ray_data *ray, float ray_angle)
 {
-ray->angle = ray_angle;
+    ray->angle = ray_angle;
     ray->ray_dir.x = cos(ray_angle);
     ray->ray_dir.y = sin(ray_angle);
     ray->map_x = (int)(get_data()->player_pos.x / GRID_DIST);
     ray->map_y = (int)(get_data()->player_pos.y / GRID_DIST);
+    // ray->will_render_above = NULL;
 }
 // calc the delta that we need to travel to hit the intersact with the next line of grid
 void calc_delta_dist(t_ray_data *ray)
@@ -55,60 +56,71 @@ void	calculate_distance(t_ray_data *ray)
         ray->dist = (ray->side_dist.x - ray->delta_dist.x) * GRID_DIST;
     else
         ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
-    // ray->dist *= cos(ray->angle - get_data()->player_angle);    
+    // ray->dist *= cos(ray->angle - get_data()->player_angle);
 }
 
-void perform_dda(t_ray_data *ray)
+void draw_col(t_ray_data ray, int col);
+
+void perform_dda(t_ray_data ray, int data_taken, int col)
 {
-    int data_taken = 0;
+    // int data_taken = 0;
     while (1)
     {
-        if (ray->side_dist.x < ray->side_dist.y)
+        if (ray.side_dist.x < ray.side_dist.y)
         {
-            ray->side_dist.x += ray->delta_dist.x;
-            ray->map_x += ray->step_x;
-            ray->side = 0;
+            ray.side_dist.x += ray.delta_dist.x;
+            ray.map_x += ray.step_x;
+            ray.side = 0;
         }
         else
         {
-            ray->side_dist.y += ray->delta_dist.y;
-            ray->map_y += ray->step_y;
-            ray->side = 1;
+            ray.side_dist.y += ray.delta_dist.y;
+            ray.map_y += ray.step_y;
+            ray.side = 1;
         }
         
-        char current_tile = get_data()->map[ray->map_y][ray->map_x];
+        char current_tile = get_data()->map[ray.map_y][ray.map_x];
         
         if (current_tile == '1')
         {
-            ray->object_hitted = 0; // hit a wall
-            if (!data_taken && ray->angle == get_data()->player_angle)
+            ray.object_hitted = 0; // hit a wall
+            if (!data_taken && ray.angle == get_data()->player_angle)
             {
-                get_data()->front_ray = *ray;
+                get_data()->front_ray = ray;
                 calculate_distance(&(get_data()->front_ray));
                 data_taken = 1;
             }
+            calculate_distance(&ray);
+            draw_col(ray, col);
             return;
         }
         else if (current_tile == 'D') // Closed door
         {
-            ray->object_hitted = 1; // hit a closed door
-            if (!data_taken && ray->angle == get_data()->player_angle)
+            ray.object_hitted = 1; // hit a closed door
+            if (!data_taken && ray.angle == get_data()->player_angle)
             {
-                get_data()->front_ray = *ray;
+                get_data()->front_ray = ray;
                 calculate_distance(&(get_data()->front_ray));
                 data_taken = 1;
             }
-            return;
+            perform_dda(ray, data_taken, col);///
+            calculate_distance(&ray);
+            draw_col(ray, col);
+            return;//TODO instead of returning make linked list of overlaped objects or use recurtion to draw
         }
         else if (current_tile == 'O') // Open door - we'll use 'O' for open doors
         {
-            if (!data_taken && ray->angle == get_data()->player_angle)
+            if (!data_taken && ray.angle == get_data()->player_angle)
             {
-                ray->object_hitted = 2; // hit an open door
-                get_data()->front_ray = *ray;
+                ray.object_hitted = 2; // hit an open door
+                get_data()->front_ray = ray;
                 calculate_distance(&(get_data()->front_ray));
                 data_taken = 1;
             }
+            perform_dda(ray, data_taken, col);///
+            // calculate_distance(&ray);//
+            // draw_col(ray, col);//
+            return;//
             // Don't return, continue raycasting through open door
         }
     }
@@ -116,7 +128,7 @@ void perform_dda(t_ray_data *ray)
 
 
 // casting the ray and grab all wanted data (coords of wall, side, ...)
-t_ray_data cast_ray(float ray_angle)
+t_ray_data cast_ray(float ray_angle, int col)
 {
     t_ray_data ray;
 
@@ -125,8 +137,8 @@ t_ray_data cast_ray(float ray_angle)
     calc_delta_dist(&ray);
     calc_step_and_side_dist_x(&ray);
     calc_step_and_side_dist_y(&ray);
-    perform_dda(&ray);
-	calculate_distance(&ray);
+    perform_dda(ray, 0, col);
+	// calculate_distance(&ray);//
     return ray;
 }
 
@@ -174,7 +186,7 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
     return (pull_pixel(texture, pixel_x, (int)pixel_y));
 }
 
-// this will find the texture later
+// this will find the texture
 int calc_color(t_ray_data ray, int start, int i, int end)
 {
     int projected_wall;
@@ -182,6 +194,8 @@ int calc_color(t_ray_data ray, int start, int i, int end)
 
     projected_wall = end - start;
 	color = get_right_pixel(i, ray);
+    if (GET_T(color) == 255)
+        return (color);
 	if (get_data()->dark_mode)
 		color = CREATE_TRGB(0,
 			((int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
@@ -197,8 +211,8 @@ void draw_col(t_ray_data ray, int col)
 	int start;
 	int end;
 	int i;
-
-	ray.wall_height = (GRID_DIST / ray.dist) * ((WIN_WIDTH / 2) / tan(FOV / 2));
+ 
+	ray.wall_height = (GRID_DIST / (ray.dist * cos(ray.angle - get_data()->player_angle))) * ((WIN_WIDTH / 2) / tan(FOV / 2));
 	start = (WIN_HEIGHT - (int)ray.wall_height) / 2;
 	end = start + (int)ray.wall_height;
 	if (start < 0)
@@ -211,6 +225,8 @@ void draw_col(t_ray_data ray, int col)
         put_pixel(&(get_data()->background_img), col, i, calc_color(ray, start, i, end));
 		i++;
 	}
+    // if (ray.angle == get_data()->player_angle)
+        // printf("object --> %d  , dist -> %f, wall_height => %f ||| start %d - end %d\n", ray.object_hitted, ray.dist, ray.wall_height, start, end);
 }
 
 // will calc the angle of the ray then cast to the wall and calc the dist
@@ -221,8 +237,9 @@ void render_col(int col)
 	int color;
 
 	ray_angle = normalise_angle(get_data()->player_angle - (FOV/2) + (col * (FOV/WIN_WIDTH)));
-	ray = cast_ray(ray_angle);
-    draw_col(ray, col);
+	// ray = cast_ray(ray_angle);
+    cast_ray(ray_angle, col);
+    // draw_col(ray, col);
 }
 
 // this will draw the the walls on the background img (it will not put it to window)
@@ -231,6 +248,7 @@ void	render_walls(void)
 	int i;
 
 	i = 0;
+    render_background();
 	while (i < WIN_WIDTH)
 	{
 		render_col(i++);// render each column of the window

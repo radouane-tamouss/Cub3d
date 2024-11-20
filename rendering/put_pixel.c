@@ -19,7 +19,7 @@ void	put_pixel(t_img_data *img, int x, int y, int color)
 	int				offset;
 	unsigned int	*ptr;
 
-	if (y >= WIN_HEIGHT || x >= WIN_WIDTH || x < 0 || y < 0)
+	if (y >= WIN_HEIGHT || x >= WIN_WIDTH || x < 0 || y < 0 || GET_T(color) == 255)
 		return ;
 	offset = y * img->line_length + x * (img->bits_per_pixel / 8);
 	dst = img->addr + offset;
