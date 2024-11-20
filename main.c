@@ -100,7 +100,7 @@ void	init_data(t_game game)
 	get_data()->west_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/west.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
 	get_data()->west_img.img_data.addr = mlx_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
 	//===
-	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/1door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
+	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/10door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
 	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 
 
@@ -352,8 +352,8 @@ int loop_hook(t_game *game)
 {
 	if (get_data()->is_updated)
 	{
-		init_background();
         update_movement();
+		init_background();
 		render_walls();
 		render_minimap();
 		render_background();
@@ -392,7 +392,7 @@ int loop_hook(t_game *game)
         }
 
 	}
-
+    get_data()->is_updated = 0;
     return (0);
 }
 
@@ -408,7 +408,7 @@ int main(int ac, char **av)
 	init_data(game);
 	init_background();
 	render_walls();
-	render_background();
+	render_background(); 
 	load_frames();
     load_first_gun_frames();
     load_shooting_gun2_frames();

@@ -269,7 +269,8 @@ typedef struct s_ray_data {
 	float	angle;
 	float	dist;
 	float	wall_height;
-	int		object_hitted;// wall 0 or door 1
+	int		object_hitted;// wall 0     &     close door 1      &     open door 2
+    // struct s_ray_data   *will_render_above;// list of thing that will render above each other (example: door will render above another door that will render above a wall)
 } t_ray_data;
 //==== data =================
 
