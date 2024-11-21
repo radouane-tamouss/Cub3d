@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/19 03:39:10 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/21 03:53:55 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,13 @@ typedef struct s_img_data
 # define DOWN_LIN 65364
 # define E_LIN 101
 # define T_LIN 116
+# define Y_LIN 121
+# define Z_LIN 122
+# define F_LIN 102
+# define CNTRL_LIN 65507
+# define TAB_LIN 65289
+# define N_LIN 110
+# define SHIFT_LIN 65505
 # define SPACE_LIN 32
 
 
@@ -346,6 +353,7 @@ t_game check_map(int fd, char *file);
 int check_file(char *str, int *fd);
 int check_if_player_direction(char c);
 void render_tab();
+void render_transparent_frame(void *frame_img, int width, int height);
 
 //=======================================================
 //=== rendering =========================================
