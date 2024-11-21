@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   libft.h                                            :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/11/02 17:52:19 by rtamouss      #+#    #+#                 */
-/*   Updated: 2024/09/29 12:49:14 by rtamouss      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   libft.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/11/02 17:52:19 by rtamouss          #+#    #+#             */
+/*   Updated: 2024/11/21 01:25:41 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <stdio.h>
+#include "../../garbage_collector/heap_controller.h"
 
 typedef struct s_list
 {

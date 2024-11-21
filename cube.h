@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/17 21:06:52 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:26:12 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@
 # include <mlx.h>
 # include <math.h>
 # include <limits.h>
+#include "garbage_collector/heap_controller.h" //=== garbage collector
 
 //== const sizes =========
 
 # define WIN_HEIGHT 800
-# define WIN_WIDTH 1600 
+# define WIN_WIDTH 1600
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 80 
 # define ZOOM 100
-# define SPEED 9
 
 
 # define SQUARE_SIZE 16 
@@ -43,6 +43,8 @@
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
 //=== buttons ====
+# define TAB 65289
+# define CTRL 65507
 # define ESC 65307
 # define Q 113
 # define W 119
@@ -56,6 +58,8 @@
 # define F 102
 # define C 99
 # define V 118
+# define F 102
+# define R 114
 # define UP_ARROW 65362
 # define DOWN_ARROW 65364
 # define RIGHT_ARROW 65363
@@ -108,7 +112,12 @@ typedef struct s_img_data
 # define SPACE_MAC 49
 # define E_MAC 14
 # define T_MAC 17
+# define Y_MAC 16 
 # define Z_MAC 6
+# define F_MAC 3 
+# define CNTRL_MAC 256
+# define TAB_MAC 48
+# define N_MAC 45
 
 # define W_LIN 119
 # define A_LIN 97
@@ -137,12 +146,14 @@ typedef struct s_img_data
 
 
 typedef struct s_gun {
-    void    *img[18];        // Array to store gun frame images
+    void    *img[20];        // Array to store gun frame images
+    void *shooting_frames[30];
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
     int     frame_delay;    // Delay counter for animation
-    int     is_shooting;    // Flag for shooting animation
+    int is_shooting;
+    int     is_reloading;    // Flag for shooting animation
     int     shooted;
 } t_gun;
 
@@ -263,7 +274,8 @@ typedef struct s_ray_data {
 	float	angle;
 	float	dist;
 	float	wall_height;
-	int		object_hitted;// wall 0 or door 1
+	int		object_hitted;// wall 0     &     close door 1      &     open door 2
+    // struct s_ray_data   *will_render_above;// list of thing that will render above each other (example: door will render above another door that will render above a wall)
 } t_ray_data;
 //==== data =================
 
@@ -279,9 +291,11 @@ typedef struct s_data
     int rotate_left;
     int rotate_right;
     int show_scope;
+    int is_tab_pressed;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
+    int speed;
 	t_texture	west_img;
 	t_texture	door_img;
 
@@ -294,6 +308,7 @@ typedef struct s_data
 	int			width;
 	float		player_angle;//
 	t_vector	player_pos;
+    int is_control_pressed;
 	t_vector	player_dir;
 	t_vector	mouse_pos;
 	t_texture	minimap;
@@ -301,18 +316,12 @@ typedef struct s_data
 	int			dark_mode;
 	t_ray_data		front_ray;
     t_gun          gun;
+    t_gun         gun2;
+    int show_tab;
+    int gun_id;
     t_door          door;
 
 } t_data;
-
-
-//==== struct of HEAP CONTROLLER ==
-
-typedef struct	s_heap
-{
-	void	*ptr;
-	struct s_heap	*next;
-} t_heap;
 
 //=================================
 t_data	*get_data(void);
@@ -326,6 +335,7 @@ int	check_charset(char *charset, char c);
 t_game check_map(int fd, char *file);
 int check_file(char *str, int *fd);
 int check_if_player_direction(char c);
+void render_tab();
 
 //=======================================================
 //=== rendering =========================================
@@ -357,11 +367,7 @@ void render_scope();
 
 void	render_walls(void);
 void render_minimap(void);
-//=== garbage collector =================================
 
-void	*mallocate(size_t size);
-void	free_all_heap(void);
-void	ft_free(void *ptr);
 //=== utils =============================================
 
 void print_err(char *str);

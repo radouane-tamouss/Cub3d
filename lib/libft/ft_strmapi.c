@@ -22,7 +22,7 @@ char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 		return (NULL);
 	i = 0;
 	len = ft_strlen(s);
-	ptr = (char *)malloc(len + 1);
+	ptr = (char *)mallocate(len + 1);
 	if (!ptr)
 		return (NULL);
 	while (i < len)

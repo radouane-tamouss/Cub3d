@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotation.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 17:52:30 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/01 02:24:34 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/18 04:39:21 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ void	rotate_player(float angle)
 
 	new_angle = normalise_angle(get_data()->player_angle + angle);
 	// old_dir = get_data()->player_dir;
-	new_dir.x = cos(new_angle) * SPEED;
-	new_dir.y = sin(new_angle) * SPEED;
+	new_dir.x = cos(new_angle) * get_data()->speed;
+	new_dir.y = sin(new_angle) * get_data()->speed;
 
 	get_data()->player_angle = new_angle;
 	get_data()->player_dir = new_dir;

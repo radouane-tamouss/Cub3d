@@ -62,7 +62,7 @@ int	main(void)
 		while (j < background.width)
 		{
 			color = pull_pixel(hand, j, i);
-			if (color != WHITE)
+			if (color != BLACK)
 				put_pixel(&(background.img_data), j, i, color);
 			j++;
 		}
