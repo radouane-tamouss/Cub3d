@@ -42,7 +42,7 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 // 	int		i;
 
 // 	str = (char *)content;
-// 	new_str = malloc(ft_strlen(str) + 1);
+// 	new_str = mallocate(ft_strlen(str) + 1);
 // 	if (!new_str)
 // 		return (NULL);
 // 	i = 0;

@@ -17,21 +17,18 @@ int	ft_close(void)
 	exiter(0);
 	return (0);
 }
-void render_scope()
-{
-    void *img;
-    int width;
-    int height;
+// void render_scope()
+// {
+//     void *img;
+//     int width;
+//     int height;
 
-    img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
-    if (get_data()->show_scope)
-    {
-        // mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
-        render_transparent_frame(img, width, height);
-        printf("scope showed!\n");
-        
-    }
-}
+//     img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
+//     if (get_data()->show_scope)
+//     {
+//         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+//     }
+// }
 
 
 void render_tab()
@@ -75,9 +72,11 @@ int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
 	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC_LIN)
+	if (keycode == ESC)
 	{
+		// fprintf(stderr , "==========heeeereeeeee\n");//
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
+
 		exiter(0);
 	}
     if (keycode == CNTRL_LIN)

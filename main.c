@@ -119,7 +119,7 @@ void render_gun_with_transparency(void)
 //             print_err("Failed to load door frame\n");
 //             exiter(1);
 //         }
-//         free(frame_paths[i]);
+//         free_ptr(frame_paths[i]);
 //         i++;
 //     }
 //     get_data()->door.current_frame = 0;
@@ -182,7 +182,7 @@ void	init_data(t_game game)
 	get_data()->west_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/west.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
 	get_data()->west_img.img_data.addr = mlx_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
 	//===
-	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/1door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
+	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/10door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
 	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 
 
@@ -565,8 +565,8 @@ int loop_hook(t_game *game)
     }
 	if (get_data()->is_updated)
 	{
-		init_background();
         update_movement();
+		init_background();
 		render_walls();
         // render_scope();
 		render_minimap();
@@ -576,34 +576,34 @@ int loop_hook(t_game *game)
 		        render_gun();
             // render_gun_with_transparency();
         // render_scope();
-    	if (get_data()->front_ray.object_hitted == 2 && 
-        	get_data()->front_ray.dist < 2 * GRID_DIST)
-        {
-            int text_width = 200;
-            int text_height = 20;
-            int text_x = (WIN_WIDTH - text_width) / 2;
-            int text_y = WIN_HEIGHT - text_height - 10;
+    	// if (get_data()->front_ray.object_hitted == 2 && 
+        // 	get_data()->front_ray.dist < 2 * GRID_DIST)
+        // {
+        //     int text_width = 200;
+        //     int text_height = 20;
+        //     int text_x = (WIN_WIDTH - text_width) / 2;
+        //     int text_y = WIN_HEIGHT - text_height - 10;
 
-            // Draw white text
-            mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to close the door]");
-        }
-        if (get_data()->front_ray.object_hitted == 1 && get_data()->front_ray.dist < 2 * GRID_DIST)
-        {
-            int text_width = 200;
-            int text_height = 20;
-            int text_x = (WIN_WIDTH - text_width) / 2;
-            int text_y = WIN_HEIGHT - text_height - 10;
+        //     // Draw white text
+        //     mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to close the door]");
+        // }
+        // if (get_data()->front_ray.object_hitted == 1 && get_data()->front_ray.dist < 2 * GRID_DIST)
+        // {
+        //     int text_width = 200;
+        //     int text_height = 20;
+        //     int text_x = (WIN_WIDTH - text_width) / 2;
+        //     int text_y = WIN_HEIGHT - text_height - 10;
 
-            // Draw white text
-            mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to open the door]");
-        }
-        if (get_data()->gun.shooted == 0 && !player_is_close_to_door())
-        {
-            int text_x = (WIN_WIDTH - 200) / 2;
-            int text_y = WIN_HEIGHT - 20 - 10;
-            // Draw white text
-            mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press T to reload the gun]");
-        }
+        //     // Draw white text
+        //     mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to open the door]");
+        // }
+        // if (get_data()->gun.shooted == 0 && !player_is_close_to_door())
+        // {
+        //     int text_x = (WIN_WIDTH - 200) / 2;
+        //     int text_y = WIN_HEIGHT - 20 - 10;
+        //     // Draw white text
+        //     mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press T to reload the gun]");
+        // }
 
 	}
     return (0);
