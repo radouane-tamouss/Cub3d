@@ -216,14 +216,20 @@ int mouse_event(int x, int y, void *par)
     if (get_data()->is_tab_pressed) 
     {
         printf("x=>%d  , y => %d\n", x, y);
-        if (y < 400 || y > 700 || x < 300 || y > 1460)// the y cors should be =---=> 400 to 700 and x shold be   betwen 150 and 1460
+        if (y < 488 || y > 680 || x < 270 || y > 1327   )// the y cors should be =---=> 400 to 700 and x shold be   betwen 150 and 1460
             return (0);
-        if (x < 499)// X from 150 to ---------------> 470
+        if (x < 460)// X from 150 to ---------------> 470
             get_data()->gun_id = 0;
-        else if (x < 600)// X from 470 to ---------------> 800
+        // else if (x < 670)// X from 470 to ---------------> 800
+        else
             get_data()->gun_id = 1;
-            
-        // X from 800 to ---------------> 1130
+        // else if (x < 870)
+        //     get_data()->gun_id = 2;
+        // else if (x < 1125)
+        //     get_data()->gun_id = 3;
+        // else
+        //     get_data()->gun_id = 4;
+        //X from 800 to ---------------> 1130
         // X from 1130 to ---------------> 1460
     }
     else
