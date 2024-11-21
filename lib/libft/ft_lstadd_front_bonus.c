@@ -19,8 +19,8 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 }
 
 // int	main(void)
-// {
-// 	t_list *n = malloc(sizeof(t_list));
+// {mallocate
+// 	t_list *n = mallocate(sizeof(t_list));
 // 	t_list *n2 = ft_lstnew("world");
 // 	n -> content = "hello";
 // 	n -> next = NULL;

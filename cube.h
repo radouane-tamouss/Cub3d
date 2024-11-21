@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 17:41:53 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:26:12 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <mlx.h>
 # include <math.h>
 # include <limits.h>
+#include "garbage_collector/heap_controller.h" //=== garbage collector
 
 //== const sizes =========
 
@@ -42,6 +43,8 @@
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
 //=== buttons ====
+# define TAB 65289
+# define CTRL 65507
 # define ESC 65307
 # define Q 113
 # define W 119
@@ -55,6 +58,8 @@
 # define F 102
 # define C 99
 # define V 118
+# define F 102
+# define R 114
 # define UP_ARROW 65362
 # define DOWN_ARROW 65364
 # define RIGHT_ARROW 65363
@@ -318,15 +323,6 @@ typedef struct s_data
 
 } t_data;
 
-
-//==== struct of HEAP CONTROLLER ==
-
-typedef struct	s_heap
-{
-	void	*ptr;
-	struct s_heap	*next;
-} t_heap;
-
 //=================================
 t_data	*get_data(void);
 
@@ -371,11 +367,7 @@ void render_scope();
 
 void	render_walls(void);
 void render_minimap(void);
-//=== garbage collector =================================
 
-void	*mallocate(size_t size);
-void	free_all_heap(void);
-void	ft_free(void *ptr);
 //=== utils =============================================
 
 void print_err(char *str);
