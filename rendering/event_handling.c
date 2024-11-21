@@ -175,7 +175,7 @@ int	handle_keys(int keycode, void *garbage)
     }
     else if (keycode == SHIFT_LIN)
     {
-        get_data()->speed = 15;
+        get_data()->speed = 10;
     }
     else if (keycode == TAB_LIN && !get_data()->is_tab_pressed)
     {
