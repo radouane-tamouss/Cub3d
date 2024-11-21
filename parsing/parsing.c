@@ -57,7 +57,7 @@ size_t calc_height(int fd, char *file, t_map *m2, char *line)
 	m2->height++;
 	while(line)
 	{
-		free(line);
+		free_ptr(line);
 		line = get_next_line(fd);
 		m2->height++;
 	}
@@ -90,7 +90,7 @@ void fill_map(char **map, char *file, char *line)
 	{
 		if (filled_lines <= 6 && (ft_strcmp(line, "") == 0 || check_line_empty(line) == 1))
 		{
-			free(line);
+			free_ptr(line);
 			line = get_next_line(fd);
 			continue;
 		}
@@ -102,7 +102,7 @@ void fill_map(char **map, char *file, char *line)
 	// Remove trailing empty lines
     while (i > 0 && (ft_strcmp(map[i - 1], "") == 0 || check_line_empty(map[i - 1]) == 1))
     {
-        free(map[i - 1]);
+        free_ptr(map[i - 1]);
         i--;
     }
 	map[i] = NULL;
@@ -306,10 +306,10 @@ void parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
     // Free split array to avoid memory leak
     int i = 0;
     while (split[i]) {
-        free(split[i]);
+        free_ptr(split[i]);
         i++;
     }
-    free(split);
+    free_ptr(split);
 }
 
 int check_if_file_empty(char *file)
@@ -579,7 +579,7 @@ void pad_map_with_spaces(t_game *game)
         j = 0;
         if (ft_strlen(game->map.grid[i]) < map_width)
         {
-            char *line = malloc(sizeof(char) * (map_width + 1));
+            char *line = mallocate(sizeof(char) * (map_width + 1));
             int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
             int k = 0;
 
@@ -599,9 +599,9 @@ void pad_map_with_spaces(t_game *game)
             }
 
             line[k] = '\0';
-            free(game->map.grid[i]); // Free the original line
+            free_ptr(game->map.grid[i]); // Free the original line
             game->map.grid[i] = ft_strdup(line); // Duplicate the new padded line
-            free(line); // Free the temporary line
+            free_ptr(line); // Free the temporary line
         }
         i++;
     }
@@ -621,7 +621,7 @@ t_game check_map(int fd, char *file)
 	m2.valid = 0;
 	line = NULL;
 	m2.height = calc_height(fd, file, &m2, line);
-	map = malloc(sizeof(char *) * (m2.height + 1));
+	map = mallocate(sizeof(char *) * (m2.height + 1));
 	if (!map)
 	{
 		printf("Error\n Malloc failed\n");
@@ -662,7 +662,7 @@ t_game check_map(int fd, char *file)
 	map_height = map_height - 6;
 	game.map.height = map_height;
 	int j = 0;
-	game.map.grid = malloc(sizeof(char *) * (map_height + 1));
+	game.map.grid = mallocate(sizeof(char *) * (map_height + 1));
 	while (j < map_height)
 	{
 		// game.map.grid[j] = ft_strtrim(map[j + 6], " ");

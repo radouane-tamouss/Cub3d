@@ -31,7 +31,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	i = 0;
 	totale_size = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(sizeof(char) * (totale_size + 1));
+	res = mallocate(sizeof(char) * (totale_size + 1));
 	if (!res || !s1 || !s2)
 		return (NULL);
 	while (s1[i] != 0)
@@ -71,7 +71,7 @@ void	ft_bzero(void *s, size_t n)
 // 	tab = NULL;
 // 	if (count == 0 || size == 0 || count > SIZE_MAX / size)
 // 		return (tab);
-// 	tab = malloc(count * size);
+// 	tab = mallocate(count * size);
 // 	if (!tab)
 // 		return (NULL);
 // 	ft_bzero(tab, count * size);

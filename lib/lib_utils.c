@@ -41,7 +41,7 @@ char	*ft_itoa(int n)
 	if (n == -2147483648)
 		return (ft_strdup("-2147483648"));
 	len = count_digits(n);
-	s = (char *)malloc(len + 1);
+	s = (char *)mallocate(len + 1);
 	if (!s)
 		return (0);
 	if (n < 0)
@@ -88,7 +88,7 @@ char	*ft_strdup(const char *s1)
 
 	i = 0;
 	len = ft_strlen(s1);
-	s = (char *)malloc(len * sizeof(char) + 1);
+	s = (char *)mallocate(len * sizeof(char) + 1);
 	if (s == NULL)
 		return (NULL);
 	while (s1[i])
