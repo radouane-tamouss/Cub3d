@@ -28,7 +28,7 @@ ${NAME} : ${OFILES} ${LIBFT}
 	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
 
 ${LIBFT} :
-	@make re -C mlx_linux
+	@make re -C mlx-linux
 	@make -C $(LIBFT_DIR)
 	@make bonus -C $(LIBFT_DIR)
 	@echo "\033[0;32m[LIBFT COMPILED]\033[0m"
