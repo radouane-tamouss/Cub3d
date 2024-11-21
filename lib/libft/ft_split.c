@@ -39,8 +39,8 @@ static char	**ft_free(char **strs)
 
 	i = 0;
 	while (strs[i])
-		free(strs[i++]);
-	free(strs);
+		free_ptr(strs[i++]);
+	free_ptr(strs);
 	return (0);
 }
 
@@ -61,7 +61,7 @@ static char	**do_it(char **res, char const *s, char c, int i)
 		end = i;
 		if (end > start)
 		{
-			res[j] = (char *)malloc((end - start + 1) * sizeof(char));
+			res[j] = (char *)mallocate((end - start + 1) * sizeof(char));
 			if (!res[j])
 				return (ft_free(res));
 			ft_strlcpy(res[j], &s[start], end - start + 1);
@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	if (!s)
 		return (NULL);
-	res = (char **)malloc((ft_count_words(s, c) + 1) * sizeof(char *));
+	res = (char **)mallocate((ft_count_words(s, c) + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	return (do_it(res, s, c, i));

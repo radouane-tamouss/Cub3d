@@ -6,10 +6,11 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:04:33 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 18:41:30 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/21 01:29:12 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "heap_controller.h"
 #include "../cube.h"
 
 static t_heap	**get_heap(void)
@@ -29,14 +30,14 @@ void	*mallocate(size_t size)
 	new = (t_heap *)malloc(sizeof(t_heap));
 	if (new == NULL)
 	{
-		print_err("minishell: allocation failed, exiting ..\n");
+		write(2, "HEAP_CONTROLLER: allocation failed, exiting ..\n", 47);
 		exiter(1);
 	}
 	new->ptr = malloc(size);
 	if (new->ptr == NULL)
 	{
 		free(new);
-		print_err("minishell: allocation failed, exiting ..\n");
+		write(2, "HEAP_CONTROLLER: allocation failed, exiting ..\n", 47);
 		exiter(1);
 	}
 	heap = get_heap();
@@ -57,7 +58,6 @@ void	free_all_heap(void)
 	heap = get_heap();
 	while (*heap != NULL)
 	{
-		printf("heeeereeeeee\n");
 		tmp = *heap;
 		(*heap) = (*heap)->next;
 		free(tmp->ptr);
@@ -78,7 +78,7 @@ static int	check_first(t_heap **heap, t_heap *tmp, void *ptr)
 }
 
 // free specefic ptr allocated by heap controller
-void	ft_free(void *ptr)
+void	free_ptr(void *ptr)
 {
 	t_heap	**heap;
 	t_heap	*tmp;

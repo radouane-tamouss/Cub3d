@@ -53,17 +53,17 @@ char	*ft_rest(char *str)
 		i++;
 	if (!str[i])
 	{
-		free(str);
+		free_ptr(str);
 		return (0);
 	}
-	temp = (char *)malloc(sizeof(char) * ((ft_strlen(str) - i) + 1));
+	temp = (char *)mallocate(sizeof(char) * ((ft_strlen(str) - i) + 1));
 	if (!temp)
 		return (0);
 	i++;
 	while (str[i])
 		temp[j++] = str[i++];
 	temp[j] = '\0';
-	free(str);
+	free_ptr(str);
 	return (temp);
 }
 
@@ -72,7 +72,7 @@ char	*join_and_free(char *result, char *buffer)
 	char	*temp;
 
 	temp = ft_strjoin(result, buffer);
-	free(result);
+	free_ptr(result);
 	return (temp);
 }
 
@@ -84,7 +84,7 @@ char	*read_file(int fd, char *result)
 	bytesread = 1;
 	if (!result)
 		result = ft_calloc(1, 1);
-	buffer = malloc(BUFFER_SIZE + 1);
+	buffer = mallocate(BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);
 	while (bytesread > 0)
@@ -92,8 +92,8 @@ char	*read_file(int fd, char *result)
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == -1)
 		{
-			free(buffer);
-			free(result);
+			free_ptr(buffer);
+			free_ptr(result);
 			return (NULL);
 		}
 		buffer[bytesread] = 0;
@@ -101,7 +101,7 @@ char	*read_file(int fd, char *result)
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	free(buffer);
+	free_ptr(buffer);
 	return (result);
 }
 

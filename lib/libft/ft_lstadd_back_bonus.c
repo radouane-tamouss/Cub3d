@@ -31,7 +31,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new)
 // {
 // 	t_list *n1 = ft_lstnew("hello");
 // 	t_list *n2 = ft_lstnew("world");
-// 	t_list *n3 = malloc(sizeof(t_list));
+// 	t_list *n3 = mallocate(sizeof(t_list));
 // 	if (!n3)
 // 		return 1;
 // 	n3 -> content = "hhhhh";

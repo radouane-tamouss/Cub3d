@@ -17,18 +17,18 @@ int	ft_close(void)
 	exiter(0);
 	return (0);
 }
-void render_scope()
-{
-    void *img;
-    int width;
-    int height;
+// void render_scope()
+// {
+//     void *img;
+//     int width;
+//     int height;
 
-    img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
-    if (get_data()->show_scope)
-    {
-        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
-    }
-}
+//     img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
+//     if (get_data()->show_scope)
+//     {
+//         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
+//     }
+// }
 
 void render_tab()
 {
@@ -73,46 +73,33 @@ int	handle_keys(int keycode, void *garbage)
 {
 	(void)garbage;
 	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC_MAC)
+	if (keycode == ESC)
 	{
+		// fprintf(stderr , "==========heeeereeeeee\n");//
 		mlx_destroy_window(get_data()->mlx, get_data()->win);
+
 		exiter(0);
 	}
-    // if (keycode == CNTRL_MAC)
-    // {
-    //     get_data()->is_control_pressed = 1;
-    //     get_data()->show_tab = 1;
-    // }
-	// else if (keycode == W_MAC)
-	// 	move_forward();
-	// else if (keycode == S_MAC)
-	// 	move_backward();
-	// else if (keycode == D_MAC)
-	// 	move_right();
-	// else if (keycode == A_MAC)
-	// 	move_left();
-    else if (keycode == W_MAC)
+    else if (keycode == W)
         get_data()->move_forward = 1;
-    else if (keycode == S_MAC)
+    else if (keycode == S)
         get_data()->move_backward = 1;
-    else if (keycode == D_MAC)
+    else if (keycode == D)
         get_data()->move_right = 1;
-    else if (keycode == A_MAC)
+    else if (keycode == A)
         get_data()->move_left = 1;
-	if (keycode == RIGHT_MAC)
-		// rotate_player(2.  * (MY_PI / (float)180));
+	if (keycode == RIGHT_ARROW)
         get_data()->rotate_right = 1;
-	else if (keycode == LEFT_MAC)
-		// rotate_player(-2.  * (MY_PI / (float)180));
+	else if (keycode == LEFT_ARROW)
         get_data()->rotate_left = 1;
-	else if (keycode == SPACE_MAC)
+	else if (keycode == SPACE)
 	{
 		if (get_data()->dark_mode == 1)
 			get_data()->dark_mode = 0;
 		else
 			get_data()->dark_mode = 1;
 	}
-	else if (keycode == E_MAC)
+	else if (keycode == E)
 	{
     
         if (get_data()->front_ray.dist < 2 * GRID_DIST)
@@ -129,25 +116,25 @@ int	handle_keys(int keycode, void *garbage)
     
         get_data()->is_updated = 1;
 	}
-    else if (keycode == Z_MAC)
+    else if (keycode == Z)
     {
         get_data()->show_scope = 1;
     }
-	else  if (keycode == T_MAC)  // Add proper key define if needed
+	else  if (keycode == R)  // Add proper key define if needed
     {
 		get_data()->gun.shooted = 1;
         get_data()->gun.is_reloading = 1;
         get_data()->gun.current_frame = 0;
         get_data()->gun.frame_delay = 0;
     }
-    else if (keycode == Y_MAC)
+    else if (keycode == R)
     {
         get_data()->gun2.shooted = 1;
         get_data()->gun2.is_reloading = 1;
         get_data()->gun2.current_frame = 0;
         get_data()->gun2.frame_delay = 0;
     }
-    else if (keycode == N_MAC)
+    else if (keycode == ENTER)
     {
         printf("n pressed\n");
         get_data()->gun2.is_shooting = 1;
@@ -156,15 +143,12 @@ int	handle_keys(int keycode, void *garbage)
         get_data()->gun2.is_reloading = 0;
 
     }
-    else if (keycode == F_MAC)
+    else if (keycode == CTRL)
     {
         get_data()->speed = 22;
     }
-    else if (keycode == TAB_MAC && !get_data()->is_tab_pressed)
+    else if (keycode == TAB && !get_data()->is_tab_pressed)
     {
-        // get_data()->gun_id++;
-        // if (get_data()->gun_id >= 2)
-        //     get_data()->gun_id = 0;
         get_data()->show_tab = 1;
         get_data()->is_tab_pressed = 1;
     }
@@ -175,30 +159,30 @@ int	handle_keys(int keycode, void *garbage)
 int key_release(int keycode, void *garbage)
 {
     (void)garbage;
-    if (keycode == CNTRL_MAC)
+    if (keycode == CTRL)
     {
         get_data()->is_control_pressed = 0;
     }
-    if (keycode == W_MAC)
+    if (keycode == W)
         get_data()->move_forward = 0;
-    else if (keycode == S_MAC)
+    else if (keycode == S)
         get_data()->move_backward = 0;
-    else if (keycode == D_MAC)
+    else if (keycode == D)
         get_data()->move_right = 0;
-    else if (keycode == A_MAC)
+    else if (keycode == A)
         get_data()->move_left = 0;
-    if (keycode == RIGHT_MAC)
+    if (keycode == RIGHT_ARROW)
         get_data()->rotate_right = 0;
-    else if (keycode == LEFT_MAC)
+    else if (keycode == LEFT_ARROW)
         get_data()->rotate_left = 0;
-    else if (keycode == Z_MAC)
+    else if (keycode == Z)
         get_data()->show_scope = 0;
-    else if (keycode == TAB_MAC)
+    else if (keycode == TAB)
     {
         get_data()->is_tab_pressed = 0;
         get_data()->show_tab = 0;
     }
-    else if (keycode == F_MAC)
+    else if (keycode == F)
         get_data()->speed = 8;
     return (0);
 }
