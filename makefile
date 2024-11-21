@@ -49,7 +49,7 @@ re : fclean all
 
 ################# TODO remember to remove this ######################
 run : all
-	 valgrind  --leak-check=full  ./${NAME}
+	 valgrind  --leak-check=full --show-leak-kinds=all  ./${NAME} ll.cub
 
 rerun : re run
 #####################################################################

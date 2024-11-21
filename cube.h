@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/21 03:53:55 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/22 00:36:10 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <mlx.h>
 # include <math.h>
 # include <limits.h>
+#include "garbage_collector/heap_controller.h" //=== garbage collector
 
 //== const sizes =========
 
@@ -42,6 +43,8 @@
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
 //=== buttons ====
+# define TAB 65289
+# define CTRL 65507
 # define ESC 65307
 # define Q 113
 # define W 119
@@ -55,6 +58,8 @@
 # define F 102
 # define C 99
 # define V 118
+# define F 102
+# define R 114
 # define UP_ARROW 65362
 # define DOWN_ARROW 65364
 # define RIGHT_ARROW 65363
@@ -280,7 +285,8 @@ typedef struct s_ray_data {
 	float	angle;
 	float	dist;
 	float	wall_height;
-	int		object_hitted;// wall 0 or door 1
+	int		object_hitted;// wall 0     &     close door 1      &     open door 2
+    // struct s_ray_data   *will_render_above;// list of thing that will render above each other (example: door will render above another door that will render above a wall)
 } t_ray_data;
 //==== data =================
 
@@ -331,15 +337,6 @@ typedef struct s_data
 
 } t_data;
 
-
-//==== struct of HEAP CONTROLLER ==
-
-typedef struct	s_heap
-{
-	void	*ptr;
-	struct s_heap	*next;
-} t_heap;
-
 //=================================
 t_data	*get_data(void);
 
@@ -385,11 +382,7 @@ void render_scope();
 
 void	render_walls(void);
 void render_minimap(void);
-//=== garbage collector =================================
 
-void	*mallocate(size_t size);
-void	free_all_heap(void);
-void	ft_free(void *ptr);
 //=== utils =============================================
 
 void print_err(char *str);
