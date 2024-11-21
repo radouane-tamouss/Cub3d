@@ -409,9 +409,9 @@ int main(int ac, char **av)
 	init_background();
 	render_walls();
 	render_background(); 
-	load_frames();
-    load_first_gun_frames();
-    load_shooting_gun2_frames();
+	// load_frames();
+    // load_first_gun_frames();
+    // load_shooting_gun2_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
