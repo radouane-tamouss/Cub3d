@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/21 01:26:12 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/21 21:21:35 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ typedef struct s_img_data
 # define Z_MAC 6
 # define F_MAC 3 
 # define CNTRL_MAC 256
+# define SHIFT_MAC 257
 # define TAB_MAC 48
 # define N_MAC 45
 
@@ -130,6 +131,13 @@ typedef struct s_img_data
 # define DOWN_LIN 65364
 # define E_LIN 101
 # define T_LIN 116
+# define Y_LIN 121
+# define Z_LIN 122
+# define F_LIN 102
+# define CNTRL_LIN 65507
+# define TAB_LIN 65289
+# define N_LIN 110
+# define SHIFT_LIN 65505
 # define SPACE_LIN 32
 
 
@@ -148,6 +156,9 @@ typedef struct s_img_data
 typedef struct s_gun {
     void    *img[20];        // Array to store gun frame images
     void *shooting_frames[30];
+    void *walking_frames[13];
+    void *running_frames[23];
+
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
@@ -307,11 +318,14 @@ typedef struct s_data
 	int			height;
 	int			width;
 	float		player_angle;//
+    int player_is_moving;
 	t_vector	player_pos;
     int is_control_pressed;
 	t_vector	player_dir;
 	t_vector	mouse_pos;
 	t_texture	minimap;
+    int is_walking;
+    int is_running;
 	int			is_updated;
 	int			dark_mode;
 	t_ray_data		front_ray;
@@ -336,6 +350,7 @@ t_game check_map(int fd, char *file);
 int check_file(char *str, int *fd);
 int check_if_player_direction(char c);
 void render_tab();
+void render_transparent_frame(void *frame_img, int width, int height);
 
 //=======================================================
 //=== rendering =========================================

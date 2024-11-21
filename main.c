@@ -19,6 +19,88 @@ t_data	*get_data(void)
 
 	return (&data);
 }
+
+void put_xpm_image(t_img_data *dest, t_img_data *src, int start_x, int start_y)
+{
+    if (!dest || !src || !dest->addr || !src->addr)
+        return;
+
+    int *dest_data = (int *)dest->addr;
+    int *src_data = (int *)src->addr;
+    
+    int dest_line_width = dest->line_length / 4;
+    int src_line_width = src->line_length / 4;
+
+    for (int y = 0; y < src->height; y++)
+    {
+        int dest_y = start_y + y;
+        
+        // Skip if outside vertical bounds
+        if (dest_y < 0 || dest_y >= WIN_HEIGHT)
+            continue;
+
+        for (int x = 0; x < src->width; x++)
+        {
+            int dest_x = start_x + x;
+            
+            // Skip if outside horizontal bounds
+            if (dest_x < 0 || dest_x >= WIN_WIDTH)
+                continue;
+
+            int src_pixel = src_data[y * src_line_width + x];
+            
+            // Skip transparent pixels (look for None color or full black/transparent)
+            if ((src_pixel & 0x00FFFFFF) == 0)  // near-black from your XPM
+                continue;
+
+            // Direct pixel replacement
+            dest_data[dest_y * dest_line_width + dest_x] = src_pixel;
+        }
+    }
+}
+
+void render_transparent_frame(void *frame_img, int width, int height)
+{
+    t_img_data current_frame;
+    current_frame.img = frame_img;
+    current_frame.width = width;
+    current_frame.height = height;
+    current_frame.addr = mlx_get_data_addr(current_frame.img, 
+        &current_frame.bits_per_pixel, 
+        &current_frame.line_length, 
+        &current_frame.endian);
+
+    // Flexible positioning
+    int pos_x = WIN_WIDTH / 2 - width / 2;
+    int pos_y = WIN_HEIGHT - height + 4;
+
+    put_xpm_image(&get_data()->background_img, &current_frame, pos_x, pos_y);
+}
+
+// Updated gun rendering
+void render_gun_with_transparency(void)
+{
+    if (get_data()->gun.is_shooting)
+    {
+        if (get_data()->gun.frame_delay++ >= 2)
+        {
+            get_data()->gun.frame_delay = 0;
+            get_data()->gun.current_frame++;
+            if (get_data()->gun.current_frame >= 18)
+            {
+                get_data()->gun.current_frame = 0;
+                get_data()->gun.is_shooting = 0;
+            }
+        }
+    }
+
+    // Use the XPM-specific rendering method
+    render_transparent_frame(
+        get_data()->gun.img[get_data()->gun.current_frame],
+        get_data()->gun.width,
+        get_data()->gun.height
+    );
+}
 // void    load_door_frames(void)
 // {
 //     char    *frame_paths[43];
@@ -161,6 +243,86 @@ void    load_shooting_gun2_frames(void)
     get_data()->gun2.is_shooting = 0;
     get_data()->gun2.shooted = 0;
 }
+void load_running_gun2_frames(void)
+{
+    char *frame_paths[23] = {
+        "textures/running_gun2/1running_gun2.xpm",
+        "textures/running_gun2/2running_gun2.xpm",
+        "textures/running_gun2/3running_gun2.xpm",
+        "textures/running_gun2/4running_gun2.xpm",
+        "textures/running_gun2/5running_gun2.xpm",
+        "textures/running_gun2/6running_gun2.xpm",
+        "textures/running_gun2/7running_gun2.xpm",
+        "textures/running_gun2/8running_gun2.xpm",
+        "textures/running_gun2/9running_gun2.xpm",
+        "textures/running_gun2/10running_gun2.xpm",
+        "textures/running_gun2/11running_gun2.xpm",
+        "textures/running_gun2/12running_gun2.xpm",
+        "textures/running_gun2/13running_gun2.xpm",
+        "textures/running_gun2/14running_gun2.xpm",
+        "textures/running_gun2/15running_gun2.xpm",
+        "textures/running_gun2/16running_gun2.xpm",
+        "textures/running_gun2/17running_gun2.xpm",
+        "textures/running_gun2/18running_gun2.xpm",
+        "textures/running_gun2/19running_gun2.xpm",
+        "textures/running_gun2/20running_gun2.xpm",
+        "textures/running_gun2/21running_gun2.xpm",
+        "textures/running_gun2/22running_gun2.xpm",
+        "textures/running_gun2/23running_gun2.xpm"
+    };
+
+    int i;
+    i = 0;
+
+    while(i < 23)
+    {
+        get_data()->gun2.running_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
+        if (!get_data()->gun2.running_frames[i])
+        {
+            print_err("Failed to load gun frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->gun2.current_frame = 0;
+    get_data()->gun2.frame_delay = 0;
+}
+void load_walking_gun2_frames(void)
+{
+    char *frame_paths[13] = {
+        "textures/moving_gun2_slow/1walk.xpm",
+        "textures/moving_gun2_slow/2walk.xpm",
+        "textures/moving_gun2_slow/3walk.xpm",
+        "textures/moving_gun2_slow/4walk.xpm",
+        "textures/moving_gun2_slow/5walk.xpm",
+        "textures/moving_gun2_slow/6walk.xpm",
+        "textures/moving_gun2_slow/7walk.xpm",
+        "textures/moving_gun2_slow/8walk.xpm",
+        "textures/moving_gun2_slow/9walk.xpm",
+        "textures/moving_gun2_slow/10walk.xpm",
+        "textures/moving_gun2_slow/11walk.xpm",
+        "textures/moving_gun2_slow/12walk.xpm",
+        "textures/moving_gun2_slow/13walk.xpm"
+    };
+
+    int i;
+    i = 0;
+
+    while(i < 13)
+    {
+        get_data()->gun2.walking_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
+        if (!get_data()->gun2.walking_frames[i])
+        {
+            print_err("Failed to load gun frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->gun2.current_frame = 0;
+    get_data()->gun2.frame_delay = 0;
+}
 void    load_first_gun_frames(void)
 {
     char    *frame_paths[18] = {
@@ -295,9 +457,14 @@ void    render_gun(void)
             }
         }
         // Render the current frame
-        mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
-            get_data()->gun.img[get_data()->gun.current_frame], 
-            gun_pos_x, gun_pos_y);
+        // mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+        //     get_data()->gun.img[get_data()->gun.current_frame], 
+        //     gun_pos_x, gun_pos_y);
+        render_transparent_frame(
+            get_data()->gun.img[get_data()->gun.current_frame],
+            get_data()->gun.width,
+            get_data()->gun.height
+        );
     }
 
     if (get_data()->gun_id == 1)
@@ -314,9 +481,14 @@ void    render_gun(void)
                     get_data()->gun2.is_reloading = 0;
                 }
             }
-            mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
-                get_data()->gun2.img[get_data()->gun2.current_frame], 
-                gun_pos_x, gun_pos_y);
+            // mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+            //     get_data()->gun2.img[get_data()->gun2.current_frame], 
+            //     gun_pos_x, gun_pos_y);
+            render_transparent_frame(
+                get_data()->gun2.img[get_data()->gun2.current_frame],
+                get_data()->gun2.width,
+                get_data()->gun2.height
+            );
         }
         else if (get_data()->gun2.is_shooting)
         {
@@ -334,10 +506,46 @@ void    render_gun(void)
             //     get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
             //     WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
         }
-        if (get_data()->gun2.is_reloading == 0)
-             mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
-            get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
-            WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+        else if (get_data()->is_walking)
+        {
+            if (get_data()->gun2.frame_delay++ >= 4)  // Adjust delay value as needed
+            {
+                get_data()->gun2.frame_delay = 1;
+                get_data()->gun2.current_frame++;
+                if (get_data()->gun2.current_frame >= 10) 
+                {
+                    get_data()->gun2.current_frame = 0;
+                }
+            }
+            // mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+            //     get_data()->gun2.walking_frames[get_data()->gun2.current_frame], 
+            //     WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+            render_transparent_frame(get_data()->gun2.walking_frames[get_data()->gun2.current_frame], get_data()->gun2.width, get_data()->gun2.height);
+        }
+        else if (get_data()->is_running)
+        {
+            if (get_data()->gun2.frame_delay++ >= 4)  // Adjust delay value as needed
+            {
+                get_data()->gun2.frame_delay = 1;
+                get_data()->gun2.current_frame++;
+                if (get_data()->gun2.current_frame >= 19) 
+                {
+                    get_data()->gun2.current_frame = 3;
+                }
+            }
+            // mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+            //     get_data()->gun2.running_frames[get_data()->gun2.current_frame], 
+            //     WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+            render_transparent_frame(get_data()->gun2.running_frames[get_data()->gun2.current_frame]
+            , get_data()->gun2.width, get_data()->gun2.height);
+        }
+
+        if (get_data()->gun2.is_reloading == 0  && get_data()->is_walking == 0 && get_data()->is_running == 0)
+                // mlx_put_image_to_window(get_data()->mlx, get_data()->win, 
+                // get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], 
+                // WIN_WIDTH / 2 - get_data()->gun2.width / 2, WIN_HEIGHT - get_data()->gun2.height + 4);
+                render_transparent_frame(get_data()->gun2.shooting_frames[get_data()->gun2.current_frame], get_data()->gun2.width, get_data()->gun2.height);
+                
         // Render the current frame
     }
     // Handle shooting animation
@@ -350,11 +558,17 @@ int player_is_close_to_door(void)
 
 int loop_hook(t_game *game)
 {
+    if (get_data()->is_tab_pressed)
+    {
+        render_tab();
+        return (0);
+    }
 	if (get_data()->is_updated)
 	{
         update_movement();
 		init_background();
 		render_walls();
+        // render_scope();
 		render_minimap();
 		render_background();
         // mlx_mouse_hide();
@@ -412,6 +626,10 @@ int main(int ac, char **av)
 	load_frames();
     load_first_gun_frames();
     load_shooting_gun2_frames();
+    load_walking_gun2_frames();
+    load_first_gun_frames();
+    load_shooting_gun2_frames();
+    load_running_gun2_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
