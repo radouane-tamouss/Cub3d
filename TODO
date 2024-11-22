@@ -1,4 +1,4 @@
-TODO impelemnt HEAP COTORLLER to remove leaks
+<!-- TODO impelemnt HEAP COTORLLER to remove leaks -->
 TODO add animations (to doors and maybe player hand)
 TODO make sure to split bonus part from mendatory (parsing should accept symbol for doors in bonus an no in mendatory part)
 TODO 42 norms
@@ -9,6 +9,6 @@ TODO  optianally add extra bonus (like enemy or collectibles or specific key to 
 
 
 ---
-TODO for Radouane  "raycasting again"
+<!-- TODO for Radouane  "raycasting again" -->
 TODO Minimap change player make it better, fix doors and add animatin for it, 
-TODO parsing parse door
+<!-- TODO parsing parse door -->
