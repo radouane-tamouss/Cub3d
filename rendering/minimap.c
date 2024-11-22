@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/11 15:38:07 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/22 17:36:18 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,26 @@ void render_square(int x, int y, int color)
 {
 	int i = 0;
 	int j = 0;
+	// int	color2;
+	// t_texture bg_texture;
+	t_vector center; // TODO put it in the get_data and inital once
 
+	center.x = 5 * SQUARE_SIZE; // TODO put it in the get_data and inital once
+	center.y = 5 * SQUARE_SIZE; // TODO put it in the get_data and inital once
+
+	// bg_texture.img_data = get_data()->background_img;
+	// bg_texture.height = WIN_HEIGHT;
+	// bg_texture.width = WIN_WIDTH;
+	
 	while (i < SQUARE_SIZE - 1)
 	{
 		j = 0;
 		while (j < SQUARE_SIZE - 1)
 		{
-			// mlx_pixel_put(game->mlx, game->win, j + x, i + y, RED);
-			put_pixel(&(get_data()->background_img), j + x, i + y, color);
+			// color2 = pull_pixel(bg_texture, j + x, i + y);
+			// color = CREATE_TRGB(0, (int)((GET_R(color2)  + GET_R(color) * 99) / 100), (int)((GET_G(color2) + GET_G(color)* 99) / 100), (int)((GET_B(color2) + GET_B(color)* 99) / 100));
+			if (calc_dist(j + x, i + y, center) <= (5 * SQUARE_SIZE))
+				put_pixel(&(get_data()->background_img), j + x, i + y, color);
 			j++;
 		}
 		i++;
@@ -127,16 +139,22 @@ void render_minimap(void)
 {
 	int	i = 0;
 	int	j;
-	while (i < SQUARE_SIZE * 11)
+	t_vector center; // TODO put it in the get_data and inital once
+
+	center.x = 5 * SQUARE_SIZE;
+	center.y = 5 * SQUARE_SIZE;
+	
+	while (i < SQUARE_SIZE * 11)/////////////////////////////
 	{
 		j = 0;
 		while (j < SQUARE_SIZE * 11)
 		{
-			put_pixel(&(get_data()->background_img), i, j, BLACK);
+			if (calc_dist(j, i, center) <= (5 * SQUARE_SIZE))
+				put_pixel(&(get_data()->background_img), i, j, BLACK);
 			j++;
 		}
 		i++;
-	}
+	}/////////////////////////////////////////////////////////
 	render_map();
 	render_player();
 	// mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
