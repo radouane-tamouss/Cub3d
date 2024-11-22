@@ -239,8 +239,8 @@ int mouse_event(int x, int y, void *par)
 	// 	rotate_player(.5 * (MY_PI / 180));
     if (get_data()->is_tab_pressed) 
     {
-        printf("x=>%d  , y => %d\n", x, y);
-        if (y < 488 || y > 680 || x < 270 || y > 1327   )// the y cors should be =---=> 400 to 700 and x shold be   betwen 150 and 1460
+        // printf("x=>%d  , y => %d\n", x, y);
+        if (y < 488 || y > 680 || x < 270 || y > 1327)// the y cors should be =---=> 400 to 700 and x shold be   betwen 150 and 1460
             return (0);
         if (x < 460)// X from 150 to ---------------> 470
             get_data()->gun_id = 0;
