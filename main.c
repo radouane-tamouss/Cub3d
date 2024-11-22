@@ -65,7 +65,7 @@ void render_transparent_frame(void *frame_img, int width, int height)
     current_frame.img = frame_img;
     current_frame.width = width;
     current_frame.height = height;
-    current_frame.addr = mlx_get_data_addr(current_frame.img, 
+    current_frame.addr = safer_get_data_addr(current_frame.img, 
         &current_frame.bits_per_pixel, 
         &current_frame.line_length, 
         &current_frame.endian);
@@ -112,7 +112,7 @@ void render_gun_with_transparency(void)
 //     {
 //         sprintf(path, "textures/%ddoor.xpm", i + 1);
 //         frame_paths[i] = ft_strdup(path);
-//         get_data()->door.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+//         get_data()->door.img[i] = safer_xpm_file_to_image(get_data()->mlx, 
 //             frame_paths[i], &get_data()->door.width, &get_data()->door.height);
 //         if (!get_data()->door.img[i])
 //         {
@@ -138,7 +138,7 @@ void	init_data(t_game game)
 		exiter(1);
 	}
 	get_data()->background_img.img = mlx_new_image(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT);// TODO protect failing
-	get_data()->background_img.addr = mlx_get_data_addr(get_data()->background_img.img,
+	get_data()->background_img.addr = safer_get_data_addr(get_data()->background_img.img,
 		&(get_data()->background_img.bits_per_pixel), &(get_data()->background_img.line_length),
 		&(get_data()->background_img.endian)); // TODO protect failing
 
@@ -170,20 +170,20 @@ void	init_data(t_game game)
     get_data()->gun_id = 0;
     get_data()->show_tab = 0;
 
-	get_data()->north_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
-	get_data()->north_img.img_data.addr = mlx_get_data_addr(get_data()->north_img.img_data.img, &(get_data()->north_img.img_data.bits_per_pixel), &(get_data()->north_img.img_data.line_length), &(get_data()->north_img.img_data.endian));
+	get_data()->north_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->north_img.width), &(get_data()->north_img.height));
+	get_data()->north_img.img_data.addr = safer_get_data_addr(get_data()->north_img.img_data.img, &(get_data()->north_img.img_data.bits_per_pixel), &(get_data()->north_img.img_data.line_length), &(get_data()->north_img.img_data.endian));
 
-	get_data()->south_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->south_img.width), &(get_data()->south_img.height));
-	get_data()->south_img.img_data.addr = mlx_get_data_addr(get_data()->south_img.img_data.img, &(get_data()->south_img.img_data.bits_per_pixel), &(get_data()->south_img.img_data.line_length), &(get_data()->south_img.img_data.endian));
+	get_data()->south_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->south_img.width), &(get_data()->south_img.height));
+	get_data()->south_img.img_data.addr = safer_get_data_addr(get_data()->south_img.img_data.img, &(get_data()->south_img.img_data.bits_per_pixel), &(get_data()->south_img.img_data.line_length), &(get_data()->south_img.img_data.endian));
 
-	get_data()->east_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->east_img.width), &(get_data()->east_img.height));
-	get_data()->east_img.img_data.addr = mlx_get_data_addr(get_data()->east_img.img_data.img, &(get_data()->east_img.img_data.bits_per_pixel), &(get_data()->east_img.img_data.line_length), &(get_data()->east_img.img_data.endian));
+	get_data()->east_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->east_img.width), &(get_data()->east_img.height));
+	get_data()->east_img.img_data.addr = safer_get_data_addr(get_data()->east_img.img_data.img, &(get_data()->east_img.img_data.bits_per_pixel), &(get_data()->east_img.img_data.line_length), &(get_data()->east_img.img_data.endian));
 	
-	get_data()->west_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/west.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
-	get_data()->west_img.img_data.addr = mlx_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
+	get_data()->west_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/west.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
+	get_data()->west_img.img_data.addr = safer_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
 	//===
-	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/10door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
-	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
+	get_data()->door_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/10door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
+	get_data()->door_img.img_data.addr = safer_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 
 
 
@@ -228,13 +228,8 @@ void    load_shooting_gun2_frames(void)
     i = 0;
     while (i < 27)
     {
-        get_data()->gun2.shooting_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+        get_data()->gun2.shooting_frames[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
-        if (!get_data()->gun2.shooting_frames[i])
-        {
-            print_err("Failed to load gun frame\n");
-            exiter(1);
-        }
         i++;
     }
     get_data()->gun2.current_frame = 0;
@@ -276,13 +271,8 @@ void load_running_gun2_frames(void)
 
     while(i < 23)
     {
-        get_data()->gun2.running_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+        get_data()->gun2.running_frames[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
-        if (!get_data()->gun2.running_frames[i])
-        {
-            print_err("Failed to load gun frame\n");
-            exiter(1);
-        }
         i++;
     }
     get_data()->gun2.current_frame = 0;
@@ -311,13 +301,8 @@ void load_walking_gun2_frames(void)
 
     while(i < 13)
     {
-        get_data()->gun2.walking_frames[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+        get_data()->gun2.walking_frames[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
-        if (!get_data()->gun2.walking_frames[i])
-        {
-            print_err("Failed to load gun frame\n");
-            exiter(1);
-        }
         i++;
     }
     get_data()->gun2.current_frame = 0;
@@ -350,13 +335,8 @@ void    load_first_gun_frames(void)
     i = 0;
     while (i < 18)
     {
-        get_data()->gun.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+        get_data()->gun.img[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun.width, &get_data()->gun.height);
-        if (!get_data()->gun.img[i])
-        {
-            print_err("Failed to load gun frame\n");
-            exiter(1);
-        }
         i++;
     }
     get_data()->gun.current_frame = 0;
@@ -417,13 +397,8 @@ void    load_frames(void)
     i = 0;
     while (i < 20)
     {
-        get_data()->gun2.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+        get_data()->gun2.img[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun2.width, &get_data()->gun2.height);
-        if (!get_data()->gun2.img[i])
-        {
-            print_err("Failed to load gun frame\n");
-            exiter(1);
-        }
         i++;
     }
     get_data()->gun2.current_frame = 0;
@@ -626,8 +601,8 @@ int main(int ac, char **av)
     load_first_gun_frames();
     load_shooting_gun2_frames();
     load_walking_gun2_frames();
-    load_first_gun_frames();
-    load_shooting_gun2_frames();
+    // load_first_gun_frames();
+    // load_shooting_gun2_frames();
     load_running_gun2_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 

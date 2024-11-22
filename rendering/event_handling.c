@@ -23,7 +23,7 @@ int	ft_close(void)
 //     int width;
 //     int height;
 
-//     img = mlx_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
+//     img = safer_xpm_file_to_image(get_data()->mlx, "textures/scope_sniper.xpm", &width, &height);
 //     if (get_data()->show_scope)
 //     {
 //         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img, (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
@@ -38,11 +38,11 @@ void render_tab()
     int width;
     int height;
 
-    img[0] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon1.xpm", &width, &height);
-    img[1] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon2.xpm", &width, &height);
-    img[2] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-    img[3] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-    img[4] = mlx_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+    img[0] = safer_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon1.xpm", &width, &height);
+    img[1] = safer_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon2.xpm", &width, &height);
+    img[2] = safer_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+    img[3] = safer_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+    img[4] = safer_xpm_file_to_image(get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
 
     if (get_data()->gun_id == 0 && get_data()->show_tab)
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0], (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);

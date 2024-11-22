@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:33:12 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/09 03:32:05 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/22 02:25:16 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_background()
 	int	color;
 
 	// get_data()->background_img.img = mlx_new_image(get_data()->mlx, WIN_WIDTH, WIN_HEIGHT);// TODO protect failing
-	// 	get_data()->background_img.addr = mlx_get_data_addr(get_data()->background_img.img,
+	// 	get_data()->background_img.addr = safer_get_data_addr(get_data()->background_img.img,
 	// 		&(get_data()->background_img.bits_per_pixel), &(get_data()->background_img.line_length),
 	// 		&(get_data()->background_img.endian)); // TODO protect failing
 	y = 0;
