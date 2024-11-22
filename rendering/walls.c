@@ -106,7 +106,7 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
             perform_dda(ray, data_taken, col);///
             calculate_distance(&ray);
             draw_col(ray, col);
-            return;//TODO instead of returning make linked list of overlaped objects or use recurtion to draw
+            return;
         }
         else if (current_tile == 'O') // Open door - we'll use 'O' for open doors
         {
@@ -120,8 +120,7 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
             perform_dda(ray, data_taken, col);///
             // calculate_distance(&ray);//
             // draw_col(ray, col);//
-            return;//
-            // Don't return, continue raycasting through open door
+            return;
         }
     }
 }
@@ -237,9 +236,7 @@ void render_col(int col)
 	int color;
 
 	ray_angle = normalise_angle(get_data()->player_angle - (FOV/2) + (col * (FOV/WIN_WIDTH)));
-	// ray = cast_ray(ray_angle);
     cast_ray(ray_angle, col);
-    // draw_col(ray, col);
 }
 
 // this will draw the the walls on the background img (it will not put it to window)

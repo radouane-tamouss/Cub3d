@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/22 00:36:10 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/22 22:35:30 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_img_data
 
 # define WHITE 0xffffff
 # define BLACK 0x000000
+# define DARK_BLUE 0x0E1721
 # define BLUE  0x0000ff
 # define RED   0xff0000
 # define GREEN 0x009900
@@ -152,6 +153,8 @@ typedef struct s_img_data
 #define CCYAN    "\033[36m"      /* Cyan */
 #define CWHITE   "\033[37m"      /* White */
 
+//======================================
+
 
 typedef struct s_gun {
     void    *img[20];        // Array to store gun frame images
@@ -168,6 +171,9 @@ typedef struct s_gun {
     int     shooted;
 } t_gun;
 
+//======================================
+
+
 typedef struct s_door {
     void    *img[20];       // Array to store door frame images
     int     width;          // Width of door image
@@ -179,6 +185,7 @@ typedef struct s_door {
     int     is_closing;     // Flag for closing animation
     int    is_closed;      // Flag to indicate if door is fully closed
 } t_door;
+//======================================
 
 typedef struct s_color
 {
@@ -187,6 +194,7 @@ typedef struct s_color
     int g;
     int b;
 } t_color;
+//======================================
 
 
 typedef struct s_player
@@ -200,6 +208,7 @@ typedef struct s_player
     double move_speed;
     double rotation_speed;
 } t_player;
+//======================================
 
 typedef struct s_map
 {
@@ -208,6 +217,7 @@ typedef struct s_map
     int height;
     int valid;
 } t_map;
+//======================================
 
 typedef struct s_texture
 {
@@ -216,15 +226,7 @@ typedef struct s_texture
     int width;
     int height;
 } t_texture;
-
-// typedef struct s_image_data
-// {
-//     void *img;
-//     char *addr;
-//     int bits_per_pixel;
-//     int line_length;
-//     int endian;
-// } t_image_data;
+//======================================
 
 typedef struct s_ray
 {
@@ -239,6 +241,7 @@ typedef struct s_ray
     int is_ray_facing_right;
     int wall_hit_content;
 } t_ray;
+//======================================
 
 typedef struct s_game
 {
@@ -336,6 +339,14 @@ typedef struct s_data
     t_door          door;
 
 } t_data;
+//= Enemie structure============================
+
+// typedef struct s_enemie
+// {
+//     t_vector    position;
+//     int         health;
+//     t_texture   texture;
+// }   t_enemie;
 
 //=================================
 t_data	*get_data(void);

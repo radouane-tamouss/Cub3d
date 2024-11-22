@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/22 17:36:18 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/22 22:25:12 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ void render_square(int x, int y, int color)
 	// bg_texture.height = WIN_HEIGHT;
 	// bg_texture.width = WIN_WIDTH;
 	
-	while (i < SQUARE_SIZE - 1)
+	while (i < SQUARE_SIZE)
 	{
 		j = 0;
-		while (j < SQUARE_SIZE - 1)
+		while (j < SQUARE_SIZE)
 		{
 			// color2 = pull_pixel(bg_texture, j + x, i + y);
 			// color = CREATE_TRGB(0, (int)((GET_R(color2)  + GET_R(color) * 99) / 100), (int)((GET_G(color2) + GET_G(color)* 99) / 100), (int)((GET_B(color2) + GET_B(color)* 99) / 100));
-			if (calc_dist(j + x, i + y, center) <= (5 * SQUARE_SIZE))
+			if (calc_dist(j + x, i + y, center) <= (5 * SQUARE_SIZE - 3))
 				put_pixel(&(get_data()->background_img), j + x, i + y, color);
 			j++;
 		}
@@ -76,13 +76,15 @@ void render_map(void)
 		{
 			x = (j +  5) * SQUARE_SIZE - (get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
 			if (get_data()->map[i][j] == '1')
-				render_square(x, y, CYAN);
+				render_square(x, y, 0x3A4A50);
 			else if (get_data()->map[i][j] == '0')
-				render_square(x, y, GREEN);
+				render_square(x, y, 0xA55D35);
 			else if (check_if_player_direction(get_data()->map[i][j]) == 1)
 				render_square(x, y, RED);
 			else if (get_data()->map[i][j] == 'D')
 				render_square(x, y, BLUE);
+			else if (get_data()->map[i][j] == 'O')
+				render_square(x, y, CYAN);
 			j++;
 		}
 		i++;
@@ -157,5 +159,4 @@ void render_minimap(void)
 	}/////////////////////////////////////////////////////////
 	render_map();
 	render_player();
-	// mlx_put_image_to_window(game->mlx, game->win, game->img.img, 0, 0);
 }
