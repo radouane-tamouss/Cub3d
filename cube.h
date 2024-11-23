@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/22 22:35:30 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/23 22:33:49 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ typedef struct s_gun {
 
 
 typedef struct s_door {
-    void    *img[20];       // Array to store door frame images
+    void    *img[18];       // Array to store door frame images
     int     width;          // Width of door image
     int     height;         // Height of door image
     int     current_frame;  // Current frame being displayed
@@ -312,6 +312,7 @@ typedef struct s_data
     int speed;
 	t_texture	west_img;
 	t_texture	door_img;
+    t_texture   door_open_img;
 
     t_img_data scope; 
 	t_img_data	background_img;
@@ -378,6 +379,9 @@ void	line_between_2points(t_vector point1,
 float	ft_max(float nbr1, float nbr2);
 float	ft_min(float nbr1, float nbr2);
 double	ft_abs(double nbr);
+void    update_door_animation(void);
+void    open_door(void);
+void    close_door(void);
 int	calc_dist(int x, int y, t_vector point);
 void	rotate_player(float angle);
 void	move_backward();

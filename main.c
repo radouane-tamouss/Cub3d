@@ -101,32 +101,50 @@ void render_gun_with_transparency(void)
         get_data()->gun.height
     );
 }
-// void    load_door_frames(void)
-// {
-//     char    *frame_paths[43];
-//     int     i;
-//     char    path[50];
+void    load_door_frames(void)
+{
+    char *frame_paths[18] = {
+      "textures/door_frames/1.xpm",
+      "textures/door_frames/2.xpm",
+      "textures/door_frames/3.xpm",
+      "textures/door_frames/4.xpm",
+      "textures/door_frames/5.xpm",
+      "textures/door_frames/6.xpm",
+      "textures/door_frames/7.xpm",
+      "textures/door_frames/8.xpm",
+      "textures/door_frames/9.xpm",
+      "textures/door_frames/10.xpm",
+      "textures/door_frames/11.xpm",
+      "textures/door_frames/12.xpm",
+      "textures/door_frames/13.xpm",
+      "textures/door_frames/14.xpm",
+      "textures/door_frames/15.xpm",
+      "textures/door_frames/16.xpm",
+      "textures/door_frames/17.xpm"
+    };
 
-//     i = 0;
-//     while (i < 43)
-//     {
-//         sprintf(path, "textures/%ddoor.xpm", i + 1);
-//         frame_paths[i] = ft_strdup(path);
-//         get_data()->door.img[i] = safer_xpm_file_to_image(get_data()->mlx, 
-//             frame_paths[i], &get_data()->door.width, &get_data()->door.height);
-//         if (!get_data()->door.img[i])
-//         {
-//             print_err("Failed to load door frame\n");
-//             exiter(1);
-//         }
-//         free_ptr(frame_paths[i]);
-//         i++;
-//     }
-//     get_data()->door.current_frame = 0;
-//     get_data()->door.frame_delay = 0;
-//     get_data()->door.is_opening = 0;
-//     get_data()->door.is_open = 0;
-// }
+    frame_paths[18] = NULL;
+    int     i;
+
+    i = 0;
+    while (i < 17)
+    {
+        get_data()->door.img[i] = mlx_xpm_file_to_image(get_data()->mlx, 
+            frame_paths[i], &get_data()->door.width, &get_data()->door.height);
+        if (!get_data()->door.img[i])
+        {
+            printf("%d ", i);
+            print_err("Failed to load door frame\n");
+            exiter(1);
+        }
+        i++;
+    }
+    get_data()->door.current_frame = 0;
+    get_data()->door.frame_delay = 0;
+    get_data()->door.is_opening = 0;
+    get_data()->door.is_open = 0;
+    get_data()->door.is_closed = 1;
+}
 void	init_data(t_game game)
 {
 	get_data()->mlx = mlx_init();
@@ -179,15 +197,15 @@ void	init_data(t_game game)
 	get_data()->east_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->east_img.width), &(get_data()->east_img.height));
 	get_data()->east_img.img_data.addr = safer_get_data_addr(get_data()->east_img.img_data.img, &(get_data()->east_img.img_data.bits_per_pixel), &(get_data()->east_img.img_data.line_length), &(get_data()->east_img.img_data.endian));
 	
-	get_data()->west_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/west.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
-	get_data()->west_img.img_data.addr = safer_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
-	//===
-	get_data()->door_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/10door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
-	get_data()->door_img.img_data.addr = safer_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
+	get_data()->west_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/future_wall.xpm", &(get_data()->west_img.width), &(get_data()->west_img.height));
+	get_data()->west_img.img_data.addr = mlx_get_data_addr(get_data()->west_img.img_data.img, &(get_data()->west_img.img_data.bits_per_pixel), &(get_data()->west_img.img_data.line_length), &(get_data()->west_img.img_data.endian));
+	//===k
+	get_data()->door_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/door_frames/1.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
+	get_data()->door_img.img_data.addr = mlx_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 
+	get_data()->door_open_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/door_frames/17.xpm", &(get_data()->door_open_img.width), &(get_data()->door_open_img.height));
+	get_data()->door_open_img.img_data.addr = mlx_get_data_addr(get_data()->door_open_img.img_data.img, &(get_data()->door_open_img.img_data.bits_per_pixel), &(get_data()->door_open_img.img_data.line_length), &(get_data()->door_open_img.img_data.endian));
 
-
-    
 
 
 
@@ -346,6 +364,73 @@ void    load_first_gun_frames(void)
 }
 
 
+void update_door_animation(void)
+{
+    if (get_data()->door.is_opening)
+    {
+        if (get_data()->door.frame_delay++ >= 0)  // Adjust delay value as needed
+        {
+            get_data()->door.frame_delay = 0;
+            get_data()->door.current_frame++;
+            printf("here before segv %d\n", get_data()->door.current_frame); 
+            if (get_data()->door.current_frame > 16)
+            {
+                get_data()->door.current_frame = 16;  // Keep at last frame
+                get_data()->door.is_opening = 0;
+                get_data()->door.is_open = 1;
+                get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'O';
+                
+            }
+            
+            // Update the door texture
+            get_data()->door_img.img_data.img = get_data()->door.img[get_data()->door.current_frame];
+            get_data()->door_img.img_data.addr = mlx_get_data_addr(
+                get_data()->door_img.img_data.img,
+                &get_data()->door_img.img_data.bits_per_pixel,
+                &get_data()->door_img.img_data.line_length,
+                &get_data()->door_img.img_data.endian
+            );
+            get_data()->is_updated = 1;
+        }
+    }
+    else if (get_data()->door.is_closing)
+    {
+        if (get_data()->door.frame_delay++ >= 0)  // Adjust delay value as needed
+        {
+            get_data()->door.frame_delay = 0;
+            get_data()->door.current_frame--;
+            
+            if (get_data()->door.current_frame <= 0)
+            {
+                get_data()->door.current_frame = 0;  // Keep at first frame
+                get_data()->door.is_closing = 0;
+                get_data()->door.is_open = 0;
+                get_data()->door.is_closed = 1;
+                get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+            }
+            
+            // Update the door texture
+            get_data()->door_img.img_data.img = get_data()->door.img[get_data()->door.current_frame];
+            get_data()->door_img.img_data.addr = mlx_get_data_addr(
+                get_data()->door_img.img_data.img,
+                &get_data()->door_img.img_data.bits_per_pixel,
+                &get_data()->door_img.img_data.line_length,
+                &get_data()->door_img.img_data.endian
+            );
+            get_data()->is_updated = 1;
+        }
+    }
+    // if (get_data()->door.is_open)
+    // {
+    //     int map_x = get_data()->front_ray.map_x;
+    //  int map_y = get_data()->front_ray.map_y;
+    //  char *current_tile = &get_data()->map[map_y][map_x];
+    //
+    //  if (*current_tile == 'D')
+    //      *current_tile = 'O';
+    //     get_data()->is_updated = 1;
+    // }
+}
 
 // Implementation of gun loading and animation functions
 void    load_frames(void)
@@ -540,11 +625,12 @@ int loop_hook(t_game *game)
     }
 	if (get_data()->is_updated)
 	{
-        update_movement();
+    update_movement();
 		init_background();
 		render_walls();
         // render_scope();
 		render_minimap();
+    update_door_animation();
 		render_background();
         // mlx_mouse_hide();
         if (!get_data()->show_scope)
@@ -601,8 +687,9 @@ int main(int ac, char **av)
 	load_frames();
     load_first_gun_frames();
     load_shooting_gun2_frames();
-    load_walking_gun2_frames();
     load_running_gun2_frames();
+    load_walking_gun2_frames();
+    load_door_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
