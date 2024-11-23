@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:01:32 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/11 14:00:59 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/11 14:00:59by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -330,20 +330,13 @@ void check_if_map_contains_only_valid_characters(t_game *game)
 {
 	int i = 0;
 	int j = 0;
-	// printf("map[7][0] = [%s]\n", game->map.grid[7]);
 	while (game->map.grid[i] != NULL)
 	{
 		j = 0;
-		// game->map.grid[i] = ft_strtrim(game->map.grid[i], " ");
 		game->map.grid[i] = ft_strtrim(game->map.grid[i], "\n");
-		// if (game->map.grid[i][0] == '\0')
-		// {
-		// 	printf("Error: Empty line in map\n");
-		// 	exit(1);
-		// }
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] != 'D' && game->map.grid[i][j] != '0' && game->map.grid[i][j] != '1' && game->map.grid[i][j] != 'N' && game->map.grid[i][j] != 'S' && game->map.grid[i][j] != 'E' && game->map.grid[i][j] != 'W' && game->map.grid[i][j] != ' ')
+			if (game->map.grid[i][j] != 'D' && game->map.grid[i][j] != '0' && game->map.grid[i][j] != '1' && game->map.grid[i][j] != 'N' && game->map.grid[i][j] != 'S' && game->map.grid[i][j] != 'E' && game->map.grid[i][j] != 'W' && game->map.grid[i][j] != ' ' && game->map.grid[i][j] != 'O')
 			{
 				printf("Error: Invalid character in map\n");
 				exit(1);
@@ -491,17 +484,19 @@ void check_invalid_map(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{ 
-			if (game->map.grid[i][j] == '0' || game->map.grid[i][j] == 'D' || check_if_player_direction(game->map.grid[i][j]) == 1)
+			if (game->map.grid[i][j] == '0' || game->map.grid[i][j] == 'D' || game->map.grid[i][j] == 'O' || check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
-				if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != 'D' && !check_if_player_direction(game->map.grid[i - 1][j]))) ||  // above
-					(i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0' && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != 'D' && !check_if_player_direction(game->map.grid[i + 1][j]))) ||  // below
-					(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != 'D' && !check_if_player_direction(game->map.grid[i][j - 1]))) ||  // left
-					(j < ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != 'D' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
+				if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != 'D' && game->map.grid[i - 1][j] != 'O' && !check_if_player_direction(game->map.grid[i - 1][j]))) ||  // above
+					(i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0' && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != 'D' && game->map.grid[i + 1][j] != 'O' && !check_if_player_direction(game->map.grid[i + 1][j]))) ||  // below
+					(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != 'D' && game->map.grid[i][j - 1] != 'O' && !check_if_player_direction(game->map.grid[i][j - 1]))) ||  // left
+					(j < ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != 'D' && game->map.grid[i][j + 1] != 'O' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
 				{
 					if (check_if_player_direction(game->map.grid[i][j]) == 1)
 						printf("invalid player direction at (%d, %d)\n", i, j);
 					else if (game->map.grid[i][j] == 'D')
 						printf("invalid door at (%d, %d)\n", i, j);
+					else if (game->map.grid[i][j] == 'O')
+						printf("invalid object at (%d, %d)\n", i, j);
 					else 
 						printf("invalid zero at (%d, %d)\n", i, j);
 
