@@ -127,27 +127,50 @@ int	handle_keys(int keycode, void *garbage)
 			get_data()->dark_mode = 1;
 	}
 	else if (keycode == E_LIN)
-	{
-    
-        if (get_data()->front_ray.dist < 2 * GRID_DIST)
+	//
+	// {
+	//
+	//        if (get_data()->front_ray.dist < 2 * GRID_DIST)
+	//        {
+	//            int map_x = get_data()->front_ray.map_x;
+	//            int map_y = get_data()->front_ray.map_y;
+	//            char *current_tile = &get_data()->map[map_y][map_x];
+	//
+	//            if (*current_tile == 'D')
+	//                *current_tile = 'O';
+	//            else if (*current_tile == 'O')
+	//                *current_tile = 'D';
+	//        }
+	//
+	//        get_data()->is_updated = 1;
+	// }
+	
+  {
+    if ((get_data()->front_ray.object_hitted == 1 || get_data()->front_ray.object_hitted == 2) && get_data()->front_ray.dist < 2 * GRID_DIST)
+    {
+        get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+        // get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'O';
+        if (!get_data()->door.is_open && !get_data()->door.is_opening)
         {
-            int map_x = get_data()->front_ray.map_x;
-            int map_y = get_data()->front_ray.map_y;
-            char *current_tile = &get_data()->map[map_y][map_x];
-        
-            if (*current_tile == 'D')
-                *current_tile = 'O';
-            else if (*current_tile == 'O')
-                *current_tile = 'D';
+            get_data()->door.is_opening = 1;
+            get_data()->door.current_frame = 0;
+            get_data()->door.frame_delay = 0;
         }
-    
-        get_data()->is_updated = 1;
-	}
+        else if (get_data()->door.is_open && !get_data()->door.is_closing)
+        {
+            get_data()->door.is_closing = 1;
+            get_data()->door.current_frame = 17;
+            get_data()->door.frame_delay = 0;
+        }
+
+      get_data()->is_updated = 1;
+    }
+}
     else if (keycode == Z_LIN)
     {
         get_data()->show_scope = 1;
     }
-	else  if (keycode == T_LIN)  // Add proper key define if needed
+	  else  if (keycode == T_LIN)  // Add proper key define if needed
     {
 		get_data()->gun.shooted = 1;
         get_data()->gun.is_reloading = 1;
