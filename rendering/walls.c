@@ -110,16 +110,16 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
         }
         else if (current_tile == 'O') // Open door - we'll use 'O' for open doors
         {
+                ray.object_hitted = 2; // hit an open door
             if (!data_taken && ray.angle == get_data()->player_angle)
             {
-                ray.object_hitted = 2; // hit an open door
                 get_data()->front_ray = ray;
                 calculate_distance(&(get_data()->front_ray));
                 data_taken = 1;
             }
             perform_dda(ray, data_taken, col);///
-            // calculate_distance(&ray);//
-            // draw_col(ray, col);//
+            calculate_distance(&ray);//
+            draw_col(ray, col);//
             return;//
             // Don't return, continue raycasting through open door
         }
@@ -155,7 +155,9 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
     if (ray.side == 0) // if it hits on the vertical side
     {
         hit_point = get_data()->player_pos.y + (ray.dist * ray.ray_dir.y);
-		if (ray.object_hitted == 1)
+        if (ray.object_hitted == 2)
+            texture = get_data()->door_open_img;
+		else if (ray.object_hitted == 1)
 			texture = get_data()->door_img;
 		else if (ray.ray_dir.x > 0)
 			texture = get_data()->east_img;
@@ -165,7 +167,9 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
     else // else if it ray hit on horizontal side
     {
         hit_point = get_data()->player_pos.x + (ray.dist * ray.ray_dir.x);
-		if (ray.object_hitted == 1)
+        if (ray.object_hitted == 2)
+            texture = get_data()->door_open_img;
+		else if (ray.object_hitted == 1)
 			texture = get_data()->door_img;
         else if (ray.ray_dir.y > 0)
 			texture = get_data()->north_img;
