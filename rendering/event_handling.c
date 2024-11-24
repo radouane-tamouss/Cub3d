@@ -144,11 +144,12 @@ int	handle_keys(int keycode, void *garbage)
 	//
 	//        get_data()->is_updated = 1;
 	// }
-	
   {
     if ((get_data()->front_ray.object_hitted == 1 || get_data()->front_ray.object_hitted == 2) && get_data()->front_ray.dist < 2 * GRID_DIST)
     {
         get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+        get_data()->door.x = get_data()->front_ray.map_x;
+        get_data()->door.y = get_data()->front_ray.map_y;
         // get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'O';
         if (!get_data()->door.is_open && !get_data()->door.is_opening)
         {

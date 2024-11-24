@@ -145,6 +145,7 @@ void    load_door_frames(void)
     get_data()->door.is_open = 0;
     get_data()->door.is_closed = 1;
 }
+
 void	init_data(t_game game)
 {
 	get_data()->mlx = mlx_init();
@@ -173,7 +174,6 @@ void	init_data(t_game game)
 	get_data()->player_angle = 0;//MY_PI / 4;
 	get_data()->player_dir.x = cos(get_data()->player_angle) * get_data()->speed;
 	get_data()->player_dir.y = sin(get_data()->player_angle) * get_data()->speed;
-
 	get_data()->map = game.map.grid;
 	get_data()->height = game.map.height;
 	get_data()->width = game.map.width;
@@ -372,13 +372,13 @@ void update_door_animation(void)
         {
             get_data()->door.frame_delay = 0;
             get_data()->door.current_frame++;
-            printf("here before segv %d\n", get_data()->door.current_frame); 
             if (get_data()->door.current_frame > 16)
             {
                 get_data()->door.current_frame = 16;  // Keep at last frame
                 get_data()->door.is_opening = 0;
                 get_data()->door.is_open = 1;
-                get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'O';
+                get_data()->map[get_data()->door.y][get_data()->door.x] = 'O';
+                // get_data()->front_ray.map_y]
                 
             }
             
@@ -406,7 +406,7 @@ void update_door_animation(void)
                 get_data()->door.is_closing = 0;
                 get_data()->door.is_open = 0;
                 get_data()->door.is_closed = 1;
-                get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x] = 'D';
+                get_data()->map[get_data()->door.y][get_data()->door.x] = 'D';
             }
             
             // Update the door texture
@@ -420,16 +420,6 @@ void update_door_animation(void)
             get_data()->is_updated = 1;
         }
     }
-    // if (get_data()->door.is_open)
-    // {
-    //     int map_x = get_data()->front_ray.map_x;
-    //  int map_y = get_data()->front_ray.map_y;
-    //  char *current_tile = &get_data()->map[map_y][map_x];
-    //
-    //  if (*current_tile == 'D')
-    //      *current_tile = 'O';
-    //     get_data()->is_updated = 1;
-    // }
 }
 
 // Implementation of gun loading and animation functions
@@ -625,47 +615,13 @@ int loop_hook(t_game *game)
     }
 	if (get_data()->is_updated)
 	{
-    update_movement();
-		init_background();
-		render_walls();
-        // render_scope();
-		render_minimap();
-    update_door_animation();
-		render_background();
-        // mlx_mouse_hide();
-        if (!get_data()->show_scope)
-		        render_gun();
-            // render_gun_with_transparency();
-        // render_scope();
-    	// if (get_data()->front_ray.object_hitted == 2 && 
-        // 	get_data()->front_ray.dist < 2 * GRID_DIST)
-        // {
-        //     int text_width = 200;
-        //     int text_height = 20;
-        //     int text_x = (WIN_WIDTH - text_width) / 2;
-        //     int text_y = WIN_HEIGHT - text_height - 10;
-
-        //     // Draw white text
-        //     mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to close the door]");
-        // }
-        // if (get_data()->front_ray.object_hitted == 1 && get_data()->front_ray.dist < 2 * GRID_DIST)
-        // {
-        //     int text_width = 200;
-        //     int text_height = 20;
-        //     int text_x = (WIN_WIDTH - text_width) / 2;
-        //     int text_y = WIN_HEIGHT - text_height - 10;
-
-        //     // Draw white text
-        //     mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press E to open the door]");
-        // }
-        // if (get_data()->gun.shooted == 0 && !player_is_close_to_door())
-        // {
-        //     int text_x = (WIN_WIDTH - 200) / 2;
-        //     int text_y = WIN_HEIGHT - 20 - 10;
-        //     // Draw white text
-        //     mlx_string_put(get_data()->mlx, get_data()->win, text_x + 10, text_y + 5, 0xFFFFFF, "[Press T to reload the gun]");
-        // }
-
+        update_movement();
+	    init_background();
+	    render_walls();
+	    render_minimap();
+        update_door_animation();
+	    render_background();
+	    // render_gun();
 	}
     return (0);
 }
