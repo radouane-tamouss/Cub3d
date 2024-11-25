@@ -2,5 +2,7 @@
 
 void print_err(char *str)
 {
-	write(STDERR_FILENO, str, ft_strlen(str));
+	ft_putstr_fd("Error ", STDERR_FILENO);
+	ft_putstr_fd(str, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
 }

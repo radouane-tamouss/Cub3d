@@ -3,7 +3,7 @@
 
 [x] fix master branch , reset the old commit and merge again --> 00:40
 [x] push the the nvim to github
-[ ] add door animation [x] door is opening [ ] door is closing
+[x] add door animation [x] door is opening [x] door is closing
 [ ] add the remaining frames -->
 [ ] add home page, and settings -> 4:40
 [ ] split parsing from bonus -> 6:00

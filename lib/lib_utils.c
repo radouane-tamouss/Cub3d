@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        ::::::::            */
-/*   lib_utils.c                                        :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: rtamouss <rtamouss@student.42.fr>            +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2024/03/02 10:16:01 by rtamouss      #+#    #+#                 */
-/*   Updated: 2024/09/28 10:28:34 by rtamouss      ########   odam.nl         */
+/*                                                        :::      ::::::::   */
+/*   lib_utils.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/02 10:16:01 by rtamouss          #+#    #+#             */
+/*   Updated: 2024/11/25 11:58:59 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,14 @@ char	*ft_strdup(const char *s1)
 
 void	ft_putstr(char *str)
 {
-	int	i;
+    int	i;
+    ssize_t ret;
 
-	i = 0;
-	while (str[i])
-	{
-		write(1, &str[i], 1);
-		i++;
-	}
+    i = 0;
+    while (str[i])
+    {
+        ret = write(1, &str[i], 1);
+        (void)ret; // Explicitly ignore the return value
+        i++;
+    }
 }

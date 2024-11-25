@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/22 22:25:12 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:52:15 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void render_map(void)
 {
 	int i,j;
 	int x,y;
-	int	color;
+	// int	color;
 	i = ft_max((get_data()->player_pos.y / GRID_DIST) - 5, 0);
 	while(i < get_data()->height && (i - (get_data()->player_pos.y / GRID_DIST)) < 5)
 	{

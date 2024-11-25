@@ -24,7 +24,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 int check_file(char *str, int *fd)
 {
-	int i = 0;
+	// int i = 0;
 	char *res;
 	ssize_t bytes_read;
 	char buff[5];
@@ -249,6 +249,7 @@ void parse_color(char *color, t_color *color_struct)
 }
 void parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 {
+	(void) map;
     char **split;
     
     split = ft_split2(line, " \t\r\n\v\f");
@@ -360,9 +361,10 @@ void check_map_sourrounded_by_walls(t_game *game)
 			printf("Error: Empty line in map\n");
 			exit(1);
 		}
+		
 		while (game->map.grid[i][j])
 		{
-			if (i == 0 || i == game->map.height - 1 || j == 0 || j == ft_strlen(game->map.grid[i]) - 1)
+			if (i == 0 || i == game->map.height - 1 || j == 0 || j == (int)(ft_strlen(game->map.grid[i])) - 1)
 			{
 				if (game->map.grid[i][j] != '1' && game->map.grid[i][j] != ' ')
 				{
@@ -458,7 +460,7 @@ void check_invalid_spaces(t_game *game)
 				if ((i > 0 && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != ' ') ||  // above
 					(i < game->map.height - 1 && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != ' ') ||  // below
 					(j > 0 && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != ' ') ||  // left
-					(j < ft_strlen(game->map.grid[i]) - 1 && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != ' '))  // right
+					(j < (int)ft_strlen(game->map.grid[i]) - 1 && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != ' '))  // right
 				{
 					printf("Error: Invalid space found at (%d, %d)\n", i, j);
 					exit(1);
@@ -489,7 +491,7 @@ void check_invalid_map(t_game *game)
 				if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != 'D' && game->map.grid[i - 1][j] != 'O' && !check_if_player_direction(game->map.grid[i - 1][j]))) ||  // above
 					(i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0' && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != 'D' && game->map.grid[i + 1][j] != 'O' && !check_if_player_direction(game->map.grid[i + 1][j]))) ||  // below
 					(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != 'D' && game->map.grid[i][j - 1] != 'O' && !check_if_player_direction(game->map.grid[i][j - 1]))) ||  // left
-					(j < ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != 'D' && game->map.grid[i][j + 1] != 'O' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
+					(j < (int)ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != 'D' && game->map.grid[i][j + 1] != 'O' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
 				{
 					if (check_if_player_direction(game->map.grid[i][j]) == 1)
 						printf("invalid player direction at (%d, %d)\n", i, j);
@@ -572,10 +574,10 @@ void pad_map_with_spaces(t_game *game)
     while (game->map.grid[i] != NULL)
     {
         j = 0;
-        if (ft_strlen(game->map.grid[i]) < map_width)
+        if ((int)ft_strlen(game->map.grid[i]) < map_width)
         {
             char *line = mallocate(sizeof(char) * (map_width + 1));
-            int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
+            // int number_of_spaces_to_add = map_width - ft_strlen(game->map.grid[i]);
             int k = 0;
 
             // Copy the original line
