@@ -94,6 +94,20 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
             draw_col(ray, col);
             return;
         }
+         else if (current_tile == 'P') // animated door 
+        {
+            ray.object_hitted = 3; // hit a closed door
+            if (!data_taken && ray.angle == get_data()->player_angle)
+            {
+                get_data()->front_ray = ray;
+                calculate_distance(&(get_data()->front_ray));
+                data_taken = 1;
+            }
+            perform_dda(ray, data_taken, col);
+            calculate_distance(&ray);
+            draw_col(ray, col);
+            return;
+        }
         else if (current_tile == 'D') // Closed door
         {
             ray.object_hitted = 1; // hit a closed door
@@ -159,6 +173,8 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
             texture = get_data()->door_open_img;
 		else if (ray.object_hitted == 1)
 			texture = get_data()->door_img;
+        else if (ray.object_hitted == 3)
+            texture = get_data()->door_animating_img;
 		else if (ray.ray_dir.x > 0)
 			texture = get_data()->east_img;
 		else
@@ -171,6 +187,8 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
             texture = get_data()->door_open_img;
 		else if (ray.object_hitted == 1)
 			texture = get_data()->door_img;
+        else if (ray.object_hitted == 3)
+            texture = get_data()->door_animating_img;
         else if (ray.ray_dir.y > 0)
 			texture = get_data()->north_img;
 		else
@@ -183,7 +201,7 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
 
 	// trying to find t x and y of the pixel must be pulled from the texture image
 
-    // calc the y coords in the texture
+   // calc the y coords in the texture
     pixel_y = (int)((i - (WIN_HEIGHT / 2 - ray.wall_height / 2)) / ray.wall_height * texture.height) % texture.height;
 	// making sure the y pixel is between 0 and height of our texture
     // pixel_y = fmaxf(0, fminf(pixel_y, texture.height - 1));
@@ -199,7 +217,9 @@ int calc_color(t_ray_data ray, int start, int i, int end)
     projected_wall = end - start;
 	color = get_right_pixel(i, ray);
     if (GET_T(color) == 255)
+    {
         return (color);
+    }
 	if (get_data()->dark_mode)
 		color = CREATE_TRGB(0,
 			((int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
@@ -211,7 +231,7 @@ int calc_color(t_ray_data ray, int start, int i, int end)
 
 void draw_col(t_ray_data ray, int col)
 {
-	float wall_height;
+	// float wall_height;
 	int start;
 	int end;
 	int i;
@@ -237,8 +257,8 @@ void draw_col(t_ray_data ray, int col)
 void render_col(int col)
 {
     float ray_angle;
-	t_ray_data	ray;
-	int color;
+	// t_ray_data	ray;
+	// int color;
 
 	ray_angle = normalise_angle(get_data()->player_angle - (FOV/2) + (col * (FOV/WIN_WIDTH)));
     cast_ray(ray_angle, col);

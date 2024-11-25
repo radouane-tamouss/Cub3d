@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   background.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:33:12 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/22 17:49:31 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/25 11:40:41 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_background()
 	int	x;
 	int	y;
 	int	color;
+
 
 	y = 0;
 	while (y < WIN_HEIGHT)

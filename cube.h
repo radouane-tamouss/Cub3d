@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/24 07:21:38 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/25 10:53:00 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,18 +173,31 @@ typedef struct s_gun {
 
 //======================================
 
+// typedef struct s_door {
+//     void    *img[18];       // Array to store door frame images
+//     int     width;          // Width of door image
+//     int     height;         // Height of door image
+//     int     current_frame;  // Current frame being displayed
+//     int     frame_delay;    // Delay counter for animation
+//     int     is_opening;     // Flag for opening animation
+//     int     is_open;        // Flag to indicate if door is fully open
+//     int     is_closing;     // Flag for closing animation
+//     int    is_closed;      // Flag to indicate if door is fully closed
+//     int    x;
+//     int    y;
+// } t_door;
 typedef struct s_door {
     void    *img[18];       // Array to store door frame images
-    int     width;          // Width of door image
-    int     height;         // Height of door image
+    int     width;          // Height of door image
+    int     height;         // Width of door image
     int     current_frame;  // Current frame being displayed
     int     frame_delay;    // Delay counter for animation
     int     is_opening;     // Flag for opening animation
     int     is_open;        // Flag to indicate if door is fully open
     int     is_closing;     // Flag for closing animation
-    int    is_closed;      // Flag to indicate if door is fully closed
-    int    x;
-    int    y;
+    int     is_closed;      // Flag to indicate if door is fully closed
+    int     active_x;       // X coordinate of currently animating door
+    int     active_y;       // Y coordinate of currently animating door
 } t_door;
 //======================================
 
@@ -314,6 +327,7 @@ typedef struct s_data
 	t_texture	west_img;
 	t_texture	door_img;
     t_texture   door_open_img;
+    t_texture   door_animating_img;
 
     t_img_data scope; 
 	t_img_data	background_img;
@@ -336,6 +350,7 @@ typedef struct s_data
 	t_ray_data		front_ray;
     t_gun          gun;
     t_gun         gun2;
+    t_gun         gun3;
     int show_tab;
     int gun_id;
     t_door          door;
