@@ -185,10 +185,15 @@ void	init_data(t_game game)
 	get_data()->door_img.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "textures/10door.xpm", &(get_data()->door_img.width), &(get_data()->door_img.height));
 	get_data()->door_img.img_data.addr = safer_get_data_addr(get_data()->door_img.img_data.img, &(get_data()->door_img.img_data.bits_per_pixel), &(get_data()->door_img.img_data.line_length), &(get_data()->door_img.img_data.endian));
 
+    //======init sprites ===============================
+    get_data()->sprites = (t_sprite *)mallocate(sizeof(t_sprite) * 1);
+    get_data()->sprites[0].position = get_data()->player_pos;
+    get_data()->sprites[0].z = WIN_HEIGHT / 2 - 20; 
 
-
-    
-
+	get_data()->sprites[0].texture.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "enemy_sprite.xpm", &(get_data()->sprites[0].texture.width), &(get_data()->sprites[0].texture.height));
+	get_data()->sprites[0].texture.img_data.addr = safer_get_data_addr(get_data()->sprites[0].texture.img_data.img, &(get_data()->sprites[0].texture.img_data.bits_per_pixel), &(get_data()->sprites[0].texture.img_data.line_length), &(get_data()->sprites[0].texture.img_data.endian));
+    get_data()->num_sprites = 1;
+    //==================================================
 
 
 }
@@ -545,6 +550,7 @@ int loop_hook(t_game *game)
 		render_walls();
         // render_scope();
 		render_minimap();
+        render_sprites();/////
 		render_background();
         // mlx_mouse_hide();
         if (!get_data()->show_scope)
@@ -597,6 +603,7 @@ int main(int ac, char **av)
 	init_background();
 	render_walls();
 	render_minimap();
+    render_sprites();/////
 	render_background();
 	load_frames();
     load_first_gun_frames();

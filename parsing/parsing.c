@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:01:32 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/11 14:00:59 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/22 22:40:27 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void fill_map(char **map, char *file, char *line)
 	int fd;
 	int i;
 	int filled_lines;
-	
+
 	fd = open(file, O_RDONLY);
 	filled_lines = 0;
 	line = get_next_line(fd);
