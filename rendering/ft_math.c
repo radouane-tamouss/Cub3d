@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 19:49:10 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/10/03 00:48:44 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/26 18:51:12 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,21 @@ int calc_dist(int x, int y, t_vector point)
 {
 	int r;
 
-	r = sqrt(ft_power(ft_abs(x - point.x), 2) + ft_power(ft_abs(y - point.y), 2));
+	r = sqrt((x - point.x) * (x - point.x) + (y - point.y) * (y - point.y));
 	return (r);
+}
+
+float calc_dist_f(float x, float y, t_vector point)
+{
+	float r;
+
+	r = sqrt((x - point.x) * (x - point.x) + (y - point.y) * (y - point.y));
+	return (r);
+}
+
+float	dot_product(t_vector v1, t_vector v2)
+{
+	return (v1.x * v2.x + v1.y * v2.y);
 }
 
 void	line_between_2points(t_vector point1,
