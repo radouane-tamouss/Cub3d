@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/25 10:53:00 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/27 18:52:50 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,8 +305,22 @@ typedef struct s_ray_data {
 	int		object_hitted;// wall 0     &     close door 1      &     open door 2
     // struct s_ray_data   *will_render_above;// list of thing that will render above each other (example: door will render above another door that will render above a wall)
 } t_ray_data;
-//==== data =================
 
+//= Sprites structure============================
+typedef struct s_sprite
+{
+    t_vector    position;
+    t_texture   texture;
+    t_texture   *frames;
+    float       z;
+    float dist;
+    int display_start_x;
+    int display_start_y;
+    int display_end_x;
+    int display_end_y;
+}   t_sprite;
+
+//==== data =================
 typedef struct s_data
 {
 	void		*mlx;
@@ -354,16 +368,31 @@ typedef struct s_data
     int show_tab;
     int gun_id;
     t_door          door;
-
+    t_sprite    *sprites;
+    int         num_sprites;
+    // t_texture enemy;
 } t_data;
+
 //= Enemie structure============================
 
-// typedef struct s_enemie
+// typedef struct s_enemy
 // {
+    
+//     t_texture   texture;
 //     t_vector    position;
 //     int         health;
-//     t_texture   texture;
-// }   t_enemie;
+//     char    id;//TODO make a max of enemies
+// }   t_enemy;
+
+// //= map_grid data ==============================
+
+// typedef struct s_map_grid
+// {
+//     t_enemy enemy;
+//     char    type;// type of the cube '0' for air | '1' for wall | 'D' for closed door | 'O' for opend DOor
+// } t_map_grid;
+
+
 
 //=================================
 t_data	*get_data(void);
@@ -399,6 +428,8 @@ void    update_door_animation(void);
 void    open_door(void);
 void    close_door(void);
 int	calc_dist(int x, int y, t_vector point);
+float	calc_dist_f(float x, float y, t_vector point);
+float	dot_product(t_vector v1, t_vector v2);
 void	rotate_player(float angle);
 void	move_backward();
 void	move_forward();
@@ -413,6 +444,10 @@ void render_scope();
 
 void	render_walls(void);
 void render_minimap(void);
+//
+t_ray_data  create_ray(float angle);
+void	calculate_distance(t_ray_data *ray);
+void	render_sprites(void);
 
 //=== utils =============================================
 
