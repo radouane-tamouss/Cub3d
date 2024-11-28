@@ -6,7 +6,7 @@
 /*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/25 10:53:00 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/11/28 11:49:22 by rtamouss         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 # define SQUARE_SIZE 16 
 # define PI 3.14159265359
 #define ROTATION_SPEED 0.2
-#define MOVE_SPEED 0.1
+#define MOVE_SPEED 0.05
 #define WALL_STRIP_WIDTH 100 
 #define FOV_ANGLE 60 * (PI / 180)
 //=== buttons ====
@@ -121,6 +121,11 @@ typedef struct s_img_data
 # define TAB_MAC 48
 # define N_MAC 45
 
+
+# define LIN_1 49
+# define LIN_2 50
+# define LIN_3 51
+# define LIN_4 52
 # define W_LIN 119
 # define A_LIN 97
 # define S_LIN 115
@@ -138,6 +143,7 @@ typedef struct s_img_data
 # define CNTRL_LIN 65507
 # define TAB_LIN 65289
 # define N_LIN 110
+# define H_LIN 104
 # define SHIFT_LIN 65505
 # define SPACE_LIN 32
 
@@ -284,6 +290,8 @@ typedef struct s_game
 //==== vector struct ========
 typedef struct s_vector
 {
+    int button;
+    int pressed;
 	float	x;
 	float	y;
 }	t_vector;
@@ -320,6 +328,7 @@ typedef struct s_data
     int rotate_right;
     int show_scope;
     int is_tab_pressed;
+    int is_sound_playing;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
@@ -351,9 +360,12 @@ typedef struct s_data
     t_gun          gun;
     t_gun         gun2;
     t_gun         gun3;
+    int screen_shake_intensity;
+    int screen_shake_timer;
     int show_tab;
     int gun_id;
     t_door          door;
+    float gun_offset_x;
 
 } t_data;
 //= Enemie structure============================
@@ -379,6 +391,7 @@ int check_file(char *str, int *fd);
 int check_if_player_direction(char c);
 void render_tab();
 void render_transparent_frame(void *frame_img, int width, int height);
+void play_sound(const char *file);
 
 //=======================================================
 //=== rendering =========================================
@@ -387,6 +400,7 @@ void	put_pixel(t_img_data *img, int x, int y, int color);
 unsigned int	pull_pixel(t_texture img, int x, int y);
 void	init_background(void);
 void	render_background(void);
+void start_walk_sound();
 int		handle_keys(int keycode, void *garbage);
 int		ft_close(void);
 int mouse_event(int x, int y, void *par);
