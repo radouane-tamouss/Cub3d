@@ -725,7 +725,7 @@ int loop_hook(void)
     }
 	if (get_data()->is_updated)
 	{
-      update_movement();
+        update_movement();
 	    init_background();
 	    render_walls();
 	    render_minimap();

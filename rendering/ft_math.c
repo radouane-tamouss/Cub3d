@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 19:49:10 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/26 18:51:12 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:33:21 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,11 @@ float calc_dist_f(float x, float y, t_vector point)
 float	dot_product(t_vector v1, t_vector v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y);
+}
+
+float vector_magnitude(t_vector vector)
+{
+	return (sqrt(vector.x * vector.x + vector.y * vector.y));
 }
 
 void	line_between_2points(t_vector point1,
