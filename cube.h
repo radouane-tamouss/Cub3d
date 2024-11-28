@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/27 18:52:50 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/28 15:31:30 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,6 +430,7 @@ void    close_door(void);
 int	calc_dist(int x, int y, t_vector point);
 float	calc_dist_f(float x, float y, t_vector point);
 float	dot_product(t_vector v1, t_vector v2);
+float vector_magnitude(t_vector vector);
 void	rotate_player(float angle);
 void	move_backward();
 void	move_forward();

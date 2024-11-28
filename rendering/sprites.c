@@ -6,13 +6,16 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/27 18:26:50 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/28 22:25:12 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube.h"
 
-static int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
+# define ENEMY_SPEED 2.5
+
+
+int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
 {
 	while (1)
     {
@@ -30,7 +33,7 @@ static int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
         }
         
         char current_tile = get_data()->map[ray.map_y][ray.map_x];
-        
+
         if (current_tile == '1' || current_tile == 'D' /* || current_tile == 'O'*/) // TODO find a way to display the opened door with the sprite accorfingly
         {
             calculate_distance(&ray);
@@ -43,6 +46,38 @@ static int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
     }
 }
 
+void	update_enemies()
+{
+	int	i;
+	t_vector	sprite_to_player;
+	float angle;
+	float	magnitude;
+	
+	i = 0;
+	while (i < get_data()->num_sprites)
+	{
+		sprite_to_player.x = get_data()->player_pos.x - get_data()->sprites[i].position.x;
+		sprite_to_player.y = get_data()->player_pos.y - get_data()->sprites[i].position.y;
+		angle = atan2(-sprite_to_player.y,  -sprite_to_player.x) ;//- normalise_angle(get_data()->player_angle);
+		angle = normalise_angle(angle);
+		// printf("angle => %f\n", angle * (180 / MY_PI));
+		// printf("angles :   ray ==> %f  ||| player ==> %f\n", angle * (180 / MY_PI), get_data()->player_angle * (180 / MY_PI));
+		if (ray_hit_sprite(create_ray(angle), get_data()->sprites[i]))
+		{
+			// printf(" y moving\n");
+
+			magnitude = vector_magnitude(sprite_to_player);
+			// printf("magnitude => %f", magnitude);
+			get_data()->sprites[i].position.x += ((sprite_to_player.x) / ft_max(1, magnitude)) * ENEMY_SPEED;
+			get_data()->sprites[i].position.y += ((sprite_to_player.y) / ft_max(1, magnitude)) * ENEMY_SPEED;
+			// printf("player: x=>%f, y=> %f | sprite x =>%f, y=>%f\n", get_data()->player_pos.x, get_data()->player_pos.y, get_data()->sprites[i].position.x, get_data()->sprites[i].position.y);
+		}
+		// else
+		// 	printf(" x not moving\n");
+		
+		i++;
+	}
+}
 static void	render_sprite(t_sprite sprite)
 {
 	int	i;
@@ -128,15 +163,17 @@ void	render_sprites(void)
 {
 	float angle;
 	int	i;
+	
+	update_enemies();//TODO just for testin
 
 	// TODO I should sort them by dist first
 	i = 0;
 	while (i < get_data()->num_sprites)
 	{
 		get_data()->sprites[i].dist = calc_dist_f(get_data()->sprites[i].position.x, get_data()->sprites[i].position.y, get_data()->player_pos);
-		if (get_data()->sprites[i].dist < GRID_DIST/ 2)
+		if (get_data()->sprites[i].dist < GRID_DIST)
 		{
-			printf("sprite ignored\n");
+			printf("sprite ignored\n");// TODO this will replcae dying or taking damage for now
 			i++;
 			continue ;
 		}
