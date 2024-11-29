@@ -72,7 +72,7 @@ void update_movement()
 
 
 
-    float move_speed = 0.5; 
+    float move_speed = 0.7; 
 
     if (get_data()->move_forward)
         move_forward();
@@ -236,10 +236,21 @@ int	handle_keys(int keycode, void *garbage)
     }
 	if (keycode == T_LIN)  // Add proper key define if needed
     {
-		get_data()->gun.shooted = 1;
-        get_data()->gun.is_reloading = 1;
-        get_data()->gun.current_frame = 0;
-        get_data()->gun.frame_delay = 0;
+    printf("gun_id == %d\n", get_data()->gun_id);
+       if (get_data()->gun_id == 0)
+       {
+	         get_data()->gun.shooted = 1;
+           get_data()->gun.is_reloading = 1;
+           get_data()->gun.current_frame = 0;
+           get_data()->gun.frame_delay = 0;
+       }
+       else if (get_data()->gun_id == 2)
+       {
+          printf("here it should be reloading\n");
+           get_data()->gun3.is_reloading = 1;
+           get_data()->gun3.current_frame = 0;
+           get_data()->gun3.frame_delay = 0;
+       }
     }
     if (keycode == Y_LIN)
     {
