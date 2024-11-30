@@ -211,15 +211,17 @@ void	init_data(t_game game)
 	get_data()->door_animating_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/door_frames/13.xpm", &(get_data()->door_animating_img.width), &(get_data()->door_animating_img.height));
 	get_data()->door_animating_img.img_data.addr = mlx_get_data_addr(get_data()->door_animating_img.img_data.img, &(get_data()->door_animating_img.img_data.bits_per_pixel), &(get_data()->door_animating_img.img_data.line_length), &(get_data()->door_animating_img.img_data.endian));
     printf("data addr 2 = %p\n", get_data()->door_animating_img.img_data.addr);
+	init_sprites(&game);
+
 
     //======init sprites ===============================
-    get_data()->sprites = (t_sprite *)mallocate(sizeof(t_sprite) * 1);
-    get_data()->sprites[0].position = get_data()->player_pos;
-    get_data()->sprites[0].z = WIN_HEIGHT / 2 - 20; 
+    // get_data()->sprites = (t_sprite *)mallocate(sizeof(t_sprite) * 1);
+    // get_data()->sprites[0].position = get_data()->player_pos;
+    // get_data()->sprites[0].z = WIN_HEIGHT / 2 - 20; 
 
-	get_data()->sprites[0].texture.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "enemy_sprite.xpm", &(get_data()->sprites[0].texture.width), &(get_data()->sprites[0].texture.height));
-	get_data()->sprites[0].texture.img_data.addr = safer_get_data_addr(get_data()->sprites[0].texture.img_data.img, &(get_data()->sprites[0].texture.img_data.bits_per_pixel), &(get_data()->sprites[0].texture.img_data.line_length), &(get_data()->sprites[0].texture.img_data.endian));
-    get_data()->num_sprites = 1;
+	// get_data()->sprites[0].texture.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "enemy_sprite.xpm", &(get_data()->sprites[0].texture.width), &(get_data()->sprites[0].texture.height));
+	// get_data()->sprites[0].texture.img_data.addr = safer_get_data_addr(get_data()->sprites[0].texture.img_data.img, &(get_data()->sprites[0].texture.img_data.bits_per_pixel), &(get_data()->sprites[0].texture.img_data.line_length), &(get_data()->sprites[0].texture.img_data.endian));
+    // get_data()->num_sprites = 1;
     //==================================================
 
 

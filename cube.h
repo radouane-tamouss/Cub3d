@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/28 15:31:30 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:25:36 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -423,6 +423,7 @@ void	line_between_2points(t_vector point1,
 				t_vector point2, int color);
 float	ft_max(float nbr1, float nbr2);
 float	ft_min(float nbr1, float nbr2);
+void init_sprites(t_game *game);
 double	ft_abs(double nbr);
 void    update_door_animation(void);
 void    open_door(void);

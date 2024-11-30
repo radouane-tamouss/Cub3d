@@ -26,6 +26,7 @@ ${NAME} : ${OFILES} ${LIBFT}
 	#$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
 	# ${NAME} : ${OFILES} ${LIBFT}
 	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
+	# gunzip textures/* textures/*/*
 
 ${LIBFT} :
 	@make re -C mlx-linux

@@ -94,7 +94,7 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
             draw_col(ray, col);
             return;
         }
-         else if (current_tile == 'P') // animated door 
+        else if (current_tile == 'P') // animated door
         {
             ray.object_hitted = 3; // hit a closed door
             if (!data_taken && ray.angle == get_data()->player_angle)

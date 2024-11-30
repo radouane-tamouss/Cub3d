@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/28 22:25:12 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/11/30 18:21:30 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,16 +46,17 @@ int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
     }
 }
 
-void	update_enemies()
+void	update_enemies_data()
 {
 	int	i;
 	t_vector	sprite_to_player;
 	float angle;
 	float	magnitude;
-	
+
 	i = 0;
 	while (i < get_data()->num_sprites)
 	{
+		get_data()->sprites[i].dist = calc_dist_f(get_data()->sprites[i].position.x, get_data()->sprites[i].position.y, get_data()->player_pos);
 		sprite_to_player.x = get_data()->player_pos.x - get_data()->sprites[i].position.x;
 		sprite_to_player.y = get_data()->player_pos.y - get_data()->sprites[i].position.y;
 		angle = atan2(-sprite_to_player.y,  -sprite_to_player.x) ;//- normalise_angle(get_data()->player_angle);
@@ -155,22 +156,41 @@ static int	should_render(t_sprite *sprite, float *angle)
 	return (0);
 }
 
-// void	calc_sprite_dist(t_sprite	sprite)
-// {}
+void	sort_sprites(void)
+{
+	t_sprite	tmp_sprite;
+	int	i;
+	int	j;
+	
+	i = 0;
+	while (i < get_data()->num_sprites - 1)
+	{
+		j = i + 1;
+		while (j < get_data()->num_sprites)
+		{
+			if (get_data()->sprites[i].dist < get_data()->sprites[j].dist)
+			{
+				tmp_sprite = get_data()->sprites[i];
+				get_data()->sprites[i] = get_data()->sprites[j];
+				get_data()->sprites[j] = tmp_sprite;
+			}
+			j++;
+		}
+		i++;
+	}
+}
 
-// func to render sprites
 void	render_sprites(void)
 {
 	float angle;
 	int	i;
 	
-	update_enemies();//TODO just for testin
-
-	// TODO I should sort them by dist first
+	update_enemies_data();//TODO just for testin
+	sort_sprites();// sorting enemies by there dist from the player
 	i = 0;
 	while (i < get_data()->num_sprites)
 	{
-		get_data()->sprites[i].dist = calc_dist_f(get_data()->sprites[i].position.x, get_data()->sprites[i].position.y, get_data()->player_pos);
+		// get_data()->sprites[i].dist = calc_dist_f(get_data()->sprites[i].position.x, get_data()->sprites[i].position.y, get_data()->player_pos);
 		if (get_data()->sprites[i].dist < GRID_DIST)
 		{
 			printf("sprite ignored\n");// TODO this will replcae dying or taking damage for now
