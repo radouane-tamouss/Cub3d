@@ -700,33 +700,55 @@ void render_gun_frames(int num_frames, t_gun *gun, int frame_delay) {
     }
   }
 }
-
-void show_scope(int num_frames, t_gun *gun, int frame_delay) {
-
-  if (gun->show_scope == 1) {
-    if (gun->frame_delay++ >= frame_delay) // Adjust delay value as needed
-    {
-      gun->frame_delay = 1;
-      gun->current_frame++;
-      if (gun->current_frame >= num_frames) {
-        gun->current_frame = num_frames;
-        gun->is_shooting = 0;
-        gun->is_reloading = 0;
+void show_scope(int max_frames, t_gun *gun, int frame_step) {
+  // Increment frame delay
+  gun->frame_delay++;
+  
+  // Check if it's time to change the frame (e.g., every 16 ticks)
+  if (gun->frame_delay >= 16) {
+    // Reset frame delay
+    gun->frame_delay = 0;
+    
+    if (frame_step > 0) {
+      // Zoom in: 0 to 5
+      if (gun->current_frame < max_frames) {
+        gun->current_frame++;
       }
-    }
-  } else if (gun->show_scope == 0) {
-    if (gun->frame_delay++ >= frame_delay) // Adjust
-    {
-      gun->frame_delay = 1;
-      gun->current_frame--;
-      if (gun->current_frame < 0) {
-        gun->current_frame = 0;
-        gun->is_shooting = 0;
-        gun->is_reloading = 0;
+    } else {
+      // Zoom out: 5 to 0 (reversed order)
+      if (gun->current_frame > 0) {
+        gun->current_frame--;
       }
     }
   }
 }
+// void show_scope(int num_frames, t_gun *gun, int frame_delay) {
+
+//   if (gun->show_scope == 1) {
+//     if (gun->frame_delay++ >= frame_delay) // Adjust delay value as needed
+//     {
+//       gun->frame_delay = 1;
+//       gun->current_frame++;
+//       if (gun->current_frame >= 5) {
+//         gun->current_frame = num_frames;
+//         gun->is_shooting = 0;
+//         gun->is_reloading = 0;
+//       }
+//     }
+//   } else if (gun->show_scope == 0) {
+//     if (gun->frame_delay++ >= frame_delay) // Adjust
+//     {
+//       printf("current frame = %d\n", gun->current_frame);
+//       gun->current_frame--;
+//       gun->frame_delay = 1;
+//       if (gun->current_frame < 0) {
+//         gun->current_frame = 0;
+//         gun->is_shooting = 0;
+//         gun->is_reloading = 0;
+//       }
+//     }
+//   }
+// }
 
 void render_reloading(int gun_id) {
 
@@ -751,13 +773,18 @@ void render_shooting(int gun_id) {
 }
 
 void render_zooming(int gun_id) {
-  if (gun_id == 0) {
-  }
-  if (gun_id == 1) {
+  if (gun_id == 2)
+  {
+    if (get_data()->gun3.show_scope == 1)
+    {
+      show_scope(5, &get_data()->gun3, 16);
+    }
+    else if (get_data()->gun3.show_scope == 0)
+    {
+      show_scope(5, &get_data()->gun3, -16);
 
-  } else if (gun_id == 2) {
-    show_scope(7, &get_data()->gun3, 16);
-  }
+    }
+  } 
 }
 void render_gun3(void) {
   if (get_data()->gun3.is_shooting) {
@@ -766,8 +793,8 @@ void render_gun3(void) {
         get_data()->gun3.shooting_frames[get_data()->gun3.current_frame],
         get_data()->gun3.width, get_data()->gun3.height);
     render_frame();
-  } else if (get_data()->gun3.show_scope) {
-    printf("here should be showing the scope\n");
+  }  else if (get_data()->gun3.show_scope == 1 ||
+             get_data()->gun3.show_scope == 0) {
     render_zooming(2);
     render_transparent_frame(
         get_data()->gun3.zoom_shooting_frames[get_data()->gun3.current_frame],
@@ -821,6 +848,7 @@ void render_gun(void) {
     render_gun2();
   if (get_data()->gun_id == 2)
     render_gun3();
+  render_frame();
 }
 
 int player_is_close_to_door(void) {
