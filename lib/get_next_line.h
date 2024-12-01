@@ -11,21 +11,21 @@
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#define GET_NEXT_LINE_H
 
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
-# endif
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 10
+#endif
 
-# include "../cube.h"
+#include "../cube.h"
 
-size_t	ft_strlen(const char *theString);
-char	*ft_strjoin(char const *s1, char const *s2);
-void	*ft_calloc(size_t num, size_t size);
-char	*ft_strchr(const char *string, int searchedChar);
-char	*ft_get_line(char *buffer);
-char	*ft_rest(char *buffer);
-char	*read_file(int fd, char *result);
-char	*get_next_line(int fd);
+size_t ft_strlen(const char *theString);
+char *ft_strjoin(char const *s1, char const *s2);
+void *ft_calloc(size_t num, size_t size);
+char *ft_strchr(const char *string, int searchedChar);
+char *ft_get_line(char *buffer);
+char *ft_rest(char *buffer);
+char *read_file(int fd, char *result);
+char *get_next_line(int fd);
 
 #endif // GET_NEXT_LINE_H

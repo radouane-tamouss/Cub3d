@@ -223,7 +223,6 @@ int handle_keys(int keycode, void *garbage) {
     printf("z pressed\n");
     if (get_data()->gun_id == 2) {
       if (!get_data()->gun3.show_scope) {
-        printf("here what's the problem\n");
         get_data()->gun_id = 2;
         get_data()->gun3.current_frame = 0;
         get_data()->gun3.frame_delay = 0;
@@ -233,7 +232,6 @@ int handle_keys(int keycode, void *garbage) {
         get_data()->gun3.show_scope = 1;
         get_data()->screen_shake_intensity = 5; // Adjust intensity as needed
         get_data()->screen_shake_timer = 10;    // Adjust duration as needed
-        play_sound("sounds/one_shot_firstgun.wav");
       } else if (get_data()->gun3.show_scope == 1) {
         get_data()->gun3.show_scope = 0;
       }
