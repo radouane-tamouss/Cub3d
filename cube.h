@@ -28,8 +28,8 @@
 
 //== const sizes =========
 
-# define WIN_HEIGHT 800
-# define WIN_WIDTH 1600
+# define WIN_HEIGHT 720
+# define WIN_WIDTH 1280
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
 # define GRID_DIST 80 
@@ -167,12 +167,14 @@ typedef struct s_gun {
     void *shooting_frames[30];
     void *walking_frames[13];
     void *running_frames[23];
+    void *zoom_shooting_frames[19];
 
     int     width;          // Width of gun image
     int     height;         // Height of gun image
     int     current_frame;  // Current frame being displayed
     int     frame_delay;    // Delay counter for animation
     int is_shooting;
+    int is_zooming;
     int     is_reloading;    // Flag for shooting animation
     int     shooted;
 } t_gun;

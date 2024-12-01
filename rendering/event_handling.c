@@ -231,8 +231,26 @@ int	handle_keys(int keycode, void *garbage)
 // }
     if (keycode == Z_LIN)
     {
-    printf("z pressed\n");
-        get_data()->show_scope = 1;
+        printf("z pressed\n");
+        if (get_data()->gun_id == 3)
+        {
+            if (!get_data()->gun3.is_shooting)
+            {
+                get_data()->gun3.is_zooming = 1;
+                get_data()->gun_id = 2;
+                get_data()->gun3.is_shooting = 1;
+                get_data()->gun3.current_frame = 0;
+                get_data()->gun3.frame_delay = 0;
+                get_data()->gun3.is_reloading = 0;
+                get_data()->is_running = 0;
+                get_data()->is_walking = 0;
+                get_data()->screen_shake_intensity = 5; // Adjust intensity as needed
+                get_data()->screen_shake_timer = 10; // Adjust duration as needed
+                play_sound("sounds/one_shot_firstgun.wav");
+            }
+          
+        }
+        
     }
 	if (keycode == T_LIN)  // Add proper key define if needed
     {
@@ -250,6 +268,7 @@ int	handle_keys(int keycode, void *garbage)
            get_data()->gun3.is_reloading = 1;
            get_data()->gun3.current_frame = 0;
            get_data()->gun3.frame_delay = 0;
+          play_sound("sounds/gun3reloadd.wav");
        }
     }
     if (keycode == Y_LIN)

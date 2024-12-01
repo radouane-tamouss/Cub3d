@@ -236,7 +236,7 @@ void render_frame()
 
 void    load_shooting_gun3_frames(void)
 {
-    char    *frame_paths[8] = {
+    char    *frame_paths[15] = {
       "textures/gun3shoot/1.xpm",
       "textures/gun3shoot/2.xpm",
       "textures/gun3shoot/3.xpm",
@@ -244,13 +244,20 @@ void    load_shooting_gun3_frames(void)
       "textures/gun3shoot/5.xpm",
       "textures/gun3shoot/6.xpm",
       "textures/gun3shoot/7.xpm",
-      "textures/gun3shoot/8.xpm"
+      "textures/gun3shoot/8.xpm",
+      "textures/gun3shoot/9.xpm",
+      "textures/gun3shoot/10.xpm",
+      "textures/gun3shoot/11.xpm",
+      "textures/gun3shoot/12.xpm",
+      "textures/gun3shoot/13.xpm",
+      "textures/gun3shoot/14.xpm",
+      "textures/gun3shoot/15.xpm"
     };
     int     i;
 
     i = 0;
 
-    while (i < 8)
+    while (i < 15)
     {
         get_data()->gun3.shooting_frames[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun3.width, &get_data()->gun3.height);
@@ -351,7 +358,7 @@ void load_running_gun2_frames(void)
 }
 void load_reloading_gun3_frames(void)
 {
-  char *frame_paths[30] = 
+  char *frame_paths[12] = 
   {
     "textures/reloading_gun3/1.xpm",
     "textures/reloading_gun3/2.xpm",
@@ -364,31 +371,13 @@ void load_reloading_gun3_frames(void)
     "textures/reloading_gun3/9.xpm",
     "textures/reloading_gun3/10.xpm",
     "textures/reloading_gun3/11.xpm",
-    "textures/reloading_gun3/12.xpm",
-    "textures/reloading_gun3/13.xpm",
-    "textures/reloading_gun3/14.xpm",
-    "textures/reloading_gun3/15.xpm",
-    "textures/reloading_gun3/16.xpm",
-    "textures/reloading_gun3/17.xpm",
-    "textures/reloading_gun3/18.xpm",
-    "textures/reloading_gun3/19.xpm",
-    "textures/reloading_gun3/20.xpm",
-    "textures/reloading_gun3/21.xpm",
-    "textures/reloading_gun3/22.xpm",
-    "textures/reloading_gun3/23.xpm",
-    "textures/reloading_gun3/24.xpm",
-    "textures/reloading_gun3/25.xpm",
-    "textures/reloading_gun3/26.xpm",
-    "textures/reloading_gun3/27.xpm",
-    "textures/reloading_gun3/28.xpm",
-    "textures/reloading_gun3/29.xpm",
-    "textures/reloading_gun3/30.xpm"
+    "textures/reloading_gun3/12.xpm"
   };
 
   printf("here\n");
   int i;
   i = 0;
-  while(i < 30)
+  while(i < 12)
   {
         get_data()->gun3.img[i] = safer_xpm_file_to_image(get_data()->mlx, 
             frame_paths[i], &get_data()->gun3.width, &get_data()->gun3.height);
@@ -401,6 +390,36 @@ void load_reloading_gun3_frames(void)
     get_data()->gun3.shooted = 0;
 }
 
+void load_zooming_gun3_frames(void)
+{
+  char *frame_paths[19] = 
+  {
+    "textures/zoom_shoot_gun3/1.xpm",
+    "textures/zoom_shoot_gun3/2.xpm",
+    "textures/zoom_shoot_gun3/3.xpm",
+    "textures/zoom_shoot_gun3/4.xpm",
+    "textures/zoom_shoot_gun3/5.xpm",
+    "textures/zoom_shoot_gun3/6.xpm",
+    "textures/zoom_shoot_gun3/7.xpm",
+    "textures/zoom_shoot_gun3/8.xpm",
+    "textures/zoom_shoot_gun3/9.xpm"
+  };
+
+  printf("here\n");
+  int i;
+  i = 0;
+  while(i < 9)
+  {
+        get_data()->gun3.zoom_shooting_frames[i] = safer_xpm_file_to_image(get_data()->mlx,
+            frame_paths[i], &get_data()->gun3.width, &get_data()->gun3.height);
+        i++;
+  }
+    get_data()->gun3.current_frame = 0;
+    get_data()->gun3.frame_delay = 0;
+    get_data()->gun3.is_reloading = 0;
+    get_data()->gun3.is_shooting = 0;
+    get_data()->gun3.shooted = 0;
+}
 void load_walking_gun2_frames(void)
 {
     char *frame_paths[13] = {
@@ -718,7 +737,7 @@ void render_reloading(int gun_id)
   }
   else if (gun_id == 2)
   {
-    render_gun_frames(30, &get_data()->gun3, 14);
+    render_gun_frames(12, &get_data()->gun3, 23);
   }
 }
 void render_shooting(int gun_id)
@@ -730,7 +749,21 @@ void render_shooting(int gun_id)
   if (gun_id == 1)
       render_gun_frames(27, &get_data()->gun2, 1);
   else if (gun_id == 2)
-      render_gun_frames(8, &get_data()->gun3, 5);
+      render_gun_frames(15, &get_data()->gun3, 5);
+}
+
+void render_zooming(int gun_id)
+{
+  if (gun_id == 0)
+  {
+
+  }
+  if (gun_id == 1)
+  {
+
+  }
+  else if (gun_id == 2)
+      render_gun_frames(9, &get_data()->gun3, 10);
 }
 void render_gun3(void)
 {
@@ -742,6 +775,14 @@ void render_gun3(void)
          get_data()->gun3.width,
          get_data()->gun3.height);
       render_frame();
+  }
+  else if (get_data()->gun3.is_zooming)
+  {
+    render_zooming(2);
+    render_transparent_frame(
+       get_data()->gun3.zoom_shooting_frames[get_data()->gun3.current_frame],
+       get_data()->gun3.width,
+       get_data()->gun3.height);
   }
   else if (get_data()->gun3.is_reloading)
   {
@@ -848,6 +889,7 @@ int main(int ac, char **av)
     load_running_gun2_frames();
     load_walking_gun2_frames();
     load_reloading_gun3_frames(); 
+    load_zooming_gun3_frames();
     load_door_frames();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
