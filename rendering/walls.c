@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   walls.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/30 22:42:05 by eouhrich          #+#    #+#             */
+/*   Updated: 2024/12/01 18:09:45 by eouhrich         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../cube.h"
+
 // this init the direction (vector) of the ray
-void init_ray_dir(t_ray_data *ray, float ray_angle)
+void    init_ray_dir(t_ray_data *ray, float ray_angle)
 {
     ray->angle = ray_angle;
     ray->ray_dir.x = cos(ray_angle);
@@ -117,7 +130,7 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
                 calculate_distance(&(get_data()->front_ray));
                 data_taken = 1;
             }
-            perform_dda(ray, data_taken, col);///
+            // perform_dda(ray, data_taken, col);///
             calculate_distance(&ray);
             draw_col(ray, col);
             return;
@@ -282,6 +295,6 @@ void	render_walls(void)
         //     - (FOV/2) + (col * (FOV/WIN_WIDTH)));
         // cast_ray(ray_angle, col);
         render_col(i);
-        i++;
+		i++;
 	}
 }
