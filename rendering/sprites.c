@@ -6,13 +6,13 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/30 18:21:30 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/02 22:40:17 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube.h"
 
-# define ENEMY_SPEED 2.5
+
 
 
 int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
@@ -46,6 +46,75 @@ int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
     }
 }
 
+
+
+void	enemy_move(t_sprite *sprite, t_vector dir)
+{
+	float	magnitude = ft_max(vector_magnitude(dir), 1.0);
+	dir.x = (dir.x / magnitude) * ENEMY_SPEED;
+	dir.y = (dir.y / magnitude) * ENEMY_SPEED;
+	// float	next_step_x = sprite->position.x + dir.x;
+    // float	next_step_y = sprite->position.y + dir.y;
+	
+	//  Ill try square of points a,b,c,d as the boc collider of the sprite 
+	// TODO use only three points acccording to direction of vector for optimization
+	float	d_square = (GRID_DIST/8) ;//
+	t_vector a;
+	a.x = sprite->position.x - d_square;
+	a.y = sprite->position.y - d_square;
+	t_vector b;
+	b.x = sprite->position.x + d_square;
+	b.y = sprite->position.y - d_square;
+	t_vector c;
+	c.x = sprite->position.x - d_square;
+	c.y = sprite->position.y + d_square;
+	t_vector d;
+	d.x = sprite->position.x + d_square;
+	d.y = sprite->position.y + d_square;
+	////////////////////////////////////////
+	int next_map_x_a = get_data()->map[(int)a.y/GRID_DIST][(int)(a.x  + dir.x)/GRID_DIST];
+    int next_map_y_a = get_data()->map[(int)(a.y + dir.y)/GRID_DIST][(int)(a.x)/GRID_DIST];
+
+	int next_map_x_b = get_data()->map[(int)b.y/GRID_DIST][(int)(b.x + dir.x)/GRID_DIST];
+    int next_map_y_b = get_data()->map[(int)(b.y + dir.y)/GRID_DIST][(int)(b.x)/GRID_DIST]; 
+
+	int next_map_x_c = get_data()->map[(int)c.y/GRID_DIST][(int)(c.x + dir.x)/GRID_DIST]; 
+    int next_map_y_c = get_data()->map[(int)(c.y + dir.y)/GRID_DIST][(int)(c.x)/GRID_DIST]; 
+
+	int next_map_x_d = get_data()->map[(int)d.y/GRID_DIST][(int)(d.x + dir.x)/GRID_DIST]; 
+    int next_map_y_d = get_data()->map[(int)(d.y + dir.y)/GRID_DIST][(int)(d.x)/GRID_DIST]; 
+    ///
+    // int next_map_x = get_data()->map[(int)sprite->position.y/GRID_DIST][(int)next_step_x/GRID_DIST]; 
+    // int next_map_y = get_data()->map[(int)next_step_y/GRID_DIST][(int)(sprite->position.x)/GRID_DIST]; 
+	
+    if (next_map_x_a != '1'
+    	&& next_map_x_b != '1'
+    	&& next_map_x_c != '1'
+    	&& next_map_x_d != '1'
+        && next_map_x_a != 'D'
+        && next_map_x_b != 'D'
+        && next_map_x_c != 'D'
+        && next_map_x_d != 'D'
+        && next_map_x_a != 'P'
+        && next_map_x_b != 'P'
+        && next_map_x_c != 'P'
+        && next_map_x_d != 'P')
+        sprite->position.x += dir.x;
+    if (next_map_y_a != '1'
+    	&& next_map_y_b != '1'
+    	&& next_map_y_c != '1'
+    	&& next_map_y_d != '1'
+        && next_map_y_a != 'D'
+        && next_map_y_b != 'D'
+        && next_map_y_c != 'D'
+        && next_map_y_d != 'D'
+        && next_map_y_a != 'P'
+        && next_map_y_b != 'P'
+        && next_map_y_c != 'P'
+        && next_map_y_d != 'P')
+        sprite->position.y += dir.y;
+}
+
 void	update_enemies_data()
 {
 	int	i;
@@ -59,23 +128,15 @@ void	update_enemies_data()
 		get_data()->sprites[i].dist = calc_dist_f(get_data()->sprites[i].position.x, get_data()->sprites[i].position.y, get_data()->player_pos);
 		sprite_to_player.x = get_data()->player_pos.x - get_data()->sprites[i].position.x;
 		sprite_to_player.y = get_data()->player_pos.y - get_data()->sprites[i].position.y;
-		angle = atan2(-sprite_to_player.y,  -sprite_to_player.x) ;//- normalise_angle(get_data()->player_angle);
+		angle = atan2(-sprite_to_player.y,  -sprite_to_player.x);
 		angle = normalise_angle(angle);
-		// printf("angle => %f\n", angle * (180 / MY_PI));
-		// printf("angles :   ray ==> %f  ||| player ==> %f\n", angle * (180 / MY_PI), get_data()->player_angle * (180 / MY_PI));
-		if (ray_hit_sprite(create_ray(angle), get_data()->sprites[i]))
-		{
-			// printf(" y moving\n");
-
-			magnitude = vector_magnitude(sprite_to_player);
-			// printf("magnitude => %f", magnitude);
-			get_data()->sprites[i].position.x += ((sprite_to_player.x) / ft_max(1, magnitude)) * ENEMY_SPEED;
-			get_data()->sprites[i].position.y += ((sprite_to_player.y) / ft_max(1, magnitude)) * ENEMY_SPEED;
-			// printf("player: x=>%f, y=> %f | sprite x =>%f, y=>%f\n", get_data()->player_pos.x, get_data()->player_pos.y, get_data()->sprites[i].position.x, get_data()->sprites[i].position.y);
-		}
-		// else
-		// 	printf(" x not moving\n");
-		
+		// if (ray_hit_sprite(create_ray(angle), get_data()->sprites[i]))
+		// {
+			// magnitude = ft_max(vector_magnitude(sprite_to_player), 1.0);
+			// get_data()->sprites[i].position.x += (sprite_to_player.x / magnitude) * ENEMY_SPEED;
+			// get_data()->sprites[i].position.y += (sprite_to_player.y / magnitude) * ENEMY_SPEED;
+			enemy_move(get_data()->sprites + i, sprite_to_player);
+		// }
 		i++;
 	}
 }
@@ -114,10 +175,10 @@ static void	find_display_postion(t_sprite *sprite, float angle)
 	position =   (angle / FOV) * WIN_WIDTH;
 	sprite->dist = ft_max(sprite->dist, 10);
 	scale =  ((WIN_WIDTH) / sprite->dist);
-	sprite->display_start_x = position + (WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2, 0.;
-	sprite->display_start_y = sprite->z, 0.;
-	sprite->display_end_x = (sprite->texture.width * scale) / 2 + position + (WIN_WIDTH / 2), WIN_WIDTH;
-	sprite->display_end_y = (sprite->texture.height * scale) + sprite->z, WIN_HEIGHT;
+	sprite->display_start_x = position + (WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
+	sprite->display_start_y = sprite->z;
+	sprite->display_end_x = (sprite->texture.width * scale) / 2 + position + (WIN_WIDTH / 2);
+	sprite->display_end_y = (sprite->texture.height * scale) + sprite->z;
 }
 
 static int	should_render(t_sprite *sprite, float *angle)

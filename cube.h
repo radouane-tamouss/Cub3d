@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/29 18:25:36 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/02 22:32:01 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@
 # define WIN_WIDTH 1600
 # define MY_PI 3.14159265358979323846
 # define FOV (60 * (MY_PI / 180))
-# define GRID_DIST 80 
+# define GRID_DIST 128
 # define ZOOM 100
-
+# define ENEMY_SPEED 2.5
 
 # define SQUARE_SIZE 16 
 # define PI 3.14159265359
@@ -432,6 +432,7 @@ int	calc_dist(int x, int y, t_vector point);
 float	calc_dist_f(float x, float y, t_vector point);
 float	dot_product(t_vector v1, t_vector v2);
 float vector_magnitude(t_vector vector);
+// t_vector	normalise_vector(t_vector vector);
 void	rotate_player(float angle);
 void	move_backward();
 void	move_forward();
