@@ -4,7 +4,8 @@ CFLAGS = -Werror -Wextra -Wall -O3 -flto -g3
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 #CFLAGS =  -g3 -Werror -Wextra -Wall -fsanitize=address
-MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
+# MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
+MLX_FLAGS = -lXext -lX11 -lm -lz -O3 -Imlx-linux mlx-linux/libmlx.a
 RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c ./garbage_collector/safer_func.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
@@ -49,7 +50,10 @@ re : fclean all
 
 ################# TODO remember to remove this ######################
 run : all
-	 valgrind  --leak-check=full --show-leak-kinds=all  ./${NAME} ll.cub
+	./cub3D ll.cub
+
+
+	 # valgrind  --leak-check=full --show-leak-kinds=all  ./${NAME} ll.cub
 
 rerun : re run
 #####################################################################
