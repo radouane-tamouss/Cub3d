@@ -165,6 +165,7 @@ typedef struct s_gun
     void *scope_shooting_frames[19];
     void *first_scope_frames[5];
     void *last_scope_frames[5];
+    void *shooting_scope_frames[6];
 
     int width;          // Width of gun image
     int height;         // Height of gun image
@@ -373,6 +374,8 @@ typedef struct s_data
     int gun_id;
     t_door door;
     float gun_offset_x;
+
+    float zoom_factor;
 
 } t_data;
 
