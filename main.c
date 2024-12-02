@@ -193,6 +193,7 @@ void init_data(t_game game)
     get_data()->rotate_left = 0;
     get_data()->rotate_right = 0;
     get_data()->show_scope = 0;
+    get_data()->zoom_factor = 1;
     get_data()->gun_id = 1;
     get_data()->show_tab = 0;
 
@@ -473,6 +474,32 @@ void load_last_scope_frames(void)
     get_data()->gun3.is_reloading = 0;
     get_data()->gun3.is_shooting = 0;
     get_data()->gun3.shooted = 0;
+    get_data()->gun3.is_showing_scope = 0;
+}
+
+void load_shooting_scope_frames(void)
+{
+    char *frame_paths[6] = {
+        "textures/zoom_shoot_gun3/6.xpm",  "textures/zoom_shoot_gun3/7.xpm",
+        "textures/zoom_shoot_gun3/8.xpm",  "textures/zoom_shoot_gun3/9.xpm",
+        "textures/zoom_shoot_gun3/10.xpm", "textures/zoom_shoot_gun3/10.xpm"};
+
+    int i = 0;
+    i = 0;
+    while (i < 6)
+    {
+        get_data()->gun3.scope_shooting_frames[i] = safer_xpm_file_to_image(
+            get_data()->mlx, frame_paths[i], &get_data()->gun3.width,
+            &get_data()->gun3.height);
+        printf("frame %p\n", get_data()->gun3.scope_shooting_frames[i]);
+        i++;
+    }
+    get_data()->gun3.current_frame = 0;
+    get_data()->gun3.frame_delay = 0;
+    get_data()->gun3.is_reloading = 0;
+    get_data()->gun3.is_shooting = 0;
+    get_data()->gun3.shooted = 0;
+    get_data()->gun3.is_showing_scope = 0;
     get_data()->gun3.is_showing_scope = 0;
 }
 
@@ -800,50 +827,92 @@ void render_shooting(int gun_id)
         render_gun_frames(15, &get_data()->gun3, 5);
 }
 
-void render_showing_scope(int gun_id)
-{
-    if (gun_id == 2)
-    {
-        if (get_data()->gun3.frame_delay++ >=
-            13)  // Adjust delay value as needed
-        {
-            get_data()->gun3.frame_delay = 1;
-            get_data()->gun3.current_frame++;
-            if (get_data()->gun3.current_frame >= 5)
-            {
-                get_data()->gun3.current_frame = 5;
-                get_data()->gun3.is_showing_scope = 0;
-            }
-        }
-    }
-}
-
 void render_gun3(void)
 {
-    if (get_data()->gun3.is_shooting)
+    printf("show scope = %d\n", get_data()->gun3.show_scope);
+    if (get_data()->gun3.is_showing_scope)
     {
-        render_shooting(2);
-        render_transparent_frame(
-            get_data()->gun3.shooting_frames[get_data()->gun3.current_frame],
-            get_data()->gun3.width, get_data()->gun3.height);
-        render_frame();
+        if (!get_data()->gun3.show_scope)
+        {
+            if (get_data()->gun3.frame_delay++ >=
+                13)  // Adjust delay value as needed
+            {
+                get_data()->gun3.frame_delay = 1;
+                get_data()->gun3.current_frame++;
+                get_data()->zoom_factor -= 0.06;
+                if (get_data()->gun3.current_frame >= 5)
+                {
+                    get_data()->gun3.current_frame = 5;
+                    get_data()->gun3.is_showing_scope = 0;
+                }
+            }
+            render_transparent_frame(
+                get_data()
+                    ->gun3.first_scope_frames[get_data()->gun3.current_frame],
+                get_data()->gun3.width, get_data()->gun3.height);
+        }
+        else if (get_data()->gun3.show_scope)
+        {
+            if (get_data()->gun3.frame_delay++ >=
+                13)  // Adjust delay value as needed
+            {
+                get_data()->gun3.frame_delay = 1;
+                get_data()->gun3.current_frame++;
+                get_data()->zoom_factor += 0.06;
+                if (get_data()->gun3.current_frame >= 5)
+                {
+                    get_data()->gun3.current_frame = 4;
+                    get_data()->gun3.is_showing_scope = 0;
+                }
+            }
+            render_transparent_frame(
+                get_data()
+                    ->gun3.last_scope_frames[get_data()->gun3.current_frame],
+                get_data()->gun3.width, get_data()->gun3.height);
+        }
     }
-    // else if (get_data()->gun3.is_showing_scope &&
-    // !get_data()->gun3.show_scope)
-    // {
-    //     render_showing_scope(2);
-    //     if (get_data()->gun3.show_scope)
-    //         render_transparent_frame(
-    //             get_data()
-    //                 ->gun3.first_scope_frames[get_data()->gun3.current_frame],
-    //             get_data()->gun3.width, get_data()->gun3.height);
-    // }
-    else if (get_data()->gun3.is_showing_scope && get_data()->gun3.show_scope)
+    else if (get_data()->gun3.is_shooting)
     {
-        render_showing_scope(2);
-        render_transparent_frame(
-            get_data()->gun3.last_scope_frames[get_data()->gun3.current_frame],
-            get_data()->gun3.width, get_data()->gun3.height);
+        if (get_data()->gun3.show_scope == 0)
+        {
+            // printf("data = %p, frame = %d\n",
+            //        get_data()
+            //            ->gun3
+            //            .scope_shooting_frames[get_data()->gun3.current_frame],
+            //        get_data()->gun3.current_frame);
+            if (get_data()->gun3.frame_delay++ >=
+                15)  // Adjust delay value as needed
+            {
+                get_data()->gun3.frame_delay = 1;
+                get_data()->gun3.current_frame++;
+                if (get_data()->gun3.current_frame >= 6)
+                {
+                    get_data()->gun3.current_frame = 0;
+                    get_data()->gun3.is_shooting = 0;
+                    get_data()->gun3.is_reloading = 0;
+                    // get_data()->gun3.is_zooming = 0;
+                }
+            }
+            render_transparent_frame(
+                get_data()
+                    ->gun3
+                    .scope_shooting_frames[get_data()->gun3.current_frame],
+                get_data()->gun3.width, get_data()->gun3.height);
+            render_frame();
+        }
+        else if (get_data()->gun3.show_scope == 1)
+        {
+            render_shooting(2);
+            printf("data = %p, frame = %d\n",
+                   get_data()
+                       ->gun3.shooting_frames[get_data()->gun3.current_frame],
+                   get_data()->gun3.current_frame);
+            render_transparent_frame(
+                get_data()
+                    ->gun3.shooting_frames[get_data()->gun3.current_frame],
+                get_data()->gun3.width, get_data()->gun3.height);
+            render_frame();
+        }
     }
     else if (get_data()->gun3.is_reloading)
     {
@@ -852,11 +921,17 @@ void render_gun3(void)
             get_data()->gun3.img[get_data()->gun3.current_frame],
             get_data()->gun3.width, get_data()->gun3.height);
     }
-    if (!get_data()->gun3.is_reloading && !get_data()->gun3.show_scope)
+    // if (!get_data()->gun3.is_reloading && !get_data()->gun3.show_scope)
+    //     render_transparent_frame(
+    //         get_data()->gun3.shooting_frames[get_data()->gun3.current_frame],
+    //         get_data()->gun3.width, get_data()->gun3.height);
+    // else if (!get_data()->gun3.is_reloading && get_data()->gun3.show_scope)
+    if (get_data()->gun3.show_scope)
         render_transparent_frame(
-            get_data()->gun3.shooting_frames[get_data()->gun3.current_frame],
+            get_data()->gun3.last_scope_frames[get_data()->gun3.current_frame],
             get_data()->gun3.width, get_data()->gun3.height);
-    else if (!get_data()->gun3.is_reloading && get_data()->gun3.show_scope)
+    else if (!get_data()->gun3.show_scope && !get_data()->gun3.is_reloading &&
+             !get_data()->gun3.is_shooting)
         render_transparent_frame(
             get_data()->gun3.first_scope_frames[get_data()->gun3.current_frame],
             get_data()->gun3.width, get_data()->gun3.height);
@@ -954,6 +1029,7 @@ int main(int ac, char **av)
     load_reloading_gun3_frames();
     load_first_scope_frames();
     load_last_scope_frames();
+    load_shooting_scope_frames();
     load_door_frames();
     mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
