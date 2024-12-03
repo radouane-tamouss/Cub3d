@@ -16,7 +16,6 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <math.h>
-#include <mlx.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -24,6 +23,7 @@
 #include "garbage_collector/heap_controller.h"  //=== garbage collector
 #include "lib/get_next_line.h"
 #include "lib/libft/libft.h"
+#include "mlx-linux/mlx.h"
 
 //== const sizes =========
 
