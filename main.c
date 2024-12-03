@@ -856,6 +856,7 @@ void render_gun3(void)
 {
     if (get_data()->gun3.is_showing_scope)
     {
+        printf("show scope = %d\n", get_data()->gun3.show_scope);
         if (get_data()->gun3.show_scope)
         {
             if (get_data()->gun3.frame_delay++ >=
