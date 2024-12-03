@@ -163,7 +163,7 @@ typedef struct s_gun
     void *walking_frames[13];
     void *running_frames[23];
     void *scope_shooting_frames[19];
-    void *first_scope_frames[5];
+    void *first_scope_frames[6];
     void *last_scope_frames[5];
     void *shooting_scope_frames[6];
 
