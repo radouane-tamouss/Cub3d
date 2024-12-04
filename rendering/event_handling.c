@@ -301,14 +301,25 @@ int handle_keys(int keycode, void *garbage)
     //         needed play_sound("sounds/one_shot_firstgun.wav");
     //     }
     // }
+
+    // get_data()->gun3.is_shooting = 1;
+    // get_data()->gun3.current_frame = 5;
+    // get_data()->gun3.frame_delay = 0;
+    // get_data()->gun3.is_reloading = 0;
+    // get_data()->is_running = 0;
+    // get_data()->is_walking = 0;
+    // get_data()->gun3.is_showing_scope = 0;
+    // get_data()->screen_shake_intensity =
+    //     5;  // Adjust intensity as needed
+    // get_data()->screen_shake_timer =
+    //     10;  // Adjust duration as needed
+    // play_sound("sounds/one_shot_firstgun.wav");
     if (keycode == N_LIN)
     {
-        printf("n pressed gun_id = %d\n", get_data()->gun_id);
         if (!get_data()->gun3.is_shooting && !get_data()->gun2.is_shooting)
         {
             if (get_data()->gun_id == 2)
             {
-                printf("herllo\n");
                 get_data()->gun3.is_shooting = 1;
                 get_data()->gun3.current_frame = 0;
                 get_data()->gun3.frame_delay = 0;
