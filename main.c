@@ -542,6 +542,34 @@ void load_walking_gun2_frames(void)
     get_data()->gun2.frame_delay = 0;
 }
 
+void load_walking_gun3_frames(void)
+{
+    char *frame_paths[11] = {"textures/movin_walk_gun3_slow/1.xpm",
+                             "textures/movin_walk_gun3_slow/2.xpm",
+                             "textures/movin_walk_gun3_slow/3.xpm",
+                             "textures/movin_walk_gun3_slow/4.xpm",
+                             "textures/movin_walk_gun3_slow/5.xpm",
+                             "textures/movin_walk_gun3_slow/6.xpm",
+                             "textures/movin_walk_gun3_slow/7.xpm",
+                             "textures/movin_walk_gun3_slow/8.xpm",
+                             "textures/movin_walk_gun3_slow/9.xpm",
+                             "textures/movin_walk_gun3_slow/10.xpm",
+                             "textures/movin_walk_gun3_slow/11.xpm"};
+
+    int i;
+    i = 0;
+
+    while (i < 11)
+    {
+        get_data()->gun3.walking_frames[i] = safer_xpm_file_to_image(
+            get_data()->mlx, frame_paths[i], &get_data()->gun3.width,
+            &get_data()->gun3.height);
+        i++;
+    }
+    get_data()->gun3.current_frame = 0;
+    get_data()->gun3.frame_delay = 0;
+}
+
 void update_door_animation(void)
 {
     // Find the animating door (marked with 'P')
@@ -643,26 +671,6 @@ void update_door_animation(void)
 // Implementation of gun loading and animation functions
 void load_frames(void)
 {
-    // char    *frame_paths[18] = {
-    //     "textures/1.xpm",
-    //     "textures/2.xpm",
-    //     "textures/3.xpm",
-    //     "textures/4.xpm",
-    //     "textures/5.xpm",
-    //     "textures/6.xpm",
-    //     "textures/7.xpm",
-    //     "textures/8.xpm",
-    //     "textures/9.xpm",
-    //     "textures/10.xpm",
-    //     "textures/11.xpm",
-    //     "textures/12.xpm",
-    //     "textures/13.xpm",
-    //     "textures/14.xpm",
-    //     "textures/15.xpm",
-    //     "textures/16.xpm",
-    //     "textures/17.xpm",
-    //     "textures/18.xpm",
-    // };
     char *frame_paths[20] = {
         "textures/reload_gun/reload_gun1.xpm",
         "textures/reload_gun/reload_gun2.xpm",
@@ -858,13 +866,23 @@ void render_gun3(void)
             get_data()->gun3.img[get_data()->gun3.current_frame],
             get_data()->gun3.width, get_data()->gun3.height);
     }
+    else if (get_data()->is_walking && !get_data()->gun3.show_scope)
+    {
+        render_gun_frames(11, &get_data()->gun3, 9);
+        render_transparent_frame(
+            get_data()->gun3.walking_frames[get_data()->gun3.current_frame],
+            get_data()->gun3.width, get_data()->gun3.height);
+    }
     if (!get_data()->gun3.show_scope && !get_data()->gun3.is_reloading &&
         !get_data()->gun3.is_shooting && get_data()->gun3.current_frame != 5)
     {
         printf("%sframe in last scope loaded is %d\n%s", CGREEN,
                get_data()->gun3.current_frame, CWHITE);
+        // render_transparent_frame(
+        //     get_data()->gun3.last_scope_frames[get_data()->gun3.current_frame],
+        //     get_data()->gun3.width, get_data()->gun3.height);
         render_transparent_frame(
-            get_data()->gun3.last_scope_frames[get_data()->gun3.current_frame],
+            get_data()->gun3.walking_frames[get_data()->gun3.current_frame],
             get_data()->gun3.width, get_data()->gun3.height);
     }
     if (get_data()->gun3.show_scope && !get_data()->gun3.is_reloading &&
@@ -969,6 +987,7 @@ int main(int ac, char **av)
     load_first_scope_frames();
     load_last_scope_frames();
     load_shooting_scope_frames();
+    load_walking_gun3_frames();
     load_door_frames();
     mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 

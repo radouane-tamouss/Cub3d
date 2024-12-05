@@ -1,5 +1,5 @@
 CC = cc
-CFLAGS = -Werror -Wextra -Wall -O3 -flto -g3 #-fsanitize=address
+CFLAGS = -Werror -Wextra -g3 -Wall -O3 -flto #-fsanitize=address
 # MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
