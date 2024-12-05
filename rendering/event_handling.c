@@ -67,11 +67,11 @@ void render_tab()
     img[4] = safer_xpm_file_to_image(
         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
 
-    if (get_data()->gun_id == 0 && get_data()->show_tab)
-        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0],
-                                (WIN_WIDTH - width) / 2,
-                                (WIN_HEIGHT - height) / 2);
-    else if (get_data()->gun_id == 1 && get_data()->show_tab)
+    // if (get_data()->gun_id == 0 && get_data()->show_tab)
+    //     mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0],
+    //                             (WIN_WIDTH - width) / 2,
+    //                             (WIN_HEIGHT - height) / 2);
+    if (get_data()->gun_id == 1 && get_data()->show_tab)
         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1],
                                 (WIN_WIDTH - width) / 2,
                                 (WIN_HEIGHT - height) / 2);
@@ -243,14 +243,14 @@ int handle_keys(int keycode, void *garbage)
     if (keycode == T_LIN)  // Add proper key define if needed
     {
         printf("gun_id == %d\n", get_data()->gun_id);
-        if (get_data()->gun_id == 0)
-        {
-            get_data()->gun.shooted = 1;
-            get_data()->gun.is_reloading = 1;
-            get_data()->gun.current_frame = 0;
-            get_data()->gun.frame_delay = 0;
-        }
-        else if (get_data()->gun_id == 2)
+        // if (get_data()->gun_id == 0)
+        // {
+        //     get_data()->gun.shooted = 1;
+        //     get_data()->gun.is_reloading = 1;
+        //     get_data()->gun.current_frame = 0;
+        //     get_data()->gun.frame_delay = 0;
+        // }
+        if (get_data()->gun_id == 2)
         {
             printf("here it should be reloading\n");
             get_data()->gun3.is_reloading = 1;
@@ -350,9 +350,9 @@ int handle_keys(int keycode, void *garbage)
         }
         get_data()->is_updated = 1;
     }
-    if (keycode == LIN_1)
-        get_data()->gun_id = 0;
-    else if (keycode == LIN_2)
+    // if (keycode == LIN_1)
+    //     get_data()->gun_id = 0;
+    if (keycode == LIN_2)
         get_data()->gun_id = 1;
     else if (keycode == LIN_3)
         get_data()->gun_id = 2;
@@ -363,7 +363,7 @@ int handle_keys(int keycode, void *garbage)
     if (keycode == TAB_LIN && !get_data()->is_tab_pressed)
     {
         get_data()->gun_id++;
-        if (get_data()->gun_id >= 3) get_data()->gun_id = 0;
+        // if (get_data()->gun_id >= 3) get_data()->gun_id = 0;
         get_data()->show_tab = 1;
         get_data()->is_tab_pressed = 1;
     }
