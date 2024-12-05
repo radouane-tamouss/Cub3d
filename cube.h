@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "garbage_collector/heap_controller.h"  //=== garbage collector
+#include "garbage_collector/heap_controller.h"
 #include "lib/get_next_line.h"
 #include "lib/libft/libft.h"
 #include "mlx-linux/mlx.h"
