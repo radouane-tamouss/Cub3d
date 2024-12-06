@@ -1,19 +1,7 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   walls.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/30 22:42:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/01 18:09:45 by eouhrich         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../cube.h"
 
 // this init the direction (vector) of the ray
-void    init_ray_dir(t_ray_data *ray, float ray_angle)
+void init_ray_dir(t_ray_data *ray, float ray_angle)
 {
     ray->angle = ray_angle;
     ray->ray_dir.x = cos(ray_angle);
@@ -159,24 +147,10 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
     }
 }
 
-
-t_ray_data  create_ray(float angle)
-{
-    t_ray_data  ray;
-
-    init_ray_dir(&ray, angle);
-    calc_delta_dist(&ray);
-    calc_step_and_side_dist_x(&ray);
-    calc_step_and_side_dist_y(&ray);
-    return (ray);
-}
-
-
 // casting the ray and grab all wanted data (coords of wall, side, ...)
-void cast_ray(float ray_angle, int col)
+t_ray_data cast_ray(float ray_angle, int col)
 {
     t_ray_data ray;
-
 
     init_ray_dir(&ray, ray_angle);
     calc_delta_dist(&ray);
@@ -185,11 +159,6 @@ void cast_ray(float ray_angle, int col)
     perform_dda(ray, 0, col);
     // calculate_distance(&ray);//
     return ray;
-
-
-    ray = create_ray(ray_angle);
-    perform_dda(ray, 0, col);
-
 }
 
 // this will calculate wich pixel should take from image buffer
@@ -297,6 +266,8 @@ void draw_col(t_ray_data ray, int col)
 void render_col(int col)
 {
     float ray_angle;
+    // t_ray_data	ray;
+    // int color;
 
     ray_angle = normalise_angle(
         get_data()->player_angle - ((FOV * get_data()->zoom_factor) / 2) +
@@ -308,20 +279,12 @@ void render_col(int col)
 // window)
 void render_walls(void)
 {
-
-	int i;
-    // float ray_angle;
-
+    int i;
 
     i = 0;
     render_background();
-
-	while (i < WIN_WIDTH)
-	{
-	    // ray_angle = normalise_angle(get_data()->player_angle
-        //     - (FOV/2) + (col * (FOV/WIN_WIDTH)));
-        // cast_ray(ray_angle, col);
-        render_col(i);
-		i++;
-	}
+    while (i < WIN_WIDTH)
+    {
+        render_col(i++);  // render each column of the window
+    }
 }
