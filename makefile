@@ -1,11 +1,8 @@
 CC = cc
-# CFLAGS = -Werror -Wextra -Wall -O3 -flto -g3
-# MLX_MAC_FLAGS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -O3 -flto #-g3 -fsanitize=address #-Werror -Wextra -Wall 
 MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
-RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c ./garbage_collector/safer_func.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
 RENDER_FILES = rendering/put_pixel.c rendering/background.c rendering/event_handling.c rendering/rotation.c rendering/movement.c rendering/ft_math.c rendering/walls.c rendering/minimap.c rendering/sprites.c rendering/vector.c rendering/ray.c
@@ -26,7 +23,6 @@ ${NAME} : ${OFILES} ${LIBFT}
 	#$(CC) ${CFLAGS} $^ -o $(NAME) $(MLX_MAC_FLAGS)
 	# ${NAME} : ${OFILES} ${LIBFT}
 	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
-	# gunzip textures/* textures/*/*
 
 ${LIBFT} :
 	@make re -C mlx-linux
@@ -49,8 +45,11 @@ fclean : clean
 re : fclean all
 
 ################# TODO remember to remove this ######################
-run : all
-	 valgrind  --leak-check=full --show-leak-kinds=all  ./${NAME} ll.cub
+f : all
+	./cub3D ll.cub
+
+
+	 # valgrind  --leak-check=full --show-leak-kinds=all  ./${NAME} ll.cub
 
 rerun : re run
 #####################################################################

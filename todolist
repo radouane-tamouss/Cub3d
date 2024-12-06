@@ -1,9 +1,21 @@
-
-
-
 [x] fix master branch , reset the old commit and merge again --> 00:40
 [x] push the the nvim to github
 [x] add door animation [x] door is opening [x] door is closing
-[ ] add the remaining frames -->
-[ ] add home page, and settings -> 4:40
-[ ] split parsing from bonus -> 6:00
+[x] add parallax effect to the gun
+
+---------------- TODAYS PROGRESS ----------------
+
+=========== 40 min ==============
+[ ] add the gun animations gun3
+[ ] add the gun animations gun2
+[ ] add the gun animations gun4
+[ ] reduces file size of frames
+[ ] add zoom effect to the gun
+=================================
+
+
+
+[ ] add parsing for the door
+[ ] fix render gun norms
+[ ] add home page, and settings
+[ ] split parsing from bonus

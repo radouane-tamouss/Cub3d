@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 22:32:00 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/02 19:27:21 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/06 23:21:34 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,3 @@ float	vector_magnitude(t_vector vector)
 // 	vector.y = vector.y / magnitude;
 // 	return	(vector);
 // }
-
-

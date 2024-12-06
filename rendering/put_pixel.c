@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:22 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/25 05:41:28 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/10/09 00:17:19 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ unsigned int	pull_pixel(t_texture img, int x, int y)
 	char			*dst;
 
 	if (y >= img.height || x >= img.width || x < 0 || y < 0)
-	{
-		// printf("prob =  %d , %d , %d , %d\n", y >= img.height, x >= img.width , x < 0 , y < 0);
 		return (BLACK);
-	}
 	offset = y * img.img_data.line_length + x * (img.img_data.bits_per_pixel / 8);
 	dst = img.img_data.addr + offset;
 	ptr = (unsigned int *)dst;
