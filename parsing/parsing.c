@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 16:01:32 by eouhrich          #+#    #+#             */
 /*   Updated: 2024/11/11 14:00:59by rtamouss         ###   ########.fr       */
@@ -81,7 +81,7 @@ void fill_map(char **map, char *file, char *line)
 	int fd;
 	int i;
 	int filled_lines;
-
+	
 	fd = open(file, O_RDONLY);
 	filled_lines = 0;
 	line = get_next_line(fd);
@@ -337,16 +337,7 @@ void check_if_map_contains_only_valid_characters(t_game *game)
 		game->map.grid[i] = ft_strtrim(game->map.grid[i], "\n");
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] != 'D' 
-					&& game->map.grid[i][j] != '0' 
-					&& game->map.grid[i][j] != '1' 
-					&& game->map.grid[i][j] != 'N'
-					&& game->map.grid[i][j] != 'S'
-					&& game->map.grid[i][j] != 'E' 
-					&& game->map.grid[i][j] != 'W' 
-					&& game->map.grid[i][j] != ' ' 
-					&& game->map.grid[i][j] != 'O'
-					&& game->map.grid[i][j] != 'M')
+			if (game->map.grid[i][j] != 'M' && game->map.grid[i][j] != 'D' && game->map.grid[i][j] != '0' && game->map.grid[i][j] != '1' && game->map.grid[i][j] != 'N' && game->map.grid[i][j] != 'S' && game->map.grid[i][j] != 'E' && game->map.grid[i][j] != 'W' && game->map.grid[i][j] != ' ' && game->map.grid[i][j] != 'O')
 			{
 				printf("Error: Invalid character in map\n");
 				exit(1);
@@ -495,12 +486,12 @@ void check_invalid_map(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{ 
-			if (game->map.grid[i][j] == '0' || game->map.grid[i][j] == 'D' || game->map.grid[i][j] == 'O' || check_if_player_direction(game->map.grid[i][j]) == 1 || game->map.grid[i][j] == 'M')
+			if (game->map.grid[i][j] == 'M' && game->map.grid[i][j] == '0' || game->map.grid[i][j] == 'D' || game->map.grid[i][j] == 'O' || check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
-				if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != 'D' && game->map.grid[i - 1][j] != 'O' && game->map.grid[i][j] == 'M'  && !check_if_player_direction(game->map.grid[i - 1][j]))) ||  // above
-					(i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0' && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != 'D'  && game->map.grid[i][j] == 'M' && game->map.grid[i + 1][j] != 'O' && !check_if_player_direction(game->map.grid[i + 1][j]))) ||  // below
-					(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != 'D' && game->map.grid[i][j - 1] != 'O'  && game->map.grid[i][j] == 'M' && !check_if_player_direction(game->map.grid[i][j - 1]))) ||  // left
-					(j < (int)ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != 'D' && game->map.grid[i][j + 1] != 'O' && game->map.grid[i][j] == 'M' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
+				if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i - 1][j] != '1' && game->map.grid[i - 1][j] != 'D' && game->map.grid[i - 1][j] != 'O' && !check_if_player_direction(game->map.grid[i - 1][j]))) ||  // above
+					(i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0' && game->map.grid[i + 1][j] != '1' && game->map.grid[i + 1][j] != 'D' && game->map.grid[i + 1][j] != 'O' && !check_if_player_direction(game->map.grid[i + 1][j]))) ||  // below
+					(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j - 1] != '1' && game->map.grid[i][j - 1] != 'D' && game->map.grid[i][j - 1] != 'O' && !check_if_player_direction(game->map.grid[i][j - 1]))) ||  // left
+					(j < (int)ft_strlen(game->map.grid[i]) - 1 && (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j + 1] != '1' && game->map.grid[i][j + 1] != 'D' && game->map.grid[i][j + 1] != 'O' && !check_if_player_direction(game->map.grid[i][j + 1]))))  // right
 				{
 					if (check_if_player_direction(game->map.grid[i][j]) == 1)
 						printf("invalid player direction at (%d, %d)\n", i, j);
@@ -510,7 +501,6 @@ void check_invalid_map(t_game *game)
 						printf("invalid object at (%d, %d)\n", i, j);
 					else 
 						printf("invalid zero at (%d, %d)\n", i, j);
-
 					exit(1);
 				}
 			}
@@ -606,19 +596,22 @@ void init_sprites(t_game *game)
 		{
 			if (game->map.grid[i][j] == 'M')
 			{
+
+    			printf("heeeere\n");
 				get_data()->sprites[n].position.x = j * GRID_DIST;
 				get_data()->sprites[n].position.y = i * GRID_DIST;
   				get_data()->sprites[n].z = WIN_HEIGHT / 2 - 20; 
 				get_data()->sprites[n].texture.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "enemy_sprite.xpm", &(get_data()->sprites[n].texture.width), &(get_data()->sprites[n].texture.height));
 				get_data()->sprites[n].texture.img_data.addr = safer_get_data_addr(get_data()->sprites[n].texture.img_data.img, &(get_data()->sprites[n].texture.img_data.bits_per_pixel), &(get_data()->sprites[n].texture.img_data.line_length), &(get_data()->sprites[n].texture.img_data.endian));
-				printf("here\n");
+				// printf("here\n");
 				n++;
 			}
 			j++;
 		}
 		i++;
 	}
-	printf("end\n");
+
+	// printf("end\n");
 
 	i = 0;
 	while(i < n)

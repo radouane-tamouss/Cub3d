@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/06 22:40:49 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/06 22:57:08 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,20 +24,23 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
+
+
 //== const sizes =========
 
-#define WIN_HEIGHT 800
-#define WIN_WIDTH 1600
+#define WIN_HEIGHT 720
+#define WIN_WIDTH 1280
 #define MY_PI 3.14159265358979323846
 #define FOV (60 * (MY_PI / 180))
-#define GRID_DIST 128
+#define GRID_DIST 80
 #define ZOOM 100
 #define ENEMY_SPEED 2.5
 
 #define SQUARE_SIZE 16
 #define PI 3.14159265359
 #define ROTATION_SPEED 0.2
-#define MOVE_SPEED 0.1
+#define MOVE_SPEED 0.05
 #define WALL_STRIP_WIDTH 100
 #define FOV_ANGLE 60 * (PI / 180)
 //=== buttons ====
@@ -68,14 +71,15 @@
 
 //====== mlx img struct =====
 
-typedef struct s_img_data {
-  void *img;
-  char *addr;
-  int bits_per_pixel;
-  int line_length;
-  int endian;
-  int width;
-  int height;
+typedef struct s_img_data
+{
+    void *img;
+    char *addr;
+    int bits_per_pixel;
+    int line_length;
+    int endian;
+    int width;
+    int height;
 } t_img_data;
 
 //======== colors =========
@@ -117,6 +121,10 @@ typedef struct s_img_data {
 #define TAB_MAC 48
 #define N_MAC 45
 
+#define LIN_1 49
+#define LIN_2 50
+#define LIN_3 51
+#define LIN_4 52
 #define W_LIN 119
 #define A_LIN 97
 #define S_LIN 115
@@ -134,6 +142,7 @@ typedef struct s_img_data {
 #define CNTRL_LIN 65507
 #define TAB_LIN 65289
 #define N_LIN 110
+#define H_LIN 104
 #define SHIFT_LIN 65505
 #define SPACE_LIN 32
 
@@ -150,19 +159,26 @@ typedef struct s_img_data {
 
 //======================================
 
-typedef struct s_gun {
-  void *img[20]; // Array to store gun frame images
-  void *shooting_frames[30];
-  void *walking_frames[13];
-  void *running_frames[23];
+typedef struct s_gun
+{
+    void *reloading_frames[50];  // Array to store gun frame images
+    void *shooting_frames[30];
+    void *walking_frames[13];
+    void *running_frames[23];
+    void *scope_shooting_frames[19];
+    void *first_scope_frames[15];
+    void *last_scope_frames[5];
+    void *shooting_scope_frames[6];
 
-  int width;         // Width of gun image
-  int height;        // Height of gun image
-  int current_frame; // Current frame being displayed
-  int frame_delay;   // Delay counter for animation
-  int is_shooting;
-  int is_reloading; // Flag for shooting animation
-  int shooted;
+    int width;          // Width of gun image
+    int height;         // Height of gun image
+    int current_frame;  // Current frame being displayed
+    int frame_delay;    // Delay counter for animation
+    int is_shooting;
+    int show_scope;
+    int is_reloading;  // Flag for shooting animation
+    int shooted;
+    int is_showing_scope;
 } t_gun;
 
 //======================================
@@ -180,19 +196,22 @@ typedef struct s_gun {
 //     int    x;
 //     int    y;
 // } t_door;
-typedef struct s_door {
-  void *img[18];     // Array to store door frame images
-  int width;         // Height of door image
-  int height;        // Width of door image
-  int current_frame; // Current frame being displayed
-  int frame_delay;   // Delay counter for animation
-  int is_opening;    // Flag for opening animation
-  int is_open;       // Flag to indicate if door is fully open
-  int is_closing;    // Flag for closing animation
-  int is_closed;     // Flag to indicate if door is fully closed
-  int active_x;      // X coordinate of currently animating door
-  int active_y;      // Y coordinate of currently animating door
+
+typedef struct s_door
+{
+    void *img[18];      // Array to store door frame images
+    int width;          // Height of door image
+    int height;         // Width of door image
+    int current_frame;  // Current frame being displayed
+    int frame_delay;    // Delay counter for animation
+    int is_opening;     // Flag for opening animation
+    int is_open;        // Flag to indicate if door is fully open
+    int is_closing;     // Flag for closing animation
+    int is_closed;      // Flag to indicate if door is fully closed
+    int active_x;       // X coordinate of currently animating door
+    int active_y;       // Y coordinate of currently animating door
 } t_door;
+
 //======================================
 
 typedef struct s_color {
@@ -201,18 +220,21 @@ typedef struct s_color {
   int g;
   int b;
 } t_color;
+
 //======================================
 
-typedef struct s_player {
-  int radius;
-  float pos_x;        // double pos_x;
-  float pos_y;        // double
-  int turn_direction; // -1 if left, +1 if right
-  int walk_direction; // -1 if back, +1 if front
-  double rotation_angle;
-  double move_speed;
-  double rotation_speed;
+typedef struct s_player
+{
+    int radius;
+    float pos_x;         // double pos_x;
+    float pos_y;         // double
+    int turn_direction;  // -1 if left, +1 if right
+    int walk_direction;  // -1 if back, +1 if front
+    double rotation_angle;
+    double move_speed;
+    double rotation_speed;
 } t_player;
+
 //======================================
 
 typedef struct s_map {
@@ -221,6 +243,7 @@ typedef struct s_map {
   int height;
   int valid;
 } t_map;
+
 //======================================
 
 typedef struct s_texture {
@@ -229,6 +252,7 @@ typedef struct s_texture {
   int width;
   int height;
 } t_texture;
+
 //======================================
 
 typedef struct s_ray {
@@ -243,6 +267,7 @@ typedef struct s_ray {
   int is_ray_facing_right;
   int wall_hit_content;
 } t_ray;
+
 //======================================
 
 typedef struct s_game {
@@ -304,60 +329,68 @@ typedef struct s_sprite {
 } t_sprite;
 
 //==== data =================
-typedef struct s_data {
-  void *mlx;
-  void *win;
-  // t_img_data	walls;
-  int move_forward;
-  int move_backward;
-  int move_left;
-  int move_right;
-  int rotate_left;
-  int rotate_right;
-  int show_scope;
-  int is_tab_pressed;
-  t_texture north_img;
-  t_texture south_img;
-  t_texture east_img;
-  int speed;
-  t_texture west_img;
-  t_texture door_img;
-  t_texture door_open_img;
-  t_texture door_animating_img;
+typedef struct s_data
+{
+    void *mlx;
+    void *win;
+    // t_img_data	walls;
+    int move_forward;
+    int move_backward;
+    int move_left;
+    int move_right;
+    int rotate_left;
+    int rotate_right;
+    int show_scope;
+    int is_tab_pressed;
+    int is_sound_playing;
+    t_texture north_img;
+    t_texture south_img;
+    t_texture east_img;
+    int speed;
+    t_texture west_img;
+    t_texture door_img;
+    t_texture door_open_img;
+    t_texture door_animating_img;
 
-  t_img_data scope;
-  t_img_data background_img;
-  int ceiling_color;
-  int floor_color;
-  char **map;
-  int height;
-  int width;
-  float player_angle; //
-  int player_is_moving;
-  t_vector player_pos;
-  int is_control_pressed;
-  t_vector player_dir;
-  t_vector mouse_pos;
-  t_texture minimap;
-  int is_walking;
-  int is_running;
-  int is_updated;
-  int dark_mode;
-  t_ray_data front_ray;
-  t_gun gun;
-  t_gun gun2;
-  t_gun gun3;
-  int show_tab;
-  int gun_id;
-  t_door door;
-  t_sprite *sprites;
-  int num_sprites;
-  // t_texture enemy;
+    t_img_data scope;
+    t_img_data background_img;
+    int ceiling_color;
+    int floor_color;
+    char **map;
+    int height;
+    int width;
+    float player_angle;  //
+    int player_is_moving;
+    t_vector player_pos;
+    int is_control_pressed;
+    t_vector player_dir;
+    t_vector mouse_pos;
+    t_texture minimap;
+    int is_walking;
+    int is_running;
+    int is_updated;
+    int dark_mode;
+    t_ray_data front_ray;
+    t_gun gun;
+    t_gun gun2;
+    t_gun gun3;
+    int screen_shake_intensity;
+    int screen_shake_timer;
+    int show_tab;
+    int gun_id;
+    t_door door;
+    float gun_offset_x;
+
+    float zoom_factor;
+    t_sprite *sprites;
+    int num_sprites;
+
 } t_data;
+
 
 //= Enemie structure============================
 
-// typedef struct s_enemy
+// typedef struct s_enemie
 // {
 
 //     t_texture   texture;
@@ -374,6 +407,10 @@ typedef struct s_data {
 //     char    type;// type of the cube '0' for air | '1' for wall | 'D' for
 //     closed door | 'O' for opend DOor
 // } t_map_grid;
+//     t_vector    position;
+//     int         health;
+//     t_texture   texture;
+// }   t_enemie;
 
 //=================================
 t_data *get_data(void);
@@ -389,6 +426,7 @@ int check_file(char *str, int *fd);
 int check_if_player_direction(char c);
 void render_tab();
 void render_transparent_frame(void *frame_img, int width, int height);
+void play_sound(const char *file);
 
 //=======================================================
 //=== rendering =========================================
@@ -397,6 +435,7 @@ void put_pixel(t_img_data *img, int x, int y, int color);
 unsigned int pull_pixel(t_texture img, int x, int y);
 void init_background(void);
 void render_background(void);
+void start_walk_sound();
 int handle_keys(int keycode, void *garbage);
 int ft_close(void);
 int mouse_event(int x, int y, void *par);

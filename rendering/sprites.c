@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/06 16:52:27 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/06 23:38:35 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,7 @@ void	render_sprites(void)
 		}
 		if (should_render(get_data()->sprites + i, &angle))
 			render_sprite(get_data()->sprites[i]);
+	// printf("here\n");
 		i++;
 	}
 }
