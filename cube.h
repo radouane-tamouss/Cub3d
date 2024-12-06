@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/02 22:32:01 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/06 22:40:49 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -424,13 +424,16 @@ int key_release(int keycode, void *garbage);
 void update_movement();
 void render_scope();
 //
+t_ray_data  create_ray(float angle);
+void        calculate_ray_distance(t_ray_data *ray);
+
+//
 
 void render_walls(void);
 void render_minimap(void);
 //
-t_ray_data create_ray(float angle);
-void calculate_distance(t_ray_data *ray);
-void render_sprites(void);
+t_ray_data  create_ray(float angle);
+void	render_sprites(void);
 
 //=== utils =============================================
 
