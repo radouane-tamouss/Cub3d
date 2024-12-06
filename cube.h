@@ -158,12 +158,12 @@ typedef struct s_img_data
 
 typedef struct s_gun
 {
-    void *img[50];  // Array to store gun frame images
+    void *reloading_frames[50];  // Array to store gun frame images
     void *shooting_frames[30];
     void *walking_frames[13];
     void *running_frames[23];
     void *scope_shooting_frames[19];
-    void *first_scope_frames[6];
+    void *first_scope_frames[15];
     void *last_scope_frames[5];
     void *shooting_scope_frames[6];
 

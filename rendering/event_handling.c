@@ -49,33 +49,33 @@ void play_sound(const char *file)
     }
 }
 
-void render_tab()
-{
-    void *img[5];
-    // void *img[4];
-    int width;
-    int height;
-
-    img[0] = safer_xpm_file_to_image(
-        get_data()->mlx, "textures/weapon/weapon1.xpm", &width, &height);
-    img[1] = safer_xpm_file_to_image(
-        get_data()->mlx, "textures/weapon/weapon2.xpm", &width, &height);
-    img[2] = safer_xpm_file_to_image(
-        get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-    img[3] = safer_xpm_file_to_image(
-        get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-    img[4] = safer_xpm_file_to_image(
-        get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-
-    // if (get_data()->gun_id == 0 && get_data()->show_tab)
-    //     mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0],
-    //                             (WIN_WIDTH - width) / 2,
-    //                             (WIN_HEIGHT - height) / 2);
-    if (get_data()->gun_id == 1 && get_data()->show_tab)
-        mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1],
-                                (WIN_WIDTH - width) / 2,
-                                (WIN_HEIGHT - height) / 2);
-}
+// void render_tab()
+// {
+//     void *img[5];
+//     // void *img[4];
+//     int width;
+//     int height;
+//
+//     img[0] = safer_xpm_file_to_image(
+//         get_data()->mlx, "textures/weapon/weapon1.xpm", &width, &height);
+//     img[1] = safer_xpm_file_to_image(
+//         get_data()->mlx, "textures/weapon/weapon2.xpm", &width, &height);
+//     img[2] = safer_xpm_file_to_image(
+//         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+//     img[3] = safer_xpm_file_to_image(
+//         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+//     img[4] = safer_xpm_file_to_image(
+//         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
+//
+//     // if (get_data()->gun_id == 0 && get_data()->show_tab)
+//     //     mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0],
+//     //                             (WIN_WIDTH - width) / 2,
+//     //                             (WIN_HEIGHT - height) / 2);
+//     if (get_data()->gun_id == 1 && get_data()->show_tab)
+//         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1],
+//                                 (WIN_WIDTH - width) / 2,
+//                                 (WIN_HEIGHT - height) / 2);
+// }
 
 void update_movement()
 {
@@ -243,13 +243,6 @@ int handle_keys(int keycode, void *garbage)
     if (keycode == T_LIN)  // Add proper key define if needed
     {
         printf("gun_id == %d\n", get_data()->gun_id);
-        // if (get_data()->gun_id == 0)
-        // {
-        //     get_data()->gun.shooted = 1;
-        //     get_data()->gun.is_reloading = 1;
-        //     get_data()->gun.current_frame = 0;
-        //     get_data()->gun.frame_delay = 0;
-        // }
         if (get_data()->gun_id == 2)
         {
             printf("here it should be reloading\n");
@@ -259,27 +252,23 @@ int handle_keys(int keycode, void *garbage)
             play_sound("sounds/gun3reloadd.wav");
         }
     }
-    if (keycode == Y_LIN)
-    {
-        get_data()->gun2.shooted = 1;
-        get_data()->gun2.is_reloading = 1;
-        get_data()->gun2.current_frame = 0;
-        get_data()->gun2.frame_delay = 0;
-    }
     if (keycode == Z_LIN)
     {
-        get_data()->gun3.current_frame = 0;
-        get_data()->gun3.frame_delay = 0;
-        get_data()->gun3.is_showing_scope = 1;
-        if (get_data()->gun3.show_scope)
+        if (get_data()->gun_id == 2)
         {
-            get_data()->gun3.show_scope = 0;
-            // get_data()->zoom_factor = 0.6;
-        }
-        else if (!get_data()->gun3.show_scope)
-        {
-            get_data()->gun3.show_scope = 1;
-            // get_data()->zoom_factor = 1;
+            get_data()->gun3.current_frame = 0;
+            get_data()->gun3.frame_delay = 0;
+            get_data()->gun3.is_showing_scope = 1;
+            if (get_data()->gun3.show_scope)
+            {
+                get_data()->gun3.show_scope = 0;
+                // get_data()->zoom_factor = 0.6;
+            }
+            else if (!get_data()->gun3.show_scope)
+            {
+                get_data()->gun3.show_scope = 1;
+                // get_data()->zoom_factor = 1;
+            }
         }
     }
     // if (keycode == N_LIN)
@@ -316,7 +305,7 @@ int handle_keys(int keycode, void *garbage)
     // play_sound("sounds/one_shot_firstgun.wav");
     if (keycode == N_LIN)
     {
-        if (!get_data()->gun3.is_shooting && !get_data()->gun2.is_shooting)
+        if (!get_data()->gun3.is_shooting)
         {
             if (get_data()->gun_id == 2)
             {
@@ -327,20 +316,6 @@ int handle_keys(int keycode, void *garbage)
                 get_data()->is_running = 0;
                 get_data()->is_walking = 0;
                 get_data()->gun3.is_showing_scope = 0;
-                get_data()->screen_shake_intensity =
-                    5;  // Adjust intensity as needed
-                get_data()->screen_shake_timer =
-                    10;  // Adjust duration as needed
-                play_sound("sounds/one_shot_firstgun.wav");
-            }
-            else if (get_data()->gun_id == 1)
-            {
-                get_data()->gun2.is_shooting = 1;
-                get_data()->gun2.current_frame = 0;
-                get_data()->gun2.frame_delay = 0;
-                get_data()->gun2.is_reloading = 0;
-                get_data()->is_running = 0;
-                get_data()->is_walking = 0;
                 get_data()->screen_shake_intensity =
                     5;  // Adjust intensity as needed
                 get_data()->screen_shake_timer =
@@ -408,8 +383,6 @@ int key_release(int keycode, void *garbage)
             printf("not moving\n");
             get_data()->is_running = 0;
             get_data()->is_walking = 0;
-            get_data()->gun2.current_frame = 0;
-            get_data()->gun2.frame_delay = 0;
         }
     }
     return (0);
