@@ -607,7 +607,7 @@ void init_sprites(t_game *game)
 			if (game->map.grid[i][j] == 'M')
 			{
 				get_data()->sprites[n].position.x = j * GRID_DIST;
-				get_data()->sprites[n].position.y = i * GRID_DIST; 
+				get_data()->sprites[n].position.y = i * GRID_DIST;
   				get_data()->sprites[n].z = WIN_HEIGHT / 2 - 20; 
 				get_data()->sprites[n].texture.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "enemy_sprite.xpm", &(get_data()->sprites[n].texture.width), &(get_data()->sprites[n].texture.height));
 				get_data()->sprites[n].texture.img_data.addr = safer_get_data_addr(get_data()->sprites[n].texture.img_data.img, &(get_data()->sprites[n].texture.img_data.bits_per_pixel), &(get_data()->sprites[n].texture.img_data.line_length), &(get_data()->sprites[n].texture.img_data.endian));

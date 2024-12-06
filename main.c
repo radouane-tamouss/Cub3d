@@ -735,6 +735,7 @@ int loop_hook(void)
         update_door_animation();
 	    render_background();
 	    render_gun();
+        // mlx_do_sync(get_data()->mlx);////////////////
 	}
     return (0);
 }
