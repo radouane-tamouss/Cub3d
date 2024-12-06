@@ -4,7 +4,8 @@
 		"libft.h": "c",
 		"get_next_line.h": "c",
 		"stdlib.h": "c",
-		"mlx_int.h": "c"
+		"mlx_int.h": "c",
+		"mlx.h": "c"
 	},
 	"C_Cpp.errorSquiggles": "disabled"
 }
