@@ -4,7 +4,7 @@ CC = cc
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -O3 -flto #-g3 -fsanitize=address #-Werror -Wextra -Wall 
-MLX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz -O3
+MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
 RM = rm -rf
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c ./garbage_collector/safer_func.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
