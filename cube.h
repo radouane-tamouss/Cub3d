@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
 /*   Updated: 2024/11/28 11:49:22 by rtamouss         ###   ########.fr       */
@@ -25,6 +25,7 @@
 #include "lib/libft/libft.h"
 #include "mlx-linux/mlx.h"
 
+//== const sizes =========
 
 #define WIN_HEIGHT 720
 #define WIN_WIDTH 1280
@@ -320,22 +321,8 @@ typedef struct s_ray_data
     // render above a wall)
 } t_ray_data;
 
-
-//= Sprites structure============================
-typedef struct s_sprite
-{
-    t_vector    position;
-    t_texture   texture;
-    t_texture   *frames;
-    float       z;
-    float dist;
-    int display_start_x;
-    int display_start_y;
-    int display_end_x;
-    int display_end_y;
-}   t_sprite;
-
 //==== data =================
+
 typedef struct s_data
 {
     void *mlx;
@@ -387,31 +374,19 @@ typedef struct s_data
     int gun_id;
     t_door door;
     float gun_offset_x;
+
     float zoom_factor;
-    t_sprite    *sprites;
-    int        num_sprites;
+
 } t_data;
 
 //= Enemie structure============================
 
-// typedef struct s_enemy
+// typedef struct s_enemie
 // {
-    
-//     t_texture   texture;
 //     t_vector    position;
 //     int         health;
-//     char    id;//TODO make a max of enemies
-// }   t_enemy;
-
-// //= map_grid data ==============================
-
-// typedef struct s_map_grid
-// {
-//     t_enemy enemy;
-//     char    type;// type of the cube '0' for air | '1' for wall | 'D' for closed door | 'O' for opend DOor
-// } t_map_grid;
-
-
+//     t_texture   texture;
+// }   t_enemie;
 
 //=================================
 t_data *get_data(void);
@@ -440,37 +415,28 @@ void start_walk_sound();
 int handle_keys(int keycode, void *garbage);
 int ft_close(void);
 int mouse_event(int x, int y, void *par);
-void    line_between_2points(t_vector point1, t_vector point2, int color);
-float   ft_max(float nbr1, float nbr2);
-float   ft_min(float nbr1, float nbr2);
-void    init_sprites(t_game *game);
-double  ft_abs(double nbr);
-void    update_door_animation(void);
-void    open_door(void);
-void    close_door(void);
-int     calc_dist(int x, int y, t_vector point);
-float   calc_dist_f(float x, float y, t_vector point);
-float   dot_product(t_vector v1, t_vector v2);
-float   vector_magnitude(t_vector vector);
-// t_vector normalise_vector(t_vector vector);
-void    rotate_player(float angle);
-void    move_backward();
-void    move_forward();
-void    move_left();
-void    move_right();
-void    draw_player();
-float   normalise_angle(float angle);
-int     key_release(int keycode, void *garbage);
+void line_between_2points(t_vector point1, t_vector point2, int color);
+float ft_max(float nbr1, float nbr2);
+float ft_min(float nbr1, float nbr2);
+double ft_abs(double nbr);
+void update_door_animation(void);
+void open_door(void);
+void close_door(void);
+int calc_dist(int x, int y, t_vector point);
+void rotate_player(float angle);
+void move_backward();
+void move_forward();
+void move_left();
+void move_right();
+void draw_player();
+float normalise_angle(float angle);
+int key_release(int keycode, void *garbage);
 void update_movement();
 void render_scope();
 //
 
 void render_walls(void);
 void render_minimap(void);
-//
-t_ray_data  create_ray(float angle);
-void	calculate_distance(t_ray_data *ray);
-void	render_sprites(void);
 
 //=== utils =============================================
 

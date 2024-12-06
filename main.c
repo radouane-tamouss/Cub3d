@@ -270,12 +270,6 @@ void init_data(t_game game)
         &(get_data()->door_animating_img.img_data.bits_per_pixel),
         &(get_data()->door_animating_img.img_data.line_length),
         &(get_data()->door_animating_img.img_data.endian));
-  
-  
-  	get_data()->door_animating_img.img_data.img = mlx_xpm_file_to_image(get_data()->mlx, "textures/door_frames/13.xpm", &(get_data()->door_animating_img.width), &(get_data()->door_animating_img.height));
-	get_data()->door_animating_img.img_data.addr = mlx_get_data_addr(get_data()->door_animating_img.img_data.img, &(get_data()->door_animating_img.img_data.bits_per_pixel), &(get_data()->door_animating_img.img_data.line_length), &(get_data()->door_animating_img.img_data.endian));
-    printf("data addr 2 = %p\n", get_data()->door_animating_img.img_data.addr);
-	init_sprites(&game);
     // printf("data addr 2 = %p\n",
     // get_data()->door_animating_img.img_data.addr);
 }
@@ -298,6 +292,7 @@ void render_frame()
     mlx_put_image_to_window(get_data()->mlx, get_data()->win,
                             get_data()->background_img.img, shake_x, shake_y);
 }
+
 void load_shooting_gun3_frames(void)
 {
     char *frame_paths[15] = {
@@ -312,17 +307,6 @@ void load_shooting_gun3_frames(void)
     int i;
 
     i = 0;
-
-    //======init sprites ===============================
-    // get_data()->sprites = (t_sprite *)mallocate(sizeof(t_sprite) * 1);
-    // get_data()->sprites[0].position = get_data()->player_pos;
-    // get_data()->sprites[0].z = WIN_HEIGHT / 2 - 20; 
-
-	// get_data()->sprites[0].texture.img_data.img = safer_xpm_file_to_image(get_data()->mlx, "enemy_sprite.xpm", &(get_data()->sprites[0].texture.width), &(get_data()->sprites[0].texture.height));
-	// get_data()->sprites[0].texture.img_data.addr = safer_get_data_addr(get_data()->sprites[0].texture.img_data.img, &(get_data()->sprites[0].texture.img_data.bits_per_pixel), &(get_data()->sprites[0].texture.img_data.line_length), &(get_data()->sprites[0].texture.img_data.endian));
-    // get_data()->num_sprites = 1;
-    //==================================================
-
 
     while (i < 15)
     {
@@ -807,13 +791,12 @@ int loop_hook(void)
         // render_tab();
         return (0);
     }
-	if (get_data()->is_updated)
-	{
+    if (get_data()->is_updated)
+    {
         update_movement();
-	    init_background();
-	    render_walls();
-	    render_minimap();
-        render_sprites();
+        init_background();
+        render_walls();
+        render_minimap();
         update_door_animation();
         render_background();
         render_gun();
@@ -831,14 +814,12 @@ int main(int ac, char **av)
         return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
     game = check_map(fd, av[1]);
     close(fd);
-
     init_data(game);
     init_background();
     render_walls();
     render_minimap();
     render_background();
-    render_sprites();/////
-  // load_frames();
+    // load_frames();
     load_shooting_gun3_frames();
     load_running_gun3_frames();
     load_reloading_gun3_frames();
@@ -847,9 +828,6 @@ int main(int ac, char **av)
     // load_last_scope_frames2();
     load_shooting_scope_frames();
     load_walking_gun3_frames();
-
-	load_frames();
-
     load_door_frames();
     mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
