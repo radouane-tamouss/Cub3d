@@ -13,10 +13,6 @@
 #ifndef CUBE_H
 #define CUBE_H
 
-#include "garbage_collector/heap_controller.h" //=== garbage collector
-#include "lib/get_next_line.h"
-#include "lib/libft/libft.h"
-#include "mlx-linux/mlx.h"
 #include <fcntl.h>
 #include <limits.h>
 #include <math.h>
@@ -24,8 +20,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-
-
+#include "garbage_collector/heap_controller.h"  //=== garbage collector
+#include "lib/get_next_line.h"
+#include "lib/libft/libft.h"
+#include "mlx-linux/mlx.h"
 
 //== const sizes =========
 
@@ -35,7 +33,7 @@
 #define FOV (60 * (MY_PI / 180))
 #define GRID_DIST 80
 #define ZOOM 100
-#define ENEMY_SPEED 2.5
+#define ENEMY_SPEED 0.05
 
 #define SQUARE_SIZE 16
 #define PI 3.14159265359
@@ -214,11 +212,12 @@ typedef struct s_door
 
 //======================================
 
-typedef struct s_color {
-  char *color;
-  int r;
-  int g;
-  int b;
+typedef struct s_color
+{
+    char *color;
+    int r;
+    int g;
+    int b;
 } t_color;
 
 //======================================
@@ -237,100 +236,109 @@ typedef struct s_player
 
 //======================================
 
-typedef struct s_map {
-  char **grid;
-  int width;
-  int height;
-  int valid;
+typedef struct s_map
+{
+    char **grid;
+    int width;
+    int height;
+    int valid;
 } t_map;
 
 //======================================
 
-typedef struct s_texture {
-  char *path;
-  t_img_data img_data;
-  int width;
-  int height;
+typedef struct s_texture
+{
+    char *path;
+    t_img_data img_data;
+    int width;
+    int height;
 } t_texture;
 
 //======================================
 
-typedef struct s_ray {
-  double ray_angle;
-  double wall_hit_x;
-  double wall_hit_y;
-  double distance;
-  int was_hit_vertical;
-  int is_ray_facing_up;
-  int is_ray_facing_down;
-  int is_ray_facing_left;
-  int is_ray_facing_right;
-  int wall_hit_content;
+typedef struct s_ray
+{
+    double ray_angle;
+    double wall_hit_x;
+    double wall_hit_y;
+    double distance;
+    int was_hit_vertical;
+    int is_ray_facing_up;
+    int is_ray_facing_down;
+    int is_ray_facing_left;
+    int is_ray_facing_right;
+    int wall_hit_content;
 } t_ray;
 
 //======================================
 
-typedef struct s_game {
-  void *mlx;
-  void *win;
-  t_img_data img;
+typedef struct s_game
+{
+    void *mlx;
+    void *win;
+    t_img_data img;
 
-  t_texture north;
-  int win_width;
-  int win_height;
-  int num_rays;
-  t_texture south;
-  double ray_angle;
-  t_texture west;
-  t_texture east;
-  t_ray *rays;
-  t_color floor;
-  t_color ceiling;
-  t_map map;
-  t_player player;
+    t_texture north;
+    int win_width;
+    int win_height;
+    int num_rays;
+    t_texture south;
+    double ray_angle;
+    t_texture west;
+    t_texture east;
+    t_ray *rays;
+    t_color floor;
+    t_color ceiling;
+    t_map map;
+    t_player player;
 } t_game;
 
 //==== vector struct ========
-typedef struct s_vector {
-  float x;
-  float y;
+typedef struct s_vector
+{
+    float x;
+    float y;
 } t_vector;
 
 //======== casted ray data =================
-typedef struct s_ray_data {
-  t_vector ray_dir;
-  t_vector delta_dist;
-  t_vector side_dist;
-  int map_x;
-  int map_y;
-  int step_x;
-  int step_y;
-  int side;
-  float angle;
-  float dist;
-  float wall_height;
-  int object_hitted; // wall 0     &     close door 1      &     open door 2
-  // struct s_ray_data   *will_render_above;// list of thing that will render
-  // above each other (example: door will render above another door that will
-  // render above a wall)
+typedef struct s_ray_data
+{
+    t_vector ray_dir;
+    t_vector delta_dist;
+    t_vector side_dist;
+    int map_x;
+    int map_y;
+    int step_x;
+    int step_y;
+    int side;
+    float angle;
+    float dist;
+    float wall_height;
+    int object_hitted;  // wall 0     &     close door 1      &     open door 2
+    // struct s_ray_data   *will_render_above;// list of thing that will render
+    // above each other (example: door will render above another door that will
+    // render above a wall)
 } t_ray_data;
 
 //= Sprites structure============================
-typedef struct s_sprite {
-  t_vector position;
-  t_texture texture;
-  t_texture *frames;
-  float z;
-  float dist;
-  int display_start_x;
-  int display_start_y;
-  int display_end_x;
-  int display_end_y;
+typedef struct s_sprite
+{
+    t_vector position;
+    t_texture texture;
+    float z;
+    float dist;
+    int display_start_x;
+    int display_start_y;
+    int display_end_x;
+    int display_end_y;
+    int current_frame;  // Current frame being displayed
+    int frame_delay;    // Delay counter for animation
 } t_sprite;
 
 //==== data =================
 typedef struct s_data
 {
+    void *sprites_frames[7];  // Array to store gun frame images
     void *mlx;
     void *win;
     // t_img_data	walls;
@@ -386,7 +394,6 @@ typedef struct s_data
     int num_sprites;
 
 } t_data;
-
 
 //= Enemie structure============================
 
@@ -463,16 +470,16 @@ int key_release(int keycode, void *garbage);
 void update_movement();
 void render_scope();
 //
-t_ray_data  create_ray(float angle);
-void        calculate_ray_distance(t_ray_data *ray);
+t_ray_data create_ray(float angle);
+void calculate_ray_distance(t_ray_data *ray);
 
 //
 
 void render_walls(void);
 void render_minimap(void);
 //
-t_ray_data  create_ray(float angle);
-void	render_sprites(void);
+t_ray_data create_ray(float angle);
+void render_sprites(void);
 
 //=== utils =============================================
 

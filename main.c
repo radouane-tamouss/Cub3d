@@ -323,6 +323,28 @@ void load_shooting_gun3_frames(void)
     get_data()->gun3.show_scope = 0;
 }
 
+void load_load_sprite_frames(void)
+{
+    char *frame_paths[7] = {"textures/spider/1.xpm", "textures/spider/2.xpm",
+                            "textures/spider/3.xpm", "textures/spider/4.xpm",
+                            "textures/spider/5.xpm", "textures/spider/6.xpm",
+                            "textures/spider/7.xpm"};
+
+    int i;
+    i = 0;
+
+    while (i < 7)
+    {
+        get_data()->sprites_frames[i] =
+            safer_xpm_file_to_image(get_data()->mlx, frame_paths[i],
+                                    &get_data()->sprites[0].texture.width,
+                                    &get_data()->sprites[0].texture.height);
+        i++;
+    }
+    get_data()->sprites[0].current_frame = 0;
+    get_data()->sprites[0].frame_delay = 0;
+}
+
 void load_running_gun3_frames(void)
 {
     char *frame_paths[11] = {
@@ -776,7 +798,7 @@ void render_gun1(void)
 void render_gun(void)
 {
     if (get_data()->gun_id == 2) render_gun3();
-    // render_frame();
+    render_frame();
 }
 
 int player_is_close_to_door(void)
@@ -800,8 +822,7 @@ int loop_hook(void)
         render_sprites();
         update_door_animation();
         render_background();
-        // render_gun();
-        render_gun3();
+        render_gun();
         // erintf("is walking = %d\n", get_data()->is_walking);
     }
     return (0);
@@ -831,9 +852,10 @@ int main(int ac, char **av)
     load_last_scope_frames();
     // load_last_scope_frames2();
     load_shooting_scope_frames();
+    load_load_sprite_frames();
     load_walking_gun3_frames();
     load_door_frames();
-        render_gun3();
+    // render_gun3();
     mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
