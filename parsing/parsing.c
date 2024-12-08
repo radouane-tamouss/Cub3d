@@ -658,7 +658,7 @@ void init_sprites(t_game *game)
     int i = 0;
     int j = 0;
     calc_num_sprites(game);
-    printf("num of sprites is : %d\n", get_data()->num_sprites);
+    // printf("num of sprites is : %d\n", get_data()->num_sprites);
     get_data()->sprites = malloc(sizeof(t_sprite) * get_data()->num_sprites);
     int n = 0;
     while (game->map.grid[i] != NULL)
@@ -683,6 +683,8 @@ void init_sprites(t_game *game)
                     &(get_data()->sprites[n].texture.img_data.bits_per_pixel),
                     &(get_data()->sprites[n].texture.img_data.line_length),
                     &(get_data()->sprites[n].texture.img_data.endian));
+                get_data()->sprites[n].current_frame = 0;
+                get_data()->sprites[n].frame_delay = 0;
                 // printf("here\n");
                 n++;
             }
@@ -691,7 +693,6 @@ void init_sprites(t_game *game)
         i++;
     }
 
-    printf("heeeere\n");
     // printf("end\n");
 
     i = 0;
