@@ -187,7 +187,7 @@ static void render_sprite(t_sprite sprite)
 
     // printf(
     //     "sprite frame that is being displayed is %p\n data img %p\n bits per
-    //     " "pidel %d\n", sprite.texture.img_data.img,
+    //     " "pidel % d\n ", sprite.texture.img_data.img,
     //     sprite.texture.img_data.img, sprite.texture.img_data.bits_per_pixel);
     i = sprite.display_start_y;
     while (i < sprite.display_end_y)
