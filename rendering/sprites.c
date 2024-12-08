@@ -99,6 +99,37 @@ void enemy_move(t_sprite *sprite, t_vector dir)
         sprite->position.y += dir.y;
 }
 
+// void animate_sprites(void)
+// {
+//     int i;
+//     for (i = 0; i < get_data()->num_sprites; i++)
+//     {
+//         // Increment frame delay
+//         get_data()->sprites[i].frame_delay++;
+//
+//         // Check if it's time to change the frame
+//         if (get_data()->sprites[i].frame_delay >= 12)
+//         {
+//             // Reset frame delay
+//             get_data()->sprites[i].frame_delay = 0;
+//
+//             // Move to next frame
+//             get_data()->sprites[i].current_frame++;
+//
+//             // Reset to first frame if we've reached the end
+//             if (get_data()->sprites[i].current_frame >= 7)
+//             {
+//                 get_data()->sprites[i].current_frame = 0;
+//             }
+//
+//             // Update the sprite's texture to the current frame
+//             get_data()->sprites[i].texture.img_data.img =
+//                 get_data()
+//                     ->sprites_frames[get_data()->sprites[i].current_frame];
+//         }
+//     }
+// }
+
 void update_enemies_data()
 {
     int i;
@@ -123,6 +154,30 @@ void update_enemies_data()
     }
 }
 
+void sort_sprites(void)
+{
+    t_sprite tmp_sprite;
+    int i;
+    int j;
+
+    i = 0;
+    while (i < get_data()->num_sprites - 1)
+    {
+        j = i + 1;
+        while (j < get_data()->num_sprites)
+        {
+            if (get_data()->sprites[i].dist < get_data()->sprites[j].dist)
+            {
+                tmp_sprite = get_data()->sprites[i];
+                get_data()->sprites[i] = get_data()->sprites[j];
+                get_data()->sprites[j] = tmp_sprite;
+            }
+            j++;
+        }
+        i++;
+    }
+}
+
 static void render_sprite(t_sprite sprite)
 {
     int i;
@@ -130,16 +185,10 @@ static void render_sprite(t_sprite sprite)
     int pixel_x;
     int pixel_y;
 
-    if (sprite.frame_delay++ >= 1)  // Adjust delay value as needed
-    {
-        sprite.frame_delay = 1;
-        sprite.current_frame++;
-        // printf("zoom factor : %f\n", get_data()->zoom_factor);
-        if (sprite.current_frame >= 7)
-        {
-            sprite.current_frame = 0;
-        }
-    }
+    // printf(
+    //     "sprite frame that is being displayed is %p\n data img %p\n bits per
+    //     " "pidel %d\n", sprite.texture.img_data.img,
+    //     sprite.texture.img_data.img, sprite.texture.img_data.bits_per_pixel);
     i = sprite.display_start_y;
     while (i < sprite.display_end_y)
     {
@@ -155,9 +204,13 @@ static void render_sprite(t_sprite sprite)
             if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
                                           (j * (FOV / WIN_WIDTH))),
                                sprite))
-                put_pixel(&(get_data()->background_img), j, i,
-                          pull_pixel(sprite.texture, pixel_x, pixel_y));
-            j++;
+            {
+                put_pixel(
+                    &(get_data()->background_img), j, i,
+                    pull_pixel(get_data()->sprites_frames[sprite.current_frame],
+                               pixel_x, pixel_y));
+                j++;
+            }
         }
         i++;
     }
@@ -214,50 +267,56 @@ static int should_render(t_sprite *sprite, float *angle)
 }
 
 // sorting enemies by there dist from the player
-void sort_sprites(void)
-{
-    t_sprite tmp_sprite;
-    int i;
-    int j;
-
-    i = 0;
-    while (i < get_data()->num_sprites - 1)
-    {
-        j = i + 1;
-        while (j < get_data()->num_sprites)
-        {
-            if (get_data()->sprites[i].dist < get_data()->sprites[j].dist)
-            {
-                tmp_sprite = get_data()->sprites[i];
-                get_data()->sprites[i] = get_data()->sprites[j];
-                get_data()->sprites[j] = tmp_sprite;
-            }
-            j++;
-        }
-        i++;
-    }
-}
-
 void render_sprites(void)
 {
     float angle;
     int i;
 
+    // Animate sprites before rendering
+    // animate_sprites();
+
     update_enemies_data();
     sort_sprites();
+
     i = 0;
     while (i < get_data()->num_sprites)
     {
         if (get_data()->sprites[i].dist < GRID_DIST)
         {
-            // printf("sprite ignored\n");// TODO this will replcae dying or
-            // taking damage for now
             i++;
             continue;
         }
+
         if (should_render(get_data()->sprites + i, &angle))
+        {
+            // Use the current animated frame when rendering
             render_sprite(get_data()->sprites[i]);
-        // printf("here\n");
+        }
+
         i++;
     }
 }
+
+// void render_sprites(void)
+// {
+//     float angle;
+//     int i;
+//
+//     update_enemies_data();
+//     sort_sprites();
+//     i = 0;
+//     while (i < get_data()->num_sprites)
+//     {
+//         if (get_data()->sprites[i].dist < GRID_DIST)
+//         {
+//             // printf("sprite ignored\n");// TODO this will replcae dying or
+//             // taking damage for now
+//             i++;
+//             continue;
+//         }
+//         if (should_render(get_data()->sprites + i, &angle))
+//             render_sprite(get_data()->sprites[i]);
+//         // printf("here\n");
+//         i++;
+//     }
+// }

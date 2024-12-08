@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "cube.h"
+#include "garbage_collector/heap_controller.h"
 
 // this will be used to store data and share it
 t_data *get_data(void)
@@ -323,6 +324,31 @@ void load_shooting_gun3_frames(void)
     get_data()->gun3.show_scope = 0;
 }
 
+void update_enemy_frames(void)
+{
+    int i;
+
+    for (i = 0; i < get_data()->num_sprites; i++)
+    {
+        if (get_data()->sprites[i].frame_delay >= 8)
+        {
+            get_data()->sprites[i].current_frame++;
+            if (get_data()->sprites[i].current_frame >= 7)
+                get_data()->sprites[i].current_frame = 0;
+            // get_data()->sprites[i].texture.img_data.img =
+            //     get_data()
+            //         ->sprites_frames[get_data()->sprites[i].current_frame];
+            // printf("sprite frame that is being displayed is %p\n",
+            //        get_data()->sprites[i].texture.img_data.img);
+            get_data()->sprites[i].frame_delay = 0;
+        }
+        else
+        {
+            get_data()->sprites[i].frame_delay++;
+        }
+    }
+}
+
 void load_load_sprite_frames(void)
 {
     char *frame_paths[7] = {"textures/spider/1.xpm", "textures/spider/2.xpm",
@@ -335,10 +361,15 @@ void load_load_sprite_frames(void)
 
     while (i < 7)
     {
-        get_data()->sprites_frames[i] =
+        get_data()->sprites_frames[i].img_data.img =
             safer_xpm_file_to_image(get_data()->mlx, frame_paths[i],
-                                    &get_data()->sprites[0].texture.width,
-                                    &get_data()->sprites[0].texture.height);
+                                    &get_data()->sprites_frames[i].width,
+                                    &get_data()->sprites_frames[i].height);
+        get_data()->sprites_frames[i].img_data.addr = safer_get_data_addr(
+            get_data()->sprites_frames[i].img_data.img,
+            &get_data()->sprites_frames[i].img_data.bits_per_pixel,
+            &get_data()->sprites_frames[i].img_data.line_length,
+            &get_data()->sprites_frames[i].img_data.endian);
         i++;
     }
     get_data()->sprites[0].current_frame = 0;
@@ -819,6 +850,7 @@ int loop_hook(void)
         init_background();
         render_walls();
         render_minimap();
+        update_enemy_frames();
         render_sprites();
         update_door_animation();
         render_background();
@@ -842,7 +874,7 @@ int main(int ac, char **av)
     init_background();
     render_walls();
     render_minimap();
-    render_sprites();
+    // render_sprites();
     render_background();
     // load_frames();
     load_shooting_gun3_frames();
