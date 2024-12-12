@@ -136,7 +136,7 @@ int handle_keys(int keycode, void *garbage)
     if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN ||
         keycode == A_LIN)
     {
-        printf("moving\n");
+        // printf("moving\n");
         if (get_data()->speed >= 10)
         {
             get_data()->is_running = 1;
@@ -380,7 +380,7 @@ int key_release(int keycode, void *garbage)
         if (get_data()->move_backward == 0 && get_data()->move_forward == 0 &&
             get_data()->move_left == 0 && get_data()->move_right == 0)
         {
-            printf("not moving\n");
+            // printf("not moving\n");
             get_data()->is_running = 0;
             get_data()->is_walking = 0;
         }
