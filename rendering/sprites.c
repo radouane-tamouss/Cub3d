@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/06 23:38:35 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:55:48 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,31 +189,59 @@ static void render_sprite(t_sprite sprite)
     //     "sprite frame that is being displayed is %p\n data img %p\n bits per
     //     " "pidel % d\n ", sprite.texture.img_data.img,
     //     sprite.texture.img_data.img, sprite.texture.img_data.bits_per_pixel);
-    i = sprite.display_start_y;
-    while (i < sprite.display_end_y)
+
+
+    j = sprite.display_start_x;
+
+    while (j < sprite.display_end_x)
     {
-        j = sprite.display_start_x;
-        pixel_y = (((float)(i - sprite.display_start_y) /
-                    (float)(sprite.display_end_y - sprite.display_start_y)) *
-                   sprite.texture.height);
-        while (j < sprite.display_end_x)
+        if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) + (j * (FOV / WIN_WIDTH))),sprite))
         {
             pixel_x = ((float)(j - sprite.display_start_x) /
                        (float)(sprite.display_end_x - sprite.display_start_x)) *
                       sprite.texture.width;
-            if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
-                                          (j * (FOV / WIN_WIDTH))),
-                               sprite))
+            i = sprite.display_start_y;
+            while (i < sprite.display_end_y)
             {
+                pixel_y = (((float)(i - sprite.display_start_y) /
+                    (float)(sprite.display_end_y - sprite.display_start_y)) *
+                   sprite.texture.height);
                 put_pixel(
                     &(get_data()->background_img), j, i,
                     pull_pixel(get_data()->sprites_frames[sprite.current_frame],
                                pixel_x, pixel_y));
-                j++;
+                ++i;
             }
         }
-        i++;
+        ++j;
     }
+
+    
+    // i = sprite.display_start_y;
+    // while (i < sprite.display_end_y)
+    // {
+    //     j = sprite.display_start_x;
+    //     pixel_y = (((float)(i - sprite.display_start_y) /
+    //                 (float)(sprite.display_end_y - sprite.display_start_y)) *
+    //                sprite.texture.height);
+    //     while (j < sprite.display_end_x)
+    //     {
+    //         pixel_x = ((float)(j - sprite.display_start_x) /
+    //                    (float)(sprite.display_end_x - sprite.display_start_x)) *
+    //                   sprite.texture.width;
+    //         if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
+    //                                       (j * (FOV / WIN_WIDTH))),
+    //                            sprite))
+    //         {
+    //             put_pixel(
+    //                 &(get_data()->background_img), j, i,
+    //                 pull_pixel(get_data()->sprites_frames[sprite.current_frame],
+    //                            pixel_x, pixel_y));
+    //             j++;
+    //         }
+    //     }
+    //     i++;
+    // }
 }
 
 static void find_display_postion(t_sprite *sprite, float angle)
@@ -223,7 +251,7 @@ static void find_display_postion(t_sprite *sprite, float angle)
 
     position = (angle / FOV) * WIN_WIDTH;
     sprite->dist = ft_max(sprite->dist, 10);
-    scale = ((WIN_WIDTH) / sprite->dist);
+    scale = ((WIN_WIDTH) / sprite->dist) * 0.5;
     sprite->display_start_x =
         position + (WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
     sprite->display_start_y = sprite->z;
@@ -260,10 +288,13 @@ static int should_render(t_sprite *sprite, float *angle)
     find_display_postion(sprite, *angle);
     start_ray = create_ray(get_data()->player_angle - (FOV / 2) +
                            (sprite->display_start_x * (FOV / WIN_WIDTH)));
-    if (ray_hit_sprite(start_ray, *sprite)) return (1);
+    if (ray_hit_sprite(start_ray, *sprite))
+        return (1);
     end_ray = create_ray(get_data()->player_angle - (FOV / 2) +
                          (sprite->display_end_x * (FOV / WIN_WIDTH)));
-    if (ray_hit_sprite(end_ray, *sprite)) return (0);
+    if (ray_hit_sprite(end_ray, *sprite))
+        return (1);
+    return (0);
 }
 
 // sorting enemies by there dist from the player
@@ -291,6 +322,12 @@ void render_sprites(void)
         {
             // Use the current animated frame when rendering
             render_sprite(get_data()->sprites[i]);
+            printf("rendered\n");
+
+        }
+        else
+        {
+            printf("should not render\n");
         }
 
         i++;

@@ -874,7 +874,9 @@ int main(int ac, char **av)
     init_background();
     render_walls();
     render_minimap();
-    // render_sprites();
+
+    update_enemy_frames();//
+    render_sprites();//
     render_background();
     // load_frames();
     load_shooting_gun3_frames();
