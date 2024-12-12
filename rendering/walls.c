@@ -271,7 +271,7 @@ void render_walls(void)
     int i;
 
     i = 0;
-    render_background();
+    // render_background();
     while (i < WIN_WIDTH)
     {
         render_col(i++);  // render each column of the window

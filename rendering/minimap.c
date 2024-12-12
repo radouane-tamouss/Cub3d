@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/25 11:52:15 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:18:02 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void render_minimap(void)
 {
 	int	i = 0;
 	int	j;
-	t_vector center; // TODO put it in the get_data and inital once
+	t_vector center; // TODO put it in the get_data and initial it once
 
 	center.x = 5 * SQUARE_SIZE;
 	center.y = 5 * SQUARE_SIZE;

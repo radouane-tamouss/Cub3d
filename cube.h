@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/06 22:57:08 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/12 22:56:11 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@
 #define FOV (60 * (MY_PI / 180))
 #define GRID_DIST 80
 #define ZOOM 100
-#define ENEMY_SPEED 0.00005
+#define ENEMY_SPEED 0.5
 
 #define SQUARE_SIZE 16
-#define PI 3.14159265359
-#define ROTATION_SPEED 0.2
-#define MOVE_SPEED 0.05
-#define WALL_STRIP_WIDTH 100
-#define FOV_ANGLE 60 * (PI / 180)
+// #define PI 3.14159265359
+// #define ROTATION_SPEED 0.2
+// #define MOVE_SPEED 0.05
+// #define WALL_STRIP_WIDTH 100
+// #define FOV_ANGLE 60 * (PI / 180)
 //=== buttons ====
 #define TAB 65289
 #define CTRL 65507
@@ -392,6 +392,7 @@ typedef struct s_data
     float zoom_factor;
     t_sprite *sprites;
     int num_sprites;
+    t_img_data  enemie_on_map;
 
 } t_data;
 

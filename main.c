@@ -271,6 +271,14 @@ void init_data(t_game game)
         &(get_data()->door_animating_img.img_data.bits_per_pixel),
         &(get_data()->door_animating_img.img_data.line_length),
         &(get_data()->door_animating_img.img_data.endian));
+
+    // get_data()->enemie_on_map.img = safer_xpm_file_to_image(get_data()->mlx, "skull.xpm", &(get_data()->enemie_on_map.width), &(get_data()->enemie_on_map.height));
+    // get_data()->enemie_on_map.addr = safer_get_data_addr(
+    //     get_data()->enemie_on_map.img,
+    //     &(get_data()->enemie_on_map.bits_per_pixel),
+    //     &(get_data()->enemie_on_map.line_length),
+    //     &(get_data()->enemie_on_map.endian));
+
     // printf("data addr 2 = %p\n",
     // get_data()->door_animating_img.img_data.addr);
 }
