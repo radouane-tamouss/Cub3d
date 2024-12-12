@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/12 20:55:48 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/12 23:14:53 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,33 @@ void enemy_move(t_sprite *sprite, t_vector dir)
 //     }
 // }
 
+void    sprite_on_minimap(t_vector  dir)
+{
+	int radius = 6;
+    int i;
+    int j;
+    t_vector center;
+    // mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->enemie_on_map.img, (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE, (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE);
+    // put_pixel(&(get_data()->background_img), (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE, (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE, RED);
+    // printf("draw sprite on  minimap ate \n");
+
+	center.x = (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE;
+	center.y = (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE;
+    i = -radius;
+    while (i <= radius)
+    {
+        j = -radius;
+        while (j <= radius)
+        {
+            if (i * i + j * j <= radius * radius)
+				put_pixel(&(get_data()->background_img), center.x + j, center. y + i, RED);
+            ++j;
+        }
+        ++i;
+    }    
+
+}
+
 void update_enemies_data()
 {
     int i;
@@ -147,6 +174,10 @@ void update_enemies_data()
             get_data()->player_pos.x - get_data()->sprites[i].position.x;
         sprite_to_player.y =
             get_data()->player_pos.y - get_data()->sprites[i].position.y;
+        ///////////////////////////////////
+        if (get_data()->sprites[i].dist <= 5 * GRID_DIST)
+            sprite_on_minimap(sprite_to_player);
+        ///////////////////////////////////
         angle = atan2(-sprite_to_player.y, -sprite_to_player.x);
         angle = normalise_angle(angle);
         enemy_move(get_data()->sprites + i, sprite_to_player);
@@ -251,7 +282,7 @@ static void find_display_postion(t_sprite *sprite, float angle)
 
     position = (angle / FOV) * WIN_WIDTH;
     sprite->dist = ft_max(sprite->dist, 10);
-    scale = ((WIN_WIDTH) / sprite->dist) * 0.5;
+    scale = ((WIN_WIDTH) / sprite->dist) * 0.25;
     sprite->display_start_x =
         position + (WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
     sprite->display_start_y = sprite->z;
