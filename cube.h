@@ -33,7 +33,7 @@
 #define FOV (60 * (MY_PI / 180))
 #define GRID_DIST 80
 #define ZOOM 100
-#define ENEMY_SPEED 0.5
+#define ENEMY_SPEED 0.6
 
 #define SQUARE_SIZE 16
 // #define PI 3.14159265359
@@ -323,6 +323,7 @@ typedef struct s_ray_data
 //= Sprites structure============================
 typedef struct s_sprite
 {
+    int is_die;
     t_vector position;
     t_texture texture;
     float z;
@@ -392,7 +393,7 @@ typedef struct s_data
     float zoom_factor;
     t_sprite *sprites;
     int num_sprites;
-    t_img_data  enemie_on_map;
+    t_img_data enemie_on_map;
 
 } t_data;
 
@@ -436,6 +437,7 @@ void render_tab();
 void render_transparent_frame(void *frame_img, int width, int height);
 void play_sound(const char *file);
 
+int ray_hit_sprite(t_ray_data ray, t_sprite sprite);
 //=======================================================
 //=== rendering =========================================
 

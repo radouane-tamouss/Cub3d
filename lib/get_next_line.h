@@ -16,7 +16,6 @@
 #ifndef BUFFER_SIZE
 #define BUFFER_SIZE 10
 #endif
-
 #include "../cube.h"
 
 size_t ft_strlen(const char *theString);
@@ -28,4 +27,4 @@ char *ft_rest(char *buffer);
 char *read_file(int fd, char *result);
 char *get_next_line(int fd);
 
-#endif // GET_NEXT_LINE_H
+#endif  // GET_NEXT_LINE_H

@@ -668,9 +668,10 @@ void init_sprites(t_game *game)
         {
             if (game->map.grid[i][j] == 'M')
             {
+                get_data()->sprites[n].is_die = 0;
                 get_data()->sprites[n].position.x = j * GRID_DIST;
                 get_data()->sprites[n].position.y = i * GRID_DIST;
-                get_data()->sprites[n].z = WIN_HEIGHT / 2 - 30;
+                get_data()->sprites[n].z = (float)(WIN_HEIGHT) / 2 - 30;
                 get_data()->sprites[n].texture.img_data.img =
                     safer_xpm_file_to_image(
                         get_data()->mlx, "textures/spider/1.xpm",

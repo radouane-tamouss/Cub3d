@@ -180,10 +180,10 @@ void init_data(t_game game)
     get_data()->speed = 4;
     get_data()->player_pos.x =
         game.player.pos_x * GRID_DIST +
-        GRID_DIST / 2;  // 1. * GRID_DIST;// TODO for test only
+        (float)GRID_DIST / 2;  // 1. * GRID_DIST;// TODO for test only
     get_data()->player_pos.y =
         game.player.pos_y * GRID_DIST +
-        GRID_DIST / 2;             // 1. * GRID_DIST;// TODO for test only
+        (float)GRID_DIST / 2;      // 1. * GRID_DIST;// TODO for test only
     get_data()->player_angle = 0;  // MY_PI / 4;
     get_data()->player_dir.x =
         cos(get_data()->player_angle) * get_data()->speed;
@@ -272,8 +272,10 @@ void init_data(t_game game)
         &(get_data()->door_animating_img.img_data.line_length),
         &(get_data()->door_animating_img.img_data.endian));
 
-    // get_data()->enemie_on_map.img = safer_xpm_file_to_image(get_data()->mlx, "skull.xpm", &(get_data()->enemie_on_map.width), &(get_data()->enemie_on_map.height));
-    // get_data()->enemie_on_map.addr = safer_get_data_addr(
+    // get_data()->enemie_on_map.img = safer_xpm_file_to_image(get_data()->mlx,
+    // "skull.xpm", &(get_data()->enemie_on_map.width),
+    // &(get_data()->enemie_on_map.height)); get_data()->enemie_on_map.addr =
+    // safer_get_data_addr(
     //     get_data()->enemie_on_map.img,
     //     &(get_data()->enemie_on_map.bits_per_pixel),
     //     &(get_data()->enemie_on_map.line_length),
@@ -883,8 +885,8 @@ int main(int ac, char **av)
     render_walls();
     render_minimap();
 
-    update_enemy_frames();//
-    render_sprites();//
+    update_enemy_frames();  //
+    render_sprites();       //
     render_background();
     // load_frames();
     load_shooting_gun3_frames();
