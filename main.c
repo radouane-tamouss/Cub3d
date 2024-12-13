@@ -847,6 +847,28 @@ int player_is_close_to_door(void)
     return (get_data()->front_ray.dist < 2 * GRID_DIST);
 }
 
+void render_cercle()
+{
+    int x, y;
+    int radius = 7;
+    // int radius = game->player.radius;
+    int center_x = WIN_WIDTH / 2;
+    int center_y = WIN_HEIGHT / 2;
+    // fprintf(stderr, "x== %d,  y==%d\n", center_x, center_y);
+
+    for (y = -radius; y <= radius; y++)
+    {
+        for (x = -radius; x <= radius; x++)
+        {
+            if (x * x + y * y <= radius * radius)
+            {
+                put_pixel(&(get_data()->background_img), center_x + x,
+                          center_y + y, BLACK);
+            }
+        }
+    }
+}
+
 int loop_hook(void)
 {
     if (get_data()->is_tab_pressed)
@@ -865,6 +887,7 @@ int loop_hook(void)
         update_door_animation();
         render_background();
         render_gun();
+        render_cercle();
         // erintf("is walking = %d\n", get_data()->is_walking);
     }
     return (0);

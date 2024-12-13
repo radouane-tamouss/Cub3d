@@ -315,7 +315,7 @@ static int sprite_angle_valide(t_sprite *sprite, float *angle)
     return (1);
 }
 
-static int should_render(t_sprite *sprite, float *angle)
+int should_render(t_sprite *sprite, float *angle)
 {
     t_vector vector_to_sprite;
     t_ray_data start_ray;

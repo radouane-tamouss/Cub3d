@@ -428,6 +428,7 @@ t_data *get_data(void);
 
 // split by charset
 
+int should_render(t_sprite *sprite, float *angle);
 char **ft_split2(char const *s, char *charset);
 int check_charset(char *charset, char c);
 t_game check_map(int fd, char *file);
@@ -464,6 +465,7 @@ float vector_magnitude(t_vector vector);
 // t_vector	normalise_vector(t_vector vector);
 void rotate_player(float angle);
 
+void render_line(int x1, int y1, int x2, int y2);
 void animate_sprites(void);
 void move_backward();
 void move_forward();
