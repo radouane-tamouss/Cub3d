@@ -342,8 +342,10 @@ int handle_keys(int keycode, void *garbage)
                 printf("num sprites: %d\n", get_data()->num_sprites);
                 for (int i = 0; i < get_data()->num_sprites; i++)
                 {
+                    float angle;
                     // Perform a raycast directly along the player's current
-                    if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]))
+                    if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]) &&
+                        should_render(&get_data()->sprites[i], &angle))
                     {
                         printf(
                             "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee "
