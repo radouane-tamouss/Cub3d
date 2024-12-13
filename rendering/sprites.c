@@ -53,7 +53,7 @@ void enemy_move(t_sprite *sprite, t_vector dir)
     dir.x = (dir.x / magnitude) * ENEMY_SPEED;
     dir.y = (dir.y / magnitude) * ENEMY_SPEED;
 
-    float d_square = (GRID_DIST / 8);  //
+    float d_square = ((float)GRID_DIST / 8);  //
     t_vector a;
     a.x = sprite->position.x - d_square;
     a.y = sprite->position.y - d_square;
@@ -130,18 +130,21 @@ void enemy_move(t_sprite *sprite, t_vector dir)
 //     }
 // }
 
-void    sprite_on_minimap(t_vector  dir)
+void sprite_on_minimap(t_vector dir)
 {
-	int radius = 6;
+    int radius = 6;
     int i;
     int j;
     t_vector center;
-    // mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->enemie_on_map.img, (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE, (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE);
-    // put_pixel(&(get_data()->background_img), (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE, (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE, RED);
-    // printf("draw sprite on  minimap ate \n");
+    // mlx_put_image_to_window(get_data()->mlx, get_data()->win,
+    // get_data()->enemie_on_map.img, (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) *
+    // SQUARE_SIZE, (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE);
+    // put_pixel(&(get_data()->background_img), (5 * SQUARE_SIZE) - (dir.x /
+    // GRID_DIST) * SQUARE_SIZE, (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) *
+    // SQUARE_SIZE, RED); printf("draw sprite on  minimap ate \n");
 
-	center.x = (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE;
-	center.y = (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE;
+    center.x = (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE;
+    center.y = (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE;
     i = -radius;
     while (i <= radius)
     {
@@ -149,12 +152,12 @@ void    sprite_on_minimap(t_vector  dir)
         while (j <= radius)
         {
             if (i * i + j * j <= radius * radius)
-				put_pixel(&(get_data()->background_img), center.x + j, center. y + i, RED);
+                put_pixel(&(get_data()->background_img), center.x + j,
+                          center.y + i, RED);
             ++j;
         }
         ++i;
-    }    
-
+    }
 }
 
 void update_enemies_data()
@@ -221,12 +224,13 @@ static void render_sprite(t_sprite sprite)
     //     " "pidel % d\n ", sprite.texture.img_data.img,
     //     sprite.texture.img_data.img, sprite.texture.img_data.bits_per_pixel);
 
-
     j = sprite.display_start_x;
 
     while (j < sprite.display_end_x)
     {
-        if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) + (j * (FOV / WIN_WIDTH))),sprite))
+        if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
+                                      (j * (FOV / WIN_WIDTH))),
+                           sprite))
         {
             pixel_x = ((float)(j - sprite.display_start_x) /
                        (float)(sprite.display_end_x - sprite.display_start_x)) *
@@ -234,9 +238,10 @@ static void render_sprite(t_sprite sprite)
             i = sprite.display_start_y;
             while (i < sprite.display_end_y)
             {
-                pixel_y = (((float)(i - sprite.display_start_y) /
-                    (float)(sprite.display_end_y - sprite.display_start_y)) *
-                   sprite.texture.height);
+                pixel_y =
+                    (((float)(i - sprite.display_start_y) /
+                      (float)(sprite.display_end_y - sprite.display_start_y)) *
+                     sprite.texture.height);
                 put_pixel(
                     &(get_data()->background_img), j, i,
                     pull_pixel(get_data()->sprites_frames[sprite.current_frame],
@@ -247,7 +252,6 @@ static void render_sprite(t_sprite sprite)
         ++j;
     }
 
-    
     // i = sprite.display_start_y;
     // while (i < sprite.display_end_y)
     // {
@@ -258,9 +262,11 @@ static void render_sprite(t_sprite sprite)
     //     while (j < sprite.display_end_x)
     //     {
     //         pixel_x = ((float)(j - sprite.display_start_x) /
-    //                    (float)(sprite.display_end_x - sprite.display_start_x)) *
+    //                    (float)(sprite.display_end_x -
+    //                    sprite.display_start_x)) *
     //                   sprite.texture.width;
-    //         if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
+    //         if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV /
+    //         2) +
     //                                       (j * (FOV / WIN_WIDTH))),
     //                            sprite))
     //         {
@@ -282,12 +288,12 @@ static void find_display_postion(t_sprite *sprite, float angle)
 
     position = (angle / FOV) * WIN_WIDTH;
     sprite->dist = ft_max(sprite->dist, 10);
-    scale = ((WIN_WIDTH) / sprite->dist) * 0.25;
+    scale = ((WIN_WIDTH) / sprite->dist) * 0.5;
     sprite->display_start_x =
-        position + (WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
+        position + ((float)WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
     sprite->display_start_y = sprite->z;
     sprite->display_end_x =
-        (sprite->texture.width * scale) / 2 + position + (WIN_WIDTH / 2);
+        (sprite->texture.width * scale) / 2 + position + ((float)WIN_WIDTH / 2);
     sprite->display_end_y = (sprite->texture.height * scale) + sprite->z;
 }
 
@@ -319,12 +325,10 @@ static int should_render(t_sprite *sprite, float *angle)
     find_display_postion(sprite, *angle);
     start_ray = create_ray(get_data()->player_angle - (FOV / 2) +
                            (sprite->display_start_x * (FOV / WIN_WIDTH)));
-    if (ray_hit_sprite(start_ray, *sprite))
-        return (1);
+    if (ray_hit_sprite(start_ray, *sprite)) return (1);
     end_ray = create_ray(get_data()->player_angle - (FOV / 2) +
                          (sprite->display_end_x * (FOV / WIN_WIDTH)));
-    if (ray_hit_sprite(end_ray, *sprite))
-        return (1);
+    if (ray_hit_sprite(end_ray, *sprite)) return (1);
     return (0);
 }
 
@@ -349,16 +353,16 @@ void render_sprites(void)
             continue;
         }
 
-        if (should_render(get_data()->sprites + i, &angle))
+        if (should_render(get_data()->sprites + i, &angle) &&
+            get_data()->sprites[i].is_die == 0)
         {
             // Use the current animated frame when rendering
             render_sprite(get_data()->sprites[i]);
-            printf("rendered\n");
-
+            // printf("rendered\n");
         }
         else
         {
-            printf("should not render\n");
+            // printf("should not render\n");
         }
 
         i++;
