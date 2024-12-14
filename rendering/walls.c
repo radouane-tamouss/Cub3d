@@ -1,161 +1,5 @@
 #include "../cube.h"
 
-// // this init the direction (vector) of the ray
-// void init_ray_dir(t_ray_data *ray, float ray_angle)
-// {
-//     ray->angle = ray_angle;
-//     ray->ray_dir.x = cos(ray_angle);
-//     ray->ray_dir.y = sin(ray_angle);
-//     ray->map_x = (int)(get_data()->player_pos.x / GRID_DIST);
-//     ray->map_y = (int)(get_data()->player_pos.y / GRID_DIST);
-//     // ray->will_render_above = NULL;
-// }
-
-// // calc the delta that we need to travel to hit the intersact with the next line
-// // of grid
-// void calc_delta_dist(t_ray_data *ray)
-// {
-//     ray->delta_dist.x = ft_abs(1 / ray->ray_dir.x);
-//     ray->delta_dist.y = ft_abs(1 / ray->ray_dir.y);
-// }
-
-// // calc the distance need to travel from intersection to another x
-// void calc_step_and_side_dist_x(t_ray_data *ray)
-// {
-//     float player_x;
-
-//     player_x = get_data()->player_pos.x / GRID_DIST;
-
-//     if (ray->ray_dir.x < 0)
-//     {
-//         ray->step_x = -1;
-//         ray->side_dist.x = (player_x - ray->map_x) * ray->delta_dist.x;
-//     }
-//     else
-//     {
-//         ray->step_x = 1;
-//         ray->side_dist.x = (ray->map_x + 1.0 - player_x) * ray->delta_dist.x;
-//     }
-// }
-
-// // calc the distance need to travel from intersection to another y
-// void calc_step_and_side_dist_y(t_ray_data *ray)
-// {
-//     float player_y;
-
-//     player_y = get_data()->player_pos.y / GRID_DIST;
-//     if (ray->ray_dir.y < 0)
-//     {
-//         ray->step_y = -1;
-//         ray->side_dist.y = (player_y - ray->map_y) * ray->delta_dist.y;
-//     }
-//     else
-//     {
-//         ray->step_y = 1;
-//         ray->side_dist.y = (ray->map_y + 1.0 - player_y) * ray->delta_dist.y;
-//     }
-// }
-
-// void calculate_distance(t_ray_data *ray)
-// {
-//     if (ray->side == 0)
-//         ray->dist = (ray->side_dist.x - ray->delta_dist.x) * GRID_DIST;
-//     else
-//         ray->dist = (ray->side_dist.y - ray->delta_dist.y) * GRID_DIST;
-//     // ray->dist *= cos(ray->angle - get_data()->player_angle);
-// }
-
-void draw_col(t_ray_data ray, int col);
-
-void perform_dda(t_ray_data ray, int data_taken, int col)
-{
-    // int data_taken = 0;
-    while (1)
-    {
-        if (ray.side_dist.x < ray.side_dist.y)
-        {
-            ray.side_dist.x += ray.delta_dist.x;
-            ray.map_x += ray.step_x;
-            ray.side = 0;
-        }
-        else
-        {
-            ray.side_dist.y += ray.delta_dist.y;
-            ray.map_y += ray.step_y;
-            ray.side = 1;
-        }
-
-        char current_tile = get_data()->map[ray.map_y][ray.map_x];
-
-        if (current_tile == '1')
-        {
-            ray.object_hitted = 0;  // hit a wall
-            if (!data_taken && ray.angle == get_data()->player_angle)
-            {
-                get_data()->front_ray = ray;
-                calculate_ray_distance(&(get_data()->front_ray));
-                data_taken = 1;
-            }
-            calculate_ray_distance(&ray);
-            draw_col(ray, col);
-            return;
-        }
-        else if (current_tile == 'P')  // animated door
-        {
-            ray.object_hitted = 3;  // hit a closed door
-            if (!data_taken && ray.angle == get_data()->player_angle)
-            {
-                get_data()->front_ray = ray;
-                calculate_ray_distance(&(get_data()->front_ray));
-                data_taken = 1;
-            }
-            perform_dda(ray, data_taken, col);
-            calculate_ray_distance(&ray);
-            draw_col(ray, col);
-            return;
-        }
-        else if (current_tile == 'D')  // Closed door
-        {
-            ray.object_hitted = 1;  // hit a closed door
-            if (!data_taken && ray.angle == get_data()->player_angle)
-            {
-                get_data()->front_ray = ray;
-                calculate_ray_distance(&(get_data()->front_ray));
-                data_taken = 1;
-            }
-            // perform_dda(ray, data_taken, col);  ///
-            calculate_ray_distance(&ray);
-            draw_col(ray, col);
-            return;
-        }
-        else if (current_tile ==
-                 'O')  // Open door - we'll use 'O' for open doors
-        {
-            ray.object_hitted = 2;  // hit an open door
-            if (!data_taken && ray.angle == get_data()->player_angle)
-            {
-                get_data()->front_ray = ray;
-                calculate_ray_distance(&(get_data()->front_ray));
-                data_taken = 1;
-            }
-            perform_dda(ray, data_taken, col);  ///
-            calculate_ray_distance(&ray);           //
-            draw_col(ray, col);                 //
-            return;                             //
-        }
-    }
-}
-
-// casting the ray and grab all wanted data (coords of wall, side, ...)
-t_ray_data cast_ray(float ray_angle, int col)
-{
-    t_ray_data ray;
-
-    ray = create_ray(ray_angle);
-    perform_dda(ray, 0, col);
-    return ray;
-}
-
 // this will calculate wich pixel should take from image buffer
 unsigned int get_right_pixel(float i, t_ray_data ray)
 {
@@ -230,7 +74,6 @@ int calc_color(t_ray_data ray, int start, int i, int end)
 
 void draw_col(t_ray_data ray, int col)
 {
-    // float wall_height;
     int start;
     int end;
     int i;
@@ -245,35 +88,100 @@ void draw_col(t_ray_data ray, int col)
     i = start;
     while (i < end)
     {
-        put_pixel(&(get_data()->background_img), col, i,
-                  calc_color(ray, start, i, end));
+		put_pixel(&(get_data()->background_img), col, i,
+			calc_color(ray, start, i, end));
         i++;
     }
-    // if (ray.angle == get_data()->player_angle)
-    // printf("object --> %d  , dist -> %f, wall_height => %f ||| start %d - end
-    // %d\n", ray.object_hitted, ray.dist, ray.wall_height, start, end);
 }
 
-void render_col(int col)
+// void draw_col(t_ray_data ray, int col);
+int	check_hitting_object(t_ray_data *ray, char current_tile, int data_taken, int col)
 {
-    float ray_angle;
-
-    ray_angle = normalise_angle(
-        get_data()->player_angle - ((FOV * get_data()->zoom_factor) / 2) +
-        (col * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
-    cast_ray(ray_angle, col);
+	if (current_tile == '1')
+	{
+		ray->object_hitted = 0;
+		if (!data_taken && ray->angle == get_data()->player_angle)
+		{
+			get_data()->front_ray = *ray;
+			calculate_ray_distance(&(get_data()->front_ray));
+			data_taken = 1;
+		}
+	}
+	else if (current_tile == 'P')
+	{
+		ray->object_hitted = 3;
+		if (!data_taken && ray->angle == get_data()->player_angle)
+		{
+			get_data()->front_ray = *ray;
+			calculate_ray_distance(&(get_data()->front_ray));
+			data_taken = 1;
+		}
+		perform_dda(*ray, data_taken, col);
+	}
+	else if (current_tile == 'D')
+	{
+		ray->object_hitted = 1;
+		if (!data_taken && ray->angle == get_data()->player_angle)
+		{
+			get_data()->front_ray = *ray;
+			calculate_ray_distance(&(get_data()->front_ray));
+			data_taken = 1;
+		}
+	}
+	else if (current_tile == 'O')
+	{
+		ray->object_hitted = 2;
+		if (!data_taken && ray->angle == get_data()->player_angle)
+		{
+			get_data()->front_ray = *ray;
+			calculate_ray_distance(&(get_data()->front_ray));
+			data_taken = 1;
+		}
+		perform_dda(*ray, data_taken, col);
+	}
+	else
+		return (0);
+	return (1);
 }
 
-// this will draw the the walls on the background img (it will not put it to
-// window)
+void perform_dda(t_ray_data ray, int data_taken, int col)
+{
+
+    while (1)
+    {
+        if (ray.side_dist.x < ray.side_dist.y)
+        {
+            ray.side_dist.x += ray.delta_dist.x;
+            ray.map_x += ray.step_x;
+            ray.side = 0;
+        }
+        else
+        {
+            ray.side_dist.y += ray.delta_dist.y;
+            ray.map_y += ray.step_y;
+            ray.side = 1;
+        }
+		if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x], data_taken, col))
+		{
+			calculate_ray_distance(&ray);
+			draw_col(ray, col);
+			return;
+		}
+    }
+}
+
 void render_walls(void)
 {
-    int i;
+	int		col;
+	float	ray_angle;
 
-    i = 0;
-    // render_background();
-    while (i < WIN_WIDTH)
-    {
-        render_col(i++);  // render each column of the window
-    }
+	col = 0;
+	while (col < WIN_WIDTH)
+	{
+		ray_angle = normalise_angle(get_data()->player_angle
+			- ((FOV * get_data()->zoom_factor) / 2)
+			+ (col * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
+		perform_dda(create_ray(ray_angle), 0, col);
+		++col;
+	}
 }

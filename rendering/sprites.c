@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/12 23:14:53 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/14 21:06:03 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,13 +288,13 @@ static void find_display_postion(t_sprite *sprite, float angle)
 
     position = (angle / FOV) * WIN_WIDTH;
     sprite->dist = ft_max(sprite->dist, 10);
-    scale = ((WIN_WIDTH) / sprite->dist) * 0.5;
+    scale = ((WIN_WIDTH) / sprite->dist) * 0.2;
     sprite->display_start_x =
         position + ((float)WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
-    sprite->display_start_y = sprite->z;
+    sprite->display_start_y = sprite->z + scale;
     sprite->display_end_x =
         (sprite->texture.width * scale) / 2 + position + ((float)WIN_WIDTH / 2);
-    sprite->display_end_y = (sprite->texture.height * scale) + sprite->z;
+    sprite->display_end_y = (sprite->texture.height * scale) + sprite->z + scale;
 }
 
 static int sprite_angle_valide(t_sprite *sprite, float *angle)
