@@ -391,7 +391,6 @@ int handle_mouse_event(int button, int x, int y, void *param)
 {
     if (button == 1)
     {
-        // Call the function or add the code that handles the N_LIN key behavior
         if (get_data()->gun_id == 2)
         {
             get_data()->gun3.is_shooting = 1;
@@ -403,17 +402,16 @@ int handle_mouse_event(int button, int x, int y, void *param)
             get_data()->gun3.is_showing_scope = 0;
             get_data()->screen_shake_intensity =
                 5;  // Adjust intensity as needed
-            printf("num sprites: %d\n", get_data()->num_sprites);
+            // printf("num sprites: %d\n", get_data()->num_sprites);
             for (int i = 0; i < get_data()->num_sprites; i++)
             {
                 float angle;
                 if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]) &&
                     should_render(&get_data()->sprites[i], &angle))
                 {
-                    printf(
-                        "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee hitted this "
-                        "mf in the middle of screen %d\n",
-                        i);
+                    // printf(
+                    //     "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee hitted this
+                    //     " "mf in the middle of screen %d\n", i);
                     get_data()->sprites[i].is_die = 1;  // Stop the enemy
                     get_data()->screen_shake_timer =
                         10;  // Adjust duration as needed

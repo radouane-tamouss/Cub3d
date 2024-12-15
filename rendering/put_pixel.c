@@ -12,31 +12,32 @@
 
 #include "../cube.h"
 
-//color a pixel in img in the cords (x, y)
-void	put_pixel(t_img_data *img, int x, int y, int color)
+// color a pixel in img in the cords (x, y)
+void put_pixel(t_img_data *img, int x, int y, int color)
 {
-	char			*dst;
-	int				offset;
-	unsigned int	*ptr;
+    char *dst;
+    int offset;
+    unsigned int *ptr;
 
-	if (y >= WIN_HEIGHT || x >= WIN_WIDTH || x < 0 || y < 0 || GET_T(color) == 255)
-		return ;
-	offset = y * img->line_length + x * (img->bits_per_pixel / 8);
-	dst = img->addr + offset;
-	ptr = (unsigned int *)dst;
-	*ptr = color;
+    if (y >= WIN_HEIGHT || x >= WIN_WIDTH || x < 0 || y < 0 ||
+        GET_T(color) == 255)
+        return;
+    offset = y * img->line_length + x * (img->bits_per_pixel / 8);
+    dst = img->addr + offset;
+    ptr = (unsigned int *)dst;
+    *ptr = color;
 }
 
-unsigned int	pull_pixel(t_texture img, int x, int y)
+unsigned int pull_pixel(t_texture img, int x, int y)
 {
-	int				offset;
-	unsigned int	*ptr;
-	char			*dst;
+    int offset;
+    unsigned int *ptr;
+    char *dst;
 
-	if (y >= img.height || x >= img.width || x < 0 || y < 0)
-		return (BLACK);
-	offset = y * img.img_data.line_length + x * (img.img_data.bits_per_pixel / 8);
-	dst = img.img_data.addr + offset;
-	ptr = (unsigned int *)dst;
-	return (*ptr);
+    if (y >= img.height || x >= img.width || x < 0 || y < 0) return (BLACK);
+    offset =
+        y * img.img_data.line_length + x * (img.img_data.bits_per_pixel / 8);
+    dst = img.img_data.addr + offset;
+    ptr = (unsigned int *)dst;
+    return (*ptr);
 }
