@@ -288,7 +288,7 @@ static void find_display_postion(t_sprite *sprite, float angle)
 
     position = (angle / FOV) * WIN_WIDTH;
     sprite->dist = ft_max(sprite->dist, 10);
-    scale = ((WIN_WIDTH) / sprite->dist) * 0.2;
+    scale = ((WIN_WIDTH) / sprite->dist) * 0.4;
     sprite->display_start_x =
         position + ((float)WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
     sprite->display_start_y = sprite->z + scale;
@@ -354,16 +354,14 @@ void render_sprites(void)
             continue;
         }
 
-        if (should_render(get_data()->sprites + i, &angle) &&
-            get_data()->sprites[i].is_die == 0)
+        if (should_render(get_data()->sprites + i, &angle))
         {
             // Use the current animated frame when rendering
             render_sprite(get_data()->sprites[i]);
             // printf("rendered\n");
         }
-        else if (get_data()->sprites[i].is_die == 1)
+        else
         {
-            render_sprite(get_data()->die_sprite);
             // printf("should not render\n");
         }
 

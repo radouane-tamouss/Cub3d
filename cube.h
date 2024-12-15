@@ -33,7 +33,7 @@
 #define FOV (60 * (MY_PI / 180))
 #define GRID_DIST 80
 #define ZOOM 100
-#define ENEMY_SPEED 0.6
+#define ENEMY_SPEED 0.2
 
 #define SQUARE_SIZE 16
 // #define PI 3.14159265359
@@ -339,7 +339,7 @@ typedef struct s_sprite
 //==== data =================
 typedef struct s_data
 {
-    t_texture sprites_frames[7];  // Array to store gun frame images
+    t_texture sprites_frames[21];  // Array to store gun frame images
     void *mlx;
     void *win;
     // t_img_data	walls;
@@ -392,6 +392,7 @@ typedef struct s_data
 
     float zoom_factor;
     t_sprite *sprites;
+    t_sprite die_sprite;
     int num_sprites;
     t_img_data enemie_on_map;
 
