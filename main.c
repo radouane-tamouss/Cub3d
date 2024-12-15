@@ -177,6 +177,7 @@ void init_data(t_game game)
     mlx_hook(get_data()->win, 17, 1L << 0, ft_close,
              NULL);  // this to handle when red arrow clicked
     mlx_hook(get_data()->win, 6, 1L << 6, mouse_event, NULL);
+    mlx_mouse_hook(get_data()->win, handle_mouse_event, NULL);
     get_data()->speed = 4;
     get_data()->player_pos.x =
         game.player.pos_x * GRID_DIST +

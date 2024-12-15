@@ -324,58 +324,6 @@ int handle_keys(int keycode, void *garbage)
     // get_data()->screen_shake_timer =
     //     10;  // Adjust duration as needed
     // play_sound("sounds/one_shot_firstgun.wav");
-    if (keycode == N_LIN)
-    {
-        if (!get_data()->gun3.is_shooting)
-        {
-            if (get_data()->gun_id == 2)
-            {
-                get_data()->gun3.is_shooting = 1;
-                get_data()->gun3.current_frame = 0;
-                get_data()->gun3.frame_delay = 0;
-                get_data()->gun3.is_reloading = 0;
-                get_data()->is_running = 0;
-                get_data()->is_walking = 0;
-                get_data()->gun3.is_showing_scope = 0;
-                get_data()->screen_shake_intensity =
-                    5;  // Adjust intensity as needed
-                printf("num sprites: %d\n", get_data()->num_sprites);
-                for (int i = 0; i < get_data()->num_sprites; i++)
-                {
-                    float angle;
-                    // Perform a raycast directly along the player's current
-                    if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]) &&
-                        should_render(&get_data()->sprites[i], &angle))
-                    {
-                        printf(
-                            "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee "
-                            "hitted this mf in the middle of screen %d\n",
-                            i);
-                        get_data()->sprites[i].is_die = 1;  // Stop the enemy
-                        get_data()->screen_shake_timer =
-                            10;  // Adjust duration as needed
-                        break;
-                    }
-                    // angle
-                    // if (ray_hit_sprite(create_ray(get_data()->player_angle),
-                    //                    get_data()->sprites[i]) &&
-                    //     get_data()->sprites[i].is_die == 0)
-                    // {
-                    //     printf(
-                    //         "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee "
-                    //         "hitted\n");
-                    //     get_data()->sprites[i].is_die = 1;  // Stop the enemy
-                    //     get_data()->screen_shake_timer =
-                    //         10;  // Adjust duration as needed
-                    //     break;
-                    // }
-                }
-                get_data()->screen_shake_timer =
-                    10;  // Adjust duration as needed
-            }
-        }
-        get_data()->is_updated = 1;
-    }
     // if (keycode == LIN_1)
     //     get_data()->gun_id = 0;
     if (keycode == LIN_2)
@@ -434,6 +382,46 @@ int key_release(int keycode, void *garbage)
             // printf("not moving\n");
             get_data()->is_running = 0;
             get_data()->is_walking = 0;
+        }
+    }
+    return (0);
+}
+
+int handle_mouse_event(int button, int x, int y, void *param)
+{
+    if (button == 1)
+    {
+        // Call the function or add the code that handles the N_LIN key behavior
+        if (get_data()->gun_id == 2)
+        {
+            get_data()->gun3.is_shooting = 1;
+            get_data()->gun3.current_frame = 0;
+            get_data()->gun3.frame_delay = 0;
+            get_data()->gun3.is_reloading = 0;
+            get_data()->is_running = 0;
+            get_data()->is_walking = 0;
+            get_data()->gun3.is_showing_scope = 0;
+            get_data()->screen_shake_intensity =
+                5;  // Adjust intensity as needed
+            printf("num sprites: %d\n", get_data()->num_sprites);
+            for (int i = 0; i < get_data()->num_sprites; i++)
+            {
+                float angle;
+                if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]) &&
+                    should_render(&get_data()->sprites[i], &angle))
+                {
+                    printf(
+                        "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee hitted this "
+                        "mf in the middle of screen %d\n",
+                        i);
+                    get_data()->sprites[i].is_die = 1;  // Stop the enemy
+                    get_data()->screen_shake_timer =
+                        10;  // Adjust duration as needed
+                    break;
+                }
+            }
+            get_data()->screen_shake_timer = 10;  // Adjust duration as needed
+            play_sound("sounds/one_shot_firstgun.wav");
         }
     }
     return (0);

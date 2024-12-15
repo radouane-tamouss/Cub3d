@@ -438,6 +438,7 @@ void render_tab();
 void render_transparent_frame(void *frame_img, int width, int height);
 void play_sound(const char *file);
 
+int handle_mouse_event(int button, int x, int y, void *param);
 int ray_hit_sprite(t_ray_data ray, t_sprite sprite);
 //=======================================================
 //=== rendering =========================================
