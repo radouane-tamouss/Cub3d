@@ -2,5 +2,8 @@
 .vscode
 *.o
 mlx_linx
+mlx-linux/libmlx.a
+mlx-linux/libmlx_Linux.a
+mlx-linux/test/mlx-test
 cub3D
 *.a
