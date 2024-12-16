@@ -429,6 +429,7 @@ t_data *get_data(void);
 
 // split by charset
 
+void update_enemy_frames(void);
 int should_render(t_sprite *sprite, float *angle);
 char **ft_split2(char const *s, char *charset);
 int check_charset(char *charset, char c);

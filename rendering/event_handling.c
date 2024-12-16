@@ -263,10 +263,10 @@ int handle_keys(int keycode, void *garbage)
     // }
     if (keycode == T_LIN)  // Add proper key define if needed
     {
-        printf("gun_id == %d\n", get_data()->gun_id);
+        // printf("gun_id == %d\n", get_data()->gun_id);
         if (get_data()->gun_id == 2)
         {
-            printf("here it should be reloading\n");
+            // printf("here it should be reloading\n");
             get_data()->gun3.is_reloading = 1;
             get_data()->gun3.current_frame = 0;
             get_data()->gun3.frame_delay = 0;

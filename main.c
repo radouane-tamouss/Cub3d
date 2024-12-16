@@ -382,7 +382,7 @@ void load_load_sprite_frames(void)
     i = 0;
     while (i < 21)
     {
-        printf("frame_paths[%d], %p\n", i, frame_paths[i]);
+        // printf("frame_paths[%d], %p\n", i, frame_paths[i]);
         get_data()->sprites_frames[i].img_data.img =
             safer_xpm_file_to_image(get_data()->mlx, frame_paths[i],
                                     &get_data()->sprites_frames[i].width,
@@ -894,7 +894,6 @@ int loop_hook(void)
         init_background();
         render_walls();
         render_minimap();
-        update_enemy_frames();
         render_sprites();
         update_door_animation();
         render_background();
