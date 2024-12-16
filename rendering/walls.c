@@ -37,16 +37,9 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
             texture = get_data()->south_img;
     }
     pixel_x = (int)(hit_point * texture.width / GRID_DIST) % texture.width;
-
-    // trying to find t x and y of the pixel must be pulled from the texture
-    // image
-
-    // calc the y coords in the texture
     pixel_y = (int)((i - (WIN_HEIGHT / 2 - ray.wall_height / 2)) /
                     ray.wall_height * texture.height) %
               texture.height;
-    // making sure the y pixel is between 0 and height of our texture
-    // pixel_y = fmaxf(0, fminf(pixel_y, texture.height - 1));
     return (pull_pixel(texture, pixel_x, (int)pixel_y));
 }
 
@@ -65,10 +58,10 @@ int calc_color(t_ray_data ray, int start, int i, int end)
     if (get_data()->dark_mode)
         color = CREATE_TRGB(
             0,
-            ((int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
-            ((int)(GET_G(color) * ((float)projected_wall / (float)WIN_HEIGHT))),
+            (int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT)),
+            (int)(GET_G(color) * ((float)projected_wall / (float)WIN_HEIGHT)),
             ((int)(GET_B(color) *
-                   ((float)projected_wall / (float)WIN_HEIGHT))));
+            ((float)projected_wall / (float)WIN_HEIGHT))));
     return (color);
 }
 
@@ -94,7 +87,6 @@ void draw_col(t_ray_data ray, int col)
     }
 }
 
-// void draw_col(t_ray_data ray, int col);
 int	check_hitting_object(t_ray_data *ray, char current_tile, int data_taken, int col)
 {
 	if (current_tile == '1')
@@ -144,9 +136,8 @@ int	check_hitting_object(t_ray_data *ray, char current_tile, int data_taken, int
 	return (1);
 }
 
-void perform_dda(t_ray_data ray, int data_taken, int col)
+void    perform_dda(t_ray_data ray, int data_taken, int col)
 {
-
     while (1)
     {
         if (ray.side_dist.x < ray.side_dist.y)
@@ -161,7 +152,8 @@ void perform_dda(t_ray_data ray, int data_taken, int col)
             ray.map_y += ray.step_y;
             ray.side = 1;
         }
-		if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x], data_taken, col))
+		if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x]
+            , data_taken, col))
 		{
 			calculate_ray_distance(&ray);
 			draw_col(ray, col);

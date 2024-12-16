@@ -935,6 +935,7 @@ int main(int ac, char **av)
     load_walking_gun3_frames();
     load_door_frames();
     // render_gun3();
+    mlx_mouse_hide(get_data()->mlx, get_data()->win);
     mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
