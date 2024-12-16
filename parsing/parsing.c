@@ -386,7 +386,7 @@ void check_map_sourrounded_by_walls(t_game *game)
         while (game->map.grid[i][j])
         {
             if (i == 0 || i == game->map.height - 1 || j == 0 ||
-                j == (int)(ft_strlen(game->map.grid[i])) - 1)
+                j == (int)(ft_strlen(game->map.grid[i]))-1)
             {
                 if (game->map.grid[i][j] != '1' && game->map.grid[i][j] != ' ')
                 {
@@ -686,7 +686,7 @@ void init_sprites(t_game *game)
                     j * GRID_DIST + ((float)GRID_DIST / 2);
                 get_data()->sprites[n].position.y =
                     i * GRID_DIST + ((float)GRID_DIST / 2);
-                get_data()->sprites[n].z = (float)(WIN_HEIGHT) / 2;
+                get_data()->sprites[n].z = (float)(WIN_HEIGHT) / 2 - 30;
                 get_data()->sprites[n].texture.img_data.img =
                     safer_xpm_file_to_image(
                         get_data()->mlx, "textures/zombie/1.xpm",
