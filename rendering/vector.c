@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 22:32:00 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/06 23:21:34 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:44:03 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,3 @@ float	vector_magnitude(t_vector vector)
 {
 	return (sqrt(vector.x * vector.x + vector.y * vector.y));
 }
-
-// t_vector	normalise_vector(t_vector vector)
-// {
-// 	float	magnitude;
-
-// 	magnitude = vector_magnitude(vector);
-// 	vector.x = vector.x / magnitude;
-// 	vector.y = vector.y / magnitude;
-// 	return	(vector);
-// }
