@@ -6,23 +6,23 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 19:49:10 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/06 23:22:29 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:55:11 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube.h"
 
-int	ft_power(int nbr, int power)
-{
-	int i = 0;
-	int r = 1;
-	while (i < power)
-	{
-		r *= nbr;
-		i++;
-	}
-	return (r);
-}
+// int	ft_power(int nbr, int power)
+// {
+// 	int i = 0;
+// 	int r = 1;
+// 	while (i < power)
+// 	{
+// 		r *= nbr;
+// 		i++;
+// 	}
+// 	return (r);
+// }
 
 double	ft_abs(double nbr)
 {
@@ -49,9 +49,6 @@ void	line_between_2points(t_vector point1,
 	int	x;
 	int	y;
 
-	// if ((point1.x == -1 && point1.y == -1)
-	// 	|| (point2.x == -1 && point2.y == -1))
-	// 	return ;
 	y = ft_max(ft_min(point1.y, point2.y), 0);
 	while ((point2.y - point1.y) != 0
 		&& y <= ft_max(point1.y, point2.y) && y < WIN_HEIGHT)

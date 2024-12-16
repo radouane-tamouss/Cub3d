@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/12 21:18:02 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/15 22:54:37 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,16 @@ void render_square(int x, int y, int color)
 {
 	int i = 0;
 	int j = 0;
-	// int	color2;
-	// t_texture bg_texture;
 	t_vector center; // TODO put it in the get_data and inital once
 
 	center.x = 5 * SQUARE_SIZE; // TODO put it in the get_data and inital once
 	center.y = 5 * SQUARE_SIZE; // TODO put it in the get_data and inital once
 
-	// bg_texture.img_data = get_data()->background_img;
-	// bg_texture.height = WIN_HEIGHT;
-	// bg_texture.width = WIN_WIDTH;
-	
 	while (i < SQUARE_SIZE)
 	{
 		j = 0;
 		while (j < SQUARE_SIZE)
 		{
-			// color2 = pull_pixel(bg_texture, j + x, i + y);
-			// color = CREATE_TRGB(0, (int)((GET_R(color2)  + GET_R(color) * 99) / 100), (int)((GET_G(color2) + GET_G(color)* 99) / 100), (int)((GET_B(color2) + GET_B(color)* 99) / 100));
 			if (calc_dist(j + x, i + y, center) <= (5 * SQUARE_SIZE - 3))
 				put_pixel(&(get_data()->background_img), j + x, i + y, color);
 			j++;
@@ -66,7 +58,7 @@ void render_map(void)
 {
 	int i,j;
 	int x,y;
-	// int	color;
+
 	i = ft_max((get_data()->player_pos.y / GRID_DIST) - 5, 0);
 	while(i < get_data()->height && (i - (get_data()->player_pos.y / GRID_DIST)) < 5)
 	{
@@ -85,9 +77,9 @@ void render_map(void)
 				render_square(x, y, BLUE);
 			else if (get_data()->map[i][j] == 'O')
 				render_square(x, y, CYAN);
-			j++;
+			++j;
 		}
-		i++;
+		++i;
 	}
 }
 
@@ -118,9 +110,6 @@ void render_player()
 	// int radius = game->player.radius;
 	int center_x = 5 * SQUARE_SIZE;//(get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
 	int center_y = 5 * SQUARE_SIZE;//(get_data()->player_pos.y / GRID_DIST) * SQUARE_SIZE;
-
-	// fprintf(stderr, "x== %d,  y==%d\n", center_x, center_y);
-
 	for (y = -radius; y <= radius; y++)
 	{
 		for (x = -radius; x <= radius; x++)
@@ -135,28 +124,26 @@ void render_player()
     int end_x = center_x + cos(get_data()->player_angle) * 80;
     int end_y = center_y + sin(get_data()->player_angle) * 80;
 	render_line(center_x, center_y, end_x, end_y);
-	// render_rays(game);
 }
 void render_minimap(void)
 {
 	int	i = 0;
 	int	j;
-	t_vector center; // TODO put it in the get_data and initial it once
+	t_vector center; // TODO put it in the get_data and initial it once for performance porpose
 
 	center.x = 5 * SQUARE_SIZE;
 	center.y = 5 * SQUARE_SIZE;
-	
-	while (i < SQUARE_SIZE * 11)/////////////////////////////
+	while (i < SQUARE_SIZE * 11)
 	{
 		j = 0;
 		while (j < SQUARE_SIZE * 11)
 		{
 			if (calc_dist(j, i, center) <= (5 * SQUARE_SIZE))
 				put_pixel(&(get_data()->background_img), i, j, BLACK);
-			j++;
+			++j;
 		}
-		i++;
-	}/////////////////////////////////////////////////////////
+		++i;
+	}
 	render_map();
 	render_player();
 }
