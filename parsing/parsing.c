@@ -386,7 +386,7 @@ void check_map_sourrounded_by_walls(t_game *game)
         while (game->map.grid[i][j])
         {
             if (i == 0 || i == game->map.height - 1 || j == 0 ||
-                j == (int)(ft_strlen(game->map.grid[i])) - 1)
+                j == (int)(ft_strlen(game->map.grid[i]))-1)
             {
                 if (game->map.grid[i][j] != '1' && game->map.grid[i][j] != ' ')
                 {
@@ -668,7 +668,7 @@ void init_sprites(t_game *game)
         {
             if (game->map.grid[i][j] == 'M')
             {
-                get_data()->sprites[n].is_die = 0;
+                get_data()->sprites[n].is_dead = 0;
                 get_data()->sprites[n].position.x =
                     j * GRID_DIST + ((float)GRID_DIST / 2);
                 get_data()->sprites[n].position.y =

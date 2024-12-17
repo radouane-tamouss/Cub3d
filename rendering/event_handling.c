@@ -122,7 +122,7 @@ int is_enemy_in_middle_of_screen(t_sprite *sprite)
     t_data *data = get_data();
     int screen_middle_x = WIN_WIDTH / 2;
 
-    if (sprite->is_die == 0)
+    if (sprite->is_dead == 0)
     {
         int display_start_x = sprite->display_start_x;
         int display_end_x = sprite->display_end_x;
@@ -412,7 +412,10 @@ int handle_mouse_event(int button, int x, int y, void *param)
                     // printf(
                     //     "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee hitted this
                     //     " "mf in the middle of screen %d\n", i);
-                    get_data()->sprites[i].is_die = 1;  // Stop the enemy
+                    // get_data()->sprites[i].is_dead = 1;  // Stop the enemy
+                    get_data()->sprites[i].is_dying = 1;
+                    get_data()->sprites[i].current_frame = 0;
+                    get_data()->is_updated = 1;
                     get_data()->screen_shake_timer =
                         10;  // Adjust duration as needed
                     break;
