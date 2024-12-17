@@ -341,10 +341,10 @@ void update_enemy_frames(void)
 
     for (i = 0; i < get_data()->num_sprites; i++)
     {
-        if (get_data()->sprites[i].frame_delay >= 13)
+        if (get_data()->sprites[i].frame_delay >= 15)
         {
             get_data()->sprites[i].current_frame++;
-            if (get_data()->sprites[i].current_frame >= 21)
+            if (get_data()->sprites[i].current_frame >= 16)
                 get_data()->sprites[i].current_frame = 0;
             // get_data()->sprites[i].texture.img_data.img =
             //     get_data()
@@ -390,7 +390,7 @@ void load_dying_sprite_frames(void)
             &get_data()->dying_frames[i].img_data.endian);
         i++;
     }
-    get_data()->sprites[0].current_frame = 0;
+    get_data()->sprites[0].current_dying_frame = 0;
     get_data()->sprites[0].frame_delay = 0;
     get_data()->sprites[0].is_dying = 0;
 }
@@ -401,20 +401,19 @@ void load_load_sprite_frames(void)
     //                         "textures/spider/3.xpm", "textures/spider/4.xpm",
     //                         "textures/spider/5.xpm", "textures/spider/6.xpm",
     //                         "textures/spider/7.xpm"};
-    char *frame_paths[19] = {"textures/zombie/2.xpm",  "textures/zombie/3.xpm",
-                             "textures/zombie/4.xpm",  "textures/zombie/5.xpm",
-                             "textures/zombie/6.xpm",  "textures/zombie/7.xpm",
-                             "textures/zombie/8.xpm",  "textures/zombie/9.xpm",
-                             "textures/zombie/10.xpm", "textures/zombie/11.xpm",
-                             "textures/zombie/12.xpm", "textures/zombie/13.xpm",
-                             "textures/zombie/14.xpm", "textures/zombie/15.xpm",
-                             "textures/zombie/16.xpm", "textures/zombie/17.xpm",
-                             "textures/zombie/18.xpm", "textures/zombie/19.xpm",
-                             "textures/zombie/20.xpm"};
+    char *frame_paths[16] = {
+        "textures/zombie/1.xpm",  "textures/zombie/2.xpm",
+        "textures/zombie/3.xpm",  "textures/zombie/4.xpm",
+        "textures/zombie/5.xpm",  "textures/zombie/6.xpm",
+        "textures/zombie/7.xpm",  "textures/zombie/8.xpm",
+        "textures/zombie/9.xpm",  "textures/zombie/10.xpm",
+        "textures/zombie/11.xpm", "textures/zombie/12.xpm",
+        "textures/zombie/13.xpm", "textures/zombie/14.xpm",
+        "textures/zombie/15.xpm", "textures/zombie/16.xpm"};
 
     int i;
     i = 0;
-    while (i < 19)
+    while (i < 16)
     {
         // printf("frame_paths[%d], %p\n", i, frame_paths[i]);
         get_data()->sprites_frames[i].img_data.img =

@@ -386,7 +386,7 @@ void check_map_sourrounded_by_walls(t_game *game)
         while (game->map.grid[i][j])
         {
             if (i == 0 || i == game->map.height - 1 || j == 0 ||
-                j == (int)(ft_strlen(game->map.grid[i]))-1)
+                j == (int)(ft_strlen(game->map.grid[i])) - 1)
             {
                 if (game->map.grid[i][j] != '1' && game->map.grid[i][j] != ' ')
                 {
@@ -703,6 +703,7 @@ void init_sprites(t_game *game)
                 ///    &(get_data()->sprites[n].die_texture.img_data.endian));
                 /////////////////
                 get_data()->sprites[n].current_frame = 0;
+                get_data()->sprites[n].current_dying_frame = 0;
                 get_data()->sprites[n].frame_delay = 0;
                 // printf("here\n");
                 n++;

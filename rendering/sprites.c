@@ -208,28 +208,25 @@ void sort_sprites(void)
     }
 }
 
-void update_dying_frames(void)
+void update_dying_frames(t_sprite *sprite)
 {
     int i;
-
-    for (i = 0; i < get_data()->num_sprites; i++)
+    if (sprite->frame_delay >= 10)
     {
-        if (get_data()->sprites[i].frame_delay >= 13)
+        sprite->current_dying_frame++;
+        printf("current frame %d\n", sprite->current_dying_frame);
+        if (sprite->current_dying_frame >= 14)
         {
-            get_data()->sprites[i].current_frame++;
-            if (get_data()->sprites[i].current_frame >= 14)
-            {
-                get_data()->sprites[i].current_frame = 0;
-                get_data()->sprites[i].is_dying = 0;
-                printf("reseted to 0\n");
-                get_data()->sprites[i].is_dead = 1;
-            }
-            get_data()->sprites[i].frame_delay = 0;
+            sprite->current_dying_frame = 0;
+            sprite->is_dead = 1;
+            sprite->is_dying = 0;
+            printf("%sreseted to 0%s\n", CRED, CWHITE);
         }
-        else
-        {
-            get_data()->sprites[i].frame_delay++;
-        }
+        sprite->frame_delay = 0;
+    }
+    else
+    {
+        sprite->frame_delay++;
     }
 }
 
@@ -257,7 +254,7 @@ static void render_sprite(t_sprite sprite)
                     (((float)(i - sprite.display_start_y) /
                       (float)(sprite.display_end_y - sprite.display_start_y)) *
                      sprite.texture.height);
-                if (sprite.is_dead == 0)
+                if (sprite.is_dead == 0 && sprite.is_dying == 0)
                 {
                     put_pixel(
                         &(get_data()->background_img), j, i,
@@ -265,21 +262,30 @@ static void render_sprite(t_sprite sprite)
                             get_data()->sprites_frames[sprite.current_frame],
                             pixel_x, pixel_y));
                 }
-                else if (sprite.is_dying == 1)
+                else if (sprite.is_dying == 1 && sprite.is_dead == 0)
                 {
-                    printf("here is dying\n");
-                    update_dying_frames();
+                    // printf("here is dying\n");
                     put_pixel(
                         &(get_data()->background_img), j, i,
                         pull_pixel(
-                            get_data()->dying_frames[sprite.current_frame],
+                            get_data()
+                                ->dying_frames[sprite.current_dying_frame],
                             pixel_x, pixel_y));
                 }
                 else if (sprite.is_dead == 1)
                 {
+                    // printf("here is dead\n");
                     put_pixel(&(get_data()->background_img), j, i,
                               pull_pixel(get_data()->dying_frames[14], pixel_x,
                                          pixel_y));
+                }
+                else
+                {
+                    put_pixel(
+                        &(get_data()->background_img), j, i,
+                        pull_pixel(
+                            get_data()->sprites_frames[sprite.current_frame],
+                            pixel_x, pixel_y));
                 }
                 ++i;
             }
@@ -362,8 +368,17 @@ void render_sprites(void)
             update_enemy_frames();
             render_sprite(get_data()->sprites[i]);
         }
-        printf("here dying\n");
-        render_sprite(get_data()->sprites[i]);
+        if (should_render(get_data()->sprites + i, &angle) &&
+            get_data()->sprites[i].is_dying == 1 &&
+            get_data()->sprites[i].is_dead == 0)
+        {
+            update_dying_frames(&get_data()->sprites[i]);
+            render_sprite(get_data()->sprites[i]);
+        }
+        if (should_render(get_data()->sprites + i, &angle) &&
+            get_data()->sprites[i].is_dying == 0 &&
+            get_data()->sprites[i].is_dead == 1)
+            render_sprite(get_data()->sprites[i]);
         i++;
     }
 }
