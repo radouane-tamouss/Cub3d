@@ -13,15 +13,17 @@
 #ifndef LIBFT_H
 #define LIBFT_H
 
-#include "../../garbage_collector/heap_controller.h"
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-typedef struct s_list {
-  int *content;
-  struct s_list *next;
+#include "../../garbage_collector/heap_controller.h"
+
+typedef struct s_list
+{
+    int *content;
+    struct s_list *next;
 
 } t_list;
 

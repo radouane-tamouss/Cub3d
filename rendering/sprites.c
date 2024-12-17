@@ -231,10 +231,20 @@ static void render_sprite(t_sprite sprite)
                     (((float)(i - sprite.display_start_y) /
                       (float)(sprite.display_end_y - sprite.display_start_y)) *
                      sprite.texture.height);
-                put_pixel(
-                    &(get_data()->background_img), j, i,
-                    pull_pixel(get_data()->sprites_frames[sprite.current_frame],
-                               pixel_x, pixel_y));
+                if (sprite.is_die == 0)
+                {
+                    put_pixel(
+                        &(get_data()->background_img), j, i,
+                        pull_pixel(
+                            get_data()->sprites_frames[sprite.current_frame],
+                            pixel_x, pixel_y));
+                }
+                else if (sprite.is_die == 1)
+                {
+                    put_pixel(&(get_data()->background_img), j, i,
+                              pull_pixel(get_data()->sprites_frames[21],
+                                         pixel_x, pixel_y));
+                }
                 ++i;
             }
         }
@@ -249,7 +259,7 @@ static void find_display_postion(t_sprite *sprite, float angle)
 
     position = (angle / FOV) * WIN_WIDTH;
     sprite->dist = ft_max(sprite->dist, 10);
-    scale = ((WIN_WIDTH) / sprite->dist) * 0.2;
+    scale = ((WIN_WIDTH) / sprite->dist) * 0.1;
     sprite->display_start_x =
         position + ((float)WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
     sprite->display_start_y = sprite->z + scale;
@@ -313,14 +323,13 @@ void render_sprites(void)
         if (should_render(get_data()->sprites + i, &angle) &&
             get_data()->sprites[i].is_die == 0)
         {
-            update_enemy_frames();
+            // update_enemy_frames();
             render_sprite(get_data()->sprites[i]);
         }
         else if (should_render(get_data()->sprites + i, &angle) &&
                  get_data()->sprites[i].is_die == 1)
         {
-            render_sprite(get_data()->sprites[0]);
-            // render_sprite(get_data()->sprites[0]);
+            render_sprite(get_data()->sprites[i]);
         }
         i++;
     }
