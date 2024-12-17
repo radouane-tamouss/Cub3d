@@ -37,7 +37,7 @@ unsigned int get_right_pixel(float i, t_ray_data ray)
             texture = get_data()->south_img;
     }
     pixel_x = (int)(hit_point * texture.width / GRID_DIST) % texture.width;
-    pixel_y = (int)((i - (WIN_HEIGHT / 2 - ray.wall_height / 2)) /
+    pixel_y = (int)((i - ((float)WIN_HEIGHT / 2 - ray.wall_height / 2)) /
                     ray.wall_height * texture.height) %
               texture.height;
     return (pull_pixel(texture, pixel_x, (int)pixel_y));
@@ -61,9 +61,11 @@ int calc_color(t_ray_data ray, int start, int i, int end)
             (int)(GET_R(color) * ((float)projected_wall / (float)WIN_HEIGHT)),
             (int)(GET_G(color) * ((float)projected_wall / (float)WIN_HEIGHT)),
             ((int)(GET_B(color) *
-            ((float)projected_wall / (float)WIN_HEIGHT))));
+                   ((float)projected_wall / (float)WIN_HEIGHT))));
     return (color);
 }
+
+void perform_dda(t_ray_data ray, int data_taken, int col);
 
 void draw_col(t_ray_data ray, int col)
 {
@@ -73,7 +75,7 @@ void draw_col(t_ray_data ray, int col)
 
     ray.wall_height =
         (GRID_DIST / (ray.dist * cos(ray.angle - get_data()->player_angle))) *
-        ((WIN_WIDTH / 2) / tan((FOV * get_data()->zoom_factor) / 2));
+        (((float)WIN_WIDTH / 2) / tan((FOV * get_data()->zoom_factor) / 2));
     start = (WIN_HEIGHT - (int)ray.wall_height) / 2;
     end = start + (int)ray.wall_height;
     if (start < 0) start = 0;
@@ -81,62 +83,63 @@ void draw_col(t_ray_data ray, int col)
     i = start;
     while (i < end)
     {
-		put_pixel(&(get_data()->background_img), col, i,
-			calc_color(ray, start, i, end));
+        put_pixel(&(get_data()->background_img), col, i,
+                  calc_color(ray, start, i, end));
         i++;
     }
 }
 
-int	check_hitting_object(t_ray_data *ray, char current_tile, int data_taken, int col)
+int check_hitting_object(t_ray_data *ray, char current_tile, int data_taken,
+                         int col)
 {
-	if (current_tile == '1')
-	{
-		ray->object_hitted = 0;
-		if (!data_taken && ray->angle == get_data()->player_angle)
-		{
-			get_data()->front_ray = *ray;
-			calculate_ray_distance(&(get_data()->front_ray));
-			data_taken = 1;
-		}
-	}
-	else if (current_tile == 'P')
-	{
-		ray->object_hitted = 3;
-		if (!data_taken && ray->angle == get_data()->player_angle)
-		{
-			get_data()->front_ray = *ray;
-			calculate_ray_distance(&(get_data()->front_ray));
-			data_taken = 1;
-		}
-		perform_dda(*ray, data_taken, col);
-	}
-	else if (current_tile == 'D')
-	{
-		ray->object_hitted = 1;
-		if (!data_taken && ray->angle == get_data()->player_angle)
-		{
-			get_data()->front_ray = *ray;
-			calculate_ray_distance(&(get_data()->front_ray));
-			data_taken = 1;
-		}
-	}
-	else if (current_tile == 'O')
-	{
-		ray->object_hitted = 2;
-		if (!data_taken && ray->angle == get_data()->player_angle)
-		{
-			get_data()->front_ray = *ray;
-			calculate_ray_distance(&(get_data()->front_ray));
-			data_taken = 1;
-		}
-		perform_dda(*ray, data_taken, col);
-	}
-	else
-		return (0);
-	return (1);
+    if (current_tile == '1')
+    {
+        ray->object_hitted = 0;
+        if (!data_taken && ray->angle == get_data()->player_angle)
+        {
+            get_data()->front_ray = *ray;
+            calculate_ray_distance(&(get_data()->front_ray));
+            data_taken = 1;
+        }
+    }
+    else if (current_tile == 'P')
+    {
+        ray->object_hitted = 3;
+        if (!data_taken && ray->angle == get_data()->player_angle)
+        {
+            get_data()->front_ray = *ray;
+            calculate_ray_distance(&(get_data()->front_ray));
+            data_taken = 1;
+        }
+        perform_dda(*ray, data_taken, col);
+    }
+    else if (current_tile == 'D')
+    {
+        ray->object_hitted = 1;
+        if (!data_taken && ray->angle == get_data()->player_angle)
+        {
+            get_data()->front_ray = *ray;
+            calculate_ray_distance(&(get_data()->front_ray));
+            data_taken = 1;
+        }
+    }
+    else if (current_tile == 'O')
+    {
+        ray->object_hitted = 2;
+        if (!data_taken && ray->angle == get_data()->player_angle)
+        {
+            get_data()->front_ray = *ray;
+            calculate_ray_distance(&(get_data()->front_ray));
+            data_taken = 1;
+        }
+        perform_dda(*ray, data_taken, col);
+    }
+    else
+        return (0);
+    return (1);
 }
 
-void    perform_dda(t_ray_data ray, int data_taken, int col)
+void perform_dda(t_ray_data ray, int data_taken, int col)
 {
     while (1)
     {
@@ -152,28 +155,28 @@ void    perform_dda(t_ray_data ray, int data_taken, int col)
             ray.map_y += ray.step_y;
             ray.side = 1;
         }
-		if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x]
-            , data_taken, col))
-		{
-			calculate_ray_distance(&ray);
-			draw_col(ray, col);
-			return;
-		}
+        if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x],
+                                 data_taken, col))
+        {
+            calculate_ray_distance(&ray);
+            draw_col(ray, col);
+            return;
+        }
     }
 }
 
 void render_walls(void)
 {
-	int		col;
-	float	ray_angle;
+    int col;
+    float ray_angle;
 
-	col = 0;
-	while (col < WIN_WIDTH)
-	{
-		ray_angle = normalise_angle(get_data()->player_angle
-			- ((FOV * get_data()->zoom_factor) / 2)
-			+ (col * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
-		perform_dda(create_ray(ray_angle), 0, col);
-		++col;
-	}
+    col = 0;
+    while (col < WIN_WIDTH)
+    {
+        ray_angle = normalise_angle(
+            get_data()->player_angle - ((FOV * get_data()->zoom_factor) / 2) +
+            (col * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
+        perform_dda(create_ray(ray_angle), 0, col);
+        ++col;
+    }
 }

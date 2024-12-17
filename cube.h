@@ -21,6 +21,7 @@
 #include <unistd.h>
 
 #include "garbage_collector/heap_controller.h"  //=== garbage collector
+#pragma once
 #include "lib/get_next_line.h"
 #include "lib/libft/libft.h"
 #include "mlx-linux/mlx.h"
@@ -339,7 +340,8 @@ typedef struct s_sprite
 //==== data =================
 typedef struct s_data
 {
-    t_texture sprites_frames[21];  // Array to store gun frame images
+    t_texture sprites_frames[22];  // Array to store gun frame images
+    t_texture die_texture;
     void *mlx;
     void *win;
     // t_img_data	walls;

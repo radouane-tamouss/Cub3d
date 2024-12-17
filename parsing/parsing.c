@@ -386,7 +386,7 @@ void check_map_sourrounded_by_walls(t_game *game)
         while (game->map.grid[i][j])
         {
             if (i == 0 || i == game->map.height - 1 || j == 0 ||
-                j == (int)(ft_strlen(game->map.grid[i]))-1)
+                j == (int)(ft_strlen(game->map.grid[i])) - 1)
             {
                 if (game->map.grid[i][j] != '1' && game->map.grid[i][j] != ' ')
                 {
@@ -661,19 +661,6 @@ void init_sprites(t_game *game)
     // printf("num of sprites is : %d\n", get_data()->num_sprites);
     get_data()->sprites = malloc(sizeof(t_sprite) * get_data()->num_sprites);
     int n = 0;
-    ///////////////////////
-    get_data()->die_sprite.position.x = j * GRID_DIST + ((float)GRID_DIST / 2);
-    get_data()->die_sprite.position.y = i * GRID_DIST + ((float)GRID_DIST / 2);
-    get_data()->die_sprite.z = (float)(WIN_HEIGHT) / 2;
-    get_data()->die_sprite.texture.img_data.img = safer_xpm_file_to_image(
-        get_data()->mlx, "skull.xpm", &(get_data()->die_sprite.texture.width),
-        &(get_data()->die_sprite.texture.height));
-    get_data()->die_sprite.texture.img_data.addr = safer_get_data_addr(
-        get_data()->die_sprite.texture.img_data.img,
-        &(get_data()->die_sprite.texture.img_data.bits_per_pixel),
-        &(get_data()->die_sprite.texture.img_data.line_length),
-        &(get_data()->die_sprite.texture.img_data.endian));
-    ////////////////////////
     while (game->map.grid[i] != NULL)
     {
         j = 0;
@@ -686,7 +673,7 @@ void init_sprites(t_game *game)
                     j * GRID_DIST + ((float)GRID_DIST / 2);
                 get_data()->sprites[n].position.y =
                     i * GRID_DIST + ((float)GRID_DIST / 2);
-                get_data()->sprites[n].z = (float)(WIN_HEIGHT) / 2 - 30;
+                get_data()->sprites[n].z = (float)(WIN_HEIGHT) / 2;
                 get_data()->sprites[n].texture.img_data.img =
                     safer_xpm_file_to_image(
                         get_data()->mlx, "textures/zombie/1.xpm",
@@ -699,6 +686,22 @@ void init_sprites(t_game *game)
                     &(get_data()->sprites[n].texture.img_data.bits_per_pixel),
                     &(get_data()->sprites[n].texture.img_data.line_length),
                     &(get_data()->sprites[n].texture.img_data.endian));
+                ///////////////////////////
+                /// get_data()->sprites[n].die_texture.img_data.img =
+                ///    safer_xpm_file_to_image(
+                ///        get_data()->mlx, "textures/zombie/20.xpm",
+                ///        &(get_data()->sprites[n].die_texture.width),
+                ///        &(get_data()->sprites[n].die_texture.height));
+                /// get_data()
+                ///    ->sprites[n]
+                ///    .die_texture.img_data.addr = safer_get_data_addr(
+                ///    get_data()->sprites[n].die_texture.img_data.img,
+                ///    &(get_data()
+                ///          ->sprites[n]
+                ///          .die_texture.img_data.bits_per_pixel),
+                ///    &(get_data()->sprites[n].die_texture.img_data.line_length),
+                ///    &(get_data()->sprites[n].die_texture.img_data.endian));
+                /////////////////
                 get_data()->sprites[n].current_frame = 0;
                 get_data()->sprites[n].frame_delay = 0;
                 // printf("here\n");
