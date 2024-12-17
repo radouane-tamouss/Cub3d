@@ -334,7 +334,8 @@ typedef struct s_sprite
     int display_end_x;
     int display_end_y;
     int current_frame;  // Current frame being displayed
-    int frame_delay;    // Delay counter for animation
+    int current_dying_frame;
+    int frame_delay;  // Delay counter for animation
 } t_sprite;
 
 //==== data =================
