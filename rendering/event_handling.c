@@ -403,16 +403,12 @@ int handle_mouse_event(int button, int x, int y, void *param)
             get_data()->screen_shake_intensity =
                 5;  // Adjust intensity as needed
             // printf("num sprites: %d\n", get_data()->num_sprites);
-            for (int i = 0; i < get_data()->num_sprites; i++)
+            for (int i = get_data()->num_sprites - 1; i >= 0; --i)
             {
                 float angle;
                 if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]) &&
                     should_render(&get_data()->sprites[i], &angle))
                 {
-                    // printf(
-                    //     "hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee hitted this
-                    //     " "mf in the middle of screen %d\n", i);
-                    // get_data()->sprites[i].is_dead = 1;  // Stop the enemy
                     get_data()->sprites[i].is_dying = 1;
                     get_data()->sprites[i].current_frame = 0;
                     get_data()->is_updated = 1;
