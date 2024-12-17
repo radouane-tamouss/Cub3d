@@ -126,7 +126,7 @@ void update_enemies_data()
     while (i < get_data()->num_sprites)
     {
         // For living enemies
-        if (get_data()->sprites[i].is_die == 0)
+        if (get_data()->sprites[i].is_dead == 0)
         {
             // Calculate distance and movement as before
             get_data()->sprites[i].dist = calc_dist_f(
@@ -142,7 +142,8 @@ void update_enemies_data()
             angle = normalise_angle(angle);
             enemy_move(get_data()->sprites + i, sprite_to_player);
         }
-        else if (get_data()->sprites[i].is_die == 1)
+        else if (get_data()->sprites[i].is_dead == 1 ||
+                 get_data()->sprites[i].is_dying == 1)
         {
             // Calculate teh distance basedd on the Position when the enemy
             // dieeeeeeed
@@ -164,7 +165,7 @@ void update_enemies_data()
 //     i = 0;
 //     while (i < get_data()->num_sprites)
 //     {
-//         if (get_data()->sprites[i].is_die == 0)
+//         if (get_data()->sprites[i].is_dead == 0)
 //         {
 //             get_data()->sprites[i].dist = calc_dist_f(
 //                 get_data()->sprites[i].position.x,
@@ -207,6 +208,31 @@ void sort_sprites(void)
     }
 }
 
+void update_dying_frames(void)
+{
+    int i;
+
+    for (i = 0; i < get_data()->num_sprites; i++)
+    {
+        if (get_data()->sprites[i].frame_delay >= 13)
+        {
+            get_data()->sprites[i].current_frame++;
+            if (get_data()->sprites[i].current_frame >= 14)
+            {
+                get_data()->sprites[i].current_frame = 0;
+                get_data()->sprites[i].is_dying = 0;
+                printf("reseted to 0\n");
+                get_data()->sprites[i].is_dead = 1;
+            }
+            get_data()->sprites[i].frame_delay = 0;
+        }
+        else
+        {
+            get_data()->sprites[i].frame_delay++;
+        }
+    }
+}
+
 static void render_sprite(t_sprite sprite)
 {
     int i;
@@ -231,7 +257,7 @@ static void render_sprite(t_sprite sprite)
                     (((float)(i - sprite.display_start_y) /
                       (float)(sprite.display_end_y - sprite.display_start_y)) *
                      sprite.texture.height);
-                if (sprite.is_die == 0)
+                if (sprite.is_dead == 0)
                 {
                     put_pixel(
                         &(get_data()->background_img), j, i,
@@ -239,11 +265,21 @@ static void render_sprite(t_sprite sprite)
                             get_data()->sprites_frames[sprite.current_frame],
                             pixel_x, pixel_y));
                 }
-                else if (sprite.is_die == 1)
+                else if (sprite.is_dying == 1)
+                {
+                    printf("here is dying\n");
+                    update_dying_frames();
+                    put_pixel(
+                        &(get_data()->background_img), j, i,
+                        pull_pixel(
+                            get_data()->dying_frames[sprite.current_frame],
+                            pixel_x, pixel_y));
+                }
+                else if (sprite.is_dead == 1)
                 {
                     put_pixel(&(get_data()->background_img), j, i,
-                              pull_pixel(get_data()->sprites_frames[21],
-                                         pixel_x, pixel_y));
+                              pull_pixel(get_data()->dying_frames[14], pixel_x,
+                                         pixel_y));
                 }
                 ++i;
             }
@@ -321,16 +357,13 @@ void render_sprites(void)
             continue;
         }
         if (should_render(get_data()->sprites + i, &angle) &&
-            get_data()->sprites[i].is_die == 0)
+            get_data()->sprites[i].is_dead == 0)
         {
-            // update_enemy_frames();
+            update_enemy_frames();
             render_sprite(get_data()->sprites[i]);
         }
-        else if (should_render(get_data()->sprites + i, &angle) &&
-                 get_data()->sprites[i].is_die == 1)
-        {
-            render_sprite(get_data()->sprites[i]);
-        }
+        printf("here dying\n");
+        render_sprite(get_data()->sprites[i]);
         i++;
     }
 }

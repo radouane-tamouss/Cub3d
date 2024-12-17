@@ -360,28 +360,61 @@ void update_enemy_frames(void)
     }
 }
 
+void load_dying_sprite_frames(void)
+{
+    // char *frame_paths[7] = {"textures/spider/1.xpm", "textures/spider/2.xpm",
+    //                         "textures/spider/3.xpm", "textures/spider/4.xpm",
+    //                         "textures/spider/5.xpm", "textures/spider/6.xpm",
+    //                         "textures/spider/7.xpm"};
+    char *frame_paths[15] = {
+        "textures/dying_zombie/1.xpm",  "textures/dying_zombie/2.xpm",
+        "textures/dying_zombie/3.xpm",  "textures/dying_zombie/4.xpm",
+        "textures/dying_zombie/5.xpm",  "textures/dying_zombie/6.xpm",
+        "textures/dying_zombie/7.xpm",  "textures/dying_zombie/8.xpm",
+        "textures/dying_zombie/9.xpm",  "textures/dying_zombie/10.xpm",
+        "textures/dying_zombie/11.xpm", "textures/dying_zombie/12.xpm",
+        "textures/dying_zombie/13.xpm", "textures/dying_zombie/14.xpm",
+        "textures/dying_zombie/15.xpm"};
+    int i;
+    i = 0;
+    while (i < 15)
+    {
+        // printf("frame_paths[%d], %p\n", i, frame_paths[i]);
+        get_data()->dying_frames[i].img_data.img = safer_xpm_file_to_image(
+            get_data()->mlx, frame_paths[i], &get_data()->dying_frames[i].width,
+            &get_data()->dying_frames[i].height);
+        get_data()->dying_frames[i].img_data.addr = safer_get_data_addr(
+            get_data()->dying_frames[i].img_data.img,
+            &get_data()->dying_frames[i].img_data.bits_per_pixel,
+            &get_data()->dying_frames[i].img_data.line_length,
+            &get_data()->dying_frames[i].img_data.endian);
+        i++;
+    }
+    get_data()->sprites[0].current_frame = 0;
+    get_data()->sprites[0].frame_delay = 0;
+    get_data()->sprites[0].is_dying = 0;
+}
+
 void load_load_sprite_frames(void)
 {
     // char *frame_paths[7] = {"textures/spider/1.xpm", "textures/spider/2.xpm",
     //                         "textures/spider/3.xpm", "textures/spider/4.xpm",
     //                         "textures/spider/5.xpm", "textures/spider/6.xpm",
     //                         "textures/spider/7.xpm"};
-    char *frame_paths[22] = {
-        "textures/zombie/1.xpm",  "textures/zombie/2.xpm",
-        "textures/zombie/3.xpm",  "textures/zombie/4.xpm",
-        "textures/zombie/5.xpm",  "textures/zombie/6.xpm",
-        "textures/zombie/7.xpm",  "textures/zombie/8.xpm",
-        "textures/zombie/9.xpm",  "textures/zombie/10.xpm",
-        "textures/zombie/11.xpm", "textures/zombie/12.xpm",
-        "textures/zombie/13.xpm", "textures/zombie/14.xpm",
-        "textures/zombie/15.xpm", "textures/zombie/16.xpm",
-        "textures/zombie/17.xpm", "textures/zombie/18.xpm",
-        "textures/zombie/19.xpm", "textures/zombie/20.xpm",
-        "textures/zombie/21.xpm", "textures/zombie/22.xpm"};
+    char *frame_paths[19] = {"textures/zombie/2.xpm",  "textures/zombie/3.xpm",
+                             "textures/zombie/4.xpm",  "textures/zombie/5.xpm",
+                             "textures/zombie/6.xpm",  "textures/zombie/7.xpm",
+                             "textures/zombie/8.xpm",  "textures/zombie/9.xpm",
+                             "textures/zombie/10.xpm", "textures/zombie/11.xpm",
+                             "textures/zombie/12.xpm", "textures/zombie/13.xpm",
+                             "textures/zombie/14.xpm", "textures/zombie/15.xpm",
+                             "textures/zombie/16.xpm", "textures/zombie/17.xpm",
+                             "textures/zombie/18.xpm", "textures/zombie/19.xpm",
+                             "textures/zombie/20.xpm"};
 
     int i;
     i = 0;
-    while (i < 22)
+    while (i < 19)
     {
         // printf("frame_paths[%d], %p\n", i, frame_paths[i]);
         get_data()->sprites_frames[i].img_data.img =
@@ -932,6 +965,7 @@ int main(int ac, char **av)
     // load_last_scope_frames2();
     load_shooting_scope_frames();
     load_load_sprite_frames();
+    load_dying_sprite_frames();
     load_walking_gun3_frames();
     load_door_frames();
     // render_gun3();
