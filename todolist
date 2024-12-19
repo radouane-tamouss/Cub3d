@@ -10,10 +10,10 @@
 
 
 
-[ ] add dying feature and keep the enemy at his place
+[x] add dying feature and keep the enemy at his place
 [x] add shooting with mouse
-[ ] add frames for enemy
-[ ] add parsing for the door
+[x] add frames for enemy
+[-] add parsing for the door
 [ ] fix render gun norms
 [ ] add home page, and settings
 [ ] split parsing from bonus
