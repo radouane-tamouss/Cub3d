@@ -378,10 +378,37 @@ void	check_if_map_contains_only_valid_characters(t_game *game)
 				game->map.grid[i][j] != '0' && game->map.grid[i][j] != '1' &&
 				game->map.grid[i][j] != 'N' && game->map.grid[i][j] != 'S' &&
 				game->map.grid[i][j] != 'E' && game->map.grid[i][j] != 'W' &&
-				game->map.grid[i][j] != ' ' && game->map.grid[i][j] != 'O')
+				game->map.grid[i][j] != ' ')
 			{
 				printf("Error: Invalid character in map\n");
 				exit(1);
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	check_door_left_and_right_should_be_wall(t_game *game)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (game->map.grid[i] != NULL)
+	{
+		j = 0;
+		while (game->map.grid[i][j])
+		{
+			if (game->map.grid[i][j] == 'D')
+			{
+				if (game->map.grid[i][j - 1] != '1'
+					|| game->map.grid[i][j + 1] != '1')
+				{
+					printf("Error: Door should be surrounded by walls\n");
+					exit(1);
+				}
 			}
 			j++;
 		}
@@ -563,26 +590,23 @@ void	check_invalid_map(t_game *game)
 		while (game->map.grid[i][j])
 		{
 			if (game->map.grid[i][j] == 'M' && game->map.grid[i][j] == '0'
-				|| game->map.grid[i][j] == 'D' || game->map.grid[i][j] == 'O'
+				|| game->map.grid[i][j] == 'D'
 				|| check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
 				if ((i > 0 && (game->map.grid[i - 1][j] != '0'
 						&& game->map.grid[i - 1][j] != '1'
 					&& game->map.grid[i - 1][j] != 'D'
-						&& game->map.grid[i - 1][j] != 'O'
-						&& !check_if_player_direction(game->map.grid[i
+					&& !check_if_player_direction(game->map.grid[i
 								- 1][j]))) ||
 					// above
 					(i < game->map.height - 1 && (game->map.grid[i
 							+ 1][j] != '0' && game->map.grid[i + 1][j] != '1'
 							&& game->map.grid[i + 1][j] != 'D'
-							&& game->map.grid[i + 1][j] != 'O'
 							&& !check_if_player_direction(game->map.grid[i
 								+ 1][j]))) || // below
 					(j > 0 && (game->map.grid[i][j - 1] != '0'
 							&& game->map.grid[i][j - 1] != '1'
 							&& game->map.grid[i][j - 1] != 'D'
-							&& game->map.grid[i][j - 1] != 'O'
 							&& !check_if_player_direction(game->map.grid[i][j
 								- 1]))) ||
 					// left
@@ -590,7 +614,6 @@ void	check_invalid_map(t_game *game)
 						&& (game->map.grid[i][j + 1] != '0'
 							&& game->map.grid[i][j + 1] != '1'
 							&& game->map.grid[i][j + 1] != 'D'
-							&& game->map.grid[i][j + 1] != 'O'
 							&& !check_if_player_direction(game->map.grid[i][j
 								+ 1])))) // right
 				{
@@ -598,8 +621,6 @@ void	check_invalid_map(t_game *game)
 						printf("invalid player direction at (%d, %d)\n", i, j);
 					else if (game->map.grid[i][j] == 'D')
 						printf("invalid door at (%d, %d)\n", i, j);
-					else if (game->map.grid[i][j] == 'O')
-						printf("invalid object at (%d, %d)\n", i, j);
 					else
 						printf("invalid zero at (%d, %d)\n", i, j);
 					exit(1);
@@ -796,13 +817,6 @@ t_game	check_map(int fd, char *file)
 		parse_texture_and_colors_info(map[i], &game, &m2);
 		i++;
 	}
-	// printf("east texture is [%s]\n", game.east.path);
-	// printf("west texture is [%s]\n", game.west.path);
-	// printf("south texture is [%s]\n", game.south.path);
-	// printf("north texture is [%s]\n", game.north.path);
-	// printf("floor color is [%d,%d,%d]\n", game.floor.r, game.floor.g,
-	// game.floor.b); printf("ceiling color is [%d,%d,%d]\n", game.ceiling.r,
-	// game.ceiling.g, game.ceiling.b); printf("------------\n");
 	map_height = 0;
 	while (map[map_height] != NULL)
 	{
@@ -841,6 +855,7 @@ t_game	check_map(int fd, char *file)
 	pad_map_with_spaces(&game);
 	check_invalid_map(&game);
 	verify_player_starting_position(&game);
+	check_door_left_and_right_should_be_wall(&game);
 	get_player_position(&game);
 	// printf("player position = [%f,%f]\n", game.player.pos_x,
 	// game.player.pos_y);
