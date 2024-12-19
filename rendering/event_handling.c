@@ -187,8 +187,9 @@ int handle_keys(int keycode, void *garbage)
     }
     if (keycode == E_LIN)
     {
-        if ((get_data()->front_ray.object_hitted == 1 ||
-             get_data()->front_ray.object_hitted == 2) &&
+        printf("here %d  \n", get_data()->front_ray.object_hitted);
+        if ((get_data()->front_ray.object_hitted == 'D' ||
+             get_data()->front_ray.object_hitted == 'O') &&
             get_data()->front_ray.dist < 2 * GRID_DIST)
         {
             int door_x = get_data()->front_ray.map_x;
