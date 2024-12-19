@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/17 20:55:26 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/10 21:24:26y rtamouss         ###   ########.fr       */
+/*   Created: 2024/12/18 18:10:15 by atamousse.red     #+#    #+#             */
+/*   Updated: 2024/12/18 18:10:15 by atamousse.red    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
