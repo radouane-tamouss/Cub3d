@@ -562,36 +562,37 @@ void	check_invalid_map(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] == 'M' && game->map.grid[i][j] == '0' ||
-				game->map.grid[i][j] == 'D' || game->map.grid[i][j] == 'O' ||
-				check_if_player_direction(game->map.grid[i][j]) == 1)
+			if (game->map.grid[i][j] == 'M' && game->map.grid[i][j] == '0'
+				|| game->map.grid[i][j] == 'D' || game->map.grid[i][j] == 'O'
+				|| check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
-				if ((i > 0 && (game->map.grid[i - 1][j] != '0' &&
-								game->map.grid[i - 1][j] != '1' &&
-								game->map.grid[i - 1][j] != 'D' &&
-								game->map.grid[i - 1][j] != 'O' &&
-								!check_if_player_direction(
-									game->map.grid[i - 1][j]))) ||  // above
-					(i < game->map.height - 1 &&
-						(game->map.grid[i + 1][j] != '0' &&
-						game->map.grid[i + 1][j] != '1' &&
-						game->map.grid[i + 1][j] != 'D' &&
-						game->map.grid[i + 1][j] != 'O' &&
-						!check_if_player_direction(
-							game->map.grid[i + 1][j]))) ||  // below
-					(j > 0 && (game->map.grid[i][j - 1] != '0' &&
-								game->map.grid[i][j - 1] != '1' &&
-								game->map.grid[i][j - 1] != 'D' &&
-								game->map.grid[i][j - 1] != 'O' &&
-								!check_if_player_direction(
-									game->map.grid[i][j - 1]))) ||  // left
-					(j < (int)ft_strlen(game->map.grid[i]) - 1 &&
-						(game->map.grid[i][j + 1] != '0' &&
-						game->map.grid[i][j + 1] != '1' &&
-						game->map.grid[i][j + 1] != 'D' &&
-						game->map.grid[i][j + 1] != 'O' &&
-						!check_if_player_direction(
-							game->map.grid[i][j + 1]))))	// right
+				if ((i > 0 && (game->map.grid[i - 1][j] != '0'
+						&& game->map.grid[i - 1][j] != '1'
+					&& game->map.grid[i - 1][j] != 'D'
+						&& game->map.grid[i - 1][j] != 'O'
+						&& !check_if_player_direction(game->map.grid[i
+								- 1][j]))) ||
+					// above
+					(i < game->map.height - 1 && (game->map.grid[i
+							+ 1][j] != '0' && game->map.grid[i + 1][j] != '1'
+							&& game->map.grid[i + 1][j] != 'D'
+							&& game->map.grid[i + 1][j] != 'O'
+							&& !check_if_player_direction(game->map.grid[i
+								+ 1][j]))) || // below
+					(j > 0 && (game->map.grid[i][j - 1] != '0'
+							&& game->map.grid[i][j - 1] != '1'
+							&& game->map.grid[i][j - 1] != 'D'
+							&& game->map.grid[i][j - 1] != 'O'
+							&& !check_if_player_direction(game->map.grid[i][j
+								- 1]))) ||
+					// left
+					(j < (int)ft_strlen(game->map.grid[i]) - 1
+						&& (game->map.grid[i][j + 1] != '0'
+							&& game->map.grid[i][j + 1] != '1'
+							&& game->map.grid[i][j + 1] != 'D'
+							&& game->map.grid[i][j + 1] != 'O'
+							&& !check_if_player_direction(game->map.grid[i][j
+								+ 1])))) // right
 				{
 					if (check_if_player_direction(game->map.grid[i][j]) == 1)
 						printf("invalid player direction at (%d, %d)\n", i, j);
@@ -610,47 +611,6 @@ void	check_invalid_map(t_game *game)
 	}
 }
 
-// void check_invalid_map(t_game *game)
-// {
-//     int i = 0;
-//     int j = 0;
-//     while (game->map.grid[i] != NULL)
-//     {
-//         j = 0;
-//         while (game->map.grid[i][j])
-//         {
-//             if (game->map.grid[i][j] == '0' ||
-//             check_if_player_direction(game->map.grid[i][j]) == 1)
-//             {
-//                 if ((i > 0 && (game->map.grid[i - 1][j] != '0' &&
-//                 game->map.grid[i - 1][j] != '1' &&
-//                 !check_if_player_direction(game->map.grid[i - 1][j]))) ||  //
-//                 above
-//                     (i < game->map.height - 1 && (game->map.grid[i + 1][j] !=
-//                     '0' && game->map.grid[i + 1][j] != '1' &&
-//                     !check_if_player_direction(game->map.grid[i + 1][j]))) ||
-//                     // below (j > 0 && (game->map.grid[i][j - 1] != '0' &&
-//                     game->map.grid[i][j - 1] != '1' &&
-//                     !check_if_player_direction(game->map.grid[i][j - 1]))) ||
-//                     // left (j < ft_strlen(game->map.grid[i]) - 1 &&
-//                     (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j +
-//                     1] != '1' &&
-//                     !check_if_player_direction(game->map.grid[i][j + 1]))))
-//                     // right
-//                 {
-// 					if (check_if_player_direction(game->map.grid[i][j]) == 1)
-// 						printf("invalid player direction at (%d, %d)\n", i, j);
-// 					else
-//       				      printf("invalid zero at (%d, %d)\n", i, j);
-
-//                     exit(1);
-//                 }
-//             }
-//             j++;
-//         }
-//         i++;
-//     }
-// }
 void	get_player_position(t_game *game)
 {
 	int	i;
@@ -714,7 +674,6 @@ void	init_sprites(t_game *game)
 	i = 0;
 	j = 0;
 	calc_num_sprites(game);
-	// printf("num of sprites is : %d\n", get_data()->num_sprites);
 	data->sprites = malloc(sizeof(t_sprite) * data->num_sprites);
 	n = 0;
 	while (game->map.grid[i] != NULL)
@@ -725,57 +684,31 @@ void	init_sprites(t_game *game)
 			if (game->map.grid[i][j] == 'M')
 			{
 				data->sprites[n].is_dead = 0;
-				data->sprites[n].position.x =
-					j * GRID_DIST + ((float)GRID_DIST / 2);
-				data->sprites[n].position.y =
-					i * GRID_DIST + ((float)GRID_DIST / 2);
+				data->sprites[n].position.x
+					= j * GRID_DIST + ((float)GRID_DIST / 2);
+				data->sprites[n].position.y
+					= i * GRID_DIST + ((float)GRID_DIST / 2);
 				data->sprites[n].z = (float)(WIN_HEIGHT) / 2;
-				data->sprites[n].texture.img_data.img =
-					safer_xpm_file_to_image(data->mlx,
-						"textures/zombie/1.xpm",&(data->sprites[n].texture.width),
+				data->sprites[n].texture.img_data.img
+					= safer_xpm_file_to_image(data->mlx,
+						"textures/zombie/1.xpm",
+						&(data->sprites[n].texture.width),
 						&(data->sprites[n].texture.height));
-				data
-					->sprites[n]
-					.texture.img_data.addr = safer_get_data_addr(
-					data->sprites[n].texture.img_data.img,
-					&(data->sprites[n].texture.img_data.bits_per_pixel),
-					&(data->sprites[n].texture.img_data.line_length),
-					&(data->sprites[n].texture.img_data.endian));
-				///////////////////////////
-				/// data->sprites[n].die_texture.img_data.img =
-				///    safer_xpm_file_to_image(
-				///        data->mlx, "textures/zombie/20.xpm",
-				///        &(data->sprites[n].die_texture.width),
-				///        &(data->sprites[n].die_texture.height));
-				/// data
-				///    ->sprites[n]
-				///    .die_texture.img_data.addr = safer_get_data_addr(
-				///    data->sprites[n].die_texture.img_data.img,
-				///    &(data
-				///          ->sprites[n]
-				///          .die_texture.img_data.bits_per_pixel),
-				///    &(data->sprites[n].die_texture.img_data.line_length),
-				///    &(data->sprites[n].die_texture.img_data.endian));
-				/////////////////
+				data->sprites[n].texture.img_data.addr
+					= safer_get_data_addr(data->sprites[n].texture.img_data.img,
+						&(data->sprites[n].texture.img_data.bits_per_pixel),
+						&(data->sprites[n].texture.img_data.line_length),
+						&(data->sprites[n].texture.img_data.endian));
 				data->sprites[n].current_frame = 0;
 				data->sprites[n].current_dying_frame = 0;
 				data->sprites[n].frame_delay = 0;
-				// printf("here\n");
 				n++;
 			}
 			j++;
 		}
 		i++;
 	}
-	// printf("end\n");
 	i = 0;
-	while (i < n)
-	{
-		printf("sprite position : [%f, %f]\n",
-				data->sprites[i].position.x,
-				data->sprites[i].position.y);
-		i++;
-	}
 }
 
 void	pad_map_with_spaces(t_game *game)
@@ -797,8 +730,6 @@ void	pad_map_with_spaces(t_game *game)
 		if ((int)ft_strlen(game->map.grid[i]) < map_width)
 		{
 			line = mallocate(sizeof(char) * (map_width + 1));
-			// int number_of_spaces_to_add = map_width -
-			// ft_strlen(game->map.grid[i]);
 			k = 0;
 			// Copy the original line
 			while (game->map.grid[i][j])
@@ -814,10 +745,12 @@ void	pad_map_with_spaces(t_game *game)
 				k++;
 			}
 			line[k] = '\0';
-			free_ptr(game->map.grid[i]);  // Free the original line
-			game->map.grid[i] =
-				ft_strdup(line);  // Duplicate the new padded line
-			free_ptr(line);			// Free the temporary line
+			// Free the original line
+			free_ptr(game->map.grid[i]);
+			// Duplicate the new padded line
+			game->map.grid[i] = ft_strdup(line);
+			// Free the temporary line
+			free_ptr(line);
 		}
 		i++;
 	}
@@ -916,38 +849,6 @@ t_game	check_map(int fd, char *file)
 	return (game);
 }
 
-// void render_background(t_game *game)
-// {
-// 	int i = 0;
-// 	int j = 0;
-// 	int color;
-// 	int width = game->map.width * SQUARE_SIZE;
-// 	int height = game->map.height * SQUARE_SIZE;
-// 	while (i < height)
-// 	{
-// 		j = 0;
-// 		while (j < width)
-// 		{
-// 			mlx_pixel_put(game->mlx, game->win, j, i, BLACK);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
-// void my_mlx_pixel_put(t_img_data *img, int x, int y, int color)
-// {
-// 	char *dst;
-
-// 	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
-// 	*(unsigned int *)dst = color;
-// }
-
-// void update_player(t_game *game)
-// {
-// 	game->player.rotation_angle += game->player.turn_direction *
-// game->player.rotation_speed;
-
-// }
 int	has_wall_at(t_game *game, double x, double y)
 {
 	int	map_x;
@@ -960,9 +861,9 @@ int	has_wall_at(t_game *game, double x, double y)
 	// printf("map_x = %d\n", map_x);
 	// printf("map_y = %d\n", map_y);
 	// printf("map[map_x][map_y] = %c\n", game->map.grid[map_x][map_y]);
-	if (map_x < 0 || map_x >= game->map.height || map_y < 0 ||
-		map_y >= game->map.width)
+	if (map_x < 0 || map_x >= game->map.height || map_y < 0 || map_y >= game->map.width)
 		return (1);
-	if (game->map.grid[map_x][map_y] == '1') return (1);
+	if (game->map.grid[map_x][map_y] == '1')
+		return (1);
 	return (0);
 }
