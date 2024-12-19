@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/23 22:22:52 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/16 18:40:52 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/19 21:17:18 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,8 +237,8 @@ static void render_sprite(t_sprite sprite)
     int pixel_x;
     int pixel_y;
 
-    j = sprite.display_start_x;
-    while (j < sprite.display_end_x)
+    j = ft_max(sprite.display_start_x, 0.0f);
+    while (j < sprite.display_end_x && j < WIN_WIDTH)
     {
         if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
                                       (j * (FOV / WIN_WIDTH))),
@@ -247,8 +247,8 @@ static void render_sprite(t_sprite sprite)
             pixel_x = ((float)(j - sprite.display_start_x) /
                        (float)(sprite.display_end_x - sprite.display_start_x)) *
                       sprite.texture.width;
-            i = sprite.display_start_y;
-            while (i < sprite.display_end_y)
+            i = ft_max(sprite.display_start_y, 0.0f);
+            while (i < sprite.display_end_y && i < WIN_HEIGHT)
             {
                 pixel_y =
                     (((float)(i - sprite.display_start_y) /
