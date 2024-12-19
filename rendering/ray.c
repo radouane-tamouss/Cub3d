@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 02:35:58 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/15 22:45:58 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:33:50 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,6 @@ void	init_ray_dir(t_ray_data *ray, float ray_angle)
 	ray->ray_dir.y = sin(ray_angle);
 	ray->map_x = (int)(get_data()->player_pos.x / GRID_DIST);
 	ray->map_y = (int)(get_data()->player_pos.y / GRID_DIST);
-}
-
-/* calc the delta that we need to travel
-to hit the intersact with the next line of grid*/
-void	calc_delta_dist(t_ray_data *ray)
-{
 	ray->delta_dist.x = ft_abs(1 / ray->ray_dir.x);
 	ray->delta_dist.y = ft_abs(1 / ray->ray_dir.y);
 }
@@ -73,7 +67,6 @@ t_ray_data	create_ray(float angle)
 	t_ray_data	ray;
 
 	init_ray_dir(&ray, angle);
-	calc_delta_dist(&ray);
 	calc_step_and_side_dist(&ray);
 	return (ray);
 }

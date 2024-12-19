@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/12 22:56:11 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:32:45 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -483,7 +483,7 @@ t_ray_data create_ray(float angle);
 void calculate_ray_distance(t_ray_data *ray);
 
 //
-
+int	calc_color(t_ray_data ray, int start, int i, int end);
 void render_walls(void);
 void render_minimap(void);
 //

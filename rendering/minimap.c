@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/09 03:38:05 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/15 22:54:37 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/17 18:15:30 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ void render_map(void)
 			x = (j +  5) * SQUARE_SIZE - (get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
 			if (get_data()->map[i][j] == '1')
 				render_square(x, y, 0x3A4A50);
-			else if (get_data()->map[i][j] == '0')
+			else if (get_data()->map[i][j] == '0'
+				|| get_data()->map[i][j] == 'M'
+				|| check_if_player_direction(get_data()->map[i][j]) == 1)
 				render_square(x, y, 0xA55D35);
-			else if (check_if_player_direction(get_data()->map[i][j]) == 1)
-				render_square(x, y, RED);
 			else if (get_data()->map[i][j] == 'D')
 				render_square(x, y, BLUE);
 			else if (get_data()->map[i][j] == 'O')
@@ -83,26 +83,6 @@ void render_map(void)
 	}
 }
 
-// void render_ray(t_game *game, t_ray ray)
-// {
-// 	// Calculate the end point of the ray
-// 	int center_x = game->player.pos_y * SQUARE_SIZE + SQUARE_SIZE / 2;
-// 	int center_y = game->player.pos_x * SQUARE_SIZE + SQUARE_SIZE / 2;
-// 	int end_x = center_x + cos(ray.ray_angle) * 80;
-// 	int end_y = center_y + sin(ray.ray_angle) * 80;
-
-// 	// Render the ray
-// 	render_line(center_x, center_y, end_x, end_y);
-// }
-// void render_rays(t_game *game)
-// {
-// 	int i = 0;
-// 	while (i < game->num_rays)
-// 	{
-// 		render_ray(game, game->rays[i]);
-// 		i++;
-// 	}
-// }
 void render_player()
 {
 	int x, y;
