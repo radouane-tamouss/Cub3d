@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split_charset.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/07 10:55:48 by atamousse.red     #+#    #+#             */
+/*   Updated: 2024/12/18 14:25:07 by atamousse.red    ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "cube.h"
 
-
+// clang-format off
 int	check_charset(char *charset, char c)
 {
 	int	i;
@@ -36,7 +47,7 @@ static int	ft_count_words(char const *str, char *charset)
 	return (count);
 }
 
-static char	**ft_free2(char **strs)
+static	char	**ft_free2(char **strs)
 {
 	int	i;
 
@@ -47,7 +58,7 @@ static char	**ft_free2(char **strs)
 	return (0);
 }
 
-static char	**do_it(char **res, char const *s, char* charset, int i)
+static char	**do_it(char **res, char const *s, char *charset, int i)
 {
 	int	start;
 	int	end;
