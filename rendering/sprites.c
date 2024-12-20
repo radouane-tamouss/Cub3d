@@ -214,7 +214,7 @@ void update_dying_frames(t_sprite *sprite)
     if (sprite->frame_delay >= 10)
     {
         sprite->current_dying_frame++;
-        printf("current frame %d\n", sprite->current_dying_frame);
+        // printf("current frame %d\n", sprite->current_dying_frame);
         if (sprite->current_dying_frame >= 14)
         {
             sprite->current_dying_frame = 0;

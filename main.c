@@ -379,7 +379,7 @@ void load_dying_sprite_frames(void)
     i = 0;
     while (i < 15)
     {
-        // printf("frame_paths[%d], %p\n", i, frame_paths[i]);
+        // printf("frame_paths[%d], %p\n", i, frame_paths[i]);  
         get_data()->dying_frames[i].img_data.img = safer_xpm_file_to_image(
             get_data()->mlx, frame_paths[i], &get_data()->dying_frames[i].width,
             &get_data()->dying_frames[i].height);
@@ -390,9 +390,6 @@ void load_dying_sprite_frames(void)
             &get_data()->dying_frames[i].img_data.endian);
         i++;
     }
-    get_data()->sprites[0].current_dying_frame = 0;
-    get_data()->sprites[0].frame_delay = 0;
-    get_data()->sprites[0].is_dying = 0;
 }
 
 void load_load_sprite_frames(void)
@@ -427,8 +424,6 @@ void load_load_sprite_frames(void)
             &get_data()->sprites_frames[i].img_data.endian);
         i++;
     }
-    get_data()->sprites[0].current_frame = 0;
-    get_data()->sprites[0].frame_delay = 0;
 }
 
 void load_running_gun3_frames(void)
@@ -952,7 +947,6 @@ int main(int ac, char **av)
     render_walls();
     render_minimap();
 
-    update_enemy_frames();  //
     render_sprites();       //
     render_background();
     // load_frames();
@@ -963,8 +957,6 @@ int main(int ac, char **av)
     load_last_scope_frames();
     // load_last_scope_frames2();
     load_shooting_scope_frames();
-    load_load_sprite_frames();
-    load_dying_sprite_frames();
     load_walking_gun3_frames();
     load_door_frames();
     // render_gun3();
