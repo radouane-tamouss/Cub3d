@@ -639,7 +639,6 @@ void	get_player_position(t_game *game)
 
 	i = 0;
 	j = 0;
-	// t_player player;
 	while (game->map.grid[i] != NULL)
 	{
 		j = 0;
@@ -651,7 +650,6 @@ void	get_player_position(t_game *game)
 				game->player.pos_y = i;
 				game->player.pos_x = j;
 				fprintf(stderr, "x == %d,  y == %d \n", i, j);
-				// game->player = player;
 				return ;
 			}
 			j++;
@@ -732,13 +730,35 @@ void	init_sprites(t_game *game)
 	i = 0;
 }
 
+void	pad_map_with_spaces_helper(t_game *game, int j, int i, int map_width)
+{
+	char	*line;
+	int		k;
+
+	k = 0;
+	line = mallocate(sizeof(char) * (map_width + 1));
+	while (game->map.grid[i][j])
+	{
+		line[k] = game->map.grid[i][j];
+		k++;
+		j++;
+	}
+	while (k < map_width)
+	{
+		line[k] = ' ';
+		k++;
+	}
+	line[k] = '\0';
+	free_ptr(game->map.grid[i]);
+	game->map.grid[i] = ft_strdup(line);
+	free_ptr(line);
+}
+
 void	pad_map_with_spaces(t_game *game)
 {
 	int		i;
 	int		j;
 	int		map_width;
-	char	*line;
-	int		k;
 
 	i = 0;
 	j = 0;
@@ -749,118 +769,86 @@ void	pad_map_with_spaces(t_game *game)
 	{
 		j = 0;
 		if ((int)ft_strlen(game->map.grid[i]) < map_width)
-		{
-			line = mallocate(sizeof(char) * (map_width + 1));
-			k = 0;
-			// Copy the original line
-			while (game->map.grid[i][j])
-			{
-				line[k] = game->map.grid[i][j];
-				k++;
-				j++;
-			}
-			// Add the necessary spaces
-			while (k < map_width)
-			{
-				line[k] = ' ';
-				k++;
-			}
-			line[k] = '\0';
-			// Free the original line
-			free_ptr(game->map.grid[i]);
-			// Duplicate the new padded line
-			game->map.grid[i] = ft_strdup(line);
-			// Free the temporary line
-			free_ptr(line);
-		}
+			pad_map_with_spaces_helper(game, j, i, map_width);
 		i++;
 	}
-	printf("------------ after padding ------------\n");
-	print_map(game->map.grid);
-	printf("------------\n");
 }
 
-t_game	check_map(int fd, char *file)
+t_game	init_game_struct(void)
 {
-	t_map	m2;
-	char	*line;
-	char	**map;
 	t_game	game;
-	int		i;
-	int		map_height;
-	int		j;
-	int		map_width;
 
-	m2.width = 0;
-	m2.height = 0;
-	m2.valid = 0;
-	line = NULL;
-	m2.height = calc_height(fd, file, &m2, line);
-	map = mallocate(sizeof(char *) * (m2.height + 1));
-	if (!map)
-	{
-		printf("Error\n Malloc failed\n");
-		exit(1);
-	}
-	fill_map(map, file, line);
 	game.north.path = NULL;
 	game.south.path = NULL;
 	game.west.path = NULL;
 	game.east.path = NULL;
 	game.floor.color = NULL;
 	game.ceiling.color = NULL;
-	i = 0;
-	// printf("map length = %d\n", m2.height);
-	// print_map(map);
-	while (i < 6)
+	return (game);
+}
+
+char	**init_map(int fd, char *file, t_map *m2)
+{
+	char	**map;
+	char	*line;
+
+	m2->width = 0;
+	m2->height = 0;
+	m2->valid = 0;
+	line = NULL;
+	m2->height = calc_height(fd, file, m2, line);
+	map = mallocate(sizeof(char *) * (m2->height + 1));
+	if (!map)
 	{
-		parse_texture_and_colors_info(map[i], &game, &m2);
-		i++;
+		printf("Error\n Malloc failed\n");
+		exit(1);
 	}
+	fill_map(map, file, line);
+	return (map);
+}
+
+void	check_map_helper(char **map, t_game *game, t_map m2)
+{
+	int	i;
+	int	map_height;
+	int	map_width;
+	int	j;
+
+	i = 0;
+	while (i < 6)
+		parse_texture_and_colors_info(map[i++], game, &m2);
 	map_height = 0;
 	while (map[map_height] != NULL)
-	{
 		map_height++;
-	}
 	map_height = map_height - 6;
-	game.map.height = map_height;
+	game->map.height = map_height;
 	j = 0;
-	game.map.grid = mallocate(sizeof(char *) * (map_height + 1));
+	game->map.grid = mallocate(sizeof(char *) * (map_height + 1));
 	while (j < map_height)
 	{
-		// game.map.grid[j] = ft_strtrim(map[j + 6], " ");
-		// game.map.grid[j] = ft_strtrim(game.map.grid[j], "\n");
-		game.map.grid[j] = ft_strdup(map[j + 6]);
+		game->map.grid[j] = ft_strdup(map[j + 6]);
 		j++;
 	}
-	game.map.grid[j] = NULL;
-	// print_map(game.map.grid);
-	// TODO parse the map
-	// [x] Identify the start of the map (should be after texture and color
-	// information) [x] Read the map lines and store them in a 2d array or
-	// similar structure [x] Validate that the map contains only valid
-	// characters (0, 1, N, S, E W) [x] Ensure the map is surrounded by walls
-	// (1's) [x] Verify that there is exactly one player starting position (N,
-	// S, E, or W) [x] check for invalid spaces in the map
-	// check_invalid_spaces(&game);
-	// printf("------------\n");
-	// print_map(game.map.grid);
-	// printf("------------\n");
-	map_width = calc_map_width(game.map.grid);
-	map_height = calc_map_height(game.map.grid);
+	game->map.grid[j] = NULL;
+	map_width = calc_map_width(game->map.grid);
+	map_height = calc_map_height(game->map.grid);
+}
+
+t_game	check_map(int fd, char *file)
+{
+	t_map	m2;
+	t_game	game;
+	char	**map;
+
+	game = init_game_struct();
+	map = init_map(fd, file, &m2);
+	check_map_helper(map, &game, m2);
 	check_if_map_contains_only_valid_characters(&game);
 	check_map_sourrounded_by_walls(&game);
-	printf("map width = %d\n", map_width);
-	printf("map height = %d\n", map_height);
 	pad_map_with_spaces(&game);
 	check_invalid_map(&game);
 	verify_player_starting_position(&game);
-	check_door_left_and_right_should_be_wall(&game);
 	get_player_position(&game);
-	// printf("player position = [%f,%f]\n", game.player.pos_x,
-	// game.player.pos_y);
-	// parse_texture_info(map[0], &game);
-	// free(map);
 	return (game);
 }
 
@@ -869,14 +857,10 @@ int	has_wall_at(t_game *game, double x, double y)
 	int	map_x;
 	int	map_y;
 
-	// printf("x = %f\n", x);
-	// printf("y = %f\n", y);
 	map_x = round(x);
 	map_y = round(y);
-	// printf("map_x = %d\n", map_x);
-	// printf("map_y = %d\n", map_y);
-	// printf("map[map_x][map_y] = %c\n", game->map.grid[map_x][map_y]);
-	if (map_x < 0 || map_x >= game->map.height || map_y < 0 || map_y >= game->map.width)
+	if (map_x < 0 || map_x >= game->map.height || map_y < 0
+		|| map_y >= game->map.width)
 		return (1);
 	if (game->map.grid[map_x][map_y] == '1')
 		return (1);
