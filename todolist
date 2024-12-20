@@ -13,7 +13,8 @@
 [x] add dying feature and keep the enemy at his place
 [x] add shooting with mouse
 [x] add frames for enemy
-[-] add parsing for the door
+[x] add parsing for the door
+[ ] fix parsing space next to zero. 
 [ ] fix render gun norms
 [ ] add home page, and settings
 [ ] split parsing from bonus

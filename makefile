@@ -52,4 +52,9 @@ f : all
 	 # valgrind  --leak-check=full --show-leak-kinds=all  ./${NAME} ll.cub
 
 rerun : re run
+
+
+debugg: $(NAME)
+	gdb --args --args ./cub3d ll.cub
+
 #####################################################################

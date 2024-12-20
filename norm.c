@@ -243,112 +243,43 @@ int	ft_count_commas(char *str)
 	return (count);
 }
 
-int ft_isspace(char c)
+void	parse_color(char *color, t_color *color_struct)
 {
-    return (c == ' ' || c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r');
+	int		count;
+	char	**rgb;
+
+	count = ft_count_commas(color);
+	if (count != 2)
+	{
+		printf("Error: Invalid color format\n");
+		exit(1);
+	}
+	rgb = ft_split2(color, ",");
+	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
+	{
+		printf("Error: Invalid color format\n");
+		exit(1);
+	}
+	color_struct->r = ft_atoi(rgb[0]);
+	color_struct->g = ft_atoi(rgb[1]);
+	color_struct->b = ft_atoi(rgb[2]);
+	if (color_struct->r < 0 || color_struct->r > 255 || color_struct->g < 0
+		|| color_struct->g > 255 || color_struct->b < 0
+		|| color_struct->b > 255)
+	{
+		printf("Error: Invalid color format\n");
+		exit(1);
+	}
 }
 
-void parse_color(char *color, t_color *color_struct)
+void	parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 {
-    char    **rgb;
-    int     i;
-    int     j;
+	char	**split;
+	int		i;
 
-    // Check for NULL pointers
-    if (!color || !color_struct)
-    {
-        printf("Error: Invalid color parameters\n");
-        exit(1);
-    }
-
-    // Count commas and validate basic format
-    int count = ft_count_commas(color);
-    if (count != 2)
-    {
-        printf("Error: Color must have exactly 2 commas (R,G,B format)\n");
-        exit(1);
-    }
-
-    // Check for invalid characters before splitting
-    i = 0;
-    while (color[i])
-    {
-        if (!ft_isdigit(color[i]) && color[i] != ',' && !ft_isspace(color[i]))
-        {
-            printf("Error: Invalid character in color format\n");
-            exit(1);
-        }
-        i++;
-    }
-
-    // Split the string
-    rgb = ft_split2(color, ",");
-    if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
-    {
-        printf("Error: Invalid color format\n");
-        // Free allocated memory before exit
-        exit(1);
-    }
-
-    // Trim whitespace and validate each number
-    i = 0;
-    while (i < 3)
-    {
-        // Check if the string contains only digits
-        j = 0;
-        while (rgb[i][j])
-        {
-            if (!ft_isdigit(rgb[i][j]) && !ft_isspace(rgb[i][j]))
-            {
-                printf("Error: Invalid number in color format\n");
-                exit(1);
-            }
-            j++;
-        }
-        i++;
-    }
-
-    // Convert to integers
-    color_struct->r = ft_atoi(rgb[0]);
-    color_struct->g = ft_atoi(rgb[1]);
-    color_struct->b = ft_atoi(rgb[2]);
-
-    // Free the split strings
-    i = 0;
-
-    // Validate range
-    if (color_struct->r < 0 || color_struct->r > 255 || 
-        color_struct->g < 0 || color_struct->g > 255 || 
-        color_struct->b < 0 || color_struct->b > 255)
-    {
-        printf("Error: RGB values must be between 0 and 255\n");
-        exit(1);
-    }
-}
-
-
-
-void check_floor_color(t_game *game, char **split)
-{
-
-		if (game->floor.color != NULL)
-		{
-			printf("error duplicate floor color\n");
-			exit(1);
-		}
-		if (split[1] == NULL)
-		{
-			printf("Error: Missing color for floor\n");
-			exit(1);
-		}
-		game->floor.color = ft_strdup(split[1]);
-		parse_color(game->floor.color, &game->floor);
-}
-
-
-void validate_split(char **split)
-{
-
+	i = 0;
+	(void)map;
+	split = ft_split2(line, " \t\r\n\v\f");
 	if (split[0] == NULL)
 	{
 		printf("Error: Invalid map\n");
@@ -365,16 +296,6 @@ void validate_split(char **split)
 		printf("Error: Invalid file extension\n");
 		exit(1);
 	}
-}
-
-void	parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
-{
-	char	**split;
-	int		i;
-
-	i = 0;
-	split = ft_split2(line, " \t\r\n\v\f");
-	validate_split(split);
 	if (ft_strcmp(split[0], "NO") == 0)
 		parse_north_texture(game, split);
 	else if (ft_strcmp(split[0], "SO") == 0)
@@ -385,21 +306,19 @@ void	parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 		parse_east_texture(game, split);
 	else if (ft_strcmp(split[0], "F") == 0)
 	{
-		
-		check_floor_color(game, split);
 		// parse_floor_color
-		// if (game->floor.color != NULL)
-		// {
-		// 	printf("error duplicate floor color\n");
-		// 	exit(1);
-		// }
-		// if (split[1] == NULL)
-		// {
-		// 	printf("Error: Missing color for floor\n");
-		// 	exit(1);
-		// }
-		// game->floor.color = ft_strdup(split[1]);
-		// parse_color(game->floor.color, &game->floor);
+		if (game->floor.color != NULL)
+		{
+			printf("error duplicate floor color\n");
+			exit(1);
+		}
+		if (split[1] == NULL)
+		{
+			printf("Error: Missing color for floor\n");
+			exit(1);
+		}
+		game->floor.color = ft_strdup(split[1]);
+		parse_color(game->floor.color, &game->floor);
 	}
 	else if (ft_strcmp(split[0], "C") == 0)
 	{
@@ -616,24 +535,6 @@ void	verify_player_starting_position(t_game *game)
 	}
 }
 
-void	check_invalid_spaces_helper(t_game *game, int i, int j)
-{
-	if (game->map.grid[i][j] == ' ')
-	{
-		if ((i > 0 && game->map.grid[i - 1][j] != '1' && game->map.grid[i
-				- 1][j] != ' ') || (i < game->map.height - 1 && game->map.grid[i
-				+ 1][j] != '1' && game->map.grid[i + 1][j] != ' ') || (j > 0
-				&& game->map.grid[i][j - 1] != '1' && game->map.grid[i][j
-				- 1] != ' ') || (j < (int)ft_strlen(game->map.grid[i]) - 1
-				&& game->map.grid[i][j + 1] != '1' && game->map.grid[i][j
-				+ 1] != ' '))
-		{
-			printf("Error: Invalid space found at (%d, %d)\n", i, j);
-			exit(1);
-		}
-	}
-}
-
 void	check_invalid_spaces(t_game *game)
 {
 	int	i;
@@ -646,7 +547,23 @@ void	check_invalid_spaces(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{
-			check_invalid_spaces_helper(game, i, j);
+			if (game->map.grid[i][j] == ' ')
+			{
+				if ((i > 0 && game->map.grid[i - 1][j] != '1'
+					&& game->map.grid[i - 1][j] != ' ')
+					|| (i < game->map.height - 1 &&
+					game->map.grid[i + 1][j] != '1' &&
+					game->map.grid[i + 1][j] != ' ') ||
+					(j > 0 && game->map.grid[i][j - 1] != '1' &&
+					game->map.grid[i][j - 1] != ' ') ||
+					(j < (int)ft_strlen(game->map.grid[i]) - 1 &&
+					game->map.grid[i][j + 1] != '1' &&
+					game->map.grid[i][j + 1] != ' '))
+				{
+					printf("Error: Invalid space found at (%d, %d)\n", i, j);
+					exit(1);
+				}
+			}
 			j++;
 		}
 		i++;
@@ -686,6 +603,7 @@ void	check_invalid_map_helper(t_game *game, int i, int j)
 		exit(1);
 	}
 }
+
 
 void	check_invalid_map(t_game *game)
 {
@@ -760,6 +678,8 @@ void	calc_num_sprites(t_game *game)
 	}
 }
 
+
+
 void	init_sprites_helper(t_game *game, int i, int j, int n)
 {
 	t_data	*data;
@@ -789,15 +709,13 @@ void	init_sprites_helper(t_game *game, int i, int j, int n)
 // clang-format off
 void	init_sprites(t_game *game)
 {
-	int	i;
-	int	j;
-	int	n;
+	int		i;
+	int		j;
+	int		n;
 
 	i = 0;
 	j = 0;
 	calc_num_sprites(game);
-	if (get_data()->num_sprites == 0)
-		return ;
 	get_data()->sprites = malloc(sizeof(t_sprite) * get_data()->num_sprites);
 	n = 0;
 	while (game->map.grid[i] != NULL)
@@ -806,14 +724,15 @@ void	init_sprites(t_game *game)
 		while (game->map.grid[i][j])
 		{
 			if (game->map.grid[i][j] == 'M')
-				init_sprites_helper(game, i, j, n++);
+			{
+				init_sprites_helper(game, i, j, n);
+				n++;
+			}
 			j++;
 		}
 		i++;
 	}
 	i = 0;
-	load_load_sprite_frames();
-	load_dying_sprite_frames();
 }
 
 void	pad_map_with_spaces_helper(t_game *game, int j, int i, int map_width)
@@ -934,7 +853,6 @@ t_game	check_map(int fd, char *file)
 	pad_map_with_spaces(&game);
 	check_invalid_map(&game);
 	verify_player_starting_position(&game);
-	check_invalid_spaces(&game);
 	get_player_position(&game);
 	return (game);
 }
@@ -953,3 +871,4 @@ int	has_wall_at(t_game *game, double x, double y)
 		return (1);
 	return (0);
 }
+
