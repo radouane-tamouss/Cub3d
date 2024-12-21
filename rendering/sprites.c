@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 00:31:56 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/20 00:49:16 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/21 18:40:54 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,8 +247,8 @@ static void	render_sprite(t_sprite sprite)
 	j = ft_max(sprite.display_start_x, 0.0f);
 	while (j < sprite.display_end_x && j < WIN_WIDTH)
 	{
-		if (ray_hit_sprite(create_ray(get_data()->player_angle - (FOV / 2) +
-									  (j * (FOV / WIN_WIDTH))),
+		if (ray_hit_sprite(create_ray(get_data()->player_angle - ((FOV * get_data()->zoom_factor) / 2) +
+									  (j * ((FOV * get_data()->zoom_factor) / WIN_WIDTH))),
 						   sprite))
 		{
 			pixel_x = ((float)(j - sprite.display_start_x) /
@@ -306,9 +306,9 @@ static void	find_display_postion(t_sprite *sprite, float angle)
 	int		position;
 	float	scale;
 
-	position = (angle / FOV) * WIN_WIDTH;
+	position = (angle / (FOV * get_data()->zoom_factor)) * WIN_WIDTH;
 	sprite->dist = ft_max(sprite->dist, 10);
-	scale = ((WIN_WIDTH) / sprite->dist) * 0.1;
+	scale = ((WIN_WIDTH) / sprite->dist) * 0.1  * (1 / get_data()->zoom_factor);
 	sprite->display_start_x =
 		position + ((float)WIN_WIDTH / 2) - (sprite->texture.width * scale) / 2;
 	sprite->display_start_y = sprite->z + scale;
@@ -332,7 +332,7 @@ static int sprite_angle_valide(t_sprite *sprite, float *angle)
 		if (*angle >= (MY_PI)) *angle -= 2 * MY_PI;
 		if (*angle <= (-MY_PI)) *angle += 2 * MY_PI;
 	}
-	if (*angle < -(FOV / 2) || *angle > (FOV / 2)) return (0);
+	if (*angle < -((FOV * get_data()->zoom_factor) / 2) || *angle > ((FOV *  get_data()->zoom_factor) / 2)) return (0);
 	return (1);
 }
 
@@ -345,11 +345,11 @@ int	should_render(t_sprite *sprite, float *angle)
 	if (!sprite_angle_valide(sprite, angle))
 		return (0);
 	find_display_postion(sprite, *angle);
-	start_ray = create_ray(get_data()->player_angle - (FOV / 2) +
-						   (sprite->display_start_x * (FOV / WIN_WIDTH)));
+	start_ray = create_ray(get_data()->player_angle - ((FOV * get_data()->zoom_factor) / 2) +
+						   (sprite->display_start_x * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
 	if (ray_hit_sprite(start_ray, *sprite)) return (1);
-	end_ray = create_ray(get_data()->player_angle - (FOV / 2) +
-						 (sprite->display_end_x * (FOV / WIN_WIDTH)));
+	end_ray = create_ray(get_data()->player_angle - ((FOV * get_data()->zoom_factor) / 2) +
+						 (sprite->display_end_x * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
 	if (ray_hit_sprite(end_ray, *sprite)) return (1);
 	return (0);
 }
