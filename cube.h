@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/17 18:32:45 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/20 00:19:55 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ typedef struct s_img_data
 
 //======================================
 
+
 typedef struct s_gun
 {
     void *reloading_frames[50];  // Array to store gun frame images
@@ -299,6 +300,12 @@ typedef struct s_vector
     float x;
     float y;
 } t_vector;
+//==== square box collider ==================================
+// typedef struct s_square
+// {
+//     t_vector    points[4];
+// }   t_square;
+
 
 //======== casted ray data =================
 typedef struct s_ray_data
@@ -494,7 +501,7 @@ void render_minimap(void);
 //
 t_ray_data create_ray(float angle);
 void render_sprites(void);
-
+void	next_step_square(t_vector *next_step_square, t_vector center, float square_lenght, t_vector dir);
 //=== utils =============================================
 
 void print_err(char *str);

@@ -273,14 +273,14 @@ void init_data(t_game game)
         &(get_data()->door_animating_img.img_data.line_length),
         &(get_data()->door_animating_img.img_data.endian));
 
-    // get_data()->enemie_on_map.img = safer_xpm_file_to_image(get_data()->mlx,
-    // "skull.xpm", &(get_data()->enemie_on_map.width),
-    // &(get_data()->enemie_on_map.height)); get_data()->enemie_on_map.addr =
-    // safer_get_data_addr(
-    //     get_data()->enemie_on_map.img,
-    //     &(get_data()->enemie_on_map.bits_per_pixel),
-    //     &(get_data()->enemie_on_map.line_length),
-    //     &(get_data()->enemie_on_map.endian));
+    get_data()->enemie_on_map.img = safer_xpm_file_to_image(get_data()->mlx,
+    "skull.xpm", &(get_data()->enemie_on_map.width),
+    &(get_data()->enemie_on_map.height)); get_data()->enemie_on_map.addr =
+    safer_get_data_addr(
+        get_data()->enemie_on_map.img,
+        &(get_data()->enemie_on_map.bits_per_pixel),
+        &(get_data()->enemie_on_map.line_length),
+        &(get_data()->enemie_on_map.endian));
 
     // printf("data addr 2 = %p\n",
     // get_data()->door_animating_img.img_data.addr);
@@ -968,7 +968,7 @@ int main(int ac, char **av)
     load_walking_gun3_frames();
     load_door_frames();
     // render_gun3();
-    mlx_mouse_hide(get_data()->mlx, get_data()->win);
+    mlx_mouse_hide(get_data()->mlx, get_data()->win);//
     mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 
     mlx_loop(get_data()->mlx);
