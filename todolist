@@ -23,6 +23,9 @@ what i did so far
 [x] add some tmux shortcuts to make the work faster
 \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 [x] complete norms for parsing.c
+[ ] fix norms for header file
+[ ] fix enemy die after wall
+[ ] do not enter the door if P
 [ ] start norms for main.c
 [ ] fix render gun norms
 [ ] add home page, and settings
