@@ -57,8 +57,14 @@ void	init_sprites_helper(t_game *game, int i, int j, int n)
 			&(data->sprites[n].texture.img_data.line_length),
 			&(data->sprites[n].texture.img_data.endian));
 	data->sprites[n].current_frame = 0;
+	data->sprites[n].display_start_x = 0;
+	data->sprites[n].display_end_x = 0;
+	data->sprites[n].display_start_y = 0;
+	data->sprites[n].display_end_y = 0;
 	data->sprites[n].current_dying_frame = 0;
 	data->sprites[n].frame_delay = 0;
+	data->sprites[n].is_dead = 0;
+	data->sprites[n].is_dying = 0;
 }
 
 // clang-format off
