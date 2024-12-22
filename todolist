@@ -26,8 +26,11 @@ what i did so far
 [x] fix norms for header file
 [x] fix enemy die after wall
 [x] do not enter the door if P
-[ ] start norms for main.c
-[ ] fix render gun norms
+
+[x] fix walking frames and zooming...
+
+[x] start norms for main.c
+[x] fix render gun
 [ ] add home page, and settings
 [ ] split parsing from bonus
 
