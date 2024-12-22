@@ -10,10 +10,25 @@
 
 
 
-[ ] add dying feature and keep the enemy at his place
+[x] add dying feature and keep the enemy at his place
 [x] add shooting with mouse
-[ ] add frames for enemy
-[ ] add parsing for the door
+[x] add frames for enemy
+[x] add parsing for the door
+[x] fix parsing space next to zero. 
+[x] learn tmux use basic thinks to work in your project
+what i did so far
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+[x] fix still richable leaks in parsing
+[x] fix norms for parsing.c
+[x] add some tmux shortcuts to make the work faster
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+[x] complete norms for parsing.c
+[ ] fix norms for header file
+[ ] fix enemy die after wall
+[ ] do not enter the door if P
+[ ] start norms for main.c
 [ ] fix render gun norms
 [ ] add home page, and settings
 [ ] split parsing from bonus
+
+

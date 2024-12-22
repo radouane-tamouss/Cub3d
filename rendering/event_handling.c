@@ -122,7 +122,7 @@ int is_enemy_in_middle_of_screen(t_sprite *sprite)
     t_data *data = get_data();
     int screen_middle_x = WIN_WIDTH / 2;
 
-    if (sprite->is_dead == 0)
+    if (sprite != NULL && sprite->is_dead == 0)
     {
         int display_start_x = sprite->display_start_x;
         int display_end_x = sprite->display_end_x;
