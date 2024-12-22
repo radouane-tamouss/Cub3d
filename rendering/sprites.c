@@ -217,24 +217,24 @@ void sort_sprites(void)
 
 void	update_dying_frames(t_sprite *sprite)
 {
-	int i;
-	if (sprite->frame_delay >= 10)
-	{
-		sprite->current_dying_frame++;
-		printf("current frame %d\n", sprite->current_dying_frame);
-		if (sprite->current_dying_frame >= 14)
-		{
-			sprite->current_dying_frame = 0;
-			sprite->is_dead = 1;
-			sprite->is_dying = 0;
-			printf("%sreseted to 0%s\n", CRED, CWHITE);
-		}
-		sprite->frame_delay = 0;
-	}
-	else
-	{
-		sprite->frame_delay++;
-	}
+    int i;
+    if (sprite->frame_delay >= 10)
+    {
+        sprite->current_dying_frame++;
+        // printf("current frame %d\n", sprite->current_dying_frame);
+        if (sprite->current_dying_frame >= 14)
+        {
+            sprite->current_dying_frame = 0;
+            sprite->is_dead = 1;
+            sprite->is_dying = 0;
+            printf("%sreseted to 0%s\n", CRED, CWHITE);
+        }
+        sprite->frame_delay = 0;
+    }
+    else
+    {
+        sprite->frame_delay++;
+    }
 }
 
 static void	render_sprite(t_sprite sprite)
