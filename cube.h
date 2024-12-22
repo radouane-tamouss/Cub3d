@@ -430,77 +430,136 @@ typedef struct s_data
 t_data *get_data(void);
 
 //=== parsing ===========================================
+// clang-format off
+t_game			init_game_struct(void);
+char			**init_map(int fd, char *file, t_map *m2);
+void			pad_map_with_spaces(t_game *game);
+void			pad_map_with_spaces_helper(t_game *game, int j, int i,
+			int map_width);
+void			check_invalid_map_helper(t_game *game, int i, int j);
+int				calc_map_width(char **map);
+void			check_invalid_spaces(t_game *game);
+void			check_invalid_map(t_game *game);
+void			check_map_helper(char **map, t_game *game, t_map m2);
+t_game			check_map(int fd, char *file);
 
+int				has_wall_at(t_game *game, double x, double y);
+int				calc_map_width(char **map);
+void			get_player_position(t_game *game);
+void			check_invalid_map(t_game *game);
+void			check_invalid_map_helper(t_game *game, int i, int j);
+int				check_if_player_direction(char c);
+void			check_invalid_spaces(t_game *game);
+void			check_invalid_spaces_helper(t_game *game, int i, int j);
+void			verify_player_starting_position(t_game *game);
+int				calc_map_width(char **map);
+char			*ft_strtrim_last(char *s1, char *set);
+int				calc_map_height(char **map);
+void			check_map_sourrounded_by_walls(t_game *game);
+void			check_door_left_and_right_should_be_wall(t_game *game);
+void			check_if_map_contains_only_valid_characters(t_game *game);
+int				check_if_file_empty(char *file);
+void			parse_texture_and_colors_info(char *line, t_game *game,
+			t_map *map);
+void			validate_split(char **split);
+void			check_floor_color(t_game *game, char **split);
+void			check_ceiling_color(t_game *game, char **split);
+void			parse_color(char *color, t_color *color_struct);
+void			split_and_trime_whitespaces(char **rgb, char *color);
+void			check_for_null_pointers(char *color, t_color *color_struct);
+int				ft_isspace(char c);
+void			count_commas_and_validate_basic_format(char *color,
+			t_color *color_struct);
+int				ft_count_commas(char *str);
+int				check_file_extension(char *str);
+void			parse_east_texture(t_game *game, char **split);
+void			parse_west_texture(t_game *game, char **split);
+void			parse_south_texture(t_game *game, char **split);
+void			parse_north_texture(t_game *game, char **split);
+void			check_file_exists_or_empty(char *file);
+void			print_map(char **map);
+void			fill_map(char **map, char *file, char *line);
+void			fill_map_helper(int fd, char *line, char **map, int *i);
+int				check_line_empty(char *line);
+size_t			calc_height(int fd, char *file, t_map *m2, char *line);
+int				check_file(char *str, int *fd);
+int				ft_strcmp(const char *s1, const char *s2);
+
+void			calc_num_sprites(t_game *game);
+void			init_sprites_helper(t_game *game, int i, int j, int n);
+void			init_sprites(t_game *game);
 // split by charset
 
-void update_enemy_frames(void);
-int should_render(t_sprite *sprite, float *angle);
-char **ft_split2(char const *s, char *charset);
-int check_charset(char *charset, char c);
-t_game check_map(int fd, char *file);
-int check_file(char *str, int *fd);
-int check_if_player_direction(char c);
-void render_tab();
-void render_transparent_frame(void *frame_img, int width, int height);
-void play_sound(const char *file);
+void			update_enemy_frames(void);
+int				should_render(t_sprite *sprite, float *angle);
+char			**ft_split2(char const *s, char *charset);
+int				check_charset(char *charset, char c);
+t_game			check_map(int fd, char *file);
+int				check_file(char *str, int *fd);
+int				check_if_player_direction(char c);
+void			render_tab(void);
+void			render_transparent_frame(void *frame_img, int width,
+					int height);
+void			play_sound(const char *file);
 
-int handle_mouse_event(int button, int x, int y, void *param);
-int ray_hit_sprite(t_ray_data ray, t_sprite sprite);
+int				handle_mouse_event(int button, int x, int y, void *param);
+int				ray_hit_sprite(t_ray_data ray, t_sprite sprite);
 //=======================================================
 //=== rendering =========================================
 
-void load_dying_sprite_frames(void);
-void load_load_sprite_frames(void);
-void put_pixel(t_img_data *img, int x, int y, int color);
-unsigned int pull_pixel(t_texture img, int x, int y);
-void init_background(void);
-void render_background(void);
-void start_walk_sound();
-int handle_keys(int keycode, void *garbage);
-int ft_close(void);
-int mouse_event(int x, int y, void *par);
-void line_between_2points(t_vector point1, t_vector point2, int color);
-float ft_max(float nbr1, float nbr2);
-float ft_min(float nbr1, float nbr2);
-void init_sprites(t_game *game);
-double ft_abs(double nbr);
-void update_door_animation(void);
-void open_door(void);
-void close_door(void);
-int calc_dist(int x, int y, t_vector point);
-float calc_dist_f(float x, float y, t_vector point);
-float dot_product(t_vector v1, t_vector v2);
-float vector_magnitude(t_vector vector);
+void			load_dying_sprite_frames(void);
+void			load_load_sprite_frames(void);
+void			put_pixel(t_img_data *img, int x, int y, int color);
+unsigned int	pull_pixel(t_texture img, int x, int y);
+void			init_background(void);
+void			render_background(void);
+void			start_walk_sound(void);
+int				handle_keys(int keycode, void *garbage);
+int				ft_close(void);
+int				mouse_event(int x, int y, void *par);
+void			line_between_2points(t_vector point1, t_vector point2,
+					int color);
+float			ft_max(float nbr1, float nbr2);
+float			ft_min(float nbr1, float nbr2);
+void			init_sprites(t_game *game);
+double			ft_abs(double nbr);
+void			update_door_animation(void);
+void			open_door(void);
+void			close_door(void);
+int				calc_dist(int x, int y, t_vector point);
+float			calc_dist_f(float x, float y, t_vector point);
+float			dot_product(t_vector v1, t_vector v2);
+float			vector_magnitude(t_vector vector);
 // t_vector	normalise_vector(t_vector vector);
-void rotate_player(float angle);
+void			rotate_player(float angle);
 
-void render_line(int x1, int y1, int x2, int y2);
-void animate_sprites(void);
-void move_backward();
-void move_forward();
-void move_left();
-void move_right();
-void draw_player();
-float normalise_angle(float angle);
-int key_release(int keycode, void *garbage);
-void update_movement();
-void render_scope();
+void			render_line(int x1, int y1, int x2, int y2);
+void			animate_sprites(void);
+void			move_backward(void);
+void			move_forward(void);
+void			move_left(void);
+void			move_right(void);
+void			draw_player(void);
+float			normalise_angle(float angle);
+int				key_release(int keycode, void *garbage);
+void			update_movement(void);
+void			render_scope(void);
 //
-t_ray_data create_ray(float angle);
-void calculate_ray_distance(t_ray_data *ray);
+t_ray_data		create_ray(float angle);
+void			calculate_ray_distance(t_ray_data *ray);
 
 //
 
-void render_walls(void);
-void render_minimap(void);
+void			render_walls(void);
+void			render_minimap(void);
 //
-t_ray_data create_ray(float angle);
-void render_sprites(void);
+t_ray_data		create_ray(float angle);
+void			render_sprites(void);
 
 //=== utils =============================================
 
-void print_err(char *str);
-void exiter(int code);
+void			print_err(char *str);
+void			exiter(int code);
 //=======================================================
 
 #endif

@@ -14,7 +14,18 @@
 [x] add shooting with mouse
 [x] add frames for enemy
 [x] add parsing for the door
-[ ] fix parsing space next to zero. 
+[x] fix parsing space next to zero. 
+[x] learn tmux use basic thinks to work in your project
+what i did so far
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+[x] fix still richable leaks in parsing
+[x] fix norms for parsing.c
+[x] add some tmux shortcuts to make the work faster
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+[x] complete norms for parsing.c
+[ ] start norms for main.c
 [ ] fix render gun norms
 [ ] add home page, and settings
 [ ] split parsing from bonus
+
+

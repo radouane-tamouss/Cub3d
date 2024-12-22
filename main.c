@@ -341,7 +341,7 @@ void update_enemy_frames(void)
 
     for (i = 0; i < get_data()->num_sprites; i++)
     {
-        if (get_data()->sprites[i].frame_delay >= 15)
+        if (get_data()->sprites[i].frame_delay >= 20)
         {
             get_data()->sprites[i].current_frame++;
             if (get_data()->sprites[i].current_frame >= 16)
