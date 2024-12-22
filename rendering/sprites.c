@@ -32,7 +32,7 @@ int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
 			ray.side = 1;
 		}
 		current_tile = get_data()->map[ray.map_y][ray.map_x];
-		if (current_tile == '1' || current_tile == 'D')
+		if (current_tile == '1' || current_tile == 'D' || current_tile == 'P')
 		{
 			calculate_ray_distance(&ray);
 			if (ray.dist < sprite.dist) return (0);
