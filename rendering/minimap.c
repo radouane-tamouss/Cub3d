@@ -86,7 +86,7 @@ void render_map(void)
 void render_player()
 {
 	int x, y;
-	int radius = 3;
+	int radius = 7;
 	// int radius = game->player.radius;
 	int center_x = 5 * SQUARE_SIZE;//(get_data()->player_pos.x / GRID_DIST) * SQUARE_SIZE;
 	int center_y = 5 * SQUARE_SIZE;//(get_data()->player_pos.y / GRID_DIST) * SQUARE_SIZE;
@@ -96,7 +96,7 @@ void render_player()
 		{
 			if (x * x + y * y <= radius * radius)
 			{
-				put_pixel(&(get_data()->background_img), center_x + x, center_y + y, RED);
+				put_pixel(&(get_data()->background_img), center_x + x, center_y + y,WHITE );
 			}
 		}
 	}
@@ -105,6 +105,8 @@ void render_player()
     int end_y = center_y + sin(get_data()->player_angle) * 80;
 	render_line(center_x, center_y, end_x, end_y);
 }
+
+
 void render_minimap(void)
 {
 	int	i = 0;

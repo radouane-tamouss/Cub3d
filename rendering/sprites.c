@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
-
+//clang-format off
 #include "../cube.h"
 
 int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
@@ -227,7 +226,6 @@ void	update_dying_frames(t_sprite *sprite)
             sprite->current_dying_frame = 0;
             sprite->is_dead = 1;
             sprite->is_dying = 0;
-            printf("%sreseted to 0%s\n", CRED, CWHITE);
         }
         sprite->frame_delay = 0;
     }
