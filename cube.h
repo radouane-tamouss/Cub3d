@@ -407,6 +407,7 @@ typedef struct s_data
 	t_sprite	die_sprite;
 	int			num_sprites;
 	t_img_data	enemie_on_map;
+	int 		number_of_shoots;
 
 }				t_data;
 

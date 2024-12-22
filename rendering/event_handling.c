@@ -127,8 +127,6 @@ int is_enemy_in_middle_of_screen(t_sprite *sprite)
         int display_start_x = sprite->display_start_x;
         int display_end_x = sprite->display_end_x;
 
-        // Check if the middle of the screen is within the sprite's display
-        // range
         if (screen_middle_x >= display_start_x &&
             screen_middle_x <= display_end_x)
         {
@@ -283,11 +281,13 @@ int handle_keys(int keycode, void *garbage)
             if (get_data()->gun3.show_scope)
             {
                 get_data()->gun3.show_scope = 0;
+				printf("setted to 0\n");
                 // get_data()->zoom_factor = 0.6;
             }
             else if (!get_data()->gun3.show_scope)
             {
                 get_data()->gun3.show_scope = 1;
+				printf("setted to 1\n");
                 // get_data()->zoom_factor = 1;
             }
         }
@@ -391,7 +391,7 @@ int handle_mouse_event(int button, int x, int y, void *param)
 {
     if (button == 1)
     {
-        if (get_data()->gun_id == 2)
+        if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading)
         {
             get_data()->gun3.is_shooting = 1;
             get_data()->gun3.current_frame = 0;
@@ -419,6 +419,7 @@ int handle_mouse_event(int button, int x, int y, void *param)
             }
             get_data()->screen_shake_timer = 10;  // Adjust duration as needed
             play_sound("sounds/one_shot_firstgun.wav");
+			get_data()->number_of_shoots++;
         }
     }
     return (0);
