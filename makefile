@@ -1,12 +1,13 @@
 CC = cc
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
-CFLAGS =  -O3 -flto -g3 -fsanitize=address #-Werror -Wextra -Wall 
+CFLAGS =  -O3 -flto -g3# -fsanitize=address #-Werror -Wextra -Wall 
 MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c ./garbage_collector/safer_func.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
 RENDER_FILES = rendering/put_pixel.c rendering/background.c rendering/event_handling.c rendering/rotation.c rendering/movement.c rendering/ft_math.c rendering/walls.c rendering/minimap.c rendering/sprites.c rendering/vector.c rendering/ray.c
-PARSING_FILES = parsing/parsing.c
+PARSING_FILES = parsing/check_file.c  parsing/check_map.c  parsing/check_map_utils.c parsing/check_player.c  parsing/init_sprites.c\
+	parsing/map_utils2.c  parsing/map_utils.c  parsing/other_functions.c  parsing/parse_colors.c  parsing/parse_textures_and_color_infos.c  parsing/parse_textures.c
 CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR} ${GET_NEXT_LINE_FILES} ft_split_charset.c
 OFILES = ${CFILES:.c=.o}
 NAME = cub3D
