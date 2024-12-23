@@ -6,23 +6,11 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 19:49:10 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/15 22:55:11 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 14:52:11 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube.h"
-
-// int	ft_power(int nbr, int power)
-// {
-// 	int i = 0;
-// 	int r = 1;
-// 	while (i < power)
-// 	{
-// 		r *= nbr;
-// 		i++;
-// 	}
-// 	return (r);
-// }
 
 double	ft_abs(double nbr)
 {
@@ -43,26 +31,28 @@ float	ft_max(float nbr1, float nbr2)
 	return (nbr2);
 }
 
-void	line_between_2points(t_vector point1,
-				t_vector point2, int color)
-{
-	int	x;
-	int	y;
 
-	y = ft_max(ft_min(point1.y, point2.y), 0);
-	while ((point2.y - point1.y) != 0
-		&& y <= ft_max(point1.y, point2.y) && y < WIN_HEIGHT)
-	{
-		x = (((y - point1.y) * (point2.x - point1.x))
-				/ (point2.y - point1.y)) + point1.x;
-		put_pixel(&(get_data()->background_img), x, y++, color);
-	}
-	x = ft_max(ft_min(point1.x, point2.x), 0);
-	while ((point2.x - point1.x) != 0
-		&& x <= ft_max(point1.x, point2.x) && x < WIN_WIDTH)
-	{
-		y = (((point2.y - point1.y) * (x - point1.x))
-				/ (point2.x - point1.x)) + point1.y;
-		put_pixel(&(get_data()->background_img), x++, y, color);
-	}
-}
+
+// void	line_between_2points(t_vector point1,
+// 				t_vector point2, int color)
+// {
+// 	int	x;
+// 	int	y;
+
+// 	y = ft_max(ft_min(point1.y, point2.y), 0);
+// 	while ((point2.y - point1.y) != 0
+// 		&& y <= ft_max(point1.y, point2.y) && y < WIN_HEIGHT)
+// 	{
+// 		x = (((y - point1.y) * (point2.x - point1.x))
+// 				/ (point2.y - point1.y)) + point1.x;
+// 		put_pixel(&(get_data()->background_img), x, y++, color);
+// 	}
+// 	x = ft_max(ft_min(point1.x, point2.x), 0);
+// 	while ((point2.x - point1.x) != 0
+// 		&& x <= ft_max(point1.x, point2.x) && x < WIN_WIDTH)
+// 	{
+// 		y = (((point2.y - point1.y) * (x - point1.x))
+// 				/ (point2.x - point1.x)) + point1.y;
+// 		put_pixel(&(get_data()->background_img), x++, y, color);
+// 	}
+// }

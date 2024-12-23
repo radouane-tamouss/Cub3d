@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/17 17:25:16 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/19 21:18:07 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/22 18:48:21 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,8 @@ void	perform_dda(t_ray_data ray, int data_taken, int col)
 
 void	render_walls(void)
 {
-    int col;
-    float ray_angle;
+	int		col;
+	float	ray_angle;
 
 	col = 0;
 	while (col < WIN_WIDTH)

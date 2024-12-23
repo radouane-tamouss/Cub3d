@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 00:31:56 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/21 18:40:54 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:28:38 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
 {
 	char	current_tile;
+
 	while (1)
 	{
 		if (ray.side_dist.x < ray.side_dist.y)
@@ -34,13 +35,15 @@ int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
 		if (current_tile == '1' || current_tile == 'D' || current_tile == 'P')
 		{
 			calculate_ray_distance(&ray);
-			if (ray.dist < sprite.dist) return (0);
+			if (ray.dist < sprite.dist)
+				return (0);
 			return (1);
 		}
 	}
 }
 
-static void	calc_square_points_pos(t_vector *square_position, t_vector center, float square_lenght)
+static void	calc_square_points_pos(t_vector *square_position, t_vector center,
+		float square_lenght)
 {
 	square_position[0].x = center.x - square_lenght;
 	square_position[0].y = center.y - square_lenght;
@@ -52,7 +55,8 @@ static void	calc_square_points_pos(t_vector *square_position, t_vector center, f
 	square_position[3].y = center.y + square_lenght;
 }
 
-void	next_step_square(t_vector *next_step_square, t_vector center, float square_lenght, t_vector dir)
+void	next_step_square(t_vector *next_step_square, t_vector center,
+		float square_lenght, t_vector dir)
 {
 	t_vector	square_position[4];
 
@@ -84,57 +88,39 @@ void	enemy_move(t_sprite *sprite, t_vector dir)
 	dir.x = (dir.x / magnitude) * ENEMY_SPEED;
 	dir.y = (dir.y / magnitude) * ENEMY_SPEED;
 	next_step_square(square, sprite->position, ((float)GRID_DIST / 8), dir);
-	if (square[0].x != '1' && square[1].x != '1' && square[2].x != '1' &&
-		square[3].x != '1' && square[0].x != 'D' && square[1].x != 'D' &&
-		square[2].x != 'D' && square[3].x != 'D' && square[0].x != 'P' &&
-		square[1].x != 'P' && square[2].x != 'P' && square[3].x != 'P')
+	if (square[0].x != '1' && square[1].x != '1' && square[2].x != '1'
+		&& square[3].x != '1' && square[0].x != 'D' && square[1].x != 'D'
+		&& square[2].x != 'D' && square[3].x != 'D' && square[0].x != 'P'
+		&& square[1].x != 'P' && square[2].x != 'P' && square[3].x != 'P')
 		sprite->position.x += dir.x;
-	if (square[0].y != '1' && square[1].y != '1' && square[2].y != '1' &&
-		square[3].y != '1' && square[0].y != 'D' && square[1].y != 'D' &&
-		square[2].y != 'D' && square[3].y != 'D' && square[0].y != 'P' &&
-		square[1].y != 'P' && square[2].y != 'P' && square[3].y != 'P')
+	if (square[0].y != '1' && square[1].y != '1' && square[2].y != '1'
+		&& square[3].y != '1' && square[0].y != 'D' && square[1].y != 'D'
+		&& square[2].y != 'D' && square[3].y != 'D' && square[0].y != 'P'
+		&& square[1].y != 'P' && square[2].y != 'P' && square[3].y != 'P')
 		sprite->position.y += dir.y;
 }
 
 void	sprite_on_minimap(t_vector dir)
 {
-	int			radius;
-	int			i;
-	int			j;
-	t_vector	center;
+	float	x;
+	float	y;
 
-	radius = 6;
-	center.x = (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE;
-	center.y = (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE;
-	// mlx_put_image_to_window(get_data()->mlx, get_data()->win, get_data()->enemie_on_map.img, center.x, center.y);
-	i = -radius;
-	while (i <= radius)
-	{
-		j = -radius;
-		while (j <= radius)
-		{
-			if (i * i + j * j <= radius * radius)
-				put_pixel(&(get_data()->background_img), center.x + j,
-						  center.y + i, RED);
-			++j;
-		}
-		++i;
-	}
+	x = (5 * SQUARE_SIZE) - (dir.x / GRID_DIST) * SQUARE_SIZE;
+	y = (5 * SQUARE_SIZE) - (dir.y / GRID_DIST) * SQUARE_SIZE;
+	render_cyrcle(x, y, 6, RED);
 }
 
 void	update_enemies_data()
 {
 	int			i;
 	t_vector	sprite_to_player;
-	float	angle;
+	float		angle;
 
 	i = 0;
 	while (i < get_data()->num_sprites)
 	{
-		// For living enemies
 		if (get_data()->sprites[i].is_dead == 0)
 		{
-			// Calculate distance and movement as before
 			get_data()->sprites[i].dist = calc_dist_f(
 				get_data()->sprites[i].position.x,
 				get_data()->sprites[i].position.y, get_data()->player_pos);
@@ -151,8 +137,6 @@ void	update_enemies_data()
 		else if (get_data()->sprites[i].is_dead == 1 ||
 				 get_data()->sprites[i].is_dying == 1)
 		{
-			// Calculate teh distance basedd on the Position when the enemy
-			// dieeeeeeed
 			get_data()->sprites[i].dist = calc_dist_f(
 				get_data()->sprites[i].position.x,
 				get_data()->sprites[i].position.y, get_data()->player_pos);
@@ -160,35 +144,6 @@ void	update_enemies_data()
 		++i;
 	}
 }
-
-// void update_enemies_data()
-// {
-//	 int i;
-//	 t_vector sprite_to_player;
-//	 float angle;
-//	 float magnitude;
-//
-//	 i = 0;
-//	 while (i < get_data()->num_sprites)
-//	 {
-//		 if (get_data()->sprites[i].is_dead == 0)
-//		 {
-//			 get_data()->sprites[i].dist = calc_dist_f(
-//				 get_data()->sprites[i].position.x,
-//				 get_data()->sprites[i].position.y, get_data()->player_pos);
-//			 sprite_to_player.x =
-//				 get_data()->player_pos.x - get_data()->sprites[i].position.x;
-//			 sprite_to_player.y =
-//				 get_data()->player_pos.y - get_data()->sprites[i].position.y;
-//			 if (get_data()->sprites[i].dist <= 5 * GRID_DIST)
-//				 sprite_on_minimap(sprite_to_player);
-//			 angle = atan2(-sprite_to_player.y, -sprite_to_player.x);
-//			 angle = normalise_angle(angle);
-//			 enemy_move(get_data()->sprites + i, sprite_to_player);
-//		 }
-//		 ++i;
-//	 }
-// }
 
 void sort_sprites(void)
 {
@@ -216,23 +171,22 @@ void sort_sprites(void)
 
 void	update_dying_frames(t_sprite *sprite)
 {
-    int i;
-    if (sprite->frame_delay >= 10)
-    {
-        sprite->current_dying_frame++;
-        // printf("current frame %d\n", sprite->current_dying_frame);
-        if (sprite->current_dying_frame >= 14)
-        {
-            sprite->current_dying_frame = 0;
-            sprite->is_dead = 1;
-            sprite->is_dying = 0;
-        }
-        sprite->frame_delay = 0;
-    }
-    else
-    {
-        sprite->frame_delay++;
-    }
+	int i;
+	if (sprite->frame_delay >= 10)
+	{
+		sprite->current_dying_frame++;
+		if (sprite->current_dying_frame >= 14)
+		{
+			sprite->current_dying_frame = 0;
+			sprite->is_dead = 1;
+			sprite->is_dying = 0;
+		}
+		sprite->frame_delay = 0;
+	}
+	else
+	{
+		sprite->frame_delay++;
+	}
 }
 
 static void	render_sprite(t_sprite sprite)
@@ -269,7 +223,6 @@ static void	render_sprite(t_sprite sprite)
 				}
 				else if (sprite.is_dying == 1 && sprite.is_dead == 0)
 				{
-					// printf("here is dying\n");
 					put_pixel(
 						&(get_data()->background_img), j, i,
 						pull_pixel(
@@ -279,7 +232,6 @@ static void	render_sprite(t_sprite sprite)
 				}
 				else if (sprite.is_dead == 1)
 				{
-					// printf("here is dead\n");
 					put_pixel(&(get_data()->background_img), j, i,
 							  pull_pixel(get_data()->dying_frames[14], pixel_x,
 										 pixel_y));
@@ -316,7 +268,7 @@ static void	find_display_postion(t_sprite *sprite, float angle)
 		(sprite->texture.height * scale) + sprite->z + scale;
 }
 
-static int sprite_angle_valide(t_sprite *sprite, float *angle)
+static int	sprite_angle_valide(t_sprite *sprite, float *angle)
 {
 	t_vector	vector_to_sprite;
 
@@ -352,7 +304,6 @@ int	should_render(t_sprite *sprite, float *angle)
 	return (0);
 }
 
-// sorting enemies by there dist from the player
 void	render_sprites(void)
 {
 	float	angle;
@@ -368,22 +319,22 @@ void	render_sprites(void)
 			++i;
 			continue;
 		}
-		if (should_render(get_data()->sprites + i, &angle) &&
-			get_data()->sprites[i].is_dead == 0)
+		if (should_render(get_data()->sprites + i, &angle)
+			&& get_data()->sprites[i].is_dead == 0)
 		{
 			update_enemy_frames();
 			render_sprite(get_data()->sprites[i]);
 		}
-		if (should_render(get_data()->sprites + i, &angle) &&
-			get_data()->sprites[i].is_dying == 1 &&
-			get_data()->sprites[i].is_dead == 0)
+		if (should_render(get_data()->sprites + i, &angle)
+			&& get_data()->sprites[i].is_dying == 1
+			&& get_data()->sprites[i].is_dead == 0)
 		{
 		update_dying_frames(&get_data()->sprites[i]);
 			render_sprite(get_data()->sprites[i]);
 		}
-		if (should_render(get_data()->sprites + i, &angle) &&
-			get_data()->sprites[i].is_dying == 0 &&
-			get_data()->sprites[i].is_dead == 1)
+		if (should_render(get_data()->sprites + i, &angle)
+			&& get_data()->sprites[i].is_dying == 0
+			&& get_data()->sprites[i].is_dead == 1)
 			render_sprite(get_data()->sprites[i]);
 		++i;
 	}
