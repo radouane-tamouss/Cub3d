@@ -14,284 +14,310 @@
 #include "garbage_collector/heap_controller.h"
 
 // clang-format off
-// this will be used to store data and share it
-t_data *get_data(void)
+t_data	*get_data(void)
 {
-    static t_data data;
+	static t_data	data;
 
-    return (&data);
+	return (&data);
+}
+// clan-format off
+
+int	init_dest_src_y_data(int **dest_data, int **src_data, t_img_data *dest,
+		t_img_data *src)
+{
+	int	y;
+
+	y = -1;
+	*dest_data = (int *)dest->addr;
+	*src_data = (int *)src->addr;
+	return (y);
 }
 
-void put_xpm_image(t_img_data *dest, t_img_data *src, int start_x, int start_y)
+void	put_xpm_image(t_img_data *dest, t_img_data *src, int start_x,
+		int start_y)
 {
-    if (!dest || !src || !dest->addr || !src->addr) return;
+	int	y;
+	int	x;
+	int	src_pixel;
+	int	*dest_data;
+	int	*src_data;
 
-    int *dest_data = (int *)dest->addr;
-    int *src_data = (int *)src->addr;
-
-    int dest_line_width = dest->line_length / 4;
-    int src_line_width = src->line_length / 4;
-
-    for (int y = 0; y < src->height; y++)
-    {
-        int dest_y = start_y + y;
-
-        // Skip if outside vertical bounds
-        if (dest_y < 0 || dest_y >= WIN_HEIGHT) continue;
-
-        for (int x = 0; x < src->width; x++)
-        {
-            int dest_x = start_x + x;
-
-            // Skip if outside horizontal bounds
-            if (dest_x < 0 || dest_x >= WIN_WIDTH) continue;
-
-            int src_pixel = src_data[y * src_line_width + x];
-
-            // Skip transparent pixels (look for None color or full
-            // black/transparent)
-            if ((src_pixel & 0x00FFFFFF) == 0)  // near-black from your XPM
-                continue;
-
-            // Direct pixel replacement
-            dest_data[dest_y * dest_line_width + dest_x] = src_pixel;
-        }
-    }
+	if (!dest || !src || !dest->addr || !src->addr)
+		return ;
+	y = init_dest_src_y_data(&dest_data, &src_data, dest, src);
+	while (++y < src->height)
+	{
+		if ((start_y + y) < 0 || (start_y + y) >= WIN_HEIGHT)
+			continue ;
+		x = -1;
+		while (++x < src->width)
+		{
+			if ((start_x + x) < 0 || (start_x + x) >= WIN_WIDTH)
+				continue ;
+			src_pixel = src_data[y * (dest->line_length / 4) + x];
+			if ((src_pixel & 0x00FFFFFF) == 0)
+				continue ;
+			dest_data[(start_y + y) * (src->line_length / 4)
+				+ (start_x + x)] = src_pixel;
+		}
+	}
 }
 
-void render_transparent_frame(void *frame_img, int width, int height)
+void	render_transparent_frame(void *frame_img, int width, int height)
 {
-    if (!frame_img)
-    {
-        printf("frame_img is null\n");
-        return;
-    }
-    t_img_data current_frame;
-    current_frame.img = frame_img;
-    current_frame.width = width;
-    current_frame.height = height;
-    current_frame.addr =
-        safer_get_data_addr(current_frame.img, &current_frame.bits_per_pixel,
-                            &current_frame.line_length, &current_frame.endian);
+	t_img_data	current_frame;
+	int			pos_x;
+	int			pos_y;
 
-    // Flexible positioning
-    // int pos_x = WIN_WIDTH / 2 - width / 2;
-    int pos_x = (WIN_WIDTH / 2 - width / 2) + (int)get_data()->gun_offset_x;
-    int pos_y = WIN_HEIGHT - height + 4;
-
-    put_xpm_image(&get_data()->background_img, &current_frame, pos_x, pos_y);
+	if (!frame_img)
+	{
+		printf("frame_img is null\n");
+		return ;
+	}
+	current_frame.img = frame_img;
+	current_frame.width = width;
+	current_frame.height = height;
+	current_frame.addr = safer_get_data_addr(current_frame.img,
+			&current_frame.bits_per_pixel, &current_frame.line_length,
+			&current_frame.endian);
+	pos_x = (WIN_WIDTH / 2 - width / 2) + (int)get_data()->gun_offset_x;
+	pos_y = WIN_HEIGHT - height + 4;
+	put_xpm_image(&get_data()->background_img, &current_frame, pos_x, pos_y);
 }
 
-// Updated gun rendering
-void render_gun_with_transparency(void)
+void	render_gun_with_transparency(void)
 {
-    if (get_data()->gun.is_shooting)
-    {
-        if (get_data()->gun.frame_delay++ >= 14)
-        {
-            get_data()->gun.frame_delay = 0;
-            get_data()->gun.current_frame++;
-            if (get_data()->gun.current_frame >= 18)
-            {
-                get_data()->gun.current_frame = 0;
-                get_data()->gun.is_shooting = 0;
-            }
-        }
-    }
-
-    // Use the XPM-specific rendering method
-    render_transparent_frame(
-        get_data()->gun.reloading_frames[get_data()->gun.current_frame],
-        get_data()->gun.width, get_data()->gun.height);
+	if (get_data()->gun.is_shooting)
+	{
+		if (get_data()->gun.frame_delay++ >= 14)
+		{
+			get_data()->gun.frame_delay = 0;
+			get_data()->gun.current_frame++;
+			if (get_data()->gun.current_frame >= 18)
+			{
+				get_data()->gun.current_frame = 0;
+				get_data()->gun.is_shooting = 0;
+			}
+		}
+	}
+	render_transparent_frame(
+		get_data()->gun.reloading_frames[get_data()->gun.current_frame],
+		get_data()->gun.width, get_data()->gun.height);
 }
 
-void load_door_frames(void)
+void	initialize_door_frames_paths(char *frame_paths[])
 {
-	t_data *data;
+	frame_paths[0] = "textures/door_frames/1.xpm";
+	frame_paths[1] = "textures/door_frames/2.xpm";
+	frame_paths[2] = "textures/door_frames/3.xpm";
+	frame_paths[3] = "textures/door_frames/4.xpm";
+	frame_paths[4] = "textures/door_frames/5.xpm";
+	frame_paths[5] = "textures/door_frames/6.xpm";
+	frame_paths[6] = "textures/door_frames/7.xpm";
+	frame_paths[7] = "textures/door_frames/8.xpm";
+	frame_paths[8] = "textures/door_frames/9.xpm";
+	frame_paths[9] = "textures/door_frames/10.xpm";
+	frame_paths[10] = "textures/door_frames/11.xpm";
+	frame_paths[11] = "textures/door_frames/12.xpm";
+	frame_paths[12] = "textures/door_frames/13.xpm";
+	frame_paths[13] = "textures/door_frames/14.xpm";
+	frame_paths[14] = "textures/door_frames/15.xpm";
+	frame_paths[15] = "textures/door_frames/16.xpm";
+	frame_paths[16] = "textures/door_frames/17.xpm";
+}
+
+void	load_door_frames(void)
+{
+	t_data	*data;
+	char	*frame_paths[17];
+	int		i;
+
+	initialize_door_frames_paths(frame_paths);
+	data = get_data();
+	i = 0;
+	while (i < 17)
+	{
+		data->door.img[i] = mlx_xpm_file_to_image(data->mlx, frame_paths[i],
+				&data->door.width, &data->door.height);
+		if (!data->door.img[i])
+		{
+			print_err("Failed to load door frame\n");
+			exiter(1);
+		}
+		i++;
+	}
+	data->door.current_frame = 0;
+	data->door.frame_delay = 0;
+	data->door.is_opening = 0;
+	data->door.is_open = 0;
+	data->door.is_closed = 1;
+	data->door.active_x = 0;
+	data->door.active_y = 0;
+}
+
+void	init_data_helper(t_game *game)
+{
+	t_data	*data;
 
 	data = get_data();
-    char *frame_paths[18] = {
-        "textures/door_frames/1.xpm",  "textures/door_frames/2.xpm",
-        "textures/door_frames/3.xpm",  "textures/door_frames/4.xpm",
-        "textures/door_frames/5.xpm",  "textures/door_frames/6.xpm",
-        "textures/door_frames/7.xpm",  "textures/door_frames/8.xpm",
-        "textures/door_frames/9.xpm",  "textures/door_frames/10.xpm",
-        "textures/door_frames/11.xpm", "textures/door_frames/12.xpm",
-        "textures/door_frames/13.xpm", "textures/door_frames/14.xpm",
-        "textures/door_frames/15.xpm", "textures/door_frames/16.xpm",
-        "textures/door_frames/17.xpm"};
-
-    int i;
-
-    i = 0;
-    while (i < 17)
-    {
-        data->door.img[i] = mlx_xpm_file_to_image(
-            data->mlx, frame_paths[i], &data->door.width,
-            &data->door.height);
-        if (!data->door.img[i])
-        {
-            // printf("%d ", i);
-            print_err("Failed to load door frame\n");
-            exiter(1);
-        }
-        i++;
-    }
-    data->door.current_frame = 0;
-    data->door.frame_delay = 0;
-    data->door.is_opening = 0;
-    data->door.is_open = 0;
-    data->door.is_closed = 1;
-    data->door.active_x = 0;
-    data->door.active_y = 0;
+	if (data->mlx != NULL)
+		data->win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, "cube3d");
+	if (data->mlx == NULL || data->win == NULL)
+	{
+		print_err("CUB3D: mlx failed\n");
+		exiter(1);
+	}
+	data->background_img.img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (data->background_img.img == NULL)
+	{
+		print_err("CUB3D: mlx_new_image failed\n");
+		exiter(1);
+	}
+	data->background_img.addr = safer_get_data_addr(data->background_img.img,
+			&(data->background_img.bits_per_pixel),
+			&(data->background_img.line_length),
+			&(data->background_img.endian));
+	data->floor_color = CREATE_TRGB(0, game->floor.r, game->floor.g,
+			game->floor.b);
+	data->ceiling_color = CREATE_TRGB(0, game->ceiling.r, game->ceiling.g,
+			game->ceiling.b);
 }
 
-void init_data(t_game game)
+void	hooks(void)
 {
-	t_data *data;
+	t_data	*data;
 
 	data = get_data();
-    data->mlx = mlx_init();
-    if (data->mlx != NULL)
-        data->win =
-            mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, "cube3d");
-    if (data->mlx == NULL || data->win == NULL)
-    {
-        print_err("CUB3D: mlx failed\n");
-        exiter(1);
-    }
-    data->background_img.img = mlx_new_image(
-        data->mlx, WIN_WIDTH, WIN_HEIGHT);  // TODO protect failing
-    data->background_img.addr = safer_get_data_addr(
-        data->background_img.img,
-        &(data->background_img.bits_per_pixel),
-        &(data->background_img.line_length),
-        &(data->background_img.endian));  // TODO protect failing
+	mlx_hook(data->win, 2, 1L << 0, handle_keys, NULL);
+	mlx_hook(data->win, 3, 1L << 1, key_release, NULL);
+	mlx_hook(data->win, 17, 1L << 0, ft_close, NULL);
+	mlx_hook(data->win, 6, 1L << 6, mouse_event, NULL);
+	mlx_mouse_hook(data->win, handle_mouse_event, NULL);
+}
 
-    data->floor_color =
-        CREATE_TRGB(0, game.floor.r, game.floor.g,
-                    game.floor.b);  // BROWN;// TODO this just for startin
-                                    // befroe parsing is complete
-    data->ceiling_color =
-        CREATE_TRGB(0, game.ceiling.r, game.ceiling.g,
-                    game.ceiling.b);  // CYAN;// TODO this just for startin
-                                      // befroe parsing is complete
-    // init_background();
-    mlx_hook(data->win, 2, 1L << 0, handle_keys,
-             NULL);  // this to handle when a key pressed
-    mlx_hook(data->win, 3, 1L << 1, key_release,
-             NULL);  // this to handle when a key released
-    mlx_hook(data->win, 17, 1L << 0, ft_close,
-             NULL);  // this to handle when red arrow clicked
-    mlx_hook(data->win, 6, 1L << 6, mouse_event, NULL);
-    mlx_mouse_hook(data->win, handle_mouse_event, NULL);
-    data->speed = 4;
-    data->player_pos.x =
-        game.player.pos_x * GRID_DIST +
-        (float)GRID_DIST / 2;  // 1. * GRID_DIST;// TODO for test only
-    data->player_pos.y =
-        game.player.pos_y * GRID_DIST +
-        (float)GRID_DIST / 2;      // 1. * GRID_DIST;// TODO for test only
-    data->player_angle = 0;  // MY_PI / 4;
-    data->player_dir.x =
-        cos(data->player_angle) * data->speed;
-    data->player_dir.y =
-        sin(data->player_angle) * data->speed;
-    data->map = game.map.grid;
-    data->height = game.map.height;
-    data->width = game.map.width;
+void	initialize_variables(t_game *game)
+{
+	t_data	*data;
 
-    data->move_forward = 0;
-    data->move_backward = 0;
-    data->move_left = 0;
-    data->move_right = 0;
-    data->rotate_left = 0;
-    data->rotate_right = 0;
-    data->show_scope = 0;
-    data->zoom_factor = 1;
-    data->gun_id = 1;
-    data->show_tab = 0;
+	data = get_data();
+	data->speed = 4;
+	data->player_pos.x = game->player.pos_x * GRID_DIST + (float)GRID_DIST / 2;
+	data->player_pos.y = game->player.pos_y * GRID_DIST + (float)GRID_DIST / 2;
+	data->player_angle = 0;
+	data->player_dir.x = cos(data->player_angle) * data->speed;
+	data->player_dir.y = sin(data->player_angle) * data->speed;
+	data->map = game->map.grid;
+	data->height = game->map.height;
+	data->width = game->map.width;
+	data->move_forward = 0;
+	data->move_backward = 0;
+	data->move_left = 0;
+	data->move_right = 0;
+	data->rotate_left = 0;
+	data->rotate_right = 0;
+	data->show_scope = 0;
+	data->zoom_factor = 1;
+	data->gun_id = 1;
+	data->show_tab = 0;
 	data->number_of_shoots = 0;
+	data->gun_offset_x = 0.0;
+}
 
-    data->gun_offset_x = 0.0;
+void	init_north_south_textures(t_game *game)
+{
+	t_data	*data;
 
-    data->north_img.img_data.img = safer_xpm_file_to_image(
-        data->mlx, "textures/future_wall.xpm",
-        &(data->north_img.width), &(data->north_img.height));
-    data->north_img.img_data.addr =
-        safer_get_data_addr(data->north_img.img_data.img,
-                            &(data->north_img.img_data.bits_per_pixel),
-                            &(data->north_img.img_data.line_length),
-                            &(data->north_img.img_data.endian));
+	data = get_data();
+	data->north_img.img_data.img = safer_xpm_file_to_image(data->mlx,
+			game->north.path, &(data->north_img.width),
+			&(data->north_img.height));
+	data->north_img.img_data.addr
+		= safer_get_data_addr(data->north_img.img_data.img,
+			&(data->north_img.img_data.bits_per_pixel),
+			&(data->north_img.img_data.line_length),
+			&(data->north_img.img_data.endian));
+	data->south_img.img_data.img = safer_xpm_file_to_image(data->mlx,
+			game->south.path, &(data->south_img.width),
+			&(data->south_img.height));
+	data->south_img.img_data.addr
+		= safer_get_data_addr(data->south_img.img_data.img,
+			&(data->south_img.img_data.bits_per_pixel),
+			&(data->south_img.img_data.line_length),
+			&(data->south_img.img_data.endian));
+}
 
-    data->south_img.img_data.img = safer_xpm_file_to_image(
-        data->mlx, "textures/future_wall.xpm",
-        &(data->south_img.width), &(data->south_img.height));
-    data->south_img.img_data.addr =
-        safer_get_data_addr(data->south_img.img_data.img,
-                            &(data->south_img.img_data.bits_per_pixel),
-                            &(data->south_img.img_data.line_length),
-                            &(data->south_img.img_data.endian));
+void	init_west_east_textures(t_game *game)
+{
+	t_data	*data;
 
-    data->east_img.img_data.img = safer_xpm_file_to_image(
-        data->mlx, "textures/future_wall.xpm",
-        &(data->east_img.width), &(data->east_img.height));
-    data->east_img.img_data.addr =
-        safer_get_data_addr(data->east_img.img_data.img,
-                            &(data->east_img.img_data.bits_per_pixel),
-                            &(data->east_img.img_data.line_length),
-                            &(data->east_img.img_data.endian));
+	data = get_data();
+	data->east_img.img_data.img = safer_xpm_file_to_image(data->mlx,
+			game->east.path, &(data->east_img.width), &(data->east_img.height));
+	data->east_img.img_data.addr
+		= safer_get_data_addr(data->east_img.img_data.img,
+			&(data->east_img.img_data.bits_per_pixel),
+			&(data->east_img.img_data.line_length),
+			&(data->east_img.img_data.endian));
+	data->west_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+			game->west.path, &(data->west_img.width), &(data->west_img.height));
+	data->west_img.img_data.addr
+		= mlx_get_data_addr(data->west_img.img_data.img,
+			&(data->west_img.img_data.bits_per_pixel),
+			&(data->west_img.img_data.line_length),
+			&(data->west_img.img_data.endian));
+}
 
-    data->west_img.img_data.img = mlx_xpm_file_to_image(
-        data->mlx, "textures/future_wall.xpm",
-        &(data->west_img.width), &(data->west_img.height));
-    data->west_img.img_data.addr =
-        mlx_get_data_addr(data->west_img.img_data.img,
-                          &(data->west_img.img_data.bits_per_pixel),
-                          &(data->west_img.img_data.line_length),
-                          &(data->west_img.img_data.endian));
-    //===k
-    data->door_img.img_data.img = mlx_xpm_file_to_image(
-        data->mlx, "textures/door_frames/1.xpm",
-        &(data->door_img.width), &(data->door_img.height));
-    data->door_img.img_data.addr =
-        mlx_get_data_addr(data->door_img.img_data.img,
-                          &(data->door_img.img_data.bits_per_pixel),
-                          &(data->door_img.img_data.line_length),
-                          &(data->door_img.img_data.endian));
+void	init_door_textures_helper(void)
+{
+	t_data	*data;
 
-    data->door_open_img.img_data.img =
-        mlx_xpm_file_to_image(data->mlx, "textures/door_frames/17.xpm",
-                              &(data->door_open_img.width),
-                              &(data->door_open_img.height));
-    data->door_open_img.img_data.addr =
-        mlx_get_data_addr(data->door_open_img.img_data.img,
-                          &(data->door_open_img.img_data.bits_per_pixel),
-                          &(data->door_open_img.img_data.line_length),
-                          &(data->door_open_img.img_data.endian));
-    // printf("data addr = %p\n", data->door_open_img.img_data.addr);
+	data = get_data();
+	data->door_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+			"textures/door_frames/1.xpm", &(data->door_img.width),
+			&(data->door_img.height));
+	data->door_img.img_data.addr
+		= mlx_get_data_addr(data->door_img.img_data.img,
+			&(data->door_img.img_data.bits_per_pixel),
+			&(data->door_img.img_data.line_length),
+			&(data->door_img.img_data.endian));
+}
 
-    data->door_animating_img.img_data.img =
-        mlx_xpm_file_to_image(data->mlx, "textures/door_frames/13.xpm",
-                              &(data->door_animating_img.width),
-                              &(data->door_animating_img.height));
-    data->door_animating_img.img_data.addr = mlx_get_data_addr(
-        data->door_animating_img.img_data.img,
-        &(data->door_animating_img.img_data.bits_per_pixel),
-        &(data->door_animating_img.img_data.line_length),
-        &(data->door_animating_img.img_data.endian));
+void	init_door_textures(void)
+{
+	t_data	*data;
 
-    data->enemie_on_map.img = safer_xpm_file_to_image(data->mlx,
-    "skull.xpm", &(data->enemie_on_map.width),
-    &(data->enemie_on_map.height)); data->enemie_on_map.addr =
-    safer_get_data_addr(
-        data->enemie_on_map.img,
-        &(data->enemie_on_map.bits_per_pixel),
-        &(data->enemie_on_map.line_length),
-        &(data->enemie_on_map.endian));
+	data = get_data();
+	init_door_textures_helper();
+	data->door_open_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+			"textures/door_frames/17.xpm", &(data->door_open_img.width),
+			&(data->door_open_img.height));
+	data->door_open_img.img_data.addr
+		= mlx_get_data_addr(data->door_open_img.img_data.img,
+			&(data->door_open_img.img_data.bits_per_pixel),
+			&(data->door_open_img.img_data.line_length),
+			&(data->door_open_img.img_data.endian));
+	data->door_animating_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+			"textures/door_frames/13.xpm", &(data->door_animating_img.width),
+			&(data->door_animating_img.height));
+	data->door_animating_img.img_data.addr
+		= mlx_get_data_addr(data->door_animating_img.img_data.img,
+			&(data->door_animating_img.img_data.bits_per_pixel),
+			&(data->door_animating_img.img_data.line_length),
+			&(data->door_animating_img.img_data.endian));
+}
 
-    // printf("data addr 2 = %p\n",
-    // data->door_animating_img.img_data.addr);
+void	init_data(t_game game)
+{
+	t_data	*data;
+
+	data = get_data();
+	data->mlx = mlx_init();
+	init_data_helper(&game);
+	hooks();
+	initialize_variables(&game);
+	init_north_south_textures(&game);
+	init_west_east_textures(&game);
+	init_door_textures();
 }
 
 void	render_frame(void)
@@ -315,7 +341,7 @@ void	render_frame(void)
 		get_data()->background_img.img, shake_x, shake_y);
 }
 
-void initialize_gun3shoot_frames_paths(char *frame_paths[])
+void	initialize_gun3shoot_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/gun3shoot/1.xpm";
 	frame_paths[1] = "textures/gun3shoot/2.xpm";
@@ -419,7 +445,7 @@ void	load_dying_sprite_frames(void)
 	}
 }
 
-void initialize_load_sprite_frames_paths(char *frame_paths[])
+void	initialize_load_sprite_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/zombie/1.xpm";
 	frame_paths[1] = "textures/zombie/2.xpm";
@@ -463,7 +489,7 @@ void	load_load_sprite_frames(void)
 	}
 }
 
-void initialize_running_gun3_frames_paths(char *frame_paths[])
+void	initialize_running_gun3_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/running_gun3/1.xpm";
 	frame_paths[1] = "textures/running_gun3/2.xpm";
@@ -497,7 +523,7 @@ void	load_running_gun3_frames(void)
 	data->gun3.frame_delay = 0;
 }
 
-void initialize_reloading_gun3_frames_paths(char *frame_paths[])
+void	initialize_reloading_gun3_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/reloading_gun3/1.xpm";
 	frame_paths[1] = "textures/reloading_gun3/2.xpm";
@@ -535,7 +561,7 @@ void	load_reloading_gun3_frames(void)
 	data->gun3.shooted = 0;
 }
 
-void initialize_first_scope_frames_paths(char *frame_paths[])
+void	initialize_first_scope_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/zoom_shoot_gun3/1.xpm";
 	frame_paths[1] = "textures/zoom_shoot_gun3/2.xpm";
@@ -568,7 +594,7 @@ void	load_first_scope_frames(void)
 	data->gun3.is_showing_scope = 0;
 }
 
-void initialize_last_scope_frames_paths(char *frame_paths[])
+void	initialize_last_scope_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/zoom_shoot_gun3/12.xpm";
 	frame_paths[1] = "textures/zoom_shoot_gun3/13.xpm";
@@ -576,7 +602,8 @@ void initialize_last_scope_frames_paths(char *frame_paths[])
 	frame_paths[3] = "textures/zoom_shoot_gun3/15.xpm";
 	frame_paths[4] = "textures/zoom_shoot_gun3/16.xpm";
 }
-void load_last_scope_frames(void)
+
+void	load_last_scope_frames(void)
 {
 	t_data	*data;
 	char	*frame_paths[5];
@@ -608,6 +635,7 @@ void	initialize_zoom_shoot_frames_paths(char *frame_paths[])
 	frame_paths[4] = "textures/zoom_shoot_gun3/10.xpm";
 	frame_paths[5] = "textures/zoom_shoot_gun3/10.xpm";
 }
+
 void	load_shooting_scope_frames(void)
 {
 	t_data	*data;
@@ -694,6 +722,7 @@ void	render_closing_door(int door_x, int door_y)
 		data->is_updated = 1;
 	}
 }
+
 // clang-format off
 void	render_opening_door(int door_x, int door_y)
 {
@@ -763,7 +792,7 @@ void	update_door_animation(void)
 	if (get_data()->door.is_opening)
 		render_opening_door(door_x, door_y);
 	else if (get_data()->door.is_closing)
-		render_closing_door(door_x,door_y);
+		render_closing_door(door_x, door_y);
 }
 
 // Implementation of gun loading and animation functions
@@ -853,6 +882,7 @@ void	render_frist_gun_frame(void)
 		return ;
 	}
 }
+
 void	render_last_frame_gun(void)
 {
 	t_data	*data;
@@ -890,6 +920,7 @@ void	render_shooting_in_scope(void)
 		data->gun3.width, data->gun3.height);
 	render_frame();
 }
+
 void	render_shootin_frames(void)
 {
 	t_data	*data;
@@ -934,6 +965,7 @@ void	render_scope_shooting_frames(void)
 		data->gun3.width, data->gun3.height);
 	render_frame();
 }
+
 void	handle_shooting_animation(void)
 {
 	t_data	*data;
@@ -944,7 +976,6 @@ void	handle_shooting_animation(void)
 	else
 		render_shootin_frames();
 }
-
 
 void	render_show_scope_frames(void)
 {
@@ -1019,7 +1050,6 @@ void	render_running(void)
 		data->gun3.width, data->gun3.height);
 }
 
-
 void	render_gun3(void)
 {
 	t_data	*data;
@@ -1049,7 +1079,8 @@ void	render_gun1(void)
 {
 	if (get_data()->gun.is_reloading)
 		render_reloading();
-	render_transparent_frame(get_data()->gun.reloading_frames[get_data()->gun.current_frame],
+	render_transparent_frame(
+		get_data()->gun.reloading_frames[get_data()->gun.current_frame],
 		get_data()->gun.width, get_data()->gun.height);
 }
 
@@ -1100,7 +1131,6 @@ int	loop_hook(void)
 {
 	if (get_data()->is_tab_pressed)
 	{
-		// render_tab();
 		return (0);
 	}
 	if (get_data()->is_updated)
@@ -1114,7 +1144,6 @@ int	loop_hook(void)
 		render_background();
 		render_gun();
 		render_cercle();
-		// erintf("is walking = %d\n", get_data()->is_walking);
 	}
 	return (0);
 }
@@ -1144,7 +1173,7 @@ int	main(int ac, char **av)
 	load_walking_gun3_frames();
 	load_door_frames();
 	render_gun();
-	mlx_mouse_hide(get_data()->mlx, get_data()->win); //
+	mlx_mouse_hide(get_data()->mlx, get_data()->win);
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 	mlx_loop(get_data()->mlx);
 	return (0);
