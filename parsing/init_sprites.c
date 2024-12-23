@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 17:59:58 by atamousse.r       #+#    #+#             */
-/*   Updated: 2024/12/22 19:12:15 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 20:41:10 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	init_sprites(t_game *game)
 	calc_num_sprites(game);
 	if (get_data()->num_sprites == 0)
 		return ;
-	get_data()->sprites = malloc(sizeof(t_sprite) * get_data()->num_sprites);
+	get_data()->sprites = mallocate(sizeof(t_sprite) * get_data()->num_sprites);
 	n = 0;
 	while (game->map.grid[i] != NULL)
 	{

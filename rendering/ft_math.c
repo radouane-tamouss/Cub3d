@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 19:49:10 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/23 14:52:11 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 19:43:30 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ float	ft_max(float nbr1, float nbr2)
 		return (nbr1);
 	return (nbr2);
 }
-
-
 
 // void	line_between_2points(t_vector point1,
 // 				t_vector point2, int color)

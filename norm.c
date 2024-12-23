@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   norm.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 22:00:39 by atamousse.red     #+#    #+#             */
-/*   Updated: 2024/12/18 22:00:39 by atamousse.red    ###   ########.fr       */
+/*   Created: 2024/12/18 22:00:39 by atamousse.r       #+#    #+#             */
+/*   Updated: 2024/12/23 20:40:24 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -716,7 +716,7 @@ void	init_sprites(t_game *game)
 	i = 0;
 	j = 0;
 	calc_num_sprites(game);
-	get_data()->sprites = malloc(sizeof(t_sprite) * get_data()->num_sprites);
+	get_data()->sprites = mallocate(sizeof(t_sprite) * get_data()->num_sprites);
 	n = 0;
 	while (game->map.grid[i] != NULL)
 	{

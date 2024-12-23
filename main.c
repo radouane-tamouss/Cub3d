@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 18:10:15 by atamousse.r       #+#    #+#             */
-/*   Updated: 2024/12/23 15:29:33 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 22:28:40 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ void	load_door_frames(void)
 	i = 0;
 	while (i < 17)
 	{
-		data->door.img[i] = mlx_xpm_file_to_image(data->mlx, frame_paths[i],
+		data->door.img[i] = safer_xpm_file_to_image(data->mlx, frame_paths[i],
 				&data->door.width, &data->door.height);
 		if (!data->door.img[i])
 		{
@@ -258,10 +258,10 @@ void	init_west_east_textures(t_game *game)
 			&(data->east_img.img_data.bits_per_pixel),
 			&(data->east_img.img_data.line_length),
 			&(data->east_img.img_data.endian));
-	data->west_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+	data->west_img.img_data.img = safer_xpm_file_to_image(data->mlx,
 			game->west.path, &(data->west_img.width), &(data->west_img.height));
 	data->west_img.img_data.addr
-		= mlx_get_data_addr(data->west_img.img_data.img,
+		= safer_get_data_addr(data->west_img.img_data.img,
 			&(data->west_img.img_data.bits_per_pixel),
 			&(data->west_img.img_data.line_length),
 			&(data->west_img.img_data.endian));
@@ -272,11 +272,11 @@ void	init_door_textures_helper(void)
 	t_data	*data;
 
 	data = get_data();
-	data->door_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+	data->door_img.img_data.img = safer_xpm_file_to_image(data->mlx,
 			"textures/door_frames/1.xpm", &(data->door_img.width),
 			&(data->door_img.height));
 	data->door_img.img_data.addr
-		= mlx_get_data_addr(data->door_img.img_data.img,
+		= safer_get_data_addr(data->door_img.img_data.img,
 			&(data->door_img.img_data.bits_per_pixel),
 			&(data->door_img.img_data.line_length),
 			&(data->door_img.img_data.endian));
@@ -288,19 +288,19 @@ void	init_door_textures(void)
 
 	data = get_data();
 	init_door_textures_helper();
-	data->door_open_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+	data->door_open_img.img_data.img = safer_xpm_file_to_image(data->mlx,
 			"textures/door_frames/17.xpm", &(data->door_open_img.width),
 			&(data->door_open_img.height));
 	data->door_open_img.img_data.addr
-		= mlx_get_data_addr(data->door_open_img.img_data.img,
+		= safer_get_data_addr(data->door_open_img.img_data.img,
 			&(data->door_open_img.img_data.bits_per_pixel),
 			&(data->door_open_img.img_data.line_length),
 			&(data->door_open_img.img_data.endian));
-	data->door_animating_img.img_data.img = mlx_xpm_file_to_image(data->mlx,
+	data->door_animating_img.img_data.img = safer_xpm_file_to_image(data->mlx,
 			"textures/door_frames/13.xpm", &(data->door_animating_img.width),
 			&(data->door_animating_img.height));
 	data->door_animating_img.img_data.addr
-		= mlx_get_data_addr(data->door_animating_img.img_data.img,
+		= safer_get_data_addr(data->door_animating_img.img_data.img,
 			&(data->door_animating_img.img_data.bits_per_pixel),
 			&(data->door_animating_img.img_data.line_length),
 			&(data->door_animating_img.img_data.endian));
@@ -715,7 +715,7 @@ void	render_closing_door(int door_x, int door_y)
 		data->door_animating_img.img_data.img
 			= data->door.img[data->door.current_frame];
 		data->door_animating_img.img_data.addr
-			= mlx_get_data_addr(data->door_animating_img.img_data.img,
+			= safer_get_data_addr(data->door_animating_img.img_data.img,
 				&data->door_animating_img.img_data.bits_per_pixel,
 				&data->door_animating_img.img_data.line_length,
 				&data->door_animating_img.img_data.endian);
@@ -743,7 +743,7 @@ void	render_opening_door(int door_x, int door_y)
 		data->door_animating_img.img_data.img
 			= data->door.img[data->door.current_frame];
 		data->door_animating_img.img_data.addr
-			= mlx_get_data_addr(data->door_animating_img.img_data.img,
+			= safer_get_data_addr(data->door_animating_img.img_data.img,
 				&data->door_animating_img.img_data.bits_per_pixel,
 				&data->door_animating_img.img_data.line_length,
 				&data->door_animating_img.img_data.endian);
@@ -1173,7 +1173,7 @@ int	main(int ac, char **av)
 	load_walking_gun3_frames();
 	load_door_frames();
 	render_gun();
-	mlx_mouse_hide(get_data()->mlx, get_data()->win);
+	// mlx_mouse_hide(get_data()->mlx, get_data()->win);
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 	mlx_loop(get_data()->mlx);
 	return (0);
