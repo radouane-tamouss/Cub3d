@@ -1,7 +1,8 @@
 # .*
 .vscode
 *.o
-mlx_linx
+*IL6*
+*2XE*
 mlx-linux/libmlx.a
 mlx-linux/libmlx_Linux.a
 mlx-linux/test/mlx-test
