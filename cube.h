@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/20 00:19:55 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 15:05:28 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,9 @@
 # define GRID_DIST 80
 # define ZOOM 100
 # define ENEMY_SPEED 0.2
-
 # define SQUARE_SIZE 16
-// # define PI 3.14159265359
-// # define ROTATION_SPEED 0.2
-// # define MOVE_SPEED 0.05
-// # define WALL_STRIP_WIDTH 100
-// # define FOV_ANGLE 60 * (PI / 180)
+// # define MINIMAP_CENTER (SQUARE_SIZE * 5)
+
 //=== buttons ====
 # define TAB 65289
 # define CTRL 65507
@@ -92,12 +88,17 @@ typedef struct s_img_data
 # define BROWN 0xCC6600
 # define CYAN 0x00ffff
 //-- manipulating colors --
-
-# define CREATE_TRGB(t, r, g, b) (t << 24 | r << 16 | g << 8 | b)
-# define GET_T(trgb) ((trgb >> 24) & 0xFF)
-# define GET_R(trgb) ((trgb >> 16) & 0xFF)
-# define GET_G(trgb) ((trgb >> 8) & 0xFF)
-# define GET_B(trgb) (trgb & 0xFF)
+unsigned int	create_trgb(unsigned char t, unsigned char r,
+		unsigned char g, unsigned char b);
+unsigned char	get_t(unsigned int trgb);
+unsigned char	get_r(unsigned int trgb);
+unsigned char	get_g(unsigned int trgb);
+unsigned char	get_b(unsigned int trgb);
+// # define create_trgb(t, r, g, b) (t << 24 | r << 16 | g << 8 | b)
+// # define get_t(trgb) ((trgb >> 24) & 0xFF)
+// # define get_r(trgb) ((trgb >> 16) & 0xFF)
+// # define get_g(trgb) ((trgb >> 8) & 0xFF)
+// # define get_b(trgb) (trgb & 0xFF)
 //=== keys
 //
 # define W_MAC	13
@@ -507,9 +508,9 @@ void			render_transparent_frame(void *frame_img, int width,
 void			play_sound(const char *file);
 
 int				handle_mouse_event(int button, int x, int y, void *param);
-int				ray_hit_sprite(t_ray_data ray, t_sprite sprite);
 //=======================================================
 //=== rendering =========================================
+int				ray_hit_sprite(t_ray_data ray, t_sprite sprite);
 
 void			load_dying_sprite_frames(void);
 void			load_load_sprite_frames(void);
@@ -527,6 +528,7 @@ float			ft_max(float nbr1, float nbr2);
 float			ft_min(float nbr1, float nbr2);
 void			init_sprites(t_game *game);
 double			ft_abs(double nbr);
+void	render_cyrcle(int x, int y, int radius, int color);
 void			update_door_animation(void);
 void			open_door(void);
 void			close_door(void);
@@ -537,7 +539,6 @@ float			vector_magnitude(t_vector vector);
 // t_vector	normalise_vector(t_vector vector);
 void			rotate_player(float angle);
 
-void			render_line(int x1, int y1, int x2, int y2);
 void			animate_sprites(void);
 void			move_backward(void);
 void			move_forward(void);
@@ -560,6 +561,8 @@ void render_minimap(void);
 t_ray_data create_ray(float angle);
 void render_sprites(void);
 void	next_step_square(t_vector *next_step_square, t_vector center, float square_lenght, t_vector dir);
+void	render_square(int x, int y, int color);
+void	render_line(float x1, float y1, float x2, float y2);
 //=== utils =============================================
 
 void			print_err(char *str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heap_controller.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:04:33 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/25 11:57:34 by rtamouss         ###   ########.fr       */
+/*   Updated: 2024/12/22 21:25:54 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	*mallocate(size_t size)
 	new = (t_heap *)malloc(sizeof(t_heap));
 	if (new == NULL)
 	{
-		// write(2, "HEAP_CONTROLLER: allocation failed, exiting ..\n", 47);
 		ft_putstr_fd("HEAP_CONTROLLER: allocation failed, exiting ..\n", 2);
 		exiter(1);
 	}
@@ -38,7 +37,6 @@ void	*mallocate(size_t size)
 	if (new->ptr == NULL)
 	{
 		free(new);
-		// write(2, "HEAP_CONTROLLER: allocation failed, exiting ..\n", 47);
 		ft_putstr_fd("HEAP_CONTROLLER: allocation failed, exiting ..\n", 2);
 		exiter(1);
 	}

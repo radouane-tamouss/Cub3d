@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_sprites.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/21 17:59:58 by atamousse.red     #+#    #+#             */
-/*   Updated: 2024/12/21 18:00:04 by atamousse.red    ###   ########.fr       */
+/*   Created: 2024/12/21 17:59:58 by atamousse.r       #+#    #+#             */
+/*   Updated: 2024/12/22 19:12:15 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

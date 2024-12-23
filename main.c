@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 18:10:15 by atamousse.red     #+#    #+#             */
-/*   Updated: 2024/12/18 18:10:15 by atamousse.red    ###   ########.fr       */
+/*   Created: 2024/12/18 18:10:15 by atamousse.r       #+#    #+#             */
+/*   Updated: 2024/12/23 13:49:00 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,11 +162,11 @@ void init_data(t_game game)
         &(get_data()->background_img.endian));  // TODO protect failing
 
     get_data()->floor_color =
-        CREATE_TRGB(0, game.floor.r, game.floor.g,
+        create_trgb(0, game.floor.r, game.floor.g,
                     game.floor.b);  // BROWN;// TODO this just for startin
                                     // befroe parsing is complete
     get_data()->ceiling_color =
-        CREATE_TRGB(0, game.ceiling.r, game.ceiling.g,
+        create_trgb(0, game.ceiling.r, game.ceiling.g,
                     game.ceiling.b);  // CYAN;// TODO this just for startin
                                       // befroe parsing is complete
     // init_background();
@@ -272,18 +272,6 @@ void init_data(t_game game)
         &(get_data()->door_animating_img.img_data.bits_per_pixel),
         &(get_data()->door_animating_img.img_data.line_length),
         &(get_data()->door_animating_img.img_data.endian));
-
-    get_data()->enemie_on_map.img = safer_xpm_file_to_image(get_data()->mlx,
-    "skull.xpm", &(get_data()->enemie_on_map.width),
-    &(get_data()->enemie_on_map.height)); get_data()->enemie_on_map.addr =
-    safer_get_data_addr(
-        get_data()->enemie_on_map.img,
-        &(get_data()->enemie_on_map.bits_per_pixel),
-        &(get_data()->enemie_on_map.line_length),
-        &(get_data()->enemie_on_map.endian));
-
-    // printf("data addr 2 = %p\n",
-    // get_data()->door_animating_img.img_data.addr);
 }
 
 void render_frame()
