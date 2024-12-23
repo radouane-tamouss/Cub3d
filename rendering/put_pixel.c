@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:22 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/19 20:43:08 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:48:21 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	put_pixel(t_img_data *img, int x, int y, int color)
 	unsigned int	*ptr;
 
 	if (y >= WIN_HEIGHT || x >= WIN_WIDTH
-		|| x < 0 || y < 0 || GET_T(color) == 255)
+		|| x < 0 || y < 0 || get_t(color) == 255)
 		return ;
 	offset = y * img->line_length + x * (img->bits_per_pixel / 8);
 	dst = img->addr + offset;
@@ -88,15 +88,15 @@ int	calc_color(t_ray_data ray, int start, int i, int end)
 
 	projected_wall = end - start;
 	color = get_right_pixel(i, ray);
-	if (GET_T(color) == 255)
+	if (get_t(color) == 255)
 		return (color);
 	if (get_data()->dark_mode)
-		color = CREATE_TRGB(0,
-				(int)(GET_R(color)
+		color = create_trgb(0,
+				(int)(get_r(color)
 					* ((float)projected_wall / (float)WIN_HEIGHT)),
-				(int)(GET_G(color)
+				(int)(get_g(color)
 					* ((float)projected_wall / (float)WIN_HEIGHT)),
-				((int)(GET_B(color)
+				((int)(get_b(color)
 						* ((float)projected_wall / (float)WIN_HEIGHT))));
 	return (color);
 }
