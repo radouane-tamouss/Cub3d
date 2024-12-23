@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
+/*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/18 18:10:15 by atamousse.red     #+#    #+#             */
-/*   Updated: 2024/12/18 18:10:15 by atamousse.red    ###   ########.fr       */
+/*   Created: 2024/12/18 18:10:15 by atamousse.r       #+#    #+#             */
+/*   Updated: 2024/12/23 15:29:33 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,9 @@ void	init_data_helper(t_game *game)
 			&(data->background_img.bits_per_pixel),
 			&(data->background_img.line_length),
 			&(data->background_img.endian));
-	data->floor_color = CREATE_TRGB(0, game->floor.r, game->floor.g,
+	data->floor_color = create_trgb(0, game->floor.r, game->floor.g,
 			game->floor.b);
-	data->ceiling_color = CREATE_TRGB(0, game->ceiling.r, game->ceiling.g,
+	data->ceiling_color = create_trgb(0, game->ceiling.r, game->ceiling.g,
 			game->ceiling.b);
 }
 

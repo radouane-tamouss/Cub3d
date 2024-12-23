@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:33:12 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/19 21:03:18 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/23 13:48:21 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ void	init_background(void)
 				color = get_data()->floor_color;
 				shift_value = (float)(y - (WIN_HEIGHT / 2)) / (WIN_HEIGHT / 2);
 				if (get_data()->dark_mode)
-					color = CREATE_TRGB(0, ((int)(GET_R(color) * shift_value)),
-							((int)(GET_G(color) * shift_value)),
-							((int)(GET_B(color) * shift_value)));
+					color = create_trgb(0, ((int)(get_r(color) * shift_value)),
+							((int)(get_g(color) * shift_value)),
+							((int)(get_b(color) * shift_value)));
 			}
 			put_pixel(&(get_data()->background_img), x, y, color);
 		}
