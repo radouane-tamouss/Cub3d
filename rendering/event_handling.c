@@ -207,7 +207,7 @@ int handle_keys(int keycode, void *garbage)
 				// Mark this door as animating closed with 'P'
 				get_data()->map[door_y][door_x] = 'P';
 				get_data()->door.is_closing = 1;
-				get_data()->door.current_frame = 17;
+				get_data()->door.current_frame = 16;
 				get_data()->door.frame_delay = 0;
 				get_data()->is_updated = 1;
 			}

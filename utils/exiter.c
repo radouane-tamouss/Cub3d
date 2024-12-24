@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:02:06 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/23 22:46:27 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/24 23:45:34 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,14 @@ void exiter(int code)
 			i++;
 		}
 		i = 0;
+		while (i < 17)
+		{
+			if (get_data()->door.images[i].img_data.img != NULL)
+				mlx_destroy_image(get_data()->mlx,
+								  get_data()->door.images[i].img_data.img);
+			i++;
+		}
+		i = 0;
 		while (i < get_data()->num_sprites)
 		{
 			if (get_data()->sprites[i].texture.img_data.img != NULL)
@@ -103,13 +111,13 @@ void exiter(int code)
 			mlx_destroy_image(data->mlx, data->west_img.img_data.img);
 		if (data->door_img.img_data.img != NULL)
 			mlx_destroy_image(data->mlx, data->door_img.img_data.img);
-		if (data->door_animating_img.img_data.img != NULL)
-			mlx_destroy_image(data->mlx, data->door_animating_img.img_data.img);
 		// if (data->door_animating_img.img_data.img != NULL)
+			// mlx_destroy_image(data->mlx, data->door_animating_img.img_data.img);
+		// if (data->door_animating_img.img_data.img != NULL)
+			// mlx_destroy_image(data->mlx, data->door_animating_img.img_data.img);
 		// {
 		// 	printf("Destroying image: %p\n",
 		// 		   data->door_animating_img.img_data.img);
-		// 	mlx_destroy_image(data->mlx, data->door_animating_img.img_data.img);
 		// }
 		// else
 		// {

@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/29 16:50:22 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/23 13:48:21 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/24 23:30:52 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,15 @@ static void	choose_cube_texture(t_ray_data ray, t_texture *texture)
 	else if (ray.object_hitted == 'D')
 		*texture = get_data()->door_img;
 	else if (ray.object_hitted == 'P')
-		*texture = get_data()->door_animating_img;
+	{
+		*texture = get_data()->door.images[get_data()->door.current_frame];
+		if (texture->width == 0)
+	{
+		fprintf(stderr, "get_data()->door.current_frame => %d\n", get_data()->door.current_frame);
+		fprintf(stderr, "its zero, pointer => %p\n", texture->img_data.img);
+		exit(1);
+	}
+	}
 	else if (ray.side == 0 && ray.ray_dir.x > 0)
 		*texture = get_data()->east_img;
 	else if (ray.side == 0)
@@ -74,6 +82,11 @@ static unsigned int	get_right_pixel(float i, t_ray_data ray)
 	else
 		hit_point = get_data()->player_pos.x + (ray.dist * ray.ray_dir.x);
 	choose_cube_texture(ray, &texture);
+	// if (texture.width == 0)
+	// {
+	// 	fprintf(stderr, "its zero, pointer => %p\n", texture.img_data.addr);
+	// 	exit(1);
+	// }
 	pixel_x = (int)(hit_point * texture.width / GRID_DIST) % texture.width;
 	pixel_y = (int)((i - (WIN_HEIGHT / 2 - ray.wall_height / 2))
 			/ ray.wall_height * texture.height) % texture.height;

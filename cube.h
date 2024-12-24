@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/23 15:05:28 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/24 23:35:24 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,8 +210,8 @@ typedef struct s_door
 {
 	// void	*img[18];
 	t_texture images[18];
-	int			width;
-	int			height;
+	// int			width;
+	// int			height;
 	int			current_frame;
 	int			frame_delay;
 	int			is_opening;
@@ -374,7 +374,7 @@ typedef struct s_data
 	t_texture	west_img;
 	t_texture	door_img;
 	t_texture	door_open_img;
-	t_texture	door_animating_img;
+	// t_texture	door_animating_img;
 
 	t_img_data	scope;
 	t_img_data	background_img;

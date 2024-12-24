@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 18:10:15 by atamousse.r       #+#    #+#             */
-/*   Updated: 2024/12/23 22:28:40 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/24 23:35:40 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ void	load_door_frames(void)
 		// data->door.img[i] = safer_xpm_file_to_image(data->mlx, frame_paths[i],
 		// 		&data->door.width, &data->door.height);
 		data->door.images[i].img_data.img = safer_xpm_file_to_image(data->mlx, frame_paths[i],
-				&data->door.width, &data->door.height);
+				&data->door.images[i].width, &data->door.images[i].height);
 		data->door.images[i].img_data.addr
 		= safer_get_data_addr(data->door.images[i].img_data.img,
 			&(data->door.images[i].img_data.bits_per_pixel),
@@ -303,15 +303,15 @@ void	init_door_textures(void)
 			&(data->door_open_img.img_data.bits_per_pixel),
 			&(data->door_open_img.img_data.line_length),
 			&(data->door_open_img.img_data.endian));
-	data->door_animating_img.img_data.img = safer_xpm_file_to_image(data->mlx,
-			"textures/door_frames/13.xpm", &(data->door_animating_img.width),
-			&(data->door_animating_img.height));
-	data->door_animating_img.img_data.addr
-		= safer_get_data_addr(data->door_animating_img.img_data.img,
-			&(data->door_animating_img.img_data.bits_per_pixel),
-			&(data->door_animating_img.img_data.line_length),
-			&(data->door_animating_img.img_data.endian));
-	printf("307 : %p\n", data->door_animating_img.img_data.img);
+	// data->door_animating_img.img_data.img = safer_xpm_file_to_image(data->mlx,
+			// "textures/door_frames/13.xpm", &(data->door_animating_img.width),
+			// &(data->door_animating_img.height));
+	// data->door_animating_img.img_data.addr
+		// = safer_get_data_addr(data->door_animating_img.img_data.img,
+			// &(data->door_animating_img.img_data.bits_per_pixel),
+			// &(data->door_animating_img.img_data.line_length),
+			// &(data->door_animating_img.img_data.endian));
+	// printf("307 : %p\n", data->door_animating_img.img_data.img);
 }
 
 void	init_data(t_game game)
@@ -720,12 +720,12 @@ void	render_closing_door(int door_x, int door_y)
 			data->door.is_closed = 1;
 			data->map[door_y][door_x] = 'D';
 		}
-		data->door_animating_img.img_data.img
-			= data->door.images[data->door.current_frame].img_data.img;
-		data->door_animating_img.img_data.addr
-			= data->door.images[data->door.current_frame].img_data.addr;
+		// data->door_animating_img.img_data.img
+			// = data->door.images[data->door.current_frame].img_data.img;
+		// data->door_animating_img.img_data.addr
+			// = data->door.images[data->door.current_frame].img_data.addr;
 		data->is_updated = 1;
-		printf("724 : %p\n", data->door_animating_img.img_data.img);
+		// printf("724 : %p\n", data->door_animating_img.img_data.img);
 	}
 }
 
@@ -746,12 +746,12 @@ void	render_opening_door(int door_x, int door_y)
 			data->door.is_open = 1;
 			data->map[door_y][door_x] = 'O';
 		}
-		data->door_animating_img.img_data.img
-			= data->door.images[data->door.current_frame].img_data.img;
-		data->door_animating_img.img_data.addr
-			= data->door.images[data->door.current_frame].img_data.addr;
+		// data->door_animating_img.img_data.img
+			// = data->door.images[data->door.current_frame].img_data.img;
+		// data->door_animating_img.img_data.addr
+			// = data->door.images[data->door.current_frame].img_data.addr;
 		data->is_updated = 1;
-		printf("753 : %p\n", data->door_animating_img.img_data.img);
+		// printf("753 : %p\n", data->door_animating_img.img_data.img);
 	}
 }
 
