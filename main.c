@@ -137,9 +137,16 @@ void	load_door_frames(void)
 	i = 0;
 	while (i < 17)
 	{
-		data->door.img[i] = safer_xpm_file_to_image(data->mlx, frame_paths[i],
+		// data->door.img[i] = safer_xpm_file_to_image(data->mlx, frame_paths[i],
+		// 		&data->door.width, &data->door.height);
+		data->door.images[i].img_data.img = safer_xpm_file_to_image(data->mlx, frame_paths[i],
 				&data->door.width, &data->door.height);
-		if (!data->door.img[i])
+		data->door.images[i].img_data.addr
+		= safer_get_data_addr(data->door.images[i].img_data.img,
+			&(data->door.images[i].img_data.bits_per_pixel),
+			&(data->door.images[i].img_data.line_length),
+			&(data->door.images[i].img_data.endian));
+		if (!data->door.images[i].img_data.img)
 		{
 			print_err("Failed to load door frame\n");
 			exiter(1);
@@ -304,6 +311,7 @@ void	init_door_textures(void)
 			&(data->door_animating_img.img_data.bits_per_pixel),
 			&(data->door_animating_img.img_data.line_length),
 			&(data->door_animating_img.img_data.endian));
+	printf("307 : %p\n", data->door_animating_img.img_data.img);
 }
 
 void	init_data(t_game game)
@@ -713,13 +721,11 @@ void	render_closing_door(int door_x, int door_y)
 			data->map[door_y][door_x] = 'D';
 		}
 		data->door_animating_img.img_data.img
-			= data->door.img[data->door.current_frame];
+			= data->door.images[data->door.current_frame].img_data.img;
 		data->door_animating_img.img_data.addr
-			= safer_get_data_addr(data->door_animating_img.img_data.img,
-				&data->door_animating_img.img_data.bits_per_pixel,
-				&data->door_animating_img.img_data.line_length,
-				&data->door_animating_img.img_data.endian);
+			= data->door.images[data->door.current_frame].img_data.addr;
 		data->is_updated = 1;
+		printf("724 : %p\n", data->door_animating_img.img_data.img);
 	}
 }
 
@@ -741,13 +747,11 @@ void	render_opening_door(int door_x, int door_y)
 			data->map[door_y][door_x] = 'O';
 		}
 		data->door_animating_img.img_data.img
-			= data->door.img[data->door.current_frame];
+			= data->door.images[data->door.current_frame].img_data.img;
 		data->door_animating_img.img_data.addr
-			= safer_get_data_addr(data->door_animating_img.img_data.img,
-				&data->door_animating_img.img_data.bits_per_pixel,
-				&data->door_animating_img.img_data.line_length,
-				&data->door_animating_img.img_data.endian);
+			= data->door.images[data->door.current_frame].img_data.addr;
 		data->is_updated = 1;
+		printf("753 : %p\n", data->door_animating_img.img_data.img);
 	}
 }
 
