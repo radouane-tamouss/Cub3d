@@ -1,6 +1,6 @@
-NO ./textures/wood.xpm 
-SO 	./textures/west.xpm
-WE ./textures/south.xpm
+NO ./textures/future_wall.xpm 
+SO 	./textures/future_wall.xpm
+WE ./textures/future_wall.xpm
 EA ./textures/future_wall.xpm
 F 139,69,12
 C 0,0,0

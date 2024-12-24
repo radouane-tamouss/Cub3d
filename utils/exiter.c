@@ -16,90 +16,113 @@
 // destroy all of them as long they're not NULL
 static void multiple_images_destroyer(void **images, unsigned int size)
 {
-    unsigned int i;
+	unsigned int i;
 
-    i = 0;
-    if (images == NULL)
-        return;
-    while (i < size)
-    {
-        if (images[i] != NULL)
-            mlx_destroy_image(get_data()->mlx, images[i]);
-        i++;
-    }
+	i = 0;
+	if (images == NULL) return;
+	while (i < size)
+	{
+		if (images[i] != NULL) mlx_destroy_image(get_data()->mlx, images[i]);
+		i++;
+	}
 }
 
+// void free_texture(t_texture *texture)
+// {
+// 	if (texture && texture->img_data.img)
+// 	{
+// 		mlx_destroy_image(get_data()->mlx, texture->img_data.img);
+// 		texture->img_data.img = NULL;
+// 		texture->img_data.addr = NULL;
+// 	}
+// }
+//
 // this will act as clean exiter , that free and remove leaks before exiting
 void exiter(int code)
 {
-    if (get_data()->mlx != NULL)
-    {
-        multiple_images_destroyer(get_data()->gun2.shooting_frames, 12);
-        multiple_images_destroyer(get_data()->gun2.reloading_frames, 15);
-        multiple_images_destroyer(get_data()->gun.reloading_frames, 18);
-        multiple_images_destroyer(get_data()->gun2.running_frames, 23);
-        multiple_images_destroyer(get_data()->gun2.walking_frames, 13);
-        multiple_images_destroyer(get_data()->gun3.shooting_frames, 15);
-        multiple_images_destroyer(get_data()->gun3.running_frames, 11);        
-        multiple_images_destroyer(get_data()->gun3.reloading_frames, 12);   
-        multiple_images_destroyer(get_data()->gun3.first_scope_frames, 6);   
-        multiple_images_destroyer(get_data()->gun3.last_scope_frames, 5);   
-        multiple_images_destroyer(get_data()->gun3.scope_shooting_frames, 6);           
-        multiple_images_destroyer(get_data()->door.img, 17);
-        int i ;
-        i = 0;
-        while (i < 15)
-        {
-            if (get_data()->dying_frames[i].img_data.img != NULL)
-                mlx_destroy_image(get_data()->mlx, get_data()->dying_frames[i].img_data.img);
-            i++;
-        }
-        i = 0;
-        while (i < 16)
-        {
-            if (get_data()->sprites_frames[i].img_data.img != NULL)
-                mlx_destroy_image(get_data()->mlx, get_data()->sprites_frames[i].img_data.img);
-            i++;
-        }
-        i = 0;
-        while (i < get_data()->num_sprites)
-        {
-            if (get_data()->sprites[i].texture.img_data.img != NULL)
-                mlx_destroy_image(get_data()->mlx, get_data()->sprites[i].texture.img_data.img);
-            i++;
-        }
-        
-        // multiple_images_destroyer(get_data()->sprites_frames, 16);
-        //============================================================
-        //============================================================
-            
-        multiple_images_destroyer(get_data()->gun3.walking_frames, 11);        
+	if (get_data()->mlx != NULL)
+	{
+		multiple_images_destroyer(get_data()->gun2.shooting_frames, 12);
+		multiple_images_destroyer(get_data()->gun2.reloading_frames, 15);
+		multiple_images_destroyer(get_data()->gun.reloading_frames, 18);
+		multiple_images_destroyer(get_data()->gun2.running_frames, 23);
+		multiple_images_destroyer(get_data()->gun2.walking_frames, 13);
+		multiple_images_destroyer(get_data()->gun3.shooting_frames, 15);
+		multiple_images_destroyer(get_data()->gun3.running_frames, 11);
+		multiple_images_destroyer(get_data()->gun3.reloading_frames, 12);
+		multiple_images_destroyer(get_data()->gun3.first_scope_frames, 6);
+		multiple_images_destroyer(get_data()->gun3.last_scope_frames, 5);
+		multiple_images_destroyer(get_data()->gun3.scope_shooting_frames, 6);
+		int i;
+		i = 0;
+		i = 0;
+		while (i < 15)
+		{
+			if (get_data()->dying_frames[i].img_data.img != NULL)
+				mlx_destroy_image(get_data()->mlx,
+								  get_data()->dying_frames[i].img_data.img);
+			i++;
+		}
+		i = 0;
+		while (i < 16)
+		{
+			if (get_data()->sprites_frames[i].img_data.img != NULL)
+				mlx_destroy_image(get_data()->mlx,
+								  get_data()->sprites_frames[i].img_data.img);
+			i++;
+		}
+		i = 0;
+		while (i < get_data()->num_sprites)
+		{
+			if (get_data()->sprites[i].texture.img_data.img != NULL)
+				mlx_destroy_image(get_data()->mlx,
+								  get_data()->sprites[i].texture.img_data.img);
+			i++;
+		}
 
-        if (get_data()->north_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx,
-                              get_data()->north_img.img_data.img);
-        if (get_data()->south_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx,
-                              get_data()->south_img.img_data.img);
-        if (get_data()->east_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx,
-                              get_data()->east_img.img_data.img);
-        if (get_data()->west_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx,
-                              get_data()->west_img.img_data.img);
-        if (get_data()->door_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx,
-                              get_data()->door_img.img_data.img);
-        if (get_data()->door_animating_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx, get_data()->door_animating_img.img_data.img);
-        if (get_data()->door_open_img.img_data.img != NULL)
-            mlx_destroy_image(get_data()->mlx, get_data()->door_open_img.img_data.img);
-        if (get_data()->background_img.img != NULL)
-            mlx_destroy_image(get_data()->mlx, get_data()->background_img.img);
-        mlx_destroy_display(get_data()->mlx);
-        free(get_data()->mlx);
-        // fprintf(stderr, "mlx freed===================================\n");
-    }
-    free_all_heap();
-    exit(code);
+		i = 0;
+		// multiple_images_destroyer(get_data()->sprites_frames, 16);
+		//============================================================
+		//============================================================
+
+		multiple_images_destroyer(get_data()->gun3.walking_frames, 11);
+
+		t_data *data = get_data();
+		if (data == NULL)
+		{
+			printf("Error: get_data() returned NULL\n");
+			return;
+		}
+		if (data->north_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->north_img.img_data.img);
+		if (data->south_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->south_img.img_data.img);
+		if (data->east_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->east_img.img_data.img);
+		if (data->west_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->west_img.img_data.img);
+		if (data->door_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->door_img.img_data.img);
+		if (data->door_animating_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->door_animating_img.img_data.img);
+		// if (data->door_animating_img.img_data.img != NULL)
+		// {
+		// 	printf("Destroying image: %p\n",
+		// 		   data->door_animating_img.img_data.img);
+		// 	mlx_destroy_image(data->mlx, data->door_animating_img.img_data.img);
+		// }
+		// else
+		// {
+		// 	printf("No image to destroy\n");
+		// }
+		if (data->door_open_img.img_data.img != NULL)
+			mlx_destroy_image(data->mlx, data->door_open_img.img_data.img);
+		if (data->background_img.img != NULL)
+			mlx_destroy_image(data->mlx, data->background_img.img);
+		mlx_destroy_display(data->mlx);
+		free(data->mlx);
+		// fprintf(stderr, "mlx freed===================================\n");
+	}
+	free_all_heap();
+	exit(code);
 }

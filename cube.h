@@ -198,19 +198,28 @@ typedef struct s_gun
 //     int    y;
 // } t_door;
 
+typedef struct s_texture
+{
+	char		*path;
+	t_img_data	img_data;
+	int			width;
+	int			height;
+}				t_texture;
+
 typedef struct s_door
 {
-	void	*img[18];
-	int		width;
-	int		height;
-	int		current_frame;
-	int		frame_delay;
-	int		is_opening;
-	int		is_open;
-	int		is_closing;
-	int		is_closed;
-	int		active_x;
-	int		active_y;
+	// void	*img[18];
+	t_texture images[18];
+	int			width;
+	int			height;
+	int			current_frame;
+	int			frame_delay;
+	int			is_opening;
+	int			is_open;
+	int			is_closing;
+	int			is_closed;
+	int			active_x;
+	int			active_y;
 }	t_door;
 
 //======================================
@@ -249,13 +258,6 @@ typedef struct s_map
 
 //======================================
 
-typedef struct s_texture
-{
-	char		*path;
-	t_img_data	img_data;
-	int			width;
-	int			height;
-}				t_texture;
 
 //======================================
 
