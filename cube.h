@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/24 23:35:24 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/25 22:34:47 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,20 +184,6 @@ typedef struct s_gun
 
 //======================================
 
-// typedef struct s_door {
-//     void    *img[18];       // Array to store door frame images
-//     int     width;          // Width of door image
-//     int     height;         // Height of door image
-//     int     current_frame;  // Current frame being displayed
-//     int     frame_delay;    // Delay counter for animation
-//     int     is_opening;     // Flag for opening animation
-//     int     is_open;        // Flag to indicate if door is fully open
-//     int     is_closing;     // Flag for closing animation
-//     int    is_closed;      // Flag to indicate if door is fully closed
-//     int    x;
-//     int    y;
-// } t_door;
-
 typedef struct s_texture
 {
 	char		*path;
@@ -365,15 +351,15 @@ typedef struct s_data
 	int			rotate_left;
 	int			rotate_right;
 	int			show_scope;
-	int			is_tab_pressed;
+	// int			is_tab_pressed;
 	int			is_sound_playing;
 	t_texture	north_img;
 	t_texture	south_img;
 	t_texture	east_img;
-	int			speed;
 	t_texture	west_img;
 	t_texture	door_img;
 	t_texture	door_open_img;
+	int			speed;
 	// t_texture	door_animating_img;
 
 	t_img_data	scope;
@@ -392,16 +378,13 @@ typedef struct s_data
 	t_texture	minimap;
 	int			is_walking;
 	int			is_running;
-	int			is_updated;
+
 	int			dark_mode;
 	t_ray_data	front_ray;
 	t_gun		gun;
-	t_gun		gun2;
-	t_gun		gun3;
 	int			screen_shake_intensity;
 	int			screen_shake_timer;
-	int			show_tab;
-	int			gun_id;
+
 	t_door		door;
 	float		gun_offset_x;
 
@@ -409,7 +392,7 @@ typedef struct s_data
 	t_sprite	*sprites;
 	t_sprite	die_sprite;
 	int			num_sprites;
-	t_img_data	enemie_on_map;
+
 	int 		number_of_shoots;
 
 }				t_data;
