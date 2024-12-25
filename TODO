@@ -8,8 +8,8 @@ TODO work only with t_data structure instead of t_game
 
 TODO remove mlx-linux and use the session one
 TODO remove unwanted files nd useless XPMs
+TODO only one door open at time
 
----
 <!-- TODO for Radouane  "raycasting again" -->
 <!-- TODO Minimap change player make it better, fix doors and add animatin for it,  -->
 <!-- TODO parsing parse door -->

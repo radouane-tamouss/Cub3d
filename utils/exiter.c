@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 23:02:06 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/24 23:45:34 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/25 22:30:29 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,12 @@ void exiter(int code)
 {
 	if (get_data()->mlx != NULL)
 	{
-		multiple_images_destroyer(get_data()->gun2.shooting_frames, 12);
-		multiple_images_destroyer(get_data()->gun2.reloading_frames, 15);
-		multiple_images_destroyer(get_data()->gun.reloading_frames, 18);
-		multiple_images_destroyer(get_data()->gun2.running_frames, 23);
-		multiple_images_destroyer(get_data()->gun2.walking_frames, 13);
-		multiple_images_destroyer(get_data()->gun3.shooting_frames, 15);
-		multiple_images_destroyer(get_data()->gun3.running_frames, 11);
-		multiple_images_destroyer(get_data()->gun3.reloading_frames, 12);
-		multiple_images_destroyer(get_data()->gun3.first_scope_frames, 6);
-		multiple_images_destroyer(get_data()->gun3.last_scope_frames, 5);
-		multiple_images_destroyer(get_data()->gun3.scope_shooting_frames, 6);
+		multiple_images_destroyer(get_data()->gun.shooting_frames, 15);
+		multiple_images_destroyer(get_data()->gun.running_frames, 11);
+		multiple_images_destroyer(get_data()->gun.reloading_frames, 12);
+		multiple_images_destroyer(get_data()->gun.first_scope_frames, 6);
+		multiple_images_destroyer(get_data()->gun.last_scope_frames, 5);
+		multiple_images_destroyer(get_data()->gun.scope_shooting_frames, 6);
 		int i;
 		i = 0;
 		i = 0;
@@ -93,7 +88,7 @@ void exiter(int code)
 		//============================================================
 		//============================================================
 
-		multiple_images_destroyer(get_data()->gun3.walking_frames, 11);
+		multiple_images_destroyer(get_data()->gun.walking_frames, 11);
 
 		t_data *data = get_data();
 		if (data == NULL)

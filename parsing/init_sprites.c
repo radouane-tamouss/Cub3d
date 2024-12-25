@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 17:59:58 by atamousse.r       #+#    #+#             */
-/*   Updated: 2024/12/23 20:41:10 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/25 20:54:27 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ void	init_sprites(t_game *game)
 	int	n;
 
 	i = 0;
-	j = 0;
 	calc_num_sprites(game);
 	if (get_data()->num_sprites == 0)
 		return ;
