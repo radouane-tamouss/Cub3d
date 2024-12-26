@@ -50,15 +50,7 @@ static void	choose_cube_texture(t_ray_data ray, t_texture *texture)
 	else if (ray.object_hitted == 'D')
 		*texture = get_data()->door_img;
 	else if (ray.object_hitted == 'P')
-	{
 		*texture = get_data()->door.images[get_data()->door.current_frame];
-		if (texture->width == 0)
-	{
-		fprintf(stderr, "get_data()->door.current_frame => %d\n", get_data()->door.current_frame);
-		fprintf(stderr, "its zero, pointer => %p\n", texture->img_data.img);
-		exit(1);
-	}
-	}
 	else if (ray.side == 0 && ray.ray_dir.x > 0)
 		*texture = get_data()->east_img;
 	else if (ray.side == 0)
