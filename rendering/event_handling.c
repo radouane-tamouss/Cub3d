@@ -3,179 +3,97 @@
 /*                                                        :::      ::::::::   */
 /*   event_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rtamouss <rtamouss@student.42.fr>          +#+  +:+       +#+        */
+/*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/29 16:50:18 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/11/18 02:43:06by rtamouss         ###   ########.fr       */
+/*   Created: 2024/12/26 01:41:00 by atamousse.red     #+#    #+#             */
+/*   Updated: 2024/12/26 01:41:00 by atamousse.red    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube.h"
 
-int ft_close(void)
+int	ft_close(void)
 {
 	exiter(0);
 	return (0);
 }
 
-// void render_scope()
-// {
-//     void *img;
-//     int width;
-//     int height;
-
-//     img = safer_xpm_file_to_image(get_data()->mlx,
-//     "textures/scope_sniper.xpm", &width, &height); if
-//     (get_data()->show_scope)
-//     {
-//         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img,
-//         (WIN_WIDTH - width) / 2, (WIN_HEIGHT - height) / 2);
-//     }
-// }
-#include <stdio.h>
-#include <stdlib.h>
-
-void play_sound(const char *file)
+void	play_sound(const char *file)
 {
-	char command[256];
-	char *temp = ft_strjoin("paplay ", file);
-	char *command_str = ft_strjoin(temp, " &");
-	ft_strlcpy(command, command_str, sizeof(command));
+	char	command[256];
+	char	*temp;
+	char	*command_str;
+	int		result;
 
-	int result = system(command);
+	temp = ft_strjoin("paplay ", file);
+	command_str = ft_strjoin(temp, " &");
+	ft_strlcpy(command, command_str, sizeof(command));
+	result = system(command);
 	if (result == -1)
 	{
 		perror("system");
 	}
 }
 
-// void render_tab()
-// {
-//     void *img[5];
-//     // void *img[4];
-//     int width;
-//     int height;
-//
-//     img[0] = safer_xpm_file_to_image(
-//         get_data()->mlx, "textures/weapon/weapon1.xpm", &width, &height);
-//     img[1] = safer_xpm_file_to_image(
-//         get_data()->mlx, "textures/weapon/weapon2.xpm", &width, &height);
-//     img[2] = safer_xpm_file_to_image(
-//         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-//     img[3] = safer_xpm_file_to_image(
-//         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-//     img[4] = safer_xpm_file_to_image(
-//         get_data()->mlx, "textures/weapon/weapon3.xpm", &width, &height);
-//
-//     // if (get_data()->gun_id == 0 && get_data()->show_tab)
-//     //     mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[0],
-//     //                             (WIN_WIDTH - width) / 2,
-//     //                             (WIN_HEIGHT - height) / 2);
-//     if (get_data()->gun_id == 1 && get_data()->show_tab)
-//         mlx_put_image_to_window(get_data()->mlx, get_data()->win, img[1],
-//                                 (WIN_WIDTH - width) / 2,
-//                                 (WIN_HEIGHT - height) / 2);
-// }
-
-void update_movement()
+void	update_movement(void)
 {
-	// the parallax effecy achieved by moving the gun in the opposite direction
-	// of the player the gun_offset_x is used to move the gun in the opposite
-	// direction of the player the gun_offset_x is then multiplied by 0.9 to
-	// slow down the movement of the gun
+	float	move_speed;
 
-	float move_speed = 0.7;
-
-	if (get_data()->move_forward) move_forward();
-	if (get_data()->move_backward) move_backward();
+	move_speed = 0.7;
+	if (get_data()->move_forward)
+		move_forward();
+	if (get_data()->move_backward)
+		move_backward();
 	if (get_data()->move_left)
-	{
 		move_left();
-		get_data()->gun_offset_x -= move_speed;
-	}
 	if (get_data()->move_right)
-	{
 		move_right();
-		get_data()->gun_offset_x += move_speed;
-	}
-	// if (get_data()->rotate_left)
-	//     rotate_player(-3.  * (MY_PI / (float)180));
-	// if (get_data()->rotate_right)
-	//     rotate_player(3.  * (MY_PI / (float)180));
 	if (get_data()->rotate_left)
-	{
 		rotate_player(-3.0f * (MY_PI / 180.0f));
-		get_data()->gun_offset_x -= move_speed;
-	}
 	if (get_data()->rotate_right)
-	{
 		rotate_player(3.0f * (MY_PI / 180.0f));
-		get_data()->gun_offset_x += move_speed;
-	}
-
-	get_data()->gun_offset_x *= 0.9;
 	get_data()->is_updated = 1;
 }
 
-int is_enemy_in_middle_of_screen(t_sprite *sprite)
+int	is_enemy_in_middle_of_screen(t_sprite *sprite)
 {
-	t_data *data = get_data();
-	int screen_middle_x = WIN_WIDTH / 2;
+	t_data	*data;
+	int		screen_middle_x;
+	int		display_start_x;
+	int		display_end_x;
 
+	data = get_data();
+	screen_middle_x = WIN_WIDTH / 2;
 	if (sprite != NULL && sprite->is_dead == 0)
 	{
-		int display_start_x = sprite->display_start_x;
-		int display_end_x = sprite->display_end_x;
-
-		if (screen_middle_x >= display_start_x &&
-			screen_middle_x <= display_end_x)
+		display_start_x = sprite->display_start_x;
+		display_end_x = sprite->display_end_x;
+		if (screen_middle_x >= display_start_x
+			&& screen_middle_x <= display_end_x)
 		{
-			return 1;
+			return (1);
 		}
 	}
-	return 0;
+	return (0);
 }
 
-int handle_keys(int keycode, void *garbage)
+void	destroy_window_and_exit(void)
 {
-	(void)garbage;
-	// printf("keycode => %d\n", keycode);
-	if (keycode == ESC)
-	{
-		// fprintf(stderr , "==========heeeereeeeee\n");//
-		mlx_destroy_window(get_data()->mlx, get_data()->win);
+	mlx_destroy_window(get_data()->mlx, get_data()->win);
+	exiter(0);
+}
 
-		exiter(0);
-	}
-	if (keycode == CNTRL_LIN)
-	{
-		get_data()->is_control_pressed = 1;
-		get_data()->show_tab = 1;
-	}
-	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN ||
-		keycode == A_LIN)
-	{
-		// printf("moving\n");
-		if (get_data()->speed >= 10)
-		{
-			get_data()->is_running = 1;
-			get_data()->is_walking = 0;
-		}
-		else
-		{
-			get_data()->is_running = 0;
-			get_data()->is_walking = 1;
-		}
-	}
-	if (keycode == W_LIN) get_data()->move_forward = 1;
-	if (keycode == S_LIN) get_data()->move_backward = 1;
-	if (keycode == D_LIN) get_data()->move_right = 1;
-	if (keycode == A_LIN)
-	{
-		get_data()->move_left = 1;
-	}
-	if (keycode == RIGHT_LIN) get_data()->rotate_right = 1;
-	if (keycode == LEFT_LIN) get_data()->rotate_left = 1;
+int is_moving(int keycode)
+{
+	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN
+		|| keycode == A_LIN)
+		return (1);
+	else
+		return (0);
+}
+
+void	toggle_dark_mode(int keycode)
+{
 	if (keycode == SPACE_LIN)
 	{
 		if (get_data()->dark_mode == 1)
@@ -183,169 +101,117 @@ int handle_keys(int keycode, void *garbage)
 		else
 			get_data()->dark_mode = 1;
 	}
+}
+
+void	handle_moving(int keycode)
+{
+	if (keycode == W_LIN)
+		get_data()->move_forward = 1;
+	if (keycode == S_LIN)
+		get_data()->move_backward = 1;
+	if (keycode == D_LIN)
+		get_data()->move_right = 1;
+	if (keycode == A_LIN)
+		get_data()->move_left = 1;
+	if (keycode == RIGHT_LIN)
+		get_data()->rotate_right = 1;
+	if (keycode == LEFT_LIN)
+		get_data()->rotate_left = 1;
+}
+
+void	control_speed(void)
+{
+	if (get_data()->speed >= 10)
+	{
+		get_data()->is_running = 1;
+		get_data()->is_walking = 0;
+	}
+	else
+	{
+		get_data()->is_running = 0;
+		get_data()->is_walking = 1;
+	}
+}
+
+void	handle_door_helper(int door_x, int door_y)
+{
+	door_x = get_data()->front_ray.map_x;
+	door_y = get_data()->front_ray.map_y;
+	if (get_data()->map[door_y][door_x] == 'D')
+	{
+		get_data()->map[door_y][door_x] = 'P';
+		get_data()->door.is_opening = 1;
+		get_data()->door.current_frame = 0;
+		get_data()->door.frame_delay = 2;
+		get_data()->is_updated = 1;
+	}
+	else if (get_data()->map[door_y][door_x] == 'O')
+	{
+		get_data()->map[door_y][door_x] = 'P';
+		get_data()->door.is_closing = 1;
+		get_data()->door.current_frame = 16;
+		get_data()->door.frame_delay = 0;
+		get_data()->is_updated = 1;
+	}
+}
+
+void	handle_door(int keycode)
+{
+	int	door_x;
+	int	door_y;
+
 	if (keycode == E_LIN)
 	{
-		if ((get_data()->front_ray.object_hitted == 'D' ||
-			 get_data()->front_ray.object_hitted == 'O') &&
-			get_data()->front_ray.dist < 2 * GRID_DIST)
+		if ((get_data()->front_ray.object_hitted == 'D'
+				|| get_data()->front_ray.object_hitted == 'O')
+			&& get_data()->front_ray.dist < 2 * GRID_DIST)
 		{
-			int door_x = get_data()->front_ray.map_x;
-			int door_y = get_data()->front_ray.map_y;
-
-			// Check if it's a door and not already animating
-			if (get_data()->map[door_y][door_x] == 'D')
-			{
-				// Mark this door as animating with 'P'
-				get_data()->map[door_y][door_x] = 'P';
-				get_data()->door.is_opening = 1;
-				get_data()->door.current_frame = 0;
-				get_data()->door.frame_delay = 2;
-				get_data()->is_updated = 1;
-			}
-			else if (get_data()->map[door_y][door_x] == 'O')
-			{
-				// Mark this door as animating closed with 'P'
-				get_data()->map[door_y][door_x] = 'P';
-				get_data()->door.is_closing = 1;
-				get_data()->door.current_frame = 16;
-				get_data()->door.frame_delay = 0;
-				get_data()->is_updated = 1;
-			}
+			handle_door_helper(door_x, door_y);
 			play_sound("sounds/door.wav");
 		}
 	}
+}
 
-	// 	{
-
-	// 	       if (get_data()->front_ray.dist < 2 * GRID_DIST)
-	// 	       {
-	// 	           int map_x = get_data()->front_ray.map_x;
-	// 	           int map_y = get_data()->front_ray.map_y;
-	// 	           char *current_tile = &get_data()->map[map_y][map_x];
-
-	// 	           if (*current_tile == 'D')
-	// 	               *current_tile = 'O';
-	// 	           else if (*current_tile == 'O')
-	// 	               *current_tile = 'D';
-	// 	       }
-
-	// 	       get_data()->is_updated = 1;
-	// 	}
-	//   {
-	//     if ((get_data()->front_ray.object_hitted == 1 ||
-	//     get_data()->front_ray.object_hitted == 2) &&
-	//     get_data()->front_ray.dist < 2 * GRID_DIST)
-	//     {
-	//         get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x]
-	//         = 'D'; get_data()->door.x = get_data()->front_ray.map_x;
-	//         get_data()->door.y = get_data()->front_ray.map_y;
-	//         //
-	//         get_data()->map[get_data()->front_ray.map_y][get_data()->front_ray.map_x]
-	//         = 'O'; if (!get_data()->door.is_open &&
-	//         !get_data()->door.is_opening)
-	//         {
-	//             get_data()->door.is_opening = 1;
-	//             get_data()->door.current_frame = 0;
-	//             get_data()->door.frame_delay = 0;
-	//         }
-	//         else if (get_data()->door.is_open &&
-	//         !get_data()->door.is_closing)
-	//         {
-	//             get_data()->door.is_closing = 1;
-	//             get_data()->door.current_frame = 17;
-	//             get_data()->door.frame_delay = 0;
-	//         }
-
-	//       get_data()->is_updated = 1;
-	//     }
-	// }
-	if (keycode == T_LIN)  // Add proper key define if needed
+void	handle_reload_gun(int keycode)
+{
+	if (keycode == R_LIN)
 	{
-		// printf("gun_id == %d\n", get_data()->gun_id);
 		if (get_data()->gun_id == 2)
 		{
-			// printf("here it should be reloading\n");
 			get_data()->gun3.is_reloading = 1;
 			get_data()->gun3.current_frame = 0;
 			get_data()->gun3.frame_delay = 0;
 			play_sound("sounds/gun3reloadd.wav");
 		}
 	}
-	if (keycode == Z_LIN)
-	{
-		if (get_data()->gun_id == 2)
-		{
-			get_data()->gun3.current_frame = 0;
-			get_data()->gun3.frame_delay = 0;
-			get_data()->gun3.is_showing_scope = 1;
-			if (get_data()->gun3.show_scope)
-			{
-				get_data()->gun3.show_scope = 0;
-				printf("setted to 0\n");
-				// get_data()->zoom_factor = 0.6;
-			}
-			else if (!get_data()->gun3.show_scope)
-			{
-				get_data()->gun3.show_scope = 1;
-				printf("setted to 1\n");
-				// get_data()->zoom_factor = 1;
-			}
-		}
-	}
-	// if (keycode == N_LIN)
-	// {
-	//     printf("n pressed\n");
-	//     if (!get_data()->gun3.is_shooting)
-	//     {
-	//         get_data()->gun_id = 2;
-	//         get_data()->gun3.is_shooting = 1;
-	//         get_data()->gun3.current_frame = 0;
-	//         get_data()->gun3.frame_delay = 0;
-	//         get_data()->gun3.is_reloading = 0;
-	//         get_data()->is_running = 0;
-	//         get_data()->is_walking = 0;
-	//         get_data()->screen_shake_intensity =
-	//             5;                                // Adjust intensity as
-	//             needed
-	//         get_data()->screen_shake_timer = 10;  // Adjust duration as
-	//         needed play_sound("sounds/one_shot_firstgun.wav");
-	//     }
-	// }
+}
 
-	// get_data()->gun3.is_shooting = 1;
-	// get_data()->gun3.current_frame = 5;
-	// get_data()->gun3.frame_delay = 0;
-	// get_data()->gun3.is_reloading = 0;
-	// get_data()->is_running = 0;
-	// get_data()->is_walking = 0;
-	// get_data()->gun3.is_showing_scope = 0;
-	// get_data()->screen_shake_intensity =
-	//     5;  // Adjust intensity as needed
-	// get_data()->screen_shake_timer =
-	//     10;  // Adjust duration as needed
-	// play_sound("sounds/one_shot_firstgun.wav");
-	// if (keycode == LIN_1)
-	//     get_data()->gun_id = 0;
-	if (keycode == LIN_2)
-		get_data()->gun_id = 1;
-	else if (keycode == LIN_3)
-		get_data()->gun_id = 2;
+void	sprint(int keycode)
+{
 	if (keycode == SHIFT_LIN)
-	{
 		get_data()->speed = 10;
-	}
-	if (keycode == TAB_LIN && !get_data()->is_tab_pressed)
-	{
-		get_data()->gun_id++;
-		// if (get_data()->gun_id >= 3) get_data()->gun_id = 0;
-		get_data()->show_tab = 1;
-		get_data()->is_tab_pressed = 1;
-	}
+}
+
+int	handle_keys(int keycode, void *garbage)
+{
+	int	door_x;
+	int	door_y;
+
+	(void)garbage;
+	if (keycode == ESC)
+		destroy_window_and_exit();
+	if (is_moving(keycode))
+		control_speed();
+	handle_moving(keycode);
+	toggle_dark_mode(keycode);
+	handle_door(keycode);
+	handle_reload_gun(keycode);
+	sprint(keycode);
 	get_data()->is_updated = 1;
 	return (0);
 }
 
-int key_release(int keycode, void *garbage)
+int	key_release(int keycode, void *garbage)
 {
 	(void)garbage;
 	if (keycode == CNTRL_LIN)
@@ -366,11 +232,6 @@ int key_release(int keycode, void *garbage)
 		get_data()->rotate_left = 0;
 	else if (keycode == Z_LIN)
 		get_data()->show_scope = 0;
-	else if (keycode == TAB_LIN)
-	{
-		get_data()->is_tab_pressed = 0;
-		get_data()->show_tab = 0;
-	}
 	else if (keycode == SHIFT_LIN)
 		get_data()->speed = 8;
 	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN ||
@@ -379,7 +240,6 @@ int key_release(int keycode, void *garbage)
 		if (get_data()->move_backward == 0 && get_data()->move_forward == 0 &&
 			get_data()->move_left == 0 && get_data()->move_right == 0)
 		{
-			// printf("not moving\n");
 			get_data()->is_running = 0;
 			get_data()->is_walking = 0;
 		}
@@ -387,11 +247,13 @@ int key_release(int keycode, void *garbage)
 	return (0);
 }
 
+
+
 int handle_mouse_event(int button, int x, int y, void *param)
 {
 	if (button == 1)
 	{
-		if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading)
+		if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading && !get_data()->gun3.is_showing_scope)
 		{
 			get_data()->gun3.is_shooting = 1;
 			get_data()->gun3.current_frame = 0;
@@ -402,7 +264,6 @@ int handle_mouse_event(int button, int x, int y, void *param)
 			get_data()->gun3.is_showing_scope = 0;
 			get_data()->screen_shake_intensity =
 				5;	// Adjust intensity as needed
-			// printf("num sprites: %d\n", get_data()->num_sprites);
 			for (int i = get_data()->num_sprites - 1; i >= 0; --i)
 			{
 				float angle;
@@ -413,7 +274,7 @@ int handle_mouse_event(int button, int x, int y, void *param)
 					get_data()->sprites[i].current_frame = 0;
 					get_data()->is_updated = 1;
 					get_data()->screen_shake_timer =
-						10;	 // Adjust duration as needed
+						10;
 					break;
 				}
 			}
@@ -422,42 +283,39 @@ int handle_mouse_event(int button, int x, int y, void *param)
 			get_data()->number_of_shoots++;
 		}
 	}
+	else if (button != 1 && button == 3)
+	{
+		if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading && !get_data()->gun3.is_shooting)
+		{
+				get_data()->gun3.current_frame = 0;
+				get_data()->gun3.frame_delay = 0;
+				get_data()->gun3.is_showing_scope = 1;
+				if (get_data()->gun3.show_scope)
+					get_data()->gun3.show_scope = 0;
+				else if (!get_data()->gun3.show_scope)
+					get_data()->gun3.show_scope = 1;
+		}
+	}
+	else if (button == 4)
+	{
+			get_data()->zoom_factor -= 0.04;
+			if (get_data()->zoom_factor < 0.7)
+				get_data()->zoom_factor = 0.7;
+	}
+	else if (button == 5)
+	{
+			get_data()->zoom_factor += 0.04;
+			if (get_data()->zoom_factor > 1)
+				get_data()->zoom_factor = 1;
+	}
 	return (0);
 }
 
-int mouse_event(int x, int y, void *par)
+int	mouse_event(int x, int y, void *par)
 {
 	(void)par;
-	// if (get_data()->mouse_pos.x > x)
-	// 	rotate_player(-.5 * (MY_PI / 180));
-	// else
-	// 	rotate_player(.5 * (MY_PI / 180));
-	if (get_data()->is_tab_pressed)
-	{
-		// printf("x=>%d  , y => %d\n", x, y);
-		if (y < 488 || y > 680 || x < 270 ||
-			y > 1327)  // the y cors should be =---=> 400 to 700 and x shold be
-					   // betwen 150 and 1460
-			return (0);
-		// if (x < 460)// X from 150 to ---------------> 470
-		//     get_data()->gun_id = 1;
-		// // else
-		//     get_data()->gun_id = 1;
-		// else if (x < 670)// X from 470 to ---------------> 800
-		// else if (x < 870)
-		//     get_data()->gun_id = 2;
-		// else if (x < 1125)
-		//     get_data()->gun_id = 3;
-		// else
-		//     get_data()->gun_id = 0;
-		// X from 800 to ---------------> 1130
-		// X from 1130 to ---------------> 1460
-	}
-	else
-	{
-		rotate_player(-.5 * (get_data()->mouse_pos.x - x) * (MY_PI / 180));
-		get_data()->mouse_pos.x = x;
-	}
+	rotate_player(-.5 * (get_data()->mouse_pos.x - x) * (MY_PI / 180));
+	get_data()->mouse_pos.x = x;
 	get_data()->is_updated = 1;
 	return (0);
 }

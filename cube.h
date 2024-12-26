@@ -39,7 +39,6 @@
 // # define MINIMAP_CENTER (SQUARE_SIZE * 5)
 
 //=== buttons ====
-# define TAB 65289
 # define CTRL 65507
 # define ESC 65307
 # define Q 113
@@ -118,7 +117,6 @@ unsigned char	get_b(unsigned int trgb);
 # define F_MAC 3
 # define CNTRL_MAC 256
 # define SHIFT_MAC 257
-# define TAB_MAC 48
 # define N_MAC 45
 
 # define LIN_1 49
@@ -135,12 +133,12 @@ unsigned char	get_b(unsigned int trgb);
 # define UP_LIN 65362
 # define DOWN_LIN 65364
 # define E_LIN 101
+# define R_LIN 114
 # define T_LIN 116
 # define Y_LIN 121
 # define Z_LIN 122
 # define F_LIN 102
 # define CNTRL_LIN 65507
-# define TAB_LIN 65289
 # define N_LIN 110
 # define H_LIN 104
 # define SHIFT_LIN 65505
@@ -365,7 +363,6 @@ typedef struct s_data
 	int			rotate_left;
 	int			rotate_right;
 	int			show_scope;
-	int			is_tab_pressed;
 	int			is_sound_playing;
 	t_texture	north_img;
 	t_texture	south_img;
@@ -400,10 +397,8 @@ typedef struct s_data
 	t_gun		gun3;
 	int			screen_shake_intensity;
 	int			screen_shake_timer;
-	int			show_tab;
 	int			gun_id;
 	t_door		door;
-	float		gun_offset_x;
 
 	float		zoom_factor;
 	t_sprite	*sprites;
@@ -439,6 +434,7 @@ t_data			*get_data(void);
 
 //=== parsing ===========================================
 // clang-format off
+void	perform_dda(t_ray_data ray, int data_taken, int col);
 t_game			init_game_struct(void);
 char			**init_map(int fd, char *file, t_map *m2);
 void			pad_map_with_spaces(t_game *game);
@@ -505,7 +501,6 @@ int				check_charset(char *charset, char c);
 t_game			check_map(int fd, char *file);
 int				check_file(char *str, int *fd);
 int				check_if_player_direction(char c);
-void			render_tab(void);
 void			render_transparent_frame(void *frame_img, int width,
 			int height);
 void			play_sound(const char *file);
