@@ -479,7 +479,6 @@ void			init_sprites(t_game *game);
 // split by charset
 
 void			update_enemy_frames(void);
-int				should_render(t_sprite *sprite, float *angle);
 char			**ft_split2(char const *s, char *charset);
 int				check_charset(char *charset, char c);
 t_game			check_map(int fd, char *file);
@@ -488,12 +487,28 @@ int				check_if_player_direction(char c);
 void			render_transparent_frame(void *frame_img, int width,
 			int height);
 void			play_sound(const char *file);
-
 int				handle_mouse_event(int button, int x, int y, void *param);
 //=======================================================
 //=== rendering =========================================
+void			render_sprites(void);
+void			render_sprite(t_sprite sprite);
+int				should_render(t_sprite *sprite, float *angle);
+int				sprite_angle_valide(t_sprite *sprite, float *angle);
+void			find_display_postion(t_sprite *sprite, float angle);
+void			update_dying_frames(t_sprite *sprite);
+void			update_enemies_data(void);
+void			sprite_on_minimap(t_vector dir);
+void			enemy_move(t_sprite *sprite, t_vector dir);
+void			calc_square_points_pos(t_vector *square_position,
+					t_vector center, float square_lenght);
+int	is_enemy_in_middle_of_screen(t_sprite *sprite);
 int				ray_hit_sprite(t_ray_data ray, t_sprite sprite);
-
+void	destroy_window_and_exit(void);
+void	control_speed(void);
+void	toggle_dark_mode(int keycode);
+void	handle_door(int keycode);
+void	handle_reload_gun(int keycode);
+void	sprint(int keycode);
 void			load_dying_sprite_frames(void);
 void			load_load_sprite_frames(void);
 void			put_pixel(t_img_data *img, int x, int y, int color);
@@ -541,7 +556,6 @@ void render_walls(void);
 void render_minimap(void);
 //
 t_ray_data create_ray(float angle);
-void render_sprites(void);
 void	next_step_square(t_vector *next_step_square, t_vector center, float square_lenght, t_vector dir);
 void	render_square(int x, int y, int color);
 void	render_line(float x1, float y1, float x2, float y2);
