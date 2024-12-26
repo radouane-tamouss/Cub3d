@@ -78,7 +78,7 @@ void	render_transparent_frame(void *frame_img, int width, int height)
 	current_frame.addr = safer_get_data_addr(current_frame.img,
 			&current_frame.bits_per_pixel, &current_frame.line_length,
 			&current_frame.endian);
-	pos_x = (WIN_WIDTH / 2 - width / 2) + (int)get_data()->gun_offset_x;
+	pos_x = (WIN_WIDTH / 2 - width / 2);
 	pos_y = WIN_HEIGHT - height + 4;
 	put_xpm_image(&get_data()->background_img, &current_frame, pos_x, pos_y);
 }
@@ -200,8 +200,8 @@ void	initialize_variables(t_game *game)
 	data->rotate_right = 0;
 	data->show_scope = 0;
 	data->zoom_factor = 1;
+	data->gun_id = 1;
 	data->number_of_shoots = 0;
-	data->gun_offset_x = 0.0;
 }
 
 void	init_north_south_textures(t_game *game)
@@ -891,16 +891,17 @@ void	render_show_scope_frames(void)
 	t_data	*data;
 
 	data = get_data();
+	printf("zoom factor = %f\n", get_data()->zoom_factor);
 	if (data->gun.frame_delay++ >= 8)
 	{
 		data->gun.frame_delay = 1;
 		data->gun.current_frame++;
-		data->zoom_factor -= 0.09;
+		data->zoom_factor -= 0.08;
 		if (data->gun.current_frame >= 5)
 		{
 			data->gun.current_frame = 5;
 			data->gun.is_showing_scope = 0;
-			data->zoom_factor += 0.06;
+			data->zoom_factor += 0.04;
 		}
 	}
 	render_transparent_frame(
@@ -913,6 +914,7 @@ void	render_unshowing_scope(void)
 	t_data	*data;
 
 	data = get_data();
+	printf("zoom factor = %f\n", get_data()->zoom_factor);
 	if (data->gun.frame_delay++ >= 8)
 	{
 		data->gun.frame_delay = 1;
@@ -987,15 +989,15 @@ void	render_gun(void)
 
 int	loop_hook(void)
 {
-		update_movement();
-		init_background();
-		render_walls();
-		render_minimap();
-		render_sprites();
-		update_door_animation();
-		render_background();
-		render_gun();
-		render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT / 2, 7, BLACK);
+	update_movement();
+	init_background();
+	render_walls();
+	render_minimap();
+	render_sprites();
+	update_door_animation();
+	render_background();
+	render_gun();
+	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT / 2 + 20, 4, BLACK);
 	return (0);
 }
 
