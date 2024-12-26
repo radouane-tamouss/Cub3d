@@ -83,7 +83,7 @@ void	destroy_window_and_exit(void)
 	exiter(0);
 }
 
-int is_moving(int keycode)
+int	is_moving(int keycode)
 {
 	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN
 		|| keycode == A_LIN)
@@ -211,13 +211,8 @@ int	handle_keys(int keycode, void *garbage)
 	return (0);
 }
 
-int	key_release(int keycode, void *garbage)
+void	key_release_helper(int keycode)
 {
-	(void)garbage;
-	if (keycode == CNTRL_LIN)
-	{
-		get_data()->is_control_pressed = 0;
-	}
 	if (keycode == W_LIN)
 		get_data()->move_forward = 0;
 	else if (keycode == S_LIN)
@@ -230,15 +225,22 @@ int	key_release(int keycode, void *garbage)
 		get_data()->rotate_right = 0;
 	else if (keycode == LEFT_LIN)
 		get_data()->rotate_left = 0;
-	else if (keycode == Z_LIN)
-		get_data()->show_scope = 0;
-	else if (keycode == SHIFT_LIN)
-		get_data()->speed = 8;
-	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN ||
-		keycode == A_LIN)
+}
+
+int	key_release(int keycode, void *garbage)
+{
+	(void)garbage;
+	if (keycode == CNTRL_LIN)
 	{
-		if (get_data()->move_backward == 0 && get_data()->move_forward == 0 &&
-			get_data()->move_left == 0 && get_data()->move_right == 0)
+		get_data()->is_control_pressed = 0;
+	}
+	key_release_helper(keycode);
+	if (keycode == SHIFT_LIN)
+		get_data()->speed = 5;
+	if (is_moving(keycode))
+	{
+		if (get_data()->move_backward == 0 && get_data()->move_forward == 0
+			&& get_data()->move_left == 0 && get_data()->move_right == 0)
 		{
 			get_data()->is_running = 0;
 			get_data()->is_walking = 0;
@@ -247,67 +249,86 @@ int	key_release(int keycode, void *garbage)
 	return (0);
 }
 
+void	kill_enemies(void)
+{
+	int		i;
+	float	angle;
 
+	i = get_data()->num_sprites - 1;
+	while (i >= 0)
+	{
+		if (is_enemy_in_middle_of_screen(&get_data()->sprites[i])
+			&& should_render(&get_data()->sprites[i], &angle))
+		{
+			get_data()->sprites[i].is_dying = 1;
+			get_data()->sprites[i].current_frame = 0;
+			get_data()->is_updated = 1;
+			get_data()->screen_shake_timer = 10;
+			break ;
+		}
+		i--;
+	}
+}
 
-int handle_mouse_event(int button, int x, int y, void *param)
+void	handle_left_mouse_click(void)
+{
+	if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading
+		&& !get_data()->gun3.is_showing_scope)
+	{
+		get_data()->gun3.is_shooting = 1;
+		get_data()->gun3.current_frame = 0;
+		get_data()->gun3.frame_delay = 0;
+		get_data()->gun3.is_reloading = 0;
+		get_data()->is_running = 0;
+		get_data()->is_walking = 0;
+		get_data()->gun3.is_showing_scope = 0;
+		get_data()->screen_shake_intensity = 5;
+		kill_enemies();
+		get_data()->screen_shake_timer = 10;
+		play_sound("sounds/one_shot_firstgun.wav");
+		get_data()->number_of_shoots++;
+	}
+}
+
+void	decrease_zoom_factor(void)
+{
+	get_data()->zoom_factor -= 0.04;
+	if (get_data()->zoom_factor < 0.7)
+		get_data()->zoom_factor = 0.7;
+}
+
+void	increase_zoom_factor(void)
+{
+	get_data()->zoom_factor += 0.04;
+	if (get_data()->zoom_factor > 1)
+		get_data()->zoom_factor = 1;
+}
+
+void	handle_right_mouse_click(void)
+{
+	if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading
+		&& !get_data()->gun3.is_shooting)
+	{
+		get_data()->gun3.current_frame = 0;
+		get_data()->gun3.frame_delay = 0;
+		get_data()->gun3.is_showing_scope = 1;
+		if (get_data()->gun3.show_scope)
+			get_data()->gun3.show_scope = 0;
+		else if (!get_data()->gun3.show_scope)
+			get_data()->gun3.show_scope = 1;
+	}
+}
+
+int	handle_mouse_event(int button, int x, int y, void *param)
 {
 	if (button == 1)
-	{
-		if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading && !get_data()->gun3.is_showing_scope)
-		{
-			get_data()->gun3.is_shooting = 1;
-			get_data()->gun3.current_frame = 0;
-			get_data()->gun3.frame_delay = 0;
-			get_data()->gun3.is_reloading = 0;
-			get_data()->is_running = 0;
-			get_data()->is_walking = 0;
-			get_data()->gun3.is_showing_scope = 0;
-			get_data()->screen_shake_intensity =
-				5;	// Adjust intensity as needed
-			for (int i = get_data()->num_sprites - 1; i >= 0; --i)
-			{
-				float angle;
-				if (is_enemy_in_middle_of_screen(&get_data()->sprites[i]) &&
-					should_render(&get_data()->sprites[i], &angle))
-				{
-					get_data()->sprites[i].is_dying = 1;
-					get_data()->sprites[i].current_frame = 0;
-					get_data()->is_updated = 1;
-					get_data()->screen_shake_timer =
-						10;
-					break;
-				}
-			}
-			get_data()->screen_shake_timer = 10;  // Adjust duration as needed
-			play_sound("sounds/one_shot_firstgun.wav");
-			get_data()->number_of_shoots++;
-		}
-	}
+		handle_left_mouse_click();
 	else if (button != 1 && button == 3)
-	{
-		if (get_data()->gun_id == 2 && !get_data()->gun3.is_reloading && !get_data()->gun3.is_shooting)
-		{
-				get_data()->gun3.current_frame = 0;
-				get_data()->gun3.frame_delay = 0;
-				get_data()->gun3.is_showing_scope = 1;
-				if (get_data()->gun3.show_scope)
-					get_data()->gun3.show_scope = 0;
-				else if (!get_data()->gun3.show_scope)
-					get_data()->gun3.show_scope = 1;
-		}
-	}
+		handle_right_mouse_click();
 	else if (button == 4)
-	{
-			get_data()->zoom_factor -= 0.04;
-			if (get_data()->zoom_factor < 0.7)
-				get_data()->zoom_factor = 0.7;
-	}
+		decrease_zoom_factor();
 	else if (button == 5)
-	{
-			get_data()->zoom_factor += 0.04;
-			if (get_data()->zoom_factor > 1)
-				get_data()->zoom_factor = 1;
-	}
+		increase_zoom_factor();
 	return (0);
 }
 
