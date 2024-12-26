@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 18:10:15 by atamousse.r       #+#    #+#             */
-/*   Updated: 2024/12/25 22:55:33 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/26 23:27:10 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,6 @@ void	load_door_frames(void)
 			&(data->door.images[i].img_data.bits_per_pixel),
 			&(data->door.images[i].img_data.line_length),
 			&(data->door.images[i].img_data.endian));
-		if (!data->door.images[i].img_data.img)
-		{
-			print_err("Failed to load door frame\n");
-			exiter(1);
-		}
 		i++;
 	}
 	data->door.current_frame = 0;
@@ -997,7 +992,7 @@ int	loop_hook(void)
 	update_door_animation();
 	render_background();
 	render_gun();
-	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT / 2 + 20, 4, BLACK);
+	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT * 0.57f, 5, BLACK);
 	return (0);
 }
 

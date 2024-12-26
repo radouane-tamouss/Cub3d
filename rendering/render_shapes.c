@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 14:51:56 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/23 15:09:11 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/26 02:32:10 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	render_square(int x, int y, int color)
 		j = 0;
 		while (j < SQUARE_SIZE)
 		{
-			if (calc_dist(j + x, i + y, center) <= (5 * SQUARE_SIZE - 3))
+			if (calc_dist(j + x, i + y, center) <= (5 * SQUARE_SIZE - 4))
 				put_pixel(&(get_data()->background_img), j + x, i + y, color);
 			++j;
 		}
@@ -53,7 +53,7 @@ void	render_square(int x, int y, int color)
 	}
 }
 
-void	render_line(float x1, float y1, float x2, float y2)// TODO norm this
+void	render_line(float x1, float y1, float x2, float y2)
 {
 	float	max;
 	float	x_step;
