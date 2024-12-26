@@ -33,7 +33,6 @@ ${LIBFT} :
 
 %.o: %.c
 	$(CC) ${CFLAGS} -Imlx -c $< -o $@ -O3
-#	$(CC) ${CFLAGS} -c $< -o $@
 
 clean :
 	${RM} ${OFILES}
