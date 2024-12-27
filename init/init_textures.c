@@ -55,4 +55,3 @@ void	init_north_south_textures(t_game *game)
 			&(data->south_img.img_data.line_length),
 			&(data->south_img.img_data.endian));
 }
-
