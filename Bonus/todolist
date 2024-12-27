@@ -1,0 +1,37 @@
+[x] fix master branch , reset the old commit and merge again --> 00:40
+[x] push the the nvim to github
+[x] add door animation [x] door is opening [x] door is closing
+[x] add parallax effect to the gun
+
+---------------- TODAYS PROGRESS ----------------
+
+
+
+
+
+
+[x] add dying feature and keep the enemy at his place
+[x] add shooting with mouse
+[x] add frames for enemy
+[x] add parsing for the door
+[x] fix parsing space next to zero. 
+[x] learn tmux use basic thinks to work in your project
+what i did so far
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+[x] fix still richable leaks in parsing
+[x] fix norms for parsing.c
+[x] add some tmux shortcuts to make the work faster
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+[x] complete norms for parsing.c
+[x] fix norms for header file
+[x] fix enemy die after wall
+[x] do not enter the door if P
+
+[x] fix walking frames and zooming...
+
+[x] start norms for main.c
+[x] fix render gun
+[ ] add home page, and settings
+[ ] split parsing from bonus
+
+

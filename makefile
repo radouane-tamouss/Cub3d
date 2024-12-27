@@ -6,32 +6,24 @@ CFLAGS =  -O3 -flto -g3 #-fsanitize=address #-Werror -Wextra -Wall
 MLX_FLAGS = -I/usr/include -L/usr/lib -lXext -lX11 -lm -lz -O3 -lmlx
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c ./garbage_collector/safer_func.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
-RENDER_FILES = rendering/animate_sprite_utils.c\
-rendering/background.c\
+RENDER_FILES = rendering/background.c\
 rendering/color.c\
 rendering/event_handling.c\
 rendering/event_handling_utils.c\
 rendering/ft_math.c\
-rendering/handle_door.c\
 rendering/key_movments.c\
-rendering/minimap.c\
 rendering/mouse_movements.c\
 rendering/movement.c\
 rendering/put_pixel.c\
 rendering/ray.c\
-rendering/rendering_sprites.c\
 rendering/render_shapes.c\
 rendering/rotation.c\
 rendering/sprite_movements.c\
 rendering/vector.c\
 rendering/walls.c\
-rendering/door.c\
-rendering/transparent.c\
-rendering/animations/gun_reloading.c\
-rendering/animations/gun.c\
-rendering/animations/scope.c
-INIT = init/load_scope_frames.c init/load_gun_frames.c init/init_textures.c init/init_scope.c init/init_gun.c init/init_enemy.c init/init_data.c init/init_door.c init/init_enemy.c
-PARSING_FILES = parsing/check_file.c  parsing/check_map.c  parsing/check_map_utils.c parsing/check_player.c  parsing/init_sprites.c\
+rendering/transparent.c
+INIT = init/init_data.c init/init_textures.c
+PARSING_FILES = parsing/check_file.c  parsing/check_map.c  parsing/check_map_utils.c parsing/check_player.c  \
 	parsing/map_utils2.c  parsing/map_utils.c  parsing/other_functions.c  parsing/parse_colors.c  parsing/parse_textures_and_color_infos.c  parsing/parse_textures.c
 CFILES = main.c ${INIT} ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR} ${GET_NEXT_LINE_FILES} ft_split_charset.c
 OFILES = ${CFILES:.c=.o}

@@ -12,6 +12,13 @@
 
 #include "../cube.h"
 
+t_data	*get_data(void)
+{
+	static t_data	data;
+
+	return (&data);
+}
+
 void	init_data_helper(t_game *game)
 {
 	t_data	*data;
@@ -49,7 +56,6 @@ void	hooks(void)
 	mlx_hook(data->win, 3, 1L << 1, key_release, NULL);
 	mlx_hook(data->win, 17, 1L << 0, ft_close, NULL);
 	mlx_hook(data->win, 6, 1L << 6, mouse_event, NULL);
-	mlx_mouse_hook(data->win, handle_mouse_event, NULL);
 }
 
 void	initialize_variables(t_game *game)
@@ -72,10 +78,6 @@ void	initialize_variables(t_game *game)
 	data->move_right = 0;
 	data->rotate_left = 0;
 	data->rotate_right = 0;
-	data->show_scope = 0;
-	data->zoom_factor = 1;
-	data->gun_id = 1;
-	data->number_of_shoots = 0;
 }
 
 void	init_data(t_game game)
@@ -89,5 +91,4 @@ void	init_data(t_game game)
 	initialize_variables(&game);
 	init_north_south_textures(&game);
 	init_west_east_textures(&game);
-	init_door_textures();
 }

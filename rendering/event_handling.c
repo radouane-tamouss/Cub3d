@@ -38,28 +38,6 @@ void	update_movement(void)
 		rotate_player(3.0f * (MY_PI / 180.0f));
 }
 
-int	is_enemy_in_middle_of_screen(t_sprite *sprite)
-{
-	t_data	*data;
-	int		screen_middle_x;
-	int		display_start_x;
-	int		display_end_x;
-
-	data = get_data();
-	screen_middle_x = WIN_WIDTH / 2;
-	if (sprite != NULL && sprite->is_dead == 0)
-	{
-		display_start_x = sprite->display_start_x;
-		display_end_x = sprite->display_end_x;
-		if (screen_middle_x >= display_start_x
-			&& screen_middle_x <= display_end_x)
-		{
-			return (1);
-		}
-	}
-	return (0);
-}
-
 void	destroy_window_and_exit(void)
 {
 	mlx_destroy_window(get_data()->mlx, get_data()->win);
