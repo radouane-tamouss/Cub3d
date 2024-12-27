@@ -6,14 +6,29 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 00:49:30 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/27 00:40:45 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/27 02:25:37 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cube.h"
 
-void	*safer_get_data_addr(void *img, int *bits_per_pixel,
-				int *size_line, int *endian)
+// void    *safer_new_image(void *mlx, int width, int height)//TODO not used yet
+// {
+//     void    *img;
+
+//     if (width <= 0 || height <= 0 || mlx == NULL)
+//         exiter(1);
+//     img = mlx_new_image(mlx, width, height);
+//     if (img == NULL)
+//     {
+// 		print_err("CUB3D: mlx failed\n");
+//         exiter(1);
+//     }
+//     return (img);
+// }
+
+void	*safer_get_data_addr(void *img, int *bits_per_pixel, int *size_line,
+		int *endian)
 {
 	void	*addr;
 
@@ -29,8 +44,8 @@ void	*safer_get_data_addr(void *img, int *bits_per_pixel,
 	return (addr);
 }
 
-void	*safer_xpm_file_to_image(void *xvar, char *filename,
-					int *width, int *height)
+void	*safer_xpm_file_to_image(void *xvar, char *filename, int *width,
+		int *height)
 {
 	void	*img;
 
