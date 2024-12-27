@@ -38,25 +38,24 @@ void	pad_map_with_spaces_helper(t_game *game, int j, int i, int map_width)
 
 void	check_invalid_map_helper(t_game *game, int i, int j)
 {
-	if ((i > 0 && (game->map.grid[i - 1][j] != '0' && game->map.grid[i
-				- 1][j] != '1' && game->map.grid[i - 1][j] != 'D'
-				&& !check_if_player_direction(game->map.grid[i - 1][j])))
-		|| (i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0'
-				&& game->map.grid[i + 1][j] != '1' && game->map.grid[i
-				+ 1][j] != 'D' && !check_if_player_direction(game->map.grid[i
-					+ 1][j]))) || // below
-		(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j
-				- 1] != '1' && game->map.grid[i][j - 1] != 'D'
-				&& !check_if_player_direction(game->map.grid[i][j - 1])))
+	if ((i > 0
+		&& (game->map.grid[i - 1][j] != '0'
+		&& game->map.grid[i - 1][j] != '1'
+		&& !check_if_player_direction(game->map.grid[i - 1][j])))
+			|| (i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0'
+				&& game->map.grid[i + 1][j] != '1'
+				&& !check_if_player_direction(game->map.grid[i + 1][j]))) || // below
+		(j > 0
+		&& (game->map.grid[i][j - 1] != '0'
+		&& game->map.grid[i][j - 1] != '1'
+		&& !check_if_player_direction(game->map.grid[i][j - 1])))
 			|| (j < (int)ft_strlen(game->map.grid[i]) - 1
-			&& (game->map.grid[i][j + 1] != '0' && game->map.grid[i][j
-				+ 1] != '1' && game->map.grid[i][j + 1] != 'D'
+				&& (game->map.grid[i][j + 1] != '0'
+				&& game->map.grid[i][j + 1] != '1'
 				&& !check_if_player_direction(game->map.grid[i][j + 1]))))
 	{
 		if (check_if_player_direction(game->map.grid[i][j]) == 1)
 			printf("invalid player direction at (%d, %d)\n", i, j);
-		else if (game->map.grid[i][j] == 'D')
-			printf("invalid door at (%d, %d)\n", i, j);
 		else
 			printf("invalid zero at (%d, %d)\n", i, j);
 		exiter(1);
@@ -112,8 +111,7 @@ void	check_invalid_map(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] == 'M' && game->map.grid[i][j] == '0'
-				|| game->map.grid[i][j] == 'D'
+			if (game->map.grid[i][j] == '0'
 				|| check_if_player_direction(game->map.grid[i][j]) == 1)
 			{
 				check_invalid_map_helper(game, i, j);

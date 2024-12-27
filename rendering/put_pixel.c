@@ -45,13 +45,7 @@ unsigned int	pull_pixel(t_texture img, int x, int y)
 
 static void	choose_cube_texture(t_ray_data ray, t_texture *texture)
 {
-	if (ray.object_hitted == 'O')
-		*texture = get_data()->door_open_img;
-	else if (ray.object_hitted == 'D')
-		*texture = get_data()->door_img;
-	else if (ray.object_hitted == 'P')
-		*texture = get_data()->door.images[get_data()->door.current_frame];
-	else if (ray.side == 0 && ray.ray_dir.x > 0)
+	if (ray.side == 0 && ray.ray_dir.x > 0)
 		*texture = get_data()->east_img;
 	else if (ray.side == 0)
 		*texture = get_data()->west_img;

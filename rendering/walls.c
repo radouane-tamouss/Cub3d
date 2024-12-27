@@ -19,8 +19,7 @@ void	draw_col(t_ray_data ray, int col)
 	int	i;
 
 	ray.wall_height = (GRID_DIST / (ray.dist * cos(ray.angle
-					- get_data()->player_angle))) * ((WIN_WIDTH / 2) / tan((FOV
-					* get_data()->zoom_factor) / 2));
+					- get_data()->player_angle))) * ((WIN_WIDTH / 2) / tan(FOV / 2));
 	start = (WIN_HEIGHT - (int)ray.wall_height) / 2;
 	end = start + (int)ray.wall_height;
 	if (start < 0)
@@ -105,8 +104,8 @@ void	render_walls(void)
 	while (col < WIN_WIDTH)
 	{
 		ray_angle = normalise_angle(get_data()->player_angle
-				- ((FOV * get_data()->zoom_factor) / 2)
-				+ (col * ((FOV * get_data()->zoom_factor) / WIN_WIDTH)));
+				- (FOV / 2)
+				+ (col * (FOV / WIN_WIDTH)));
 		perform_dda(create_ray(ray_angle), 0, col);
 		++col;
 	}

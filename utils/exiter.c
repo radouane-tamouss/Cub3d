@@ -49,13 +49,6 @@ static	void	destroy_remaining_images(void)
 	int	i;
 
 	i = 0;
-	while (i < get_data()->num_sprites)
-	{
-		if (get_data()->sprites[i].texture.img_data.img != NULL)
-			mlx_destroy_image(get_data()->mlx,
-				get_data()->sprites[i].texture.img_data.img);
-		++i;
-	}
 	if (get_data()->north_img.img_data.img != NULL)
 		mlx_destroy_image(get_data()->mlx, get_data()->north_img.img_data.img);
 	if (get_data()->south_img.img_data.img != NULL)
@@ -64,11 +57,6 @@ static	void	destroy_remaining_images(void)
 		mlx_destroy_image(get_data()->mlx, get_data()->east_img.img_data.img);
 	if (get_data()->west_img.img_data.img != NULL)
 		mlx_destroy_image(get_data()->mlx, get_data()->west_img.img_data.img);
-	if (get_data()->door_img.img_data.img != NULL)
-		mlx_destroy_image(get_data()->mlx, get_data()->door_img.img_data.img);
-	if (get_data()->door_open_img.img_data.img != NULL)
-		mlx_destroy_image(get_data()->mlx,
-			get_data()->door_open_img.img_data.img);
 	if (get_data()->background_img.img != NULL)
 		mlx_destroy_image(get_data()->mlx, get_data()->background_img.img);
 }
@@ -78,16 +66,6 @@ void	exiter(int code)
 {
 	if (get_data()->mlx != NULL)
 	{
-		multiple_images_destroyer(get_data()->gun.shooting_frames, 15);
-		multiple_images_destroyer(get_data()->gun.running_frames, 11);
-		multiple_images_destroyer(get_data()->gun.reloading_frames, 12);
-		multiple_images_destroyer(get_data()->gun.first_scope_frames, 6);
-		multiple_images_destroyer(get_data()->gun.last_scope_frames, 5);
-		multiple_images_destroyer(get_data()->gun.scope_shooting_frames, 6);
-		multiple_textures_destroyer(get_data()->dying_frames, 15);
-		multiple_textures_destroyer(get_data()->sprites_frames, 16);
-		multiple_textures_destroyer(get_data()->door.images, 17);
-		multiple_images_destroyer(get_data()->gun.walking_frames, 11);
 		destroy_remaining_images();
 		mlx_destroy_display(get_data()->mlx);
 		free(get_data()->mlx);

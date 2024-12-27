@@ -17,25 +17,8 @@ int	loop_hook(void)
 	update_movement();
 	init_background();
 	render_walls();
-	render_minimap();
-	render_sprites();
-	update_door_animation();
 	render_background();
-	render_gun();
-	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT * 0.57f, 5, BLACK);
 	return (0);
-}
-
-void	load_all_frames(void)
-{
-	load_shooting_gun3_frames();
-	load_running_gun3_frames();
-	load_reloading_gun3_frames();
-	load_first_scope_frames();
-	load_last_scope_frames();
-	load_shooting_scope_frames();
-	load_walking_gun3_frames();
-	load_door_frames();
 }
 
 int	main(int ac, char **av)
@@ -48,14 +31,9 @@ int	main(int ac, char **av)
 	game = check_map(fd, av[1]);
 	close(fd);
 	init_data(game);
-	init_sprites(&game);
 	init_background();
 	render_walls();
-	render_minimap();
-	render_sprites();
 	render_background();
-	load_all_frames();
-	render_gun();
 	mlx_loop_hook(get_data()->mlx, loop_hook, NULL);
 	mlx_loop(get_data()->mlx);
 	return (0);
