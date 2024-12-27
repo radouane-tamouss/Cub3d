@@ -40,3 +40,30 @@ void	initialize_zoom_shoot_frames_paths(char *frame_paths[])
 	frame_paths[4] = "textures/zoom_shoot_gun3/10.xpm";
 	frame_paths[5] = "textures/zoom_shoot_gun3/10.xpm";
 }
+
+t_data	*get_data(void)
+{
+	static t_data	data;
+
+	return (&data);
+}
+
+void	render_frame(void)
+{
+	int		shake_x;
+	int		shake_y;
+
+	shake_x = 0;
+	shake_y = 0;
+	if (get_data()->screen_shake_timer > 0)
+	{
+		shake_x = (rand() % (2 * get_data()->screen_shake_intensity))
+			- get_data()->screen_shake_intensity;
+		shake_y = (rand() % (2 * get_data()->screen_shake_intensity))
+			- get_data()->screen_shake_intensity;
+		get_data()->screen_shake_timer--;
+	}
+	mlx_clear_window(get_data()->mlx, get_data()->win);
+	mlx_put_image_to_window(get_data()->mlx, get_data()->win,
+		get_data()->background_img.img, shake_x, shake_y);
+}

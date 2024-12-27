@@ -31,7 +31,7 @@
 # define WIN_HEIGHT 720
 # define WIN_WIDTH 1280
 # define MY_PI 3.14159265358979323846
-# define FOV (60 * (MY_PI / 180))
+# define FOV 1.0471975511965976 // (60 * (MY_PI / 180))
 # define GRID_DIST 80
 # define ZOOM 100
 # define ENEMY_SPEED 0.2
@@ -372,6 +372,7 @@ typedef struct s_data
 t_data			*get_data(void);
 
 //=== parsing ===========================================
+void			render_frame(void);
 void			perform_dda(t_ray_data ray, int data_taken, int col);
 t_game			init_game_struct(void);
 char			**init_map(int fd, char *file, t_map *m2);
@@ -512,57 +513,58 @@ void			render_line(float x1, float y1, float x2, float y2);
 void			print_err(char *str);
 void			exiter(int code);
 //=== init ==============================================
-void	init_data_helper(t_game *game);
-void	hooks(void);
-void	initialize_variables(t_game *game);
-void	init_data(t_game game);
-void	initialize_door_frames_paths(char *frame_paths[]);
-void	load_door_frames(void);
-void	init_door_textures_helper(void);
-void	init_door_textures(void);
-void	update_enemy_frames(void);
-void	initialize_dying_zombie_frames_paths(char *frame_paths[]);
-void	load_dying_sprite_frames(void);
-void	initialize_load_sprite_frames_paths(char *frame_paths[]);
-void	initialize_gun3shoot_frames_paths(char *frame_paths[]);
-void	initialize_running_gun3_frames_paths(char *frame_paths[]);
-void	initialize_reloading_gun3_frames_paths(char *frame_paths[]);
-void	initialize_walking_frames_paths(char *frame_paths[]);
-void	initialize_first_scope_frames_paths(char *frame_paths[]);
-void	initialize_last_scope_frames_paths(char *frame_paths[]);
-void	initialize_zoom_shoot_frames_paths(char *frame_paths[]);
-void	init_west_east_textures(t_game *game);
-void	init_north_south_textures(t_game *game);
-void	load_shooting_gun3_frames(void);
-void	load_running_gun3_frames(void);
-void	load_reloading_gun3_frames(void);
-void	load_walking_gun3_frames(void);
-void	load_first_scope_frames(void);
-void	load_last_scope_frames(void);
-void	load_shooting_scope_frames(void);
-void	render_transparent_frame(void *frame_img, int width, int height);
-void	put_xpm_image(t_img_data *dest, t_img_data *src, int start_x,
-		int start_y);
-int	init_dest_src_y_data(int **dest_data, int **src_data, t_img_data *dest,
-		t_img_data *src);
-void	update_door_animation(void);
-int	find_door_position(int *door_x, int *door_y);
-void	render_opening_door(int door_x, int door_y);
-void	render_closing_door(int door_x, int door_y);
-void	render_reloading(void);
-void	reload_gun_when_empty(void);
-void	render_frirst_gun_frame(void);
-void	render_last_frame_gun(void);
-void	render_gun_frames(int num_frames, t_gun *gun, int frame_delay);
-void	render_shootin_frames(void);
-void	render_walking(void);
-void	render_running(void);
-void	render_gun(void);
-void	handle_shooting_animation(void);
-void	render_scope_shooting_frames(void);
-void	render_unshowing_scope(void);
-void	render_show_scope_frames(void);
-//=======================================================
-void	load_load_sprite_frames(void);
+void			init_data_helper(t_game *game);
+void			hooks(void);
+void			initialize_variables(t_game *game);
+void			init_data(t_game game);
+void			initialize_door_frames_paths(char *frame_paths[]);
+void			load_door_frames(void);
+void			init_door_textures_helper(void);
+void			init_door_textures(void);
+void			update_enemy_frames(void);
+void			initialize_dying_zombie_frames_paths(char *frame_paths[]);
+void			load_dying_sprite_frames(void);
+void			initialize_load_sprite_frames_paths(char *frame_paths[]);
+void			initialize_gun3shoot_frames_paths(char *frame_paths[]);
+void			initialize_running_gun3_frames_paths(char *frame_paths[]);
+void			initialize_reloading_gun3_frames_paths(char *frame_paths[]);
+void			initialize_walking_frames_paths(char *frame_paths[]);
+void			initialize_first_scope_frames_paths(char *frame_paths[]);
+void			initialize_last_scope_frames_paths(char *frame_paths[]);
+void			initialize_zoom_shoot_frames_paths(char *frame_paths[]);
+void			init_west_east_textures(t_game *game);
+void			init_north_south_textures(t_game *game);
+void			load_shooting_gun3_frames(void);
+void			load_running_gun3_frames(void);
+void			load_reloading_gun3_frames(void);
+void			load_walking_gun3_frames(void);
+void			load_first_scope_frames(void);
+void			load_last_scope_frames(void);
+void			load_shooting_scope_frames(void);
+void			render_transparent_frame(void *frame_img, int width,
+					int height);
+void			put_xpm_image(t_img_data *dest, t_img_data *src, int start_x,
+					int start_y);
+int				init_dest_src_y_data(int **dest_data, int **src_data,
+					t_img_data *dest, t_img_data *src);
+void			update_door_animation(void);
+int				find_door_position(int *door_x, int *door_y);
+void			render_opening_door(int door_x, int door_y);
+void			render_closing_door(int door_x, int door_y);
+void			render_reloading(void);
+void			reload_gun_when_empty(void);
+void			render_frirst_gun_frame(void);
+void			render_last_frame_gun(void);
+void			render_gun_frames(int num_frames, t_gun *gun, int frame_delay);
+void			render_shootin_frames(void);
+void			render_walking(void);
+void			render_running(void);
+void			render_gun(void);
+void			handle_shooting_animation(void);
+void			render_scope_shooting_frames(void);
+void			render_unshowing_scope(void);
+void			render_show_scope_frames(void);
+//======		=================================================
+void			load_load_sprite_frames(void);
 
 #endif
