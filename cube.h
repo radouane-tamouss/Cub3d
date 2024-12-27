@@ -6,7 +6,7 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 20:55:34 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/25 22:34:47 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/27 02:17:55 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include "garbage_collector/heap_controller.h"	//=== garbage collector
 # include "lib/get_next_line.h"
 # include "lib/libft/libft.h"
-// # include "mlx-linux/mlx.h"
 # include <mlx.h>
 
 //== const sizes =========
@@ -37,7 +36,6 @@
 # define ZOOM 100
 # define ENEMY_SPEED 0.2
 # define SQUARE_SIZE 16
-// # define MINIMAP_CENTER (SQUARE_SIZE * 5)
 
 //=== buttons ====
 # define CTRL 65507
@@ -88,17 +86,14 @@ typedef struct s_img_data
 # define BROWN 0xCC6600
 # define CYAN 0x00ffff
 //-- manipulating colors --
+
 unsigned int	create_trgb(unsigned char t, unsigned char r, unsigned char g,
 					unsigned char b);
 unsigned char	get_t(unsigned int trgb);
 unsigned char	get_r(unsigned int trgb);
 unsigned char	get_g(unsigned int trgb);
 unsigned char	get_b(unsigned int trgb);
-// # define create_trgb(t, r, g, b) (t << 24 | r << 16 | g << 8 | b)
-// # define get_t(trgb) ((trgb >> 24) & 0xFF)
-// # define get_r(trgb) ((trgb >> 16) & 0xFF)
-// # define get_g(trgb) ((trgb >> 8) & 0xFF)
-// # define get_b(trgb) (trgb & 0xFF)
+
 //=== keys
 //
 # define W_MAC 13
@@ -192,10 +187,7 @@ typedef struct s_texture
 
 typedef struct s_door
 {
-	// void	*img[18];
 	t_texture	images[18];
-	// int			width;
-	// int			height;
 	int			current_frame;
 	int			frame_delay;
 	int			is_opening;
@@ -287,11 +279,6 @@ typedef struct s_vector
 	float		x;
 	float		y;
 }				t_vector;
-//==== square box collider ==================================
-// typedef struct s_square
-// {
-//     t_vector    points[4];
-// }   t_square;
 
 //======== casted ray data =================
 typedef struct s_ray_data
@@ -307,10 +294,7 @@ typedef struct s_ray_data
 	float		angle;
 	float		dist;
 	float		wall_height;
-	int			object_hitted; // wall 0  & close door 1 & open door 2
-		// above each other (example: door will render above\
-		// another door that will
-		// render above a wall)
+	int			object_hitted;
 }				t_ray_data;
 
 //= Sprites structure============================
@@ -527,6 +511,58 @@ void			render_line(float x1, float y1, float x2, float y2);
 //=== utils =============================================
 void			print_err(char *str);
 void			exiter(int code);
+//=== init ==============================================
+void	init_data_helper(t_game *game);
+void	hooks(void);
+void	initialize_variables(t_game *game);
+void	init_data(t_game game);
+void	initialize_door_frames_paths(char *frame_paths[]);
+void	load_door_frames(void);
+void	init_door_textures_helper(void);
+void	init_door_textures(void);
+void	update_enemy_frames(void);
+void	initialize_dying_zombie_frames_paths(char *frame_paths[]);
+void	load_dying_sprite_frames(void);
+void	initialize_load_sprite_frames_paths(char *frame_paths[]);
+void	initialize_gun3shoot_frames_paths(char *frame_paths[]);
+void	initialize_running_gun3_frames_paths(char *frame_paths[]);
+void	initialize_reloading_gun3_frames_paths(char *frame_paths[]);
+void	initialize_walking_frames_paths(char *frame_paths[]);
+void	initialize_first_scope_frames_paths(char *frame_paths[]);
+void	initialize_last_scope_frames_paths(char *frame_paths[]);
+void	initialize_zoom_shoot_frames_paths(char *frame_paths[]);
+void	init_west_east_textures(t_game *game);
+void	init_north_south_textures(t_game *game);
+void	load_shooting_gun3_frames(void);
+void	load_running_gun3_frames(void);
+void	load_reloading_gun3_frames(void);
+void	load_walking_gun3_frames(void);
+void	load_first_scope_frames(void);
+void	load_last_scope_frames(void);
+void	load_shooting_scope_frames(void);
+void	render_transparent_frame(void *frame_img, int width, int height);
+void	put_xpm_image(t_img_data *dest, t_img_data *src, int start_x,
+		int start_y);
+int	init_dest_src_y_data(int **dest_data, int **src_data, t_img_data *dest,
+		t_img_data *src);
+void	update_door_animation(void);
+int	find_door_position(int *door_x, int *door_y);
+void	render_opening_door(int door_x, int door_y);
+void	render_closing_door(int door_x, int door_y);
+void	render_reloading(void);
+void	reload_gun_when_empty(void);
+void	render_frirst_gun_frame(void);
+void	render_last_frame_gun(void);
+void	render_gun_frames(int num_frames, t_gun *gun, int frame_delay);
+void	render_shootin_frames(void);
+void	render_walking(void);
+void	render_running(void);
+void	render_gun(void);
+void	handle_shooting_animation(void);
+void	render_scope_shooting_frames(void);
+void	render_unshowing_scope(void);
+void	render_show_scope_frames(void);
 //=======================================================
+void	load_load_sprite_frames(void);
 
 #endif

@@ -24,10 +24,16 @@ rendering/render_shapes.c\
 rendering/rotation.c\
 rendering/sprite_movements.c\
 rendering/vector.c\
-rendering/walls.c
+rendering/walls.c\
+rendering/door.c\
+rendering/transparent.c\
+rendering/animations/gun_reloading.c\
+rendering/animations/gun.c\
+rendering/animations/scope.c
+INIT = init/load_scope_frames.c init/load_gun_frames.c init/init_textures.c init/init_scope.c init/init_gun.c init/init_enemy.c init/init_data.c init/init_door.c init/init_enemy.c
 PARSING_FILES = parsing/check_file.c  parsing/check_map.c  parsing/check_map_utils.c parsing/check_player.c  parsing/init_sprites.c\
 	parsing/map_utils2.c  parsing/map_utils.c  parsing/other_functions.c  parsing/parse_colors.c  parsing/parse_textures_and_color_infos.c  parsing/parse_textures.c
-CFILES = main.c ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR} ${GET_NEXT_LINE_FILES} ft_split_charset.c
+CFILES = main.c ${INIT} ${RENDER_FILES} ${PARSING_FILES} ${UTILS_FILES} ${GARBAGE_COLLECTOR} ${GET_NEXT_LINE_FILES} ft_split_charset.c
 OFILES = ${CFILES:.c=.o}
 NAME = cub3D
 
