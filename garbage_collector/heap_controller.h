@@ -6,10 +6,11 @@
 /*   By: eouhrich <eouhrich@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 01:17:41 by eouhrich          #+#    #+#             */
-/*   Updated: 2024/12/27 00:37:14 by eouhrich         ###   ########.fr       */
+/*   Updated: 2024/12/27 02:25:45 by eouhrich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// clang-format off
 #ifndef HEAP_CONTROLLER_H
 # define HEAP_CONTROLLER_H
 # include <stdlib.h>
@@ -19,16 +20,18 @@ typedef struct s_heap
 {
 	void			*ptr;
 	struct s_heap	*next;
-}	t_heap;
-// the api functions to use 
+}					t_heap;
 
-void	*mallocate(size_t size);
-void	free_all_heap(void);
-void	free_ptr(void *ptr);
+// the api functions to use
+
+void				*mallocate(size_t size);
+void				free_all_heap(void);
+void				free_ptr(void *ptr);
 
 // a safer version of the functions that could possibly fail
-void	*safer_xpm_file_to_image(void *xvar, char *filename,
-			int *width, int *height);
-void	*safer_get_data_addr(void *img, int *bits_per_pixel,
-			int *size_line, int *endian);
+void				*safer_xpm_file_to_image(void *xvar, char *filename,
+						int *width, int *height);
+void				*safer_get_data_addr(void *img, int *bits_per_pixel,
+						int *size_line, int *endian);
+
 #endif
