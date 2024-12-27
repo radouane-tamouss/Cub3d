@@ -102,14 +102,14 @@ char	*ft_strdup(const char *s1)
 
 void	ft_putstr(char *str)
 {
-    int	i;
-    ssize_t ret;
+	int		i;
+	ssize_t	ret;
 
-    i = 0;
-    while (str[i])
-    {
-        ret = write(1, &str[i], 1);
-        (void)ret; // Explicitly ignore the return value
-        i++;
-    }
+	i = 0;
+	while (str[i])
+	{
+		ret = write(1, &str[i], 1);
+		(void)ret;
+		i++;
+	}
 }

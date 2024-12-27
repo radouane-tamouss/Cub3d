@@ -2,7 +2,8 @@ CC = cc
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
 CFLAGS =  -O3 -flto -g3 #-fsanitize=address #-Werror -Wextra -Wall 
-MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
+# MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
+MLX_FLAGS = -I/usr/include -L/usr/lib -lXext -lX11 -lm -lz -O3 -lmlx
 GARBAGE_COLLECTOR = ./garbage_collector/heap_controller.c ./garbage_collector/safer_func.c
 UTILS_FILES =  utils/exiter.c utils/print_err.c 
 RENDER_FILES = rendering/animate_sprite_utils.c\
@@ -44,7 +45,7 @@ ${NAME} : ${OFILES} ${LIBFT}
 	$(CC) ${CFLAGS}  $^ -o $(NAME) ${MLX_FLAGS}
 
 ${LIBFT} :
-	@make re -C mlx-linux
+	# @make re -C mlx-linux
 	@make -C $(LIBFT_DIR)
 	@make bonus -C $(LIBFT_DIR)
 	@echo "\033[0;32m[LIBFT COMPILED]\033[0m"
