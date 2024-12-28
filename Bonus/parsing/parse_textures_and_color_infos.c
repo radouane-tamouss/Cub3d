@@ -18,10 +18,10 @@ void	split_and_trime_whitespaces(char **rgb, char *color)
 	int	i;
 	int	j;
 
-	(void) color;
+	(void)color;
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
 	{
-		printf("here Error: Invalid color format\n");
+		print_err("Valid color format");
 		exiter(1);
 	}
 	i = 0;
@@ -32,7 +32,7 @@ void	split_and_trime_whitespaces(char **rgb, char *color)
 		{
 			if (!ft_isdigit(rgb[i][j]) && !ft_isspace(rgb[i][j]))
 			{
-				printf("Error: Invalid number in color format\n");
+				print_err("Invalid number in color format");
 				exiter(1);
 			}
 			j++;
@@ -45,7 +45,7 @@ void	check_for_null_pointers(char *color, t_color *color_struct)
 {
 	if (!color || !color_struct)
 	{
-		printf("Error: Invalid color parameters\n");
+		print_err("Invalid color parameters");
 		exiter(1);
 	}
 }
@@ -54,30 +54,29 @@ void	validate_split(char **split)
 {
 	if (split == NULL || split[0] == NULL)
 	{
-		printf("Error: Invalid map\n");
+		print_err("Invalid map");
 		exiter(1);
 	}
 	else if (split[1] == NULL || split[2] != NULL)
 	{
-		printf("Error: Invalid Map\n");
+		print_err("Invalid Map");
 		exiter(1);
 	}
 	if (check_file_extension(split[1]) == 0 && ft_strcmp(split[0], "F") != 0
 		&& ft_strcmp(split[0], "C") != 0)
 	{
-		printf("Error: Invalid file extension\n");
+		print_err("Invalid file extension");
 		exiter(1);
 	}
 }
 
-void	parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
+void	parse_texture_and_colors_info(char *line, t_game *game)
 {
 	char	**split;
 	int		i;
 
-	i = 0;
+	i = -1;
 	split = ft_split2(line, " \t\r\n\v\f");
-	(void) map;
 	validate_split(split);
 	if (ft_strcmp(split[0], "NO") == 0)
 		parse_north_texture(game, split);
@@ -91,10 +90,9 @@ void	parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 		check_floor_color(game, split);
 	else if (ft_strcmp(split[0], "C") == 0)
 		check_ceiling_color(game, split);
-	while (split[i])
-	{
+	else
+		(print_err("Invalide Identifier for Texture"), exiter(1));
+	while (split[++i])
 		free_ptr(split[i]);
-		i++;
-	}
 	free_ptr(split);
 }
