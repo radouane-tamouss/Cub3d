@@ -12,12 +12,13 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	render_closing_door(int door_x, int door_y)
 {
 	t_data	*data;
 
 	data = get_data();
-	if (data->door.frame_delay++ >= 3)
+	if (data->door.frame_delay++ >= DOOR_FRAME_DELAY)
 	{
 		data->door.frame_delay = 0;
 		data->door.current_frame--;
@@ -37,7 +38,7 @@ void	render_opening_door(int door_x, int door_y)
 	t_data	*data;
 
 	data = get_data();
-	if (data->door.frame_delay++ >= 3)
+	if (data->door.frame_delay++ >= DOOR_FRAME_DELAY)
 	{
 		data->door.frame_delay = 0;
 		data->door.current_frame++;

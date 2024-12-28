@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	ray_hit_sprite(t_ray_data ray, t_sprite sprite)
 {
 	char	current_tile;
@@ -96,7 +97,7 @@ void	update_dying_frames(t_sprite *sprite)
 {
 	int	i;
 
-	if (sprite->frame_delay >= 10)
+	if (sprite->frame_delay >= DYING_FRAME_DELAY)
 	{
 		sprite->current_dying_frame++;
 		if (sprite->current_dying_frame >= 14)

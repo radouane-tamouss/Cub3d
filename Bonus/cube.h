@@ -37,6 +37,15 @@
 # define ENEMY_SPEED 0.2
 # define SQUARE_SIZE 16
 
+# define DOOR_FRAME_DELAY 5
+# define SHOOTING_FRAME_DELAY 5
+# define WALKING_FRAME_DELAY 10
+# define RUNNING_FRAME_DELAY 12 
+# define ENEMY_FRAME_DELAY 30
+# define DYING_FRAME_DELAY 14
+# define SHOW_SCOPE_FRAME_DELAY 14
+# define RELOADING_FRAME_DELAY 14
+
 //=== buttons ====
 # define CTRL 65507
 # define ESC 65307

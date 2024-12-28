@@ -12,12 +12,13 @@
 
 #include "../../cube.h"
 
+// clang-format off
 void	render_show_scope_frames(void)
 {
 	t_data	*data;
 
 	data = get_data();
-	if (data->gun.frame_delay++ >= 8)
+	if (data->gun.frame_delay++ >= SHOW_SCOPE_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 1;
 		data->gun.current_frame++;
@@ -39,7 +40,7 @@ void	render_unshowing_scope(void)
 	t_data	*data;
 
 	data = get_data();
-	if (data->gun.frame_delay++ >= 8)
+	if (data->gun.frame_delay++ >= SHOW_SCOPE_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 1;
 		data->gun.current_frame++;
@@ -60,7 +61,7 @@ void	render_scope_shooting_frames(void)
 	t_data	*data;
 
 	data = get_data();
-	if (data->gun.frame_delay++ >= 5)
+	if (data->gun.frame_delay++ >= SHOOTING_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 1;
 		data->gun.current_frame++;

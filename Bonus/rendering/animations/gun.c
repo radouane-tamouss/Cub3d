@@ -34,7 +34,7 @@ void	render_shootin_frames(void)
 
 	data = get_data();
 	render_gun_frames(15, &data->gun, 6);
-	if (data->gun.frame_delay++ >= 5)
+	if (data->gun.frame_delay++ >= SHOOTING_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 1;
 		data->gun.current_frame++;
@@ -56,7 +56,7 @@ void	render_walking(void)
 	t_data	*data;
 
 	data = get_data();
-	if (data->gun.frame_delay++ >= 6)
+	if (data->gun.frame_delay++ >= WALKING_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 0;
 		data->gun.current_frame = (data->gun.current_frame + 1) % 11;
@@ -71,7 +71,7 @@ void	render_running(void)
 	t_data	*data;
 
 	data = get_data();
-	if (data->gun.frame_delay++ >= 10)
+	if (data->gun.frame_delay++ >= RUNNING_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 0;
 		data->gun.current_frame = (data->gun.current_frame + 1) % 11;
