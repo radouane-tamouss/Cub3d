@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	ft_close(void)
 {
 	mlx_destroy_window(get_data()->mlx, get_data()->win);
@@ -21,9 +22,6 @@ int	ft_close(void)
 
 void	update_movement(void)
 {
-	float	move_speed;
-
-	move_speed = 0.7;
 	if (get_data()->move_forward)
 		move_forward();
 	if (get_data()->move_backward)

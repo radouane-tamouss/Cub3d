@@ -39,6 +39,7 @@ void	init_sprites_helper(t_game *game, int i, int j, int n)
 	t_data	*data;
 
 	data = get_data();
+	(void) game;
 	data->sprites[n].position.x
 		= j * GRID_DIST + ((float)GRID_DIST / 2);
 	data->sprites[n].position.y

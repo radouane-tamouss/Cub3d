@@ -13,6 +13,7 @@
 //clang-format off
 #include "../cube.h"
 
+// clang-format off
 void	sort_sprites(void)
 {
 	t_sprite	tmp_sprite;
@@ -63,7 +64,6 @@ void	render_sprite_helper(t_sprite sprite, int *pixel_x, int i, int j)
 
 int	should_render(t_sprite *sprite, float *angle)
 {
-	t_vector	vector_to_sprite;
 	t_ray_data	start_ray;
 	t_ray_data	end_ray;
 
@@ -88,7 +88,6 @@ void	render_sprite(t_sprite sprite)
 	int	i;
 	int	j;
 	int	pixel_x;
-	int	pixel_y;
 
 	j = ft_max(sprite.display_start_x, 0.0f);
 	while (j < sprite.display_end_x && j < WIN_WIDTH)

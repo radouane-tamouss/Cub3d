@@ -52,6 +52,7 @@ void	collect_front_ray_data(t_ray_data *ray, char current_tile,
 int	check_hitting_object(t_ray_data *ray, char current_tile, int data_taken,
 		int col)
 {
+	(void)col;
 	if (current_tile == '1')
 		collect_front_ray_data(ray, current_tile, &data_taken);
 	else

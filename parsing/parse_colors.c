@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	ft_count_commas(char *str)
 {
 	int	i;
@@ -31,9 +32,6 @@ int	ft_count_commas(char *str)
 void	parse_color(char *color, t_color *color_struct)
 {
 	char	**rgb;
-	int		i;
-	int		j;
-	int		count;
 
 	check_for_null_pointers(color, color_struct);
 	count_commas_and_validate_basic_format(color, color_struct);
@@ -42,7 +40,6 @@ void	parse_color(char *color, t_color *color_struct)
 	color_struct->r = ft_atoi(rgb[0]);
 	color_struct->g = ft_atoi(rgb[1]);
 	color_struct->b = ft_atoi(rgb[2]);
-	i = 0;
 	if (color_struct->r < 0 || color_struct->r > 255 || color_struct->g < 0
 		|| color_struct->g > 255 || color_struct->b < 0
 		|| color_struct->b > 255)
@@ -90,6 +87,7 @@ void	count_commas_and_validate_basic_format(char *color,
 	int	count;
 	int	i;
 
+	(void) color_struct;
 	count = ft_count_commas(color);
 	if (count != 2)
 	{

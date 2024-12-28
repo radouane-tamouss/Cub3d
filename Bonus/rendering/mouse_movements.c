@@ -49,6 +49,9 @@ void	handle_right_mouse_click(void)
 
 int	handle_mouse_event(int button, int x, int y, void *param)
 {
+	(void) x;
+	(void) y;
+	(void) param;
 	if (button == 1)
 		handle_left_mouse_click();
 	else if (button != 1 && button == 3)
@@ -63,6 +66,7 @@ int	handle_mouse_event(int button, int x, int y, void *param)
 int	mouse_event(int x, int y, void *par)
 {
 	(void)par;
+	(void)y;
 	rotate_player(-.5 * (get_data()->mouse_pos.x - x) * (MY_PI / 180));
 	get_data()->mouse_pos.x = x;
 	return (0);

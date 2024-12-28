@@ -12,12 +12,13 @@
 
 #include "../../cube.h"
 
+// clang-format off
 void	render_reloading(void)
 {
 	t_data	*data;
 
 	data = get_data();
-	if (data->gun.frame_delay++ >= 23)
+	if (data->gun.frame_delay++ >= RELOADING_FRAME_DELAY)
 	{
 		data->gun.frame_delay = 1;
 		data->gun.current_frame++;

@@ -18,6 +18,7 @@ void	split_and_trime_whitespaces(char **rgb, char *color)
 	int	i;
 	int	j;
 
+	(void) color;
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
 	{
 		printf("here Error: Invalid color format\n");
@@ -76,6 +77,7 @@ void	parse_texture_and_colors_info(char *line, t_game *game, t_map *map)
 
 	i = 0;
 	split = ft_split2(line, " \t\r\n\v\f");
+	(void) map;
 	validate_split(split);
 	if (ft_strcmp(split[0], "NO") == 0)
 		parse_north_texture(game, split);
