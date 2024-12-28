@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	initialize_door_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/door_frames/1.xpm";

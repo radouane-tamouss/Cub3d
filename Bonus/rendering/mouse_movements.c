@@ -12,10 +12,10 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	handle_left_mouse_click(void)
 {
-	if (!get_data()->gun.is_reloading
-		&& !get_data()->gun.is_showing_scope)
+	if (!get_data()->gun.is_reloading && !get_data()->gun.is_showing_scope)
 	{
 		get_data()->gun.is_shooting = 1;
 		get_data()->gun.current_frame = 0;
@@ -34,8 +34,8 @@ void	handle_left_mouse_click(void)
 
 void	handle_right_mouse_click(void)
 {
-	if (!get_data()->gun.is_reloading
-		&& !get_data()->gun.is_shooting && !get_data()->gun.is_showing_scope)
+	if (!get_data()->gun.is_reloading && !get_data()->gun.is_shooting
+		&& !get_data()->gun.is_showing_scope)
 	{
 		get_data()->gun.current_frame = 0;
 		get_data()->gun.frame_delay = 0;

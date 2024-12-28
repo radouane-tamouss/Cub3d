@@ -12,6 +12,7 @@
 
 #include "../../cube.h"
 
+// clang-format off
 void	render_gun_frames(int num_frames, t_gun *gun, int frame_delay)
 {
 	if (gun->frame_delay++ >= frame_delay)

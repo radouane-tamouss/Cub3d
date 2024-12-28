@@ -12,21 +12,19 @@
 
 #include "../cube.h"
 
+// clang-format off
+
 void	move_forward(void)
 {
 	t_vector	square[4];
 
-	next_step_square(square, get_data()->player_pos,
-		((float)GRID_DIST / 10), get_data()->player_dir);
+	next_step_square(square, get_data()->player_pos, ((float)GRID_DIST / 10),
+		get_data()->player_dir);
 	if (square[0].x != '1' && square[1].x != '1' && square[2].x != '1'
-		&& square[3].x != '1'
-		&& square[2].x != 'D' && square[3].x != 'D' && square[0].x != 'P'
-		&& square[1].x != 'P' && square[2].x != 'P' && square[3].x != 'P')
+		&& square[3].x != '1')
 		get_data()->player_pos.x += get_data()->player_dir.x;
 	if (square[0].y != '1' && square[1].y != '1' && square[2].y != '1'
-		&& square[3].y != '1' && square[0].y != 'D' && square[1].y != 'D'
-		&& square[2].y != 'D' && square[3].y != 'D' && square[0].y != 'P'
-		&& square[1].y != 'P' && square[2].y != 'P' && square[3].y != 'P')
+		&& square[3].y != '1')
 		get_data()->player_pos.y += get_data()->player_dir.y;
 }
 

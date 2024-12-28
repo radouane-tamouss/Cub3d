@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	handle_door_helper(int door_x, int door_y)
 {
 	door_x = get_data()->front_ray.map_x;

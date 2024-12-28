@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	calc_num_sprites(t_game *game)
 {
 	int	i;

@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	initialize_gun3shoot_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/gun3shoot/1.xpm";

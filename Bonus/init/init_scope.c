@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	initialize_first_scope_frames_paths(char *frame_paths[])
 {
 	frame_paths[0] = "textures/zoom_shoot_gun3/1.xpm";
