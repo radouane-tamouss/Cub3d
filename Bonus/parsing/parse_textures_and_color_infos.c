@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	split_and_trime_whitespaces(char **rgb, char *color)
 {
 	int	i;
@@ -50,7 +51,7 @@ void	check_for_null_pointers(char *color, t_color *color_struct)
 
 void	validate_split(char **split)
 {
-	if (split[0] == NULL)
+	if (split == NULL || split[0] == NULL)
 	{
 		printf("Error: Invalid map\n");
 		exiter(1);

@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	init_data_helper(t_game *game)
 {
 	t_data	*data;

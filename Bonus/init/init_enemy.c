@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	update_enemy_frames(void)
 {
 	int	i;

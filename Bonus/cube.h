@@ -22,8 +22,8 @@
 # include <unistd.h>
 
 # include "garbage_collector/heap_controller.h"	//=== garbage collector
-# include "lib/get_next_line.h"
-# include "lib/libft/libft.h"
+# include "../lib/get_next_line.h"
+# include "../lib/libft/libft.h"
 # include <mlx.h>
 
 //== const sizes =========
@@ -553,6 +553,9 @@ void			render_opening_door(int door_x, int door_y);
 void			render_closing_door(int door_x, int door_y);
 void			render_reloading(void);
 void			reload_gun_when_empty(void);
+void			decrease_zoom_factor(void);
+void			increase_zoom_factor(void);
+void			kill_enemies(void);
 void			render_frirst_gun_frame(void);
 void			render_last_frame_gun(void);
 void			render_gun_frames(int num_frames, t_gun *gun, int frame_delay);

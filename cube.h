@@ -94,7 +94,6 @@ unsigned char	get_r(unsigned int trgb);
 unsigned char	get_g(unsigned int trgb);
 unsigned char	get_b(unsigned int trgb);
 
-
 # define LIN_1 49
 # define LIN_2 50
 # define LIN_3 51
@@ -142,7 +141,6 @@ typedef struct s_texture
 	int			width;
 	int			height;
 }				t_texture;
-
 
 //======================================
 
@@ -278,9 +276,8 @@ typedef struct s_data
 t_data			*get_data(void);
 
 //=== parsing ===========================================
-void			render_frame(void);
-void	calc_square_points_pos(t_vector *square_position, t_vector center,
-		float square_lenght);
+void			calc_square_points_pos(t_vector *square_position,
+					t_vector center, float square_lenght);
 void			perform_dda(t_ray_data ray, int data_taken, int col);
 t_game			init_game_struct(void);
 char			**init_map(int fd, char *file, t_map *m2);
@@ -293,7 +290,6 @@ void			check_invalid_spaces(t_game *game);
 void			check_invalid_map(t_game *game);
 void			check_map_helper(char **map, t_game *game, t_map m2);
 t_game			check_map(int fd, char *file);
-
 int				has_wall_at(t_game *game, double x, double y);
 int				calc_map_width(char **map);
 void			get_player_position(t_game *game);
@@ -307,7 +303,6 @@ int				calc_map_width(char **map);
 char			*ft_strtrim_last(char *s1, char *set);
 int				calc_map_height(char **map);
 void			check_map_sourrounded_by_walls(t_game *game);
-void			check_door_left_and_right_should_be_wall(t_game *game);
 void			check_if_map_contains_only_valid_characters(t_game *game);
 int				check_if_file_empty(char *file);
 void			parse_texture_and_colors_info(char *line, t_game *game,
@@ -342,8 +337,6 @@ t_game			check_map(int fd, char *file);
 int				check_file(char *str, int *fd);
 int				check_if_player_direction(char c);
 
-
-
 void			destroy_window_and_exit(void);
 void			control_speed(void);
 void			toggle_dark_mode(int keycode);
@@ -375,11 +368,9 @@ t_ray_data		create_ray(float angle);
 void			calculate_ray_distance(t_ray_data *ray);
 int				calc_color(t_ray_data ray, int start, int i, int end);
 void			render_walls(void);
-void			render_minimap(void);
 t_ray_data		create_ray(float angle);
 void			next_step_square(t_vector *next_step_square, t_vector center,
 					float square_lenght, t_vector dir);
-void			render_line(float x1, float y1, float x2, float y2);
 //=== utils =============================================
 void			print_err(char *str);
 void			exiter(int code);
@@ -388,12 +379,7 @@ void			init_data_helper(t_game *game);
 void			hooks(void);
 void			initialize_variables(t_game *game);
 void			init_data(t_game game);
-void			initialize_door_frames_paths(char *frame_paths[]);
 void			init_west_east_textures(t_game *game);
 void			init_north_south_textures(t_game *game);
-void			put_xpm_image(t_img_data *dest, t_img_data *src, int start_x,
-					int start_y);
-int				init_dest_src_y_data(int **dest_data, int **src_data,
-					t_img_data *dest, t_img_data *src);
 
 #endif

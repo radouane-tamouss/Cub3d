@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 // void    *safer_new_image(void *mlx, int width, int height)//TODO not used yet
 // {
 //     void    *img;

@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	draw_col(t_ray_data ray, int col)
 {
 	int	start;
@@ -19,7 +20,8 @@ void	draw_col(t_ray_data ray, int col)
 	int	i;
 
 	ray.wall_height = (GRID_DIST / (ray.dist * cos(ray.angle
-					- get_data()->player_angle))) * ((WIN_WIDTH / 2) / tan(FOV / 2));
+					- get_data()->player_angle))) * ((WIN_WIDTH / 2) / tan(FOV
+				/ 2));
 	start = (WIN_HEIGHT - (int)ray.wall_height) / 2;
 	end = start + (int)ray.wall_height;
 	if (start < 0)
@@ -29,14 +31,14 @@ void	draw_col(t_ray_data ray, int col)
 	i = start;
 	while (i < end)
 	{
-		put_pixel(&(get_data()->background_img), col, i,
-			calc_color(ray, start, i, end));
+		put_pixel(&(get_data()->background_img), col, i, calc_color(ray, start,
+				i, end));
 		i++;
 	}
 }
 
-void	collect_front_ray_data(t_ray_data *ray, char current_tile
-	, int *data_taken)
+void	collect_front_ray_data(t_ray_data *ray, char current_tile,
+		int *data_taken)
 {
 	ray->object_hitted = current_tile;
 	if (!(*data_taken) && ray->angle == get_data()->player_angle)
@@ -47,23 +49,11 @@ void	collect_front_ray_data(t_ray_data *ray, char current_tile
 	}
 }
 
-int	check_hitting_object(t_ray_data *ray, char current_tile
-	, int data_taken, int col)
+int	check_hitting_object(t_ray_data *ray, char current_tile, int data_taken,
+		int col)
 {
 	if (current_tile == '1')
 		collect_front_ray_data(ray, current_tile, &data_taken);
-	else if (current_tile == 'P')
-	{
-		collect_front_ray_data(ray, current_tile, &data_taken);
-		perform_dda(*ray, data_taken, col);
-	}
-	else if (current_tile == 'D')
-		collect_front_ray_data(ray, current_tile, &data_taken);
-	else if (current_tile == 'O')
-	{
-		collect_front_ray_data(ray, current_tile, &data_taken);
-		perform_dda(*ray, data_taken, col);
-	}
 	else
 		return (0);
 	return (1);
@@ -85,8 +75,8 @@ void	perform_dda(t_ray_data ray, int data_taken, int col)
 			ray.map_y += ray.step_y;
 			ray.side = 1;
 		}
-		if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x]
-			, data_taken, col))
+		if (check_hitting_object(&ray, get_data()->map[ray.map_y][ray.map_x],
+			data_taken, col))
 		{
 			calculate_ray_distance(&ray);
 			draw_col(ray, col);
@@ -103,9 +93,8 @@ void	render_walls(void)
 	col = 0;
 	while (col < WIN_WIDTH)
 	{
-		ray_angle = normalise_angle(get_data()->player_angle
-				- (FOV / 2)
-				+ (col * (FOV / WIN_WIDTH)));
+		ray_angle = normalise_angle(get_data()->player_angle - (FOV / 2) + (col
+					* (FOV / WIN_WIDTH)));
 		perform_dda(create_ray(ray_angle), 0, col);
 		++col;
 	}

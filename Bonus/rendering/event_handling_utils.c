@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	control_speed(void)
 {
 	if (get_data()->speed >= 10)
