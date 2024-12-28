@@ -411,8 +411,7 @@ void			check_map_sourrounded_by_walls(t_game *game);
 void			check_door_left_and_right_should_be_wall(t_game *game);
 void			check_if_map_contains_only_valid_characters(t_game *game);
 int				check_if_file_empty(char *file);
-void			parse_texture_and_colors_info(char *line, t_game *game,
-					t_map *map);
+void			parse_texture_and_colors_info(char *line, t_game *game);
 void			validate_split(char **split);
 void			check_floor_color(t_game *game, char **split);
 void			check_ceiling_color(t_game *game, char **split);

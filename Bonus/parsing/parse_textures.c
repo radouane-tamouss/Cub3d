@@ -11,16 +11,17 @@
 /* ************************************************************************** */
 #include "../cube.h"
 
+// clang-format off
 void	parse_north_texture(t_game *game, char **split)
 {
 	if (game->north.path != NULL)
 	{
-		printf("error duplicate north texture\n");
+		print_err("Duplicate north texture");
 		exiter(1);
 	}
 	if (split[1] == NULL)
 	{
-		printf("Error: Missing path for north texture\n");
+		print_err("Missing path for north texture");
 		exiter(1);
 	}
 	game->north.path = ft_strdup(split[1]);
@@ -31,12 +32,12 @@ void	parse_south_texture(t_game *game, char **split)
 {
 	if (game->south.path != NULL)
 	{
-		printf("error duplicate south texture\n");
+		print_err("Duplicate south texture");
 		exiter(1);
 	}
 	if (split[1] == NULL)
 	{
-		printf("Error: Missing path for south texture\n");
+		print_err("Missing path for south texture");
 		exiter(1);
 	}
 	game->south.path = ft_strdup(split[1]);
@@ -47,12 +48,12 @@ void	parse_west_texture(t_game *game, char **split)
 {
 	if (game->west.path != NULL)
 	{
-		printf("error duplicate west texture\n");
+		print_err("Duplicate west texture");
 		exiter(1);
 	}
 	if (split[1] == NULL)
 	{
-		printf("Error: Missing path for west texture\n");
+		print_err("Missing path for west texture");
 		exiter(1);
 	}
 	game->west.path = ft_strdup(split[1]);
@@ -63,12 +64,12 @@ void	parse_east_texture(t_game *game, char **split)
 {
 	if (game->east.path != NULL)
 	{
-		printf("error duplicate east texture\n");
+		print_err("Duplicate east texture");
 		exiter(1);
 	}
 	if (split[1] == NULL)
 	{
-		printf("Error: Missing path for east texture\n");
+		print_err("Missing path for east texture");
 		exiter(1);
 	}
 	game->east.path = ft_strdup(split[1]);

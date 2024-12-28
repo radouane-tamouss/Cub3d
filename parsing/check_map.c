@@ -76,7 +76,7 @@ void	check_map_helper(char **map, t_game *game, t_map m2)
 	i = 0;
 	(void) map_width;
 	while (i < 6)
-		parse_texture_and_colors_info(map[i++], game, &m2);
+		parse_texture_and_colors_info(map[i++], game);
 	map_height = 0;
 	while (map[map_height] != NULL)
 		map_height++;
