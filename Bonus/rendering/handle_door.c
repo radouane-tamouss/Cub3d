@@ -52,6 +52,8 @@ void	handle_door(int keycode)
 	int	door_x;
 	int	door_y;
 
+	door_x = 0;
+	door_y = 0;
 	if (keycode == E_LIN)
 	{
 		if ((get_data()->front_ray.object_hitted == 'D'
