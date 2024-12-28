@@ -77,7 +77,7 @@ void	kill_enemies(void)
 		{
 			get_data()->sprites[i].is_dying = 1;
 			get_data()->sprites[i].current_frame = 0;
-			get_data()->screen_shake_timer = 10;
+			get_data()->screen_shake_timer = 16;
 			break ;
 		}
 		i--;

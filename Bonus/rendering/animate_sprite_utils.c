@@ -95,8 +95,6 @@ void	sprite_on_minimap(t_vector dir)
 
 void	update_dying_frames(t_sprite *sprite)
 {
-	int	i;
-
 	if (sprite->frame_delay >= DYING_FRAME_DELAY)
 	{
 		sprite->current_dying_frame++;

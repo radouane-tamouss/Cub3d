@@ -14,41 +14,10 @@
 
 // as its name says, you give it array of images and its size the function will
 // destroy all of them as long they're not NULL
-static void	multiple_images_destroyer(void **images, unsigned int size)
-{
-	unsigned int	i;
-
-	i = 0;
-	if (images == NULL)
-		return ;
-	while (i < size)
-	{
-		if (images[i] != NULL)
-			mlx_destroy_image(get_data()->mlx, images[i]);
-		++i;
-	}
-}
-
-static void	multiple_textures_destroyer(t_texture *textures, unsigned int size)
-{
-	unsigned int	i;
-
-	i = 0;
-	if (textures == NULL)
-		return ;
-	while (i < size)
-	{
-		if (textures[i].img_data.img != NULL)
-			mlx_destroy_image(get_data()->mlx, textures[i].img_data.img);
-		++i;
-	}
-}
+// clang-format off
 
 static	void	destroy_remaining_images(void)
 {
-	int	i;
-
-	i = 0;
 	if (get_data()->north_img.img_data.img != NULL)
 		mlx_destroy_image(get_data()->mlx, get_data()->north_img.img_data.img);
 	if (get_data()->south_img.img_data.img != NULL)

@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	pad_map_with_spaces_helper(t_game *game, int j, int i, int map_width)
 {
 	char	*line;
@@ -44,7 +45,7 @@ void	check_invalid_map_helper(t_game *game, int i, int j)
 		|| (i < game->map.height - 1 && (game->map.grid[i + 1][j] != '0'
 				&& game->map.grid[i + 1][j] != '1' && game->map.grid[i
 				+ 1][j] != 'D' && !check_if_player_direction(game->map.grid[i
-					+ 1][j]))) || // below
+					+ 1][j]))) ||
 		(j > 0 && (game->map.grid[i][j - 1] != '0' && game->map.grid[i][j
 				- 1] != '1' && game->map.grid[i][j - 1] != 'D'
 				&& !check_if_player_direction(game->map.grid[i][j - 1])))
@@ -112,9 +113,9 @@ void	check_invalid_map(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] == 'M' && game->map.grid[i][j] == '0'
+			if (game->map.grid[i][j] == 'M' && (game->map.grid[i][j] == '0'
 				|| game->map.grid[i][j] == 'D'
-				|| check_if_player_direction(game->map.grid[i][j]) == 1)
+				|| check_if_player_direction(game->map.grid[i][j]) == 1))
 			{
 				check_invalid_map_helper(game, i, j);
 			}

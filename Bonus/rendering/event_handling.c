@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	ft_close(void)
 {
 	mlx_destroy_window(get_data()->mlx, get_data()->win);
@@ -21,9 +22,6 @@ int	ft_close(void)
 
 void	update_movement(void)
 {
-	float	move_speed;
-
-	move_speed = 0.7;
 	if (get_data()->move_forward)
 		move_forward();
 	if (get_data()->move_backward)
@@ -40,12 +38,10 @@ void	update_movement(void)
 
 int	is_enemy_in_middle_of_screen(t_sprite *sprite)
 {
-	t_data	*data;
 	int		screen_middle_x;
 	int		display_start_x;
 	int		display_end_x;
 
-	data = get_data();
 	screen_middle_x = WIN_WIDTH / 2;
 	if (sprite != NULL && sprite->is_dead == 0)
 	{

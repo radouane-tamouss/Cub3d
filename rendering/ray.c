@@ -13,6 +13,7 @@
 #include "../cube.h"
 
 // this init the direction (vector) of the ray
+// clang-format off
 void	init_ray_dir(t_ray_data *ray, float ray_angle)
 {
 	ray->angle = ray_angle;
@@ -66,6 +67,7 @@ t_ray_data	create_ray(float angle)
 {
 	t_ray_data	ray;
 
+	ray.wall_height = 0;
 	init_ray_dir(&ray, angle);
 	calc_step_and_side_dist(&ray);
 	return (ray);

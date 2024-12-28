@@ -12,9 +12,11 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	mouse_event(int x, int y, void *par)
 {
 	(void)par;
+	(void)y;
 	rotate_player(-.5 * (get_data()->mouse_pos.x - x) * (MY_PI / 180));
 	get_data()->mouse_pos.x = x;
 	return (0);

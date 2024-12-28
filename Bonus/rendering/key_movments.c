@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	is_moving(int keycode)
 {
 	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN
@@ -77,9 +78,6 @@ int	key_release(int keycode, void *garbage)
 
 int	handle_keys(int keycode, void *garbage)
 {
-	int	door_x;
-	int	door_y;
-
 	(void)garbage;
 	if (keycode == ESC)
 		destroy_window_and_exit();

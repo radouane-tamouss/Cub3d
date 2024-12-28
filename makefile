@@ -1,7 +1,7 @@
 CC = cc
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
-CFLAGS =  -O3 -flto -g3 -fsanitize=address #-Werror -Wextra -Wall 
+CFLAGS =  -O3 -flto -g3 -Werror -Wextra -Wall#-fsanitize=address  
 # MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
 MLX_FLAGS = -I/usr/include -L/usr/lib -lXext -lX11 -lm -lz -O3 -lmlx
 
