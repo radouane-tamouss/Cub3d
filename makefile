@@ -1,7 +1,7 @@
 CC = cc
 RM = rm -rf
 GET_NEXT_LINE_FILES = lib/lib_utils.c lib/get_next_line.c lib/get_next_line_utils.c
-CFLAGS =  -O3 -flto -g3 -Werror -Wextra -Wall#-fsanitize=address  
+CFLAGS =  -O3 -flto -g3 #-Werror -Wextra -Wall#-fsanitize=address  
 # MLX_FLAGS = -Imlx-linux -lXext -lX11 -lm -lz -O3 mlx-linux/libmlx.a
 MLX_FLAGS = -I/usr/include -L/usr/lib -lXext -lX11 -lm -lz -O3 -lmlx
 
@@ -110,7 +110,7 @@ ${NAME} : ${OFILES} ${LIBFT}
 
 ${BONUS_NAME} : ${BONUS_OFILES} ${LIBFT}
 	@find textures -type f -name "*.gz" -exec gunzip {} +
-	$(CC) ${BONUS_CFLAGS}  $^ -o $(BONUS_NAME) ${MLX_FLAGS}
+	$(CC) ${CFLAGS}  $^ -o $(BONUS_NAME) ${MLX_FLAGS}
 
 ${LIBFT} :
 	@make -C $(LIBFT_DIR)

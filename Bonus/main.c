@@ -12,6 +12,7 @@
 
 #include "cube.h"
 
+// clang-format off
 int	loop_hook(void)
 {
 	update_movement();
@@ -22,7 +23,7 @@ int	loop_hook(void)
 	update_door_animation();
 	render_background();
 	render_gun();
-	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT * 0.57f, 5, BLACK);
+	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT * 0.5f, 5, BLACK);
 	return (0);
 }
 
