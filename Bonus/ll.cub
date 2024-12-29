@@ -3,7 +3,7 @@ SO ./textures/horror.xpm
 WE ./textures/future_wall.xpm
 EA ./textures/future_wall.xpm
 F 19, 69,12
-C 255,255,255 
+C 255, 255,255 
 
 111111111111111
 111111011110111
