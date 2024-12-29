@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 // color a pixel in img in the cords (x, y)
 void	put_pixel(t_img_data *img, int x, int y, int color)
 {
@@ -51,7 +52,7 @@ static void	choose_cube_texture(t_ray_data ray, t_texture *texture)
 		*texture = get_data()->door_img;
 	else if (ray.object_hitted == 'P')
 		*texture = get_data()->door.images[get_data()->door.current_frame];
-	else if (ray.side == 0 && ray.ray_dir.x > 0)
+	else if (ray.side == 0 && ray.ray_dir.x < 0)
 		*texture = get_data()->east_img;
 	else if (ray.side == 0)
 		*texture = get_data()->west_img;

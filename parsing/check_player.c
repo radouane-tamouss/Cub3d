@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	verify_player_starting_position(t_game *game)
 {
 	int	i;
@@ -65,6 +66,7 @@ void	get_player_position(t_game *game)
 			{
 				game->player.pos_y = i;
 				game->player.pos_x = j;
+				get_data()->player_direction = game->map.grid[i][j];
 				return ;
 			}
 			j++;

@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 t_data	*get_data(void)
 {
 	static t_data	data;
@@ -63,10 +64,10 @@ void	initialize_variables(t_game *game)
 	t_data	*data;
 
 	data = get_data();
-	data->speed = 4;
+	data->speed = 2;
 	data->player_pos.x = game->player.pos_x * GRID_DIST + (float)GRID_DIST / 2;
 	data->player_pos.y = game->player.pos_y * GRID_DIST + (float)GRID_DIST / 2;
-	data->player_angle = 0;
+	init_direction(game);
 	data->player_dir.x = cos(data->player_angle) * data->speed;
 	data->player_dir.y = sin(data->player_angle) * data->speed;
 	data->map = game->map.grid;
