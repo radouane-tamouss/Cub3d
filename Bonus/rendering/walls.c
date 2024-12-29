@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	draw_col(t_ray_data ray, int col)
 {
 	int	start;

@@ -39,7 +39,7 @@ void	verify_player_starting_position(t_game *game)
 		i++;
 	}
 	if (player_count == 0)
-		(printf("No player starting position"), exiter(1));
+		(print_err("No player starting position"), exiter(1));
 }
 
 int	check_if_player_direction(char c)

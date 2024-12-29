@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	init_dest_src_y_data(int **dest_data, int **src_data, t_img_data *dest,
 		t_img_data *src)
 {
@@ -61,7 +62,7 @@ void	render_transparent_frame(void *frame_img, int width, int height)
 
 	if (!frame_img)
 	{
-		printf("frame_img is null\n");
+		print_err("Frame_img is null");
 		return ;
 	}
 	current_frame.img = frame_img;

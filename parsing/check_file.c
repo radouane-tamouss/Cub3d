@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 int	check_file(char *str, int *fd)
 {
 	char	*res;
@@ -21,16 +22,17 @@ int	check_file(char *str, int *fd)
 	if (str == NULL)
 		return (0);
 	res = ft_strrchr(str, '.');
-	if (res == NULL || ft_strcmp(res, ".cub") != 0 || ft_strlen(str) <= 4)
-		return ((printf("invalid file\n"), 0));
+	if (res == NULL || ft_strcmp(res, ".cub") != 0 || ft_strlen(str) <= 4
+		|| (ft_strlen(str) > 4 && str[ft_strlen(str) - 5] == '/'))
+		(print_err("invalid file"), exiter(1));
 	*fd = open(str, O_RDONLY);
 	if (*fd < 0)
-		return (printf("Open failed\n"), 0);
+		(print_err("Open failed\n"), exiter(1));
 	bytes_read = read(*fd, &buff, 1);
 	if (bytes_read == 0)
-		return (printf("File is empty\n"), 0);
+		(print_err("File is empty"), exiter(1));
 	else if (bytes_read < 0)
-		return (printf("Read failed\n"), 0);
+		(print_err("Read failed"), exiter(0));
 	return (1);
 }
 
@@ -69,7 +71,7 @@ int	check_if_file_empty(char *file)
 	if (bytes_read == 0)
 		return (1);
 	else if (bytes_read < 0)
-		return (printf("Read failed\n"), 0);
+		return (print_err("Read failed"), 0);
 	close(fd);
 	return (0);
 }
@@ -83,18 +85,18 @@ void	check_file_exists_or_empty(char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 	{
-		perror("open");
+		print_err("Open failed");
 		exiter(1);
 	}
 	bytes_read = read(fd, &buff, 1);
 	if (bytes_read == 0)
 	{
-		printf("Error : File %s is empty\n", file);
+		print_err("File is empty");
 		exiter(1);
 	}
 	else if (bytes_read < 0)
 	{
-		printf("Error : Read failed\n");
+		print_err("Read failed");
 		exiter(1);
 	}
 	close(fd);

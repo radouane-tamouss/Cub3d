@@ -12,6 +12,7 @@
 
 #include "cube.h"
 
+// clang-format off
 int	loop_hook(void)
 {
 	update_movement();
@@ -27,7 +28,7 @@ int	main(int ac, char **av)
 	t_game	game;
 
 	if (ac != 2 || check_file(av[1], &fd) == 0)
-		return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
+		return (print_err("Usage: ./Cube3d map.cub"), 0);
 	game = check_map(fd, av[1]);
 	close(fd);
 	init_data(game);

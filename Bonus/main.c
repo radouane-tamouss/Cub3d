@@ -23,7 +23,7 @@ int	loop_hook(void)
 	update_door_animation();
 	render_background();
 	render_gun();
-	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT * 0.5f, 5, BLACK);
+	render_cyrcle(WIN_WIDTH / 2, WIN_HEIGHT * 0.53f, 3, BLACK);
 	return (0);
 }
 
@@ -45,7 +45,7 @@ int	main(int ac, char **av)
 	t_game	game;
 
 	if (ac != 2 || check_file(av[1], &fd) == 0)
-		return (printf("Error\nUsage: ./Cube3d map.cub\n"), 0);
+		return (print_err("Usage: ./Cube3d map.cub"), 0);
 	game = check_map(fd, av[1]);
 	close(fd);
 	init_data(game);
