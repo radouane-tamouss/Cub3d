@@ -347,7 +347,6 @@ void			init_background(void);
 void			render_background(void);
 int				handle_keys(int keycode, void *garbage);
 int				ft_close(void);
-int				mouse_event(int x, int y, void *par);
 void			line_between_2points(t_vector point1, t_vector point2,
 					int color);
 float			ft_max(float nbr1, float nbr2);

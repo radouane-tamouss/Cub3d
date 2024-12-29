@@ -56,7 +56,6 @@ void	hooks(void)
 	mlx_hook(data->win, 2, 1L << 0, handle_keys, NULL);
 	mlx_hook(data->win, 3, 1L << 1, key_release, NULL);
 	mlx_hook(data->win, 17, 1L << 0, ft_close, NULL);
-	mlx_hook(data->win, 6, 1L << 6, mouse_event, NULL);
 }
 
 void	initialize_variables(t_game *game)

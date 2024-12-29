@@ -18,7 +18,6 @@ rendering/event_handling.c\
 rendering/event_handling_utils.c\
 rendering/ft_math.c\
 rendering/key_movments.c\
-rendering/mouse_movements.c\
 rendering/movement.c\
 rendering/put_pixel.c\
 rendering/ray.c\
