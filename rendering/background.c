@@ -13,6 +13,7 @@
 #include "../cube.h"
 
 // this will put backgrouind image to the window
+// clang-format off
 void	render_background(void)
 {
 	mlx_put_image_to_window(get_data()->mlx, get_data()->win,

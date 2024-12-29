@@ -29,6 +29,7 @@ int	ft_count_commas(char *str)
 	return (count);
 }
 
+// Helper function to convert string to integer while handling spaces
 void	parse_color(char *color, t_color *color_struct)
 {
 	char	**rgb;
@@ -44,40 +45,64 @@ void	parse_color(char *color, t_color *color_struct)
 		|| color_struct->g > 255 || color_struct->b < 0
 		|| color_struct->b > 255)
 	{
-		printf("Error: RGB values must be between 0 and 255\n");
+		print_err("RGB values must be between 0 and 255");
 		exiter(1);
 	}
 }
 
 void	check_ceiling_color(t_game *game, char **split)
 {
+	char	*joined_color;
+	char	*temp;
+	int		i;
+
 	if (game->ceiling.color != NULL)
 	{
-		printf("error duplicate ceiling color\n");
+		print_err("Duplicate ceiling color");
 		exiter(1);
 	}
 	if (split[1] == NULL)
 	{
-		printf("Error: Missing color for ceiling\n");
+		print_err("Missing color for ceiling");
 		exiter(1);
 	}
-	game->ceiling.color = ft_strdup(split[1]);
+	joined_color = ft_strdup(split[1]);
+	i = 2;
+	while (split[i] != NULL)
+	{
+		temp = ft_strjoin(joined_color, " ");
+		joined_color = ft_strjoin(temp, split[i]);
+		i++;
+	}
+	game->ceiling.color = ft_strdup(joined_color);
 	parse_color(game->ceiling.color, &game->ceiling);
 }
 
 void	check_floor_color(t_game *game, char **split)
 {
+	char	*joined_color;
+	char	*temp;
+	int		i;
+
 	if (game->floor.color != NULL)
 	{
-		printf("error duplicate floor color\n");
+		print_err("Duplicate floor color");
 		exiter(1);
 	}
 	if (split[1] == NULL)
 	{
-		printf("Error: Missing color for floor\n");
+		print_err("Missing color for floor");
 		exiter(1);
 	}
-	game->floor.color = ft_strdup(split[1]);
+	joined_color = ft_strdup(split[1]);
+	i = 2;
+	while (split[i] != NULL)
+	{
+		temp = ft_strjoin(joined_color, " ");
+		joined_color = ft_strjoin(temp, split[i]);
+		i++;
+	}
+	game->floor.color = ft_strdup(joined_color);
 	parse_color(game->floor.color, &game->floor);
 }
 
@@ -91,7 +116,7 @@ void	count_commas_and_validate_basic_format(char *color,
 	count = ft_count_commas(color);
 	if (count != 2)
 	{
-		printf("Error: Color must have exactly 2 commas (R,G,B format)\n");
+		print_err("Color must have exactly 2 commas (R,G,B format)");
 		exiter(1);
 	}
 	i = 0;
@@ -99,7 +124,7 @@ void	count_commas_and_validate_basic_format(char *color,
 	{
 		if (!ft_isdigit(color[i]) && color[i] != ',' && !ft_isspace(color[i]))
 		{
-			printf("Error: Invalid character in color format\n");
+			print_err("Invalid character in color format");
 			exiter(1);
 		}
 		i++;

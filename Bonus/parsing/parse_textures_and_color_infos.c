@@ -77,7 +77,8 @@ void	parse_texture_and_colors_info(char *line, t_game *game)
 
 	i = -1;
 	split = ft_split2(line, " \t\r\n\v\f");
-	validate_split(split);
+	if (ft_strcmp(split[0], "F") != 0 && ft_strcmp(split[0], "C") != 0)
+		validate_split(split);
 	if (ft_strcmp(split[0], "NO") == 0)
 		parse_north_texture(game, split);
 	else if (ft_strcmp(split[0], "SO") == 0)
@@ -91,7 +92,7 @@ void	parse_texture_and_colors_info(char *line, t_game *game)
 	else if (ft_strcmp(split[0], "C") == 0)
 		check_ceiling_color(game, split);
 	else
-		(print_err("Invalide Identifier for Texture"), exiter(1));
+		(print_err("Invalide Identifier"), exiter(1));
 	while (split[++i])
 		free_ptr(split[i]);
 	free_ptr(split);

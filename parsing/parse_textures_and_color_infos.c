@@ -5,11 +5,10 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: atamousse.red <atamousse.red@gmail.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/21 21:44:37 by atamousse.red     #+#    #+#             */
-/*   Updated: 2024/12/21 21:45:08 by atamousse.red    ###   ########.fr       */
+/*   Created: 2024/12/29 23:15:28 by atamousse.red     #+#    #+#             */
+/*   Updated: 2024/12/29 23:15:28 by atamousse.red    ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "../cube.h"
 
 // clang-format off
@@ -21,7 +20,7 @@ void	split_and_trime_whitespaces(char **rgb, char *color)
 	(void)color;
 	if (!rgb || !rgb[0] || !rgb[1] || !rgb[2])
 	{
-		print_err("Valid color format");
+		print_err("Invalid color format");
 		exiter(1);
 	}
 	i = 0;
@@ -59,7 +58,6 @@ void	validate_split(char **split)
 	}
 	else if (split[1] == NULL || split[2] != NULL)
 	{
-		print_err("Invalid Map");
 		exiter(1);
 	}
 	if (check_file_extension(split[1]) == 0 && ft_strcmp(split[0], "F") != 0
@@ -77,7 +75,8 @@ void	parse_texture_and_colors_info(char *line, t_game *game)
 
 	i = -1;
 	split = ft_split2(line, " \t\r\n\v\f");
-	validate_split(split);
+	if (ft_strcmp(split[0], "F") != 0 && ft_strcmp(split[0], "C") != 0)
+		validate_split(split);
 	if (ft_strcmp(split[0], "NO") == 0)
 		parse_north_texture(game, split);
 	else if (ft_strcmp(split[0], "SO") == 0)
@@ -91,7 +90,7 @@ void	parse_texture_and_colors_info(char *line, t_game *game)
 	else if (ft_strcmp(split[0], "C") == 0)
 		check_ceiling_color(game, split);
 	else
-		(print_err("Invalide Identifier for Texture"), exiter(1));
+		(print_err("Invalide Identifier"), exiter(1));
 	while (split[++i])
 		free_ptr(split[i]);
 	free_ptr(split);

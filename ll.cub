@@ -1,8 +1,8 @@
 NO ./textures/future_wall.xpm
-SO 	./textures/future_wall.xpm
+SO 			./textures/future_wall.xpm
 WE ./textures/horror.xpm
-EA ./textures/floor.xpm
-F 139,69,12
+EA ./textures/horror.xpm
+F 184 , 69,2
 C 255,255,255
 
                               
@@ -11,7 +11,7 @@ C 255,255,255
 111111111111111
 111111011110111
 101000001000001
-1010000010000W1
+1010000010000W1   1111
 101000001000001
 101000001000001
 101000001000001

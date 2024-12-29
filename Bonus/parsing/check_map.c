@@ -59,7 +59,7 @@ char	**init_map(int fd, char *file, t_map *m2)
 	map = mallocate(sizeof(char *) * (m2->height + 1));
 	if (!map)
 	{
-		printf("Error\n Malloc failed\n");
+		print_err("Malloc failed");
 		exiter(1);
 	}
 	fill_map(map, file, line);

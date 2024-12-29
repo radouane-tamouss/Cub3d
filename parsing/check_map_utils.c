@@ -52,9 +52,9 @@ void	check_invalid_map_helper(t_game *game, int i, int j)
 					+ 1]))))
 	{
 		if (check_if_player_direction(game->map.grid[i][j]) == 1)
-			printf("invalid player direction at (%d, %d)\n", i, j);
+			printf("Error \nInvalid player direction at (%d, %d)\n", i, j);
 		else
-			printf("invalid zero at (%d, %d)\n", i, j);
+			printf("Error \nInvalid zero at (%d, %d)\n", i, j);
 		exiter(1);
 	}
 }
@@ -71,7 +71,7 @@ void	check_invalid_spaces_helper(t_game *game, int i, int j)
 				&& game->map.grid[i][j + 1] != '1' && game->map.grid[i][j
 				+ 1] != ' '))
 		{
-			printf("Error: Invalid space found at (%d, %d)\n", i, j);
+			printf("Error\nInvalid space found at (%d, %d)\n", i, j);
 			exiter(1);
 		}
 	}

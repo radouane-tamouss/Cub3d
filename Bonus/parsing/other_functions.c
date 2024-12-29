@@ -40,7 +40,7 @@ void	check_door_left_and_right_should_be_wall(t_game *game)
 				if (game->map.grid[i][j - 1] != '1' || game->map.grid[i][j
 					+ 1] != '1')
 				{
-					printf("Error: Door should be surrounded by walls\n");
+					print_err("Door should be surrounded by walls");
 					exiter(1);
 				}
 			}
