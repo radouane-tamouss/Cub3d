@@ -270,6 +270,7 @@ typedef struct s_data
 	t_vector	mouse_pos;
 	int			dark_mode;
 	t_ray_data	front_ray;
+	char		player_direction;
 }	t_data;
 
 //=================================
@@ -278,6 +279,7 @@ t_data			*get_data(void);
 //=== parsing ===========================================
 void			calc_square_points_pos(t_vector *square_position,
 					t_vector center, float square_lenght);
+void			init_direction(t_game *game);
 void			perform_dda(t_ray_data ray, int data_taken, int col);
 t_game			init_game_struct(void);
 char			**init_map(int fd, char *file, t_map *m2);

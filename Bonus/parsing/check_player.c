@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	verify_player_starting_position(t_game *game)
 {
 	int	i;
@@ -26,8 +27,8 @@ void	verify_player_starting_position(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S' ||
-				game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
+			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S'
+				|| game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
 			{
 				player_count++;
 				if (player_count > 1)
@@ -60,12 +61,12 @@ void	get_player_position(t_game *game)
 		j = 0;
 		while (game->map.grid[i][j])
 		{
-			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S' ||
-				game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
+			if (game->map.grid[i][j] == 'N' || game->map.grid[i][j] == 'S'
+				|| game->map.grid[i][j] == 'E' || game->map.grid[i][j] == 'W')
 			{
 				game->player.pos_y = i;
 				game->player.pos_x = j;
-				fprintf(stderr, "x == %d,  y == %d \n", i, j);
+				get_data()->player_direction = game->map.grid[i][j];
 				return ;
 			}
 			j++;

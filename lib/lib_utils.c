@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 static int	count_digits(long n)
 {
 	int	count;

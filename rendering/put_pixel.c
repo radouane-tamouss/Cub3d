@@ -13,14 +13,15 @@
 #include "../cube.h"
 
 // color a pixel in img in the cords (x, y)
+// clang-format off
 void	put_pixel(t_img_data *img, int x, int y, int color)
 {
 	char			*dst;
 	int				offset;
 	unsigned int	*ptr;
 
-	if (y >= WIN_HEIGHT || x >= WIN_WIDTH
-		|| x < 0 || y < 0 || get_t(color) == 255)
+	if (y >= WIN_HEIGHT || x >= WIN_WIDTH || x < 0 || y < 0
+		|| get_t(color) == 255)
 		return ;
 	offset = y * img->line_length + x * (img->bits_per_pixel / 8);
 	dst = img->addr + offset;
@@ -36,8 +37,8 @@ unsigned int	pull_pixel(t_texture img, int x, int y)
 
 	if (y >= img.height || x >= img.width || x < 0 || y < 0)
 		return (BLACK);
-	offset = y * img.img_data.line_length
-		+ x * (img.img_data.bits_per_pixel / 8);
+	offset = y * img.img_data.line_length + x * (img.img_data.bits_per_pixel
+			/ 8);
 	dst = img.img_data.addr + offset;
 	ptr = (unsigned int *)dst;
 	return (*ptr);
@@ -45,7 +46,7 @@ unsigned int	pull_pixel(t_texture img, int x, int y)
 
 static void	choose_cube_texture(t_ray_data ray, t_texture *texture)
 {
-	if (ray.side == 0 && ray.ray_dir.x > 0)
+	if (ray.side == 0 && ray.ray_dir.x < 0)
 		*texture = get_data()->east_img;
 	else if (ray.side == 0)
 		*texture = get_data()->west_img;
@@ -85,12 +86,10 @@ int	calc_color(t_ray_data ray, int start, int i, int end)
 	if (get_t(color) == 255)
 		return (color);
 	if (get_data()->dark_mode)
-		color = create_trgb(0,
-				(int)(get_r(color)
+		color = create_trgb(0, (int)(get_r(color) * ((float)projected_wall
+						/ (float)WIN_HEIGHT)), (int)(get_g(color)
 					* ((float)projected_wall / (float)WIN_HEIGHT)),
-				(int)(get_g(color)
-					* ((float)projected_wall / (float)WIN_HEIGHT)),
-				((int)(get_b(color)
-						* ((float)projected_wall / (float)WIN_HEIGHT))));
+				((int)(get_b(color) * ((float)projected_wall
+							/ (float)WIN_HEIGHT))));
 	return (color);
 }

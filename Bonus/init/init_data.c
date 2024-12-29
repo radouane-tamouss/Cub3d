@@ -53,6 +53,23 @@ void	hooks(void)
 	mlx_mouse_hook(data->win, handle_mouse_event, NULL);
 }
 
+void	init_direction(t_game *game)
+{
+	t_data	*data;
+
+	data = get_data();
+	if (data->player_direction == 'E')
+		data->player_angle = 0.0;
+	else if (data->player_direction == 'S')
+		data->player_angle = MY_PI / 2;
+	else if (data->player_direction == 'W')
+		data->player_angle = MY_PI;
+	else if (data->player_direction == 'N')
+		data->player_angle = 3 * MY_PI / 2;
+	else
+		data->player_angle = 0.0;
+}
+
 void	initialize_variables(t_game *game)
 {
 	t_data	*data;
@@ -61,7 +78,7 @@ void	initialize_variables(t_game *game)
 	data->speed = 4;
 	data->player_pos.x = game->player.pos_x * GRID_DIST + (float)GRID_DIST / 2;
 	data->player_pos.y = game->player.pos_y * GRID_DIST + (float)GRID_DIST / 2;
-	data->player_angle = 0;
+	init_direction(game);
 	data->player_dir.x = cos(data->player_angle) * data->speed;
 	data->player_dir.y = sin(data->player_angle) * data->speed;
 	data->map = game->map.grid;

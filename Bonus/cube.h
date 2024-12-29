@@ -375,6 +375,7 @@ typedef struct s_data
 	t_sprite	die_sprite;
 	int			num_sprites;
 	int			number_of_shoots;
+	char		player_direction;
 }	t_data;
 
 //=================================

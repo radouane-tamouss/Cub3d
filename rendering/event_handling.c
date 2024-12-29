@@ -31,9 +31,9 @@ void	update_movement(void)
 	if (get_data()->move_right)
 		move_right();
 	if (get_data()->rotate_left)
-		rotate_player(-3.0f * (MY_PI / 180.0f));
+		rotate_player(-0.5f * (MY_PI / 180.0f));
 	if (get_data()->rotate_right)
-		rotate_player(3.0f * (MY_PI / 180.0f));
+		rotate_player(0.5f * (MY_PI / 180.0f));
 }
 
 void	destroy_window_and_exit(void)
