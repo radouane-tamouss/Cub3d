@@ -60,9 +60,6 @@ void	handle_door(int keycode)
 				|| get_data()->front_ray.object_hitted == 'O')
 			&& get_data()->front_ray.dist < 2 * GRID_DIST
 			&& !get_data()->door.is_opening && !get_data()->door.is_closing)
-		{
 			handle_door_helper(door_x, door_y);
-			play_sound("sounds/door.wav");
-		}
 	}
 }

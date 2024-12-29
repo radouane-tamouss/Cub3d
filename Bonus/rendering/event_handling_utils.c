@@ -36,7 +36,6 @@ void	handle_reload_gun(int keycode)
 			get_data()->gun.is_reloading = 1;
 			get_data()->gun.current_frame = 0;
 			get_data()->gun.frame_delay = 0;
-			play_sound("sounds/gun3reloadd.wav");
 		}
 	}
 }
@@ -45,23 +44,6 @@ void	sprint(int keycode)
 {
 	if (keycode == SHIFT_LIN)
 		get_data()->speed = 10;
-}
-
-void	play_sound(const char *file)
-{
-	char	command[256];
-	char	*temp;
-	char	*command_str;
-	int		result;
-
-	temp = ft_strjoin("paplay ", file);
-	command_str = ft_strjoin(temp, " &");
-	ft_strlcpy(command, command_str, sizeof(command));
-	result = system(command);
-	if (result == -1)
-	{
-		perror("system");
-	}
 }
 
 void	kill_enemies(void)
@@ -77,7 +59,7 @@ void	kill_enemies(void)
 		{
 			get_data()->sprites[i].is_dying = 1;
 			get_data()->sprites[i].current_frame = 0;
-			get_data()->screen_shake_timer = 16;
+			get_data()->screen_shake_timer = 9;
 			break ;
 		}
 		i--;

@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	move_forward(void)
 {
 	t_vector	square[4];
