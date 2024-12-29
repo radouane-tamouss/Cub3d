@@ -450,7 +450,6 @@ int				check_file(char *str, int *fd);
 int				check_if_player_direction(char c);
 void			render_transparent_frame(void *frame_img, int width,
 					int height);
-void			play_sound(const char *file);
 int				handle_mouse_event(int button, int x, int y, void *param);
 //=======================================================
 //=== rendering =========================================

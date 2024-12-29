@@ -27,8 +27,6 @@ void	handle_left_mouse_click(void)
 		get_data()->screen_shake_intensity = 5;
 		kill_enemies();
 		get_data()->screen_shake_timer = 10;
-		play_sound("sounds/one_shot_firstgun.wav");
-		get_data()->number_of_shoots++;
 	}
 }
 
