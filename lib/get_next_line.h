@@ -18,7 +18,14 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
 # endif
-# include "../cube.h"
+// # include "../cube.h"
+# include <stdlib.h>
+# include <limits.h>
+# include <unistd.h>
+
+# ifndef HEAP_CONTROLLER_H
+#  include "../garbage_collector/heap_controller.h"
+# endif
 
 size_t	ft_strlen(const char *theString);
 char	*ft_strjoin(char const *s1, char const *s2);

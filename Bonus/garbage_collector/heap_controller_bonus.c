@@ -10,9 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "heap_controller.h"
-
-#include "../cube.h"
+#include "../cub_bonus.h"
 
 // clang-format off
 static t_heap	**get_heap(void)
