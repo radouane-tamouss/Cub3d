@@ -256,6 +256,7 @@ typedef struct s_data
 	t_texture	south_img;
 	t_texture	east_img;
 	t_texture	west_img;
+	t_texture	ceiling_img;
 	int			speed;
 	t_img_data	background_img;
 	int			ceiling_color;
@@ -381,5 +382,6 @@ void			initialize_variables(t_game *game);
 void			init_data(t_game game);
 void			init_west_east_textures(t_game *game);
 void			init_north_south_textures(t_game *game);
+void			init_ceiling_texture(void);
 
 #endif
