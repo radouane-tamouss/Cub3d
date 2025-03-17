@@ -108,4 +108,5 @@ void	init_data(t_game game)
 	init_north_south_textures(&game);
 	init_west_east_textures(&game);
 	init_door_textures();
+	init_ceiling_texture();
 }

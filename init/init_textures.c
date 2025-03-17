@@ -75,3 +75,18 @@ void	init_north_south_textures(t_game *game)
 			&(data->south_img.img_data.line_length),
 			&(data->south_img.img_data.endian));
 }
+
+void	init_ceiling_texture(void)
+{
+	t_data	*data;
+
+	data = get_data();
+	data->ceiling_img.img_data.img = safer_xpm_file_to_image(data->mlx,
+			"textures/wall.xpm", &(data->ceiling_img.width),
+			&(data->ceiling_img.height));
+	data->ceiling_img.img_data.addr
+		= safer_get_data_addr(data->ceiling_img.img_data.img,
+			&(data->ceiling_img.img_data.bits_per_pixel),
+			&(data->ceiling_img.img_data.line_length),
+			&(data->ceiling_img.img_data.endian));
+}

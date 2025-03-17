@@ -343,6 +343,7 @@ typedef struct s_data
 	t_texture	south_img;
 	t_texture	east_img;
 	t_texture	west_img;
+	t_texture	ceiling_img;
 	t_texture	door_img;
 	t_texture	door_open_img;
 	int			speed;
@@ -541,6 +542,7 @@ void			initialize_last_scope_frames_paths(char *frame_paths[]);
 void			initialize_zoom_shoot_frames_paths(char *frame_paths[]);
 void			init_west_east_textures(t_game *game);
 void			init_north_south_textures(t_game *game);
+void			init_ceiling_texture(void);
 void			load_shooting_gun3_frames(void);
 void			load_running_gun3_frames(void);
 void			load_reloading_gun3_frames(void);
