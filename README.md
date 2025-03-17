@@ -19,29 +19,26 @@ Watch the full gameplay video on YouTube: [Cube3D Gameplay](https://youtu.be/Ytj
 
 ### Interactive Elements
 - **Doors**: Open and close doors using the 'E' key
-- **Enemies**: Dynamic enemy AI with animations
+- **Enemies**: Dynamic enemy with animations
 - **Combat System**:
-  - Multiple weapons with unique animations
+  - Weapons with unique animations
   - Shooting mechanics with recoil effects
   - Reloading system
   - Screen shake effects for immersion
 - **Scope System**: Toggle scope view with right mouse button
 - **Movement Options**:
   - Walking (default)
-  - Running (hold CTRL)
   - Sprinting (hold SHIFT)
 
 ### Visual Effects
 - Dynamic lighting system
 - Smooth animations for all interactive elements
-- Particle effects
-- Screen shake during combat
-- Transparent overlays for UI elements
-
+- Screen shake during shooting
+- 
 ### Additional Features
 - Minimap for navigation
-- Sound effects for various actions
-- Configurable controls
+- Enemy location in minimap with realtime position
+- Sound effects for door and shooting
 - Multiple map support
 - Error handling and validation
 
@@ -57,17 +54,11 @@ Watch the full gameplay video on YouTube: [Cube3D Gameplay](https://youtu.be/Ytj
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/Cube3D.git
+git clone https://github.com/radouane-tamouss/Cube3D.git
 cd Cube3D
 ```
 
-2. Install dependencies:
-```bash
-sudo apt-get update
-sudo apt-get install gcc make xorg libxext-dev libbsd-dev
-```
-
-3. Compile the game:
+2. Compile the game:
 ```bash
 make        # For the basic version
 make bonus  # For the full version with all features
@@ -77,12 +68,12 @@ make bonus  # For the full version with all features
 
 ### Basic Version
 ```bash
-./cub3D maps/your_map.cub
+./cub3D ll.cub
 ```
 
 ### Bonus Version
 ```bash
-./cub3D_bonus maps/your_map.cub
+./cub3D_bonus bonus/ll.cub
 ```
 
 ### Controls
@@ -93,7 +84,6 @@ make bonus  # For the full version with all features
 - `A` - Strafe left
 - `D` - Strafe right
 - `←` / `→` - Rotate left/right
-- `CTRL` - Run
 - `SHIFT` - Sprint
 
 #### Combat
@@ -104,8 +94,13 @@ make bonus  # For the full version with all features
 
 #### Other
 - `ESC` - Exit game
-- `N` - Toggle dark mode
+- `space` - Toggle dark mode
 - `Mouse Movement` - Look around
+
+## 👥 Authors
+
+- [Radouane](https://github.com/radouane-tamouss)
+- [Erabareta](https://github.com/erabareta)
 
 ## 🗺️ Map Format
 
@@ -147,26 +142,3 @@ Place your custom textures in the `textures/` directory. Supported formats:
 ### Maps
 Create your own maps using the `.cub` format and place them in the `maps/` directory.
 
-## 🐛 Known Issues
-
-- Some systems might require additional X11 libraries
-- Performance may vary depending on system specifications
-- Some high-resolution textures might cause performance issues
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📝 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👥 Authors
-
-- [Your Name](https://github.com/yourusername)
-
-## 🙏 Acknowledgments
-
-- MinilibX library
-- Wolfenstein 3D for inspiration
-- All contributors and testers 
