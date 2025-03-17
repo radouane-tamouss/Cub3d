@@ -3,7 +3,7 @@
 A 3D raycasting game inspired by Wolfenstein 3D, featuring dynamic lighting, textures, and interactive elements. Built using the MinilibX graphics library.
 
 ## 🎥 Gameplay Showcase
-[![Cube3D Gameplay](https://img.youtube.com/vi/YtjDYRPUCvg/maxresdefault.jpg)](https://www.youtube.com/watch?v=HV48BXeT3Z0)
+[![Cube3D Gameplay](https://img.youtube.com/vi/YtjDYRPUCvg/maxresdefault.jpg)](https://youtu.be/HV48BXeT3Z0)
 
 Watch the full gameplay video on YouTube: [Cube3D Gameplay](https://youtu.be/YtjDYRPUCvg)
 
