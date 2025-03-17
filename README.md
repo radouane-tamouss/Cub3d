@@ -14,7 +14,6 @@ Watch the full gameplay video on YouTube: [Cube3D Gameplay](https://youtu.be/Ytj
 - Smooth player movement and rotation
 - Collision detection with walls
 - Dynamic wall textures
-- Textured ceiling and floor
 - Dark mode toggle for enhanced atmosphere
 
 ### Interactive Elements
