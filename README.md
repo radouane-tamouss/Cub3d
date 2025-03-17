@@ -34,7 +34,7 @@ Watch the full gameplay video on YouTube: [Cube3D Gameplay](https://youtu.be/Ytj
 - Dynamic lighting system
 - Smooth animations for all interactive elements
 - Screen shake during shooting
-- 
+
 ### Additional Features
 - Minimap for navigation
 - Enemy location in minimap with realtime position
