@@ -1,4 +1,4 @@
-# Cube3D
+# Cub3D
 
 A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX graphics library. Features dynamic lighting, textured environments, and interactive elements.
 
