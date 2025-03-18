@@ -1,8 +1,0 @@
-BasedOnStyle: Google
-BreakBeforeBraces: Allman
-SeparateDefinitionBlocks: Always
-ColumnLimit: 80
-IndentWidth: 4
-TabWidth: 4
-UseTab: Always
-IndentFunctionDeclarationAfterType: false

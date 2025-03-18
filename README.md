@@ -1,143 +1,118 @@
-# 🎮 Cube3D - A Raycasting Game
+# Cube3D
 
-A 3D raycasting game inspired by Wolfenstein 3D, featuring dynamic lighting, textures, and interactive elements. Built using the MinilibX graphics library.
+A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX graphics library. Features dynamic lighting, textured environments, and interactive elements.
 
-## 🎥 Gameplay Showcase
+## Video Showcase
+
 [![Cube3D Gameplay](https://img.youtube.com/vi/HV48BXeT3Z0/maxresdefault.jpg)](https://youtu.be/HV48BXeT3Z0)
 
-Watch the full gameplay video on YouTube: [Cube3D Gameplay](https://youtu.be/YtjDYRPUCvg)
+*Click the image above to watch the gameplay demo*
 
-## 🌟 Features
+## Screenshots
 
-### Core Gameplay
-- First-person 3D perspective using raycasting
-- Smooth player movement and rotation
-- Collision detection with walls
-- Dynamic wall textures
-- Dark mode toggle for enhanced atmosphere
+<div align="center">
+  <img src="Screenshots/image.png" width="400" alt="Cube3D Screenshot 1" />
+  <img src="Screenshots/image copy.png" width="400" alt="Cube3D Screenshot 2" />
+  <img src="Screenshots/image copy 2.png" width="400" alt="Cube3D Screenshot 3" />
+  <img src="Screenshots/image copy 3.png" width="400" alt="Cube3D Screenshot 4" />
+  <img src="Screenshots/image copy 4.png" width="400" alt="Cube3D Screenshot 5" />
+  <img src="Screenshots/image copy 5.png" width="400" alt="Cube3D Screenshot 6" />
+  <img src="Screenshots/image copy 6.png" width="400" alt="Cube3D Screenshot 7" />
+</div>
 
-### Interactive Elements
-- **Doors**: Open and close doors using the 'E' key
-- **Enemies**: Dynamic enemy with animations
-- **Combat System**:
-  - Weapons with unique animations
-  - Shooting mechanics with recoil effects
-  - Reloading system
-  - Screen shake effects for immersion
-- **Scope System**: Toggle scope view with right mouse button
-- **Movement Options**:
-  - Walking (default)
-  - Sprinting (hold SHIFT)
+## Features
 
-### Visual Effects
-- Dynamic lighting system
-- Smooth animations for all interactive elements
-- Screen shake during shooting
+### Core Engine
+- First-person 3D perspective using raycasting technology
+- Smooth movement and rotation system
+- Collision detection
+- Dynamic wall texturing
+- Customizable lighting system
 
-### Additional Features
-- Minimap for navigation
-- Enemy location in minimap with realtime position
-- Sound effects for door and shooting
-- Multiple map support
-- Error handling and validation
+### Gameplay Elements
+- Interactive doors
+- Enemy AI with animations
+- Weapon system with recoil and reload mechanics
+- Scope/zoom functionality
+- Sprint mechanics
 
-## 🛠️ Requirements
+### Visual Elements
+- Dynamic lighting effects
+- Smooth animations
+- Screen effects (shake, recoil)
+- Real-time minimap
+- Enemy tracking system
 
-- Linux operating system
+## Requirements
+
 - GCC compiler
 - Make
 - MinilibX library
-- X11 development libraries
 
-## 📦 Installation
+## Building
 
-1. Clone the repository:
 ```bash
+# Clone the repository
 git clone https://github.com/radouane-tamouss/Cube3D.git
 cd Cube3D
+
+# Build standard version
+make
+
+# Build bonus version (includes all features)
+make bonus
 ```
 
-2. Compile the game:
+## Usage
+
 ```bash
-make        # For the basic version
-make bonus  # For the full version with all features
+# Standard version
+./cub3D maps/default.cub
+
+# Bonus version
+./cub3D_bonus maps/bonus.cub
 ```
 
-## 🎯 Usage
+## Controls
 
-### Basic Version
-```bash
-./cub3D ll.cub
+### Movement
+- WASD - Movement
+- Mouse - Look around
+- Shift - Sprint
+- Arrow Keys - Rotate camera
+
+### Actions
+- Left Click - Shoot
+- Right Click - Scope
+- E - Interact with doors
+- R - Reload weapon
+- Space - Toggle dark mode
+- Esc - Exit game
+
+## Project Structure
+
 ```
-
-### Bonus Version
-```bash
-./cub3D_bonus bonus/ll.cub
+.
+├── src/                  # Core source files
+│   ├── init/            # Initialization modules
+│   ├── parsing/         # Map and config parsing
+│   ├── rendering/       # Graphics and ray-casting engine
+│   └── utils/           # Utility functions
+├── bonus/               # Additional features
+│   ├── animations/      # Sprite and effect animations
+│   ├── enemy_ai/        # Enemy behavior and pathfinding
+│   └── weapons/         # Weapon mechanics and effects
+├── lib/                 # Libraries
+│   └── libft/           # Custom C library functions
+├── maps/                # Game maps and level designs
+├── textures/            # Game assets
+│   ├── environment/     # Wall and floor textures
+│   ├── weapons/         # Weapon sprites and effects
+│   ├── enemies/         # Enemy character sprites
+│   └── animations/      # Animation frame sequences
+└── includes/            # Header files
 ```
-
-### Controls
-
-#### Movement
-- `W` - Move forward
-- `S` - Move backward
-- `A` - Strafe left
-- `D` - Strafe right
-- `←` / `→` - Rotate left/right
-- `SHIFT` - Sprint
-
-#### Combat
-- `Left Mouse Button` - Shoot
-- `Right Mouse Button` - Toggle scope
-- `R` - Reload weapon
-- `E` - Interact with doors
-
-#### Other
-- `ESC` - Exit game
-- `space` - Toggle dark mode
-- `Mouse Movement` - Look around
-
-## 👥 Authors
+## Authors
 
 - [Radouane](https://github.com/radouane-tamouss)
 - [Erabareta](https://github.com/erabareta)
-
-## 🗺️ Map Format
-
-The game uses `.cub` files for maps. Here's an example format:
-
-```
-NO ./textures/north.xpm
-SO ./textures/south.xpm
-WE ./textures/west.xpm
-EA ./textures/east.xpm
-F 220,100,0
-C 225,30,0
-
-1111111
-1000001
-1000001
-1000001
-1000001
-1000001
-1111111
-```
-
-- `NO`, `SO`, `WE`, `EA`: Path to wall textures
-- `F`: Floor color (RGB)
-- `C`: Ceiling color (RGB)
-- `1`: Wall
-- `0`: Empty space
-- `N`, `S`, `E`, `W`: Player starting position and direction
-- `D`: Door
-- `2`: Enemy
-
-## 🎨 Customization
-
-### Textures
-Place your custom textures in the `textures/` directory. Supported formats:
-- XPM files for walls and sprites
-- Custom color schemes for floor and ceiling
-
-### Maps
-Create your own maps using the `.cub` format and place them in the `maps/` directory.
-
