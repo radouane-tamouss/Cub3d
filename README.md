@@ -11,13 +11,14 @@ A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX grap
 ## Screenshots
 
 <div align="center">
-  <img src="Screenshots/image.png" width="400" alt="Cube3D Screenshot 1" />
+    <img src="youtube-video-gif (1).gif" alt="Cube3D gif" />
+<!--   <img src="Screenshots/image.png" width="400" alt="Cube3D Screenshot 1" />
   <img src="Screenshots/image copy.png" width="400" alt="Cube3D Screenshot 2" />
   <img src="Screenshots/image copy 2.png" width="400" alt="Cube3D Screenshot 3" />
   <img src="Screenshots/image copy 3.png" width="400" alt="Cube3D Screenshot 4" />
   <img src="Screenshots/image copy 4.png" width="400" alt="Cube3D Screenshot 5" />
   <img src="Screenshots/image copy 5.png" width="400" alt="Cube3D Screenshot 6" />
-  <img src="Screenshots/image copy 6.png" width="400" alt="Cube3D Screenshot 7" />
+  <img src="Screenshots/image copy 6.png" width="400" alt="Cube3D Screenshot 7" /> -->
 </div>
 
 ## Features
