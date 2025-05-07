@@ -1,10 +1,43 @@
-# .*
-.vscode
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+.clangd/
+.clang-format
+
+# Build artifacts
 *.o
+*.a
+cub3D
+cub3D_bonus
 *IL6*
 *2XE*
+*.dSYM/
+
+# MLX library files
 mlx-linux/libmlx.a
 mlx-linux/libmlx_Linux.a
 mlx-linux/test/mlx-test
-cub3D
-*.a
+
+# Dependency directories
+node_modules/
+vendor/
+
+# Debug files
+*.log
+core
+
+# Temporary files
+*.tmp
+*~
+
+# Map backup files
+*.cub.bak
+
+# Temporary files
+*.tmp
+*.log
+test
+test.c

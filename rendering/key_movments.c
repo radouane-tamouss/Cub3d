@@ -12,6 +12,8 @@
 
 #include "../cube.h"
 
+// clang-format off
+
 int	is_moving(int keycode)
 {
 	if (keycode == W_LIN || keycode == S_LIN || keycode == D_LIN
@@ -56,39 +58,18 @@ void	key_release_helper(int keycode)
 int	key_release(int keycode, void *garbage)
 {
 	(void)garbage;
-	if (keycode == CNTRL_LIN)
-	{
-		get_data()->is_control_pressed = 0;
-	}
 	key_release_helper(keycode);
 	if (keycode == SHIFT_LIN)
 		get_data()->speed = 5;
-	if (is_moving(keycode))
-	{
-		if (get_data()->move_backward == 0 && get_data()->move_forward == 0
-			&& get_data()->move_left == 0 && get_data()->move_right == 0)
-		{
-			get_data()->is_running = 0;
-			get_data()->is_walking = 0;
-		}
-	}
 	return (0);
 }
 
 int	handle_keys(int keycode, void *garbage)
 {
-	int	door_x;
-	int	door_y;
-
 	(void)garbage;
 	if (keycode == ESC)
 		destroy_window_and_exit();
-	if (is_moving(keycode))
-		control_speed();
 	handle_moving(keycode);
 	toggle_dark_mode(keycode);
-	handle_door(keycode);
-	handle_reload_gun(keycode);
-	sprint(keycode);
 	return (0);
 }

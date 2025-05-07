@@ -12,73 +12,46 @@
 
 #include "../cube.h"
 
-void	control_speed(void)
-{
-	if (get_data()->speed >= 10)
-	{
-		get_data()->is_running = 1;
-		get_data()->is_walking = 0;
-	}
-	else
-	{
-		get_data()->is_running = 0;
-		get_data()->is_walking = 1;
-	}
-}
-
-void	handle_reload_gun(int keycode)
-{
-	if (keycode == R_LIN)
-	{
-		if (!get_data()->gun.is_showing_scope && !get_data()->gun.is_shooting)
-		{
-			get_data()->gun.is_reloading = 1;
-			get_data()->gun.current_frame = 0;
-			get_data()->gun.frame_delay = 0;
-			play_sound("sounds/gun3reloadd.wav");
-		}
-	}
-}
-
+// clang-format off
 void	sprint(int keycode)
 {
 	if (keycode == SHIFT_LIN)
 		get_data()->speed = 10;
 }
 
-void	play_sound(const char *file)
+void	next_step_square(t_vector *next_step_square, t_vector center,
+		float square_lenght, t_vector dir)
 {
-	char	command[256];
-	char	*temp;
-	char	*command_str;
-	int		result;
+	t_vector	square_position[4];
 
-	temp = ft_strjoin("paplay ", file);
-	command_str = ft_strjoin(temp, " &");
-	ft_strlcpy(command, command_str, sizeof(command));
-	result = system(command);
-	if (result == -1)
-	{
-		perror("system");
-	}
+	calc_square_points_pos(square_position, center, square_lenght);
+	next_step_square[0].x = get_data()->map[(int)square_position[0].y
+		/ GRID_DIST][(int)(square_position[0].x + dir.x) / GRID_DIST];
+	next_step_square[0].y = get_data()->map[(int)(square_position[0].y + dir.y)
+		/ GRID_DIST][(int)(square_position[0].x) / GRID_DIST];
+	next_step_square[1].x = get_data()->map[(int)square_position[1].y
+		/ GRID_DIST][(int)(square_position[1].x + dir.x) / GRID_DIST];
+	next_step_square[1].y = get_data()->map[(int)(square_position[1].y + dir.y)
+		/ GRID_DIST][(int)(square_position[1].x) / GRID_DIST];
+	next_step_square[2].x = get_data()->map[(int)square_position[2].y
+		/ GRID_DIST][(int)(square_position[2].x + dir.x) / GRID_DIST];
+	next_step_square[2].y = get_data()->map[(int)(square_position[2].y + dir.y)
+		/ GRID_DIST][(int)(square_position[2].x) / GRID_DIST];
+	next_step_square[3].x = get_data()->map[(int)square_position[3].y
+		/ GRID_DIST][(int)(square_position[3].x + dir.x) / GRID_DIST];
+	next_step_square[3].y = get_data()->map[(int)(square_position[3].y + dir.y)
+		/ GRID_DIST][(int)(square_position[3].x) / GRID_DIST];
 }
 
-void	kill_enemies(void)
+void	calc_square_points_pos(t_vector *square_position, t_vector center,
+		float square_lenght)
 {
-	int		i;
-	float	angle;
-
-	i = get_data()->num_sprites - 1;
-	while (i >= 0)
-	{
-		if (is_enemy_in_middle_of_screen(&get_data()->sprites[i])
-			&& should_render(&get_data()->sprites[i], &angle))
-		{
-			get_data()->sprites[i].is_dying = 1;
-			get_data()->sprites[i].current_frame = 0;
-			get_data()->screen_shake_timer = 10;
-			break ;
-		}
-		i--;
-	}
+	square_position[0].x = center.x - square_lenght;
+	square_position[0].y = center.y - square_lenght;
+	square_position[1].x = center.x + square_lenght;
+	square_position[1].y = center.y - square_lenght;
+	square_position[2].x = center.x - square_lenght;
+	square_position[2].y = center.y + square_lenght;
+	square_position[3].x = center.x + square_lenght;
+	square_position[3].y = center.y + square_lenght;
 }

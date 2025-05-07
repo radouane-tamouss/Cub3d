@@ -24,7 +24,6 @@ void	pad_map_with_spaces(t_game *game)
 	j = 0;
 	map_width = calc_map_width(game->map.grid);
 	game->map.width = map_width;
-	printf("map width  2 = %d\n", map_width);
 	while (game->map.grid[i] != NULL)
 	{
 		j = 0;
@@ -60,7 +59,7 @@ char	**init_map(int fd, char *file, t_map *m2)
 	map = mallocate(sizeof(char *) * (m2->height + 1));
 	if (!map)
 	{
-		printf("Error\n Malloc failed\n");
+		print_err("Malloc failed");
 		exiter(1);
 	}
 	fill_map(map, file, line);
@@ -75,8 +74,9 @@ void	check_map_helper(char **map, t_game *game, t_map m2)
 	int	j;
 
 	i = 0;
+	(void) map_width;
 	while (i < 6)
-		parse_texture_and_colors_info(map[i++], game, &m2);
+		parse_texture_and_colors_info(map[i++], game);
 	map_height = 0;
 	while (map[map_height] != NULL)
 		map_height++;

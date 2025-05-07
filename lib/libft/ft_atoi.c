@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+// clang-format off
 int	ft_atoi(const char *str)
 {
 	int		i;
@@ -32,6 +33,8 @@ int	ft_atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = (res * 10) + (str[i] - 48);
+		if (res > 255)
+			return (-1);
 		i++;
 	}
 	res *= sign;

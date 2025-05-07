@@ -12,6 +12,7 @@
 
 #include "../cube.h"
 
+// clang-format off
 void	verify_player_starting_position(t_game *game)
 {
 	int	i;
@@ -31,14 +32,14 @@ void	verify_player_starting_position(t_game *game)
 			{
 				player_count++;
 				if (player_count > 1)
-					(printf("Error: More than starting position\n"), exiter(1));
+					(print_err("More than starting position"), exiter(1));
 			}
 			j++;
 		}
 		i++;
 	}
 	if (player_count == 0)
-		(printf("Error: No player starting position\n"), exiter(1));
+		(print_err("No player starting position"), exiter(1));
 }
 
 int	check_if_player_direction(char c)
@@ -65,7 +66,7 @@ void	get_player_position(t_game *game)
 			{
 				game->player.pos_y = i;
 				game->player.pos_x = j;
-				fprintf(stderr, "x == %d,  y == %d \n", i, j);
+				get_data()->player_direction = game->map.grid[i][j];
 				return ;
 			}
 			j++;

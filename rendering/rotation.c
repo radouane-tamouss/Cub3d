@@ -12,7 +12,8 @@
 
 #include "../cube.h"
 
-//make the angle between 0 and 360 degree
+// clang-format off
+// make the angle between 0 and 360 degree
 float	normalise_angle(float angle)
 {
 	while (angle >= (2 * MY_PI) || angle <= (-2 * MY_PI))
