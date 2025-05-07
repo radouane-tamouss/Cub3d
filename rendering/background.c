@@ -13,6 +13,7 @@
 #include "../cube.h"
 
 // this will put backgrouind image to the window
+// clang-format off
 void	render_background(void)
 {
 	mlx_put_image_to_window(get_data()->mlx, get_data()->win,
@@ -23,11 +24,13 @@ void	render_background(void)
 by putting colors of cieling and floor to it */
 void	init_background(void)
 {
-	int		x;
-	int		y;
-	int		color;
-	float	shift_value;
+	int			x;
+	int			y;
+	int			color;
+	float		shift_value;
+	t_texture	ceiling_tex;
 
+	ceiling_tex = get_data()->ceiling_img;
 	y = -1;
 	while (++y < WIN_HEIGHT)
 	{
@@ -35,7 +38,12 @@ void	init_background(void)
 		while (++x < WIN_WIDTH)
 		{
 			if (y < (WIN_HEIGHT / 2))
-				color = get_data()->ceiling_color;
+			{
+				// Use ceiling texture for the ceiling
+				color = pull_pixel(ceiling_tex, 
+					x % ceiling_tex.width, 
+					((float)y / (WIN_HEIGHT / 2)) * ceiling_tex.height);
+			}
 			else
 			{
 				color = get_data()->floor_color;
