@@ -46,7 +46,7 @@ A 3D raycasting game engine inspired by Wolfenstein 3D, built with MinilibX grap
 
 - GCC compiler
 - Make
-- MinilibX library
+- MinilibX library ([how to install](https://harm-smits.github.io/42docs/libs/minilibx/getting_started.html))
 
 ## Building
 
